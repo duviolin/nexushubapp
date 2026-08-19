@@ -5,29 +5,33 @@ Este arquivo serve como a "memória" do projeto, garantindo que o Agente e o Des
 ---
 
 ## ✅ DIA 1: O Coração do Build (Concluído)
-**Data:** [Data Atual]
 **Status:** 100% OK
-
-### O que foi entregue:
-- [x] **Version Catalog (`libs.versions.toml`):** Centralização total de todas as dependências do ecossistema Android (Hilt, Retrofit, Room, Compose, etc).
-- [x] **Bundles de Dependências:** Criação de pacotes lógicos (`compose`, `lifecycle`, `networking`) para facilitar a implementação em múltiplos módulos.
-- [x] **Limpeza de Build:** `build.gradle.kts` da raiz configurado apenas com plugins via `alias`.
-- [x] **Modernização de Compilador:** Configuração para Kotlin 2.0 e o novo Compose Compiler integrado.
-- [x] **Otimização de Performance:** Ativação do AndroidX e **remoção completa do Jetifier**, garantindo um build mais rápido e moderno.
-- [x] **Validação:** Build `assembleDebug` executado com sucesso.
+- [x] **Version Catalog (`libs.versions.toml`):** Centralização total de dependências.
+- [x] **Bundles de Dependências:** `compose`, `lifecycle`, `networking`.
+- [x] **Limpeza de Build:** Plugins via `alias` na raiz.
+- [x] **Otimização:** Remoção do Jetifier e ativação do AndroidX.
 
 ---
 
-## 🏗️ DIA 2: Arquitetura Multi-Módulo (Em Andamento)
-**Status:** Iniciando
+## ✅ DIA 2: Arquitetura Multi-Módulo (Concluído)
+**Status:** 100% OK
+- [x] **Criação dos Módulos Core:** `:core:common`, `:core:network`, `:core:database` e `:core:ui`.
+- [x] **Configuração de Build Individual:** Cada módulo com seu `build.gradle.kts` otimizado.
+- [x] **Estrutura de Source Sets:** Pastas `src/main/kotlin` e `AndroidManifest.xml` criados para todos.
+- [x] **Hierarquia Inicial:** `:core:network` e `:core:database` já dependendo de `:core:common`.
+
+---
+
+## 🏗️ DIA 3: Convention Plugins (Build Logic) (Próximo Passo)
+**Status:** Aguardando início
 
 ### Objetivo:
-Quebrar o monólito `:app` e criar a base de módulos `:core` seguindo os princípios de separação de interesses e escalabilidade.
+Eliminar a repetição de código nos `build.gradle.kts` usando plugins customizados.
 
 ### Próximos Passos Imediatos:
-1. Criar estrutura de pastas física para `core:common`, `core:network`, `core:database` e `core:ui`.
-2. Registrar novos módulos no `settings.gradle.kts`.
-3. Criar os arquivos `build.gradle.kts` base de cada módulo `:core`.
+1. Criar o diretório `build-logic`.
+2. Implementar o `AndroidLibraryConventionPlugin`.
+3. Implementar o `AndroidComposeConventionPlugin`.
 
 ---
-*Última atualização: Fim do Dia 1 / Início do Dia 2.*
+*Última atualização: Fim do Dia 2.*
