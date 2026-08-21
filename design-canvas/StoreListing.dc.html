@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #E8B86D; } a:hover { color: #f0c98a; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .sect { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 14px; }
+    .field { background:#12110F; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px 18px; }
+    .flabel { font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(237,230,217,0.5); display:flex; justify-content:space-between; }
+    .fval { font-family:"IBM Plex Sans",sans-serif; font-size:14px; line-height:1.55; color:#EDE6D9; margin-top:8px; white-space:pre-line; }
+    .col { background:#1C1B18; border:1px solid rgba(255,255,255,0.07); border-radius:22px; padding:26px; display:flex; flex-direction:column; gap:16px; }
+    .cnt { color:rgba(232,184,109,0.8); }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 1560px; height: 1320px; background: #12110F; color: #EDE6D9; padding: 52px 56px; position: relative; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; gap: 16px;">
+    <span class="serif" style="font-size: 42px; font-weight: 600;">Texto da ficha</span>
+    <span class="mono" style="font-size: 13px; color: #E8B86D; letter-spacing: 0.1em;">Google Play · PT-BR + EN · pronto pra colar</span>
+  </div>
+  <div class="serif" style="font-size: 18px; line-height: 1.5; color: rgba(237,230,217,0.7); margin-top: 12px; max-width: 1040px;">
+    Contadores no limite do Play: nome ≤30, descrição curta ≤80, completa ≤4000. Campos entre [colchetes] você preenche antes de publicar.
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:36px;">
+
+    <!-- ============ PT-BR ============ -->
+    <div class="col">
+      <div class="sect" style="margin:0;">Português (BR)</div>
+      <div class="field">
+        <div class="flabel"><span>Nome do app</span><span class="cnt">22 / 30</span></div>
+        <div class="fval">Nexus Hub: Leitor Tech</div>
+      </div>
+      <div class="field">
+        <div class="flabel"><span>Descrição curta</span><span class="cnt">70 / 80</span></div>
+        <div class="fval">HN, NewsAPI e RSS num feed só. Resumos por IA e leitura offline-first.</div>
+      </div>
+      <div class="field">
+        <div class="flabel"><span>Descrição completa</span><span class="cnt">~1180 / 4000</span></div>
+        <div class="fval">O Nexus Hub reúne o que você lê de tecnologia — Hacker News, NewsAPI e seus feeds RSS — num único fluxo calmo, pensado para ler à noite sem cansar a vista.
+
+O QUE ELE FAZ
+• Um feed, várias fontes: Hacker News, NewsAPI e RSS lado a lado, sem abas espalhadas.
+• Resumo por IA: entenda do que trata um artigo em segundos, antes de abrir.
+• Leitura offline-first: salvou, leu — com ou sem rede.
+• Modo escuro editorial de verdade: grafite quente e um só acento âmbar, nada de tela branca gritando às 2h.
+• Tema claro de papel para o dia.
+• Filtros por fonte e "só não lidos" para cortar o ruído.
+• Sem anúncio no meio do texto, sem rastreamento agressivo.
+
+PARA QUEM É
+Devs, PMs e curiosos de tecnologia que querem um lugar só para acompanhar o que importa — rápido, bonito e no seu ritmo.
+
+PRIVACIDADE
+Seus salvos ficam no aparelho. [Descreva aqui o que é ou não coletado — obrigatório na ficha.]
+
+Feito com Jetpack Compose, Material 3 e Kotlin.</div>
+      </div>
+    </div>
+
+    <!-- ============ EN ============ -->
+    <div class="col">
+      <div class="sect" style="margin:0;">English</div>
+      <div class="field">
+        <div class="flabel"><span>App name</span><span class="cnt">22 / 30</span></div>
+        <div class="fval">Nexus Hub: Tech Reader</div>
+      </div>
+      <div class="field">
+        <div class="flabel"><span>Short description</span><span class="cnt">68 / 80</span></div>
+        <div class="fval">Hacker News, NewsAPI &amp; RSS in one feed. AI summaries, offline-first.</div>
+      </div>
+      <div class="field">
+        <div class="flabel"><span>Full description</span><span class="cnt">~1120 / 4000</span></div>
+        <div class="fval">Nexus Hub brings everything you read about technology — Hacker News, NewsAPI and your own RSS feeds — into one calm stream, built to read at night without tiring your eyes.
+
+WHAT IT DOES
+• One feed, many sources: Hacker News, NewsAPI and RSS side by side, no scattered tabs.
+• AI summary: grasp what an article is about in seconds, before you open it.
+• Offline-first reading: saved is read — network or not.
+• A real editorial dark mode: warm graphite and a single amber accent, no white screen shouting at 2am.
+• A paper-light theme for daytime.
+• Filter by source and "unread only" to cut the noise.
+• No mid-article ads, no aggressive tracking.
+
+WHO IT'S FOR
+Developers, PMs and tech-curious readers who want one place to follow what matters — fast, beautiful, at their own pace.
+
+PRIVACY
+Your saved articles stay on your device. [Describe here what is and isn't collected — required by the listing.]
+
+Built with Jetpack Compose, Material 3 and Kotlin.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- meta fields -->
+  <div style="margin-top:26px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+    <div class="field"><div class="flabel"><span>Categoria</span></div><div class="fval" style="font-size:13px;">Notícias e revistas</div></div>
+    <div class="field"><div class="flabel"><span>Tags</span></div><div class="fval" style="font-size:13px;">rss · hacker news · leitura · tech</div></div>
+    <div class="field"><div class="flabel"><span>E-mail de contato</span></div><div class="fval" style="font-size:13px; color:rgba(237,230,217,0.6);">[seu-email]</div></div>
+    <div class="field"><div class="flabel"><span>Política de privacidade</span></div><div class="fval" style="font-size:13px; color:rgba(237,230,217,0.6);">[URL obrigatória]</div></div>
+  </div>
+
+  <div style="margin-top:22px; display:flex; gap:12px; align-items:flex-start;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
+    <div class="sans" style="font-size:13px; line-height:1.55; color:rgba(237,230,217,0.6); max-width:1200px;">Antes de publicar: preencha a política de privacidade (obrigatória mesmo sem coleta), o formulário de segurança de dados, e confirme o texto sobre uso de fontes de terceiros (HN/NewsAPI) conforme os termos de cada API. O Play não formata markdown — os cabeçalhos em caixa alta já funcionam como estão ao colar.</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

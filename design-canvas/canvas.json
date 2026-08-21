@@ -5,7 +5,9 @@
     { "id": "telas", "name": "Telas · escuro ↕ claro" },
     { "id": "estados", "name": "Estados · escuro ↕ claro" },
     { "id": "adaptativo", "name": "Adaptativo" },
-    { "id": "motion", "name": "Motion & interações" }
+    { "id": "motion", "name": "Motion & interações" },
+    { "id": "marca", "name": "Marca" },
+    { "id": "loja", "name": "Loja · Play Store" }
   ],
   "artboards": [
     { "file": "Palette.dc.html", "title": "Identidade visual & cor", "page": "identidade", "x": 0, "y": 0, "w": 1240, "h": 1500 },
@@ -42,14 +44,24 @@
     { "file": "Catalog.dc.html", "title": "Nexus Catalog · escuro", "page": "adaptativo", "x": 1280, "y": 0, "w": 980, "h": 1300 },
     { "file": "CatalogLight.dc.html", "title": "Nexus Catalog · claro", "page": "adaptativo", "x": 1280, "y": 1400, "w": 980, "h": 1300 },
 
-    { "file": "Motion.dc.html", "title": "Motion & interações", "page": "motion", "x": 0, "y": 0, "w": 1420, "h": 920 }
+    { "file": "Motion.dc.html", "title": "Motion & interações", "page": "motion", "x": 0, "y": 0, "w": 1420, "h": 920 },
+
+    { "file": "LogoDirections.dc.html", "title": "Marca — 3 direções", "page": "marca", "x": 0, "y": 0, "w": 1500, "h": 1180 },
+    { "file": "LogoSystem.dc.html", "title": "Marca — sistema (dir. A)", "page": "marca", "x": 0, "y": 1330, "w": 1500, "h": 1560 },
+
+    { "file": "AppIcon.dc.html", "title": "Ícone adaptativo", "page": "loja", "x": 0, "y": 0, "w": 1500, "h": 1120 },
+    { "file": "FeatureGraphic.dc.html", "title": "Feature graphic 1024×500", "page": "loja", "x": 0, "y": 1220, "w": 1024, "h": 500 },
+    { "file": "StoreScreens.dc.html", "title": "Screenshots de loja", "page": "loja", "x": 0, "y": 1820, "w": 2020, "h": 900 },
+    { "file": "StoreListing.dc.html", "title": "Texto da ficha (PT+EN)", "page": "loja", "x": 0, "y": 2820, "w": 1560, "h": 1320 }
   ],
   "annotations": [
     { "id": "idnote", "page": "identidade", "x": 0, "y": -150, "w": 660, "text": "A fundação NexusUI. Cor, tipografia, espaço e forma como tokens (papel), não tinta. Tudo o que vem depois — telas e componentes — monta com estas peças. Feature nunca escreve hex." },
     { "id": "compnote", "page": "componentes", "x": 0, "y": -150, "w": 660, "text": "Cada componente com anatomia, dimensões (dp), estados e API. KDoc = contrato de uso. É o Nexus Catalog em forma de spec: se o componente não tem do/don't aqui, não entra no :core:ui." },
     { "id": "compare", "page": "telas", "x": 0, "y": -180, "w": 640, "text": "Escuro (linha de cima) ↕ Claro (linha de baixo). Mesmos tokens, papéis invertidos: marfim↔grafite trocam; o âmbar vira âmbar profundo quando é texto/ícone (contraste WCAG); capas de imagem não invertem." },
     { "id": "estadosnote", "page": "estados", "x": 0, "y": -140, "w": 520, "text": "Todo estado de tela cheia é um StatePanel (nunca só um spinner central): loading com skeleton, empty, offline e error — cada um com no máximo um NexusButton. Nos dois temas." },
-    { "id": "adaptnote", "page": "adaptativo", "x": 0, "y": -140, "w": 560, "text": "Compact = feed full-bleed. Medium/Expanded = List-Detail (lista ~360–420dp + artigo persistente). Insets tratados pelo NexusScaffold. O Catalog é o Storybook que prova o DS." }
+    { "id": "adaptnote", "page": "adaptativo", "x": 0, "y": -140, "w": 560, "text": "Compact = feed full-bleed. Medium/Expanded = List-Detail (lista ~360–420dp + artigo persistente). Insets tratados pelo NexusScaffold. O Catalog é o Storybook que prova o DS." },
+    { "id": "marcanote", "page": "marca", "x": 0, "y": -180, "w": 640, "text": "Direção escolhida: A · Nexus node — um hub âmbar onde as fontes (HN, NewsAPI, RSS, salvos) convergem. Mesma DNA da fundação: grafite quente, um só acento, zero gradiente. O sistema abaixo define lockup, clearspace, variações e usos indevidos." },
+    { "id": "lojanote", "page": "loja", "x": 0, "y": -180, "w": 640, "text": "Kit de publicação Google Play, na marca Nexus node. Ícone adaptativo (fg #símbolo + bg #12110F, safe-zone 66dp) · feature graphic 1024×500 · 5 screenshots com legenda · ficha PT+EN nos limites de caracteres. Exporte cada artboard por PNG na barra do canvas." }
   ],
-  "launch": { "view": "canvas", "page": "identidade" }
+  "launch": { "view": "canvas", "page": "loja" }
 }

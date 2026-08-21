@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #E8B86D; } a:hover { color: #f0c98a; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .tile { width: 372px; height: 806px; border-radius: 28px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+    .capkick { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #E8B86D; }
+    .caphead { font-family: "Newsreader", Georgia, serif; font-size: 30px; line-height: 1.16; font-weight: 600; color: #EDE6D9; margin-top: 12px; }
+    /* device */
+    .phone { width: 300px; border-radius: 30px; background: #12110F; border: 1px solid rgba(255,255,255,0.10); box-shadow: 0 20px 50px rgba(0,0,0,0.55); overflow: hidden; align-self: center; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; padding: 18px 16px 12px 16px; }
+    .brand-s { font-family:"Newsreader",serif; font-size:17px; font-weight:600; color:#EDE6D9; }
+    .brand-h { font-family:"IBM Plex Mono",monospace; font-size:10px; color:#E8B86D; letter-spacing:0.14em; }
+    .chip-on { padding:5px 11px; border-radius:999px; font-size:11px; font-weight:500; background:rgba(232,184,109,0.16); color:#E8B86D; border:1px solid rgba(232,184,109,0.34); }
+    .chip-off { padding:5px 11px; border-radius:999px; font-size:11px; font-weight:500; color:rgba(237,230,217,0.6); border:1px solid rgba(255,255,255,0.12); }
+    .meta { font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:rgba(237,230,217,0.55); }
+    .headline { font-family:"Newsreader",serif; font-weight:500; color:#EDE6D9; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 2020px; height: 900px; background: #0d0c0b; padding: 46px 40px; display:flex; gap:24px; align-items:center;">
+
+  <!-- ===== TILE 1 · FEED ===== -->
+  <div class="tile" style="background: linear-gradient(180deg,#1C1B18,#141310);">
+    <div style="padding: 34px 30px 0 30px;">
+      <div class="capkick">Um feed só</div>
+      <div class="caphead">Todas as fontes<br>num lugar.</div>
+    </div>
+    <div style="flex:1;"></div>
+    <div class="phone" style="margin-bottom:-40px; height:540px;">
+      <div class="topbar"><div style="display:flex; align-items:baseline; gap:6px;"><span class="brand-s">Nexus</span><span class="brand-h">HUB</span></div>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#EDE6D9" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </div>
+      <div style="display:flex; gap:6px; padding:0 16px 14px 16px;"><span class="chip-on">Todos</span><span class="chip-off">Hacker News</span><span class="chip-off">Não lidos</span></div>
+      <div style="padding:0 16px;">
+        <div style="height:120px; border-radius:12px; background:radial-gradient(120% 90% at 20% 10%, rgba(232,184,109,0.30), transparent 55%), radial-gradient(140% 120% at 90% 100%, rgba(80,120,140,0.35), transparent 60%), linear-gradient(135deg,#241f18,#14161a); position:relative;">
+          <span class="mono" style="position:absolute; left:10px; top:10px; font-size:10px; color:#EDE6D9; background:rgba(9,8,7,0.55); padding:3px 8px; border-radius:999px;">Hacker News</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:9px;"><span class="meta">news.ycombinator</span><span style="color:rgba(237,230,217,0.3);">·</span><span class="meta">2h</span><span style="flex:1;"></span><span class="mono" style="font-size:10.5px; color:#E8B86D;">▲ 842</span><span style="width:6px;height:6px;border-radius:50%;background:#E8B86D;margin-left:6px;"></span></div>
+        <div class="headline" style="font-size:17px; line-height:1.25; margin-top:6px;">The hidden cost of abstraction layers in modern Android runtimes</div>
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.07);">
+          <div style="display:flex; align-items:center; gap:6px;"><span class="meta">theverge.com</span><span style="color:rgba(237,230,217,0.3);">·</span><span class="meta">5h</span><span style="flex:1;"></span><span class="mono" style="font-size:10.5px; color:rgba(232,184,109,0.55);">▲ 311</span></div>
+          <div class="headline" style="font-size:16px; line-height:1.28; margin-top:6px; color:rgba(237,230,217,0.72);">Kotlin 2.2 ships context parameters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TILE 2 · READER ===== -->
+  <div class="tile" style="background: linear-gradient(180deg,#161512,#12110F);">
+    <div style="padding: 34px 30px 0 30px;">
+      <div class="capkick">Leitura</div>
+      <div class="caphead">Feita para<br>descansar a vista.</div>
+    </div>
+    <div style="flex:1;"></div>
+    <div class="phone" style="margin-bottom:-40px; height:540px;">
+      <div class="topbar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EDE6D9" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <div style="display:flex; gap:14px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.7)" stroke-width="1.8" stroke-linecap="round"><path d="M6 4h12v16l-6-4-6 4z"/></svg><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.7)" stroke-width="1.8" stroke-linecap="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg></div>
+      </div>
+      <div style="padding:6px 22px 0 22px;">
+        <div style="display:flex; align-items:center; gap:6px;"><span class="meta">news.ycombinator</span><span style="color:rgba(237,230,217,0.3);">·</span><span class="mono" style="font-size:10.5px; color:#E8B86D;">▲ 842</span></div>
+        <div class="serif" style="font-size:25px; line-height:1.22; font-weight:600; color:#EDE6D9; margin-top:10px;">The hidden cost of abstraction layers in modern Android runtimes</div>
+        <div class="serif" style="font-size:14.5px; line-height:1.62; color:rgba(237,230,217,0.78); margin-top:16px;">Every layer you add between the app and the metal promises safety and portability. Most of the time it delivers — until the frame budget runs out and the abstraction becomes the thing you profile against.</div>
+        <div class="serif" style="font-size:14.5px; line-height:1.62; color:rgba(237,230,217,0.78); margin-top:12px;">On Android, the runtime has spent a decade absorbing this cost quietly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TILE 3 · AI SUMMARY (accent tile) ===== -->
+  <div class="tile" style="background: linear-gradient(180deg,#E8B86D,#d89f4a);">
+    <div style="padding: 34px 30px 0 30px;">
+      <div class="capkick" style="color:#1A140C; opacity:0.7;">Resumo por IA</div>
+      <div class="caphead" style="color:#1A140C;">Saiba do que<br>trata em 5s.</div>
+    </div>
+    <div style="flex:1;"></div>
+    <div class="phone" style="margin-bottom:-40px; height:540px;">
+      <div class="topbar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EDE6D9" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg><span class="mono" style="font-size:10px; color:rgba(237,230,217,0.5);">Reader</span></div>
+      <div style="padding:6px 22px 0 22px;">
+        <div class="serif" style="font-size:22px; line-height:1.22; font-weight:600; color:#EDE6D9;">On-device inference is quietly reshaping the mobile stack</div>
+        <!-- AI summary card -->
+        <div style="margin-top:16px; border-radius:14px; background:rgba(232,184,109,0.10); border:1px solid rgba(232,184,109,0.30); padding:14px 15px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5 13.9 11.4 12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/></svg>
+            <span class="mono" style="font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#E8B86D;">Resumo IA</span>
+          </div>
+          <div class="sans" style="font-size:13px; line-height:1.55; color:rgba(237,230,217,0.82); margin-top:10px;">NPUs em telefones já rodam modelos de linguagem locais. O artigo argumenta que a inferência sai da nuvem e vira recurso de sistema — com ganhos de latência e privacidade.</div>
+          <div style="display:flex; gap:6px; margin-top:12px;"><span class="mono" style="font-size:9.5px; color:rgba(237,230,217,0.6); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:3px 8px;">latência</span><span class="mono" style="font-size:9.5px; color:rgba(237,230,217,0.6); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:3px 8px;">privacidade</span><span class="mono" style="font-size:9.5px; color:rgba(237,230,217,0.6); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:3px 8px;">NPU</span></div>
+        </div>
+        <div class="serif" style="font-size:14px; line-height:1.6; color:rgba(237,230,217,0.7); margin-top:16px;">A leitura completa continua logo abaixo, sem anúncio no meio.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TILE 4 · LER DEPOIS / OFFLINE ===== -->
+  <div class="tile" style="background: linear-gradient(180deg,#1C1B18,#141310);">
+    <div style="padding: 34px 30px 0 30px;">
+      <div class="capkick">Seu, offline</div>
+      <div class="caphead">Salve agora,<br>leia sem rede.</div>
+    </div>
+    <div style="flex:1;"></div>
+    <div class="phone" style="margin-bottom:-40px; height:540px;">
+      <div class="topbar"><span class="serif" style="font-size:19px; font-weight:600; color:#EDE6D9;">Ler depois</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.7)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="12" r="1.6"/></svg></div>
+      <!-- stats -->
+      <div style="display:flex; gap:10px; padding:6px 16px 0 16px;">
+        <div style="flex:1; background:#12110F; border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:12px;"><div class="serif" style="font-size:24px; font-weight:600; color:#E8B86D;">14</div><div class="mono" style="font-size:9.5px; color:rgba(237,230,217,0.5); margin-top:2px;">SALVOS</div></div>
+        <div style="flex:1; background:#12110F; border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:12px;"><div class="serif" style="font-size:24px; font-weight:600; color:#EDE6D9;">3h</div><div class="mono" style="font-size:9.5px; color:rgba(237,230,217,0.5); margin-top:2px;">DE LEITURA</div></div>
+        <div style="flex:1; background:#12110F; border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:12px;"><div class="serif" style="font-size:24px; font-weight:600; color:#EDE6D9;">92<span style="font-size:14px;">%</span></div><div class="mono" style="font-size:9.5px; color:rgba(237,230,217,0.5); margin-top:2px;">OFFLINE</div></div>
+      </div>
+      <div style="padding:16px 16px 0 16px; display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; gap:12px; align-items:flex-start;"><div style="width:52px; height:52px; border-radius:10px; background:linear-gradient(135deg,#241f18,#14161a); flex-shrink:0;"></div><div><div class="headline" style="font-size:15px; line-height:1.28;">The hidden cost of abstraction layers</div><div class="meta" style="margin-top:5px; display:flex; align-items:center; gap:5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> baixado</div></div></div>
+        <div style="display:flex; gap:12px; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(255,255,255,0.07);"><div style="width:52px; height:52px; border-radius:10px; background:linear-gradient(135deg,#201a16,#16130f); flex-shrink:0;"></div><div><div class="headline" style="font-size:15px; line-height:1.28; color:rgba(237,230,217,0.75);">On-device inference is quietly reshaping the stack</div><div class="meta" style="margin-top:5px; display:flex; align-items:center; gap:5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> baixado</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TILE 5 · THEMES ===== -->
+  <div class="tile" style="background: linear-gradient(120deg,#141310 0%,#141310 50%,#F4EFE5 50%,#F4EFE5 100%);">
+    <div style="padding: 34px 30px 0 30px;">
+      <div class="capkick">Dois temas</div>
+      <div class="caphead">Escuro editorial<br>ou claro de papel.</div>
+    </div>
+    <div style="flex:1;"></div>
+    <div style="display:flex; justify-content:center; gap:14px; margin-bottom:-40px;">
+      <!-- mini dark -->
+      <div style="width:150px; height:520px; border-radius:26px; background:#12110F; border:1px solid rgba(255,255,255,0.12); box-shadow:0 18px 40px rgba(0,0,0,0.5); overflow:hidden; padding:16px 12px;">
+        <div style="display:flex; align-items:baseline; gap:4px;"><span class="serif" style="font-size:13px; font-weight:600; color:#EDE6D9;">Nexus</span><span class="brand-h" style="font-size:8px;">HUB</span></div>
+        <div style="height:70px; border-radius:9px; margin-top:12px; background:radial-gradient(120% 90% at 20% 10%, rgba(232,184,109,0.30), transparent 55%), linear-gradient(135deg,#241f18,#14161a);"></div>
+        <div class="serif" style="font-size:12px; line-height:1.28; color:#EDE6D9; margin-top:9px;">The hidden cost of abstraction layers</div>
+        <div class="serif" style="font-size:11px; line-height:1.3; color:rgba(237,230,217,0.6); margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.08);">Kotlin 2.2 context parameters</div>
+      </div>
+      <!-- mini light -->
+      <div style="width:150px; height:520px; border-radius:26px; background:#F4EFE5; border:1px solid rgba(26,20,12,0.14); box-shadow:0 18px 40px rgba(0,0,0,0.28); overflow:hidden; padding:16px 12px;">
+        <div style="display:flex; align-items:baseline; gap:4px;"><span class="serif" style="font-size:13px; font-weight:600; color:#241F18;">Nexus</span><span class="mono" style="font-size:8px; color:#8A5510; letter-spacing:0.14em;">HUB</span></div>
+        <div style="height:70px; border-radius:9px; margin-top:12px; background:radial-gradient(120% 90% at 20% 10%, rgba(232,184,109,0.4), transparent 55%), linear-gradient(135deg,#e7ddc9,#d6cdb8);"></div>
+        <div class="serif" style="font-size:12px; line-height:1.28; color:#241F18; margin-top:9px;">The hidden cost of abstraction layers</div>
+        <div class="serif" style="font-size:11px; line-height:1.3; color:rgba(36,31,24,0.6); margin-top:14px; padding-top:12px; border-top:1px solid rgba(26,20,12,0.12);">Kotlin 2.2 context parameters</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
