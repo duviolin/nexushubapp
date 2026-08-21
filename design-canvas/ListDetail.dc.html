@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .meta { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: rgba(237,230,217,0.55); }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 1180px; height: 820px; background: #12110F; color: #EDE6D9; position: relative; overflow: hidden; display: flex;">
+
+  <!-- LIST pane (~400dp) -->
+  <div style="width: 404px; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 28px 24px 18px 24px;">
+      <div style="display: flex; align-items: baseline; gap: 8px;"><span class="serif" style="font-size: 24px; font-weight: 600;">Nexus</span><span class="mono" style="font-size: 12px; color: #E8B86D; letter-spacing: 0.14em;">HUB</span></div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EDE6D9" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+    </div>
+    <div style="display: flex; gap: 8px; padding: 0 24px 16px 24px;">
+      <div style="padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 500; background: rgba(232,184,109,0.16); color: #E8B86D; border: 1px solid rgba(232,184,109,0.34);">Todos</div>
+      <div style="padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 500; color: rgba(237,230,217,0.6); border: 1px solid rgba(255,255,255,0.12);">Hacker News</div>
+      <div style="padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 500; color: rgba(237,230,217,0.6); border: 1px solid rgba(255,255,255,0.12);">Não lidos</div>
+    </div>
+
+    <!-- selected row -->
+    <div style="padding: 16px 24px; background: rgba(232,184,109,0.08); border-left: 3px solid #E8B86D;">
+      <div style="display: flex; align-items: center; gap: 8px;"><span class="meta">news.ycombinator</span><span style="color: rgba(237,230,217,0.28);">·</span><span class="meta">2h</span><span style="color: rgba(237,230,217,0.28);">·</span><span class="mono" style="font-size: 12px; color: #E8B86D;">▲ 842</span></div>
+      <div class="serif" style="font-size: 18px; line-height: 1.26; margin-top: 6px; color: #EDE6D9;">The hidden cost of abstraction layers in modern runtimes</div>
+    </div>
+    <!-- other rows -->
+    <div style="padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06);">
+      <div style="display: flex; align-items: center; gap: 8px;"><span class="meta">theverge.com</span><span style="color: rgba(237,230,217,0.28);">·</span><span class="meta">5h</span></div>
+      <div class="serif" style="font-size: 18px; line-height: 1.26; margin-top: 6px; color: rgba(237,230,217,0.72);">Kotlin 2.2 ships context parameters</div>
+    </div>
+    <div style="padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px; align-items: flex-start;">
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: center; gap: 8px;"><span class="meta">NewsAPI</span><span style="color: rgba(237,230,217,0.28);">·</span><span class="meta">now</span></div>
+        <div class="serif" style="font-size: 18px; line-height: 1.26; margin-top: 6px; color: #EDE6D9;">On-device inference is quietly reshaping the mobile stack</div>
+      </div>
+      <span style="width: 7px; height: 7px; border-radius: 50%; background: #E8B86D; margin-top: 6px;"></span>
+    </div>
+    <div style="padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06);">
+      <div style="display: flex; align-items: center; gap: 8px;"><span class="meta">lobste.rs</span><span style="color: rgba(237,230,217,0.28);">·</span><span class="meta">8h</span><span style="color: rgba(237,230,217,0.28);">·</span><span class="mono" style="font-size: 12px; color: rgba(232,184,109,0.55);">▲ 121</span></div>
+      <div class="serif" style="font-size: 18px; line-height: 1.26; margin-top: 6px; color: rgba(237,230,217,0.72);">A pragmatic guide to R8 full mode</div>
+    </div>
+  </div>
+
+  <!-- DETAIL pane (persistent) -->
+  <div style="flex: 1; position: relative; overflow: hidden;">
+    <div style="height: 260px; position: relative; background: radial-gradient(100% 90% at 12% 5%, rgba(232,184,109,0.32), transparent 55%), radial-gradient(130% 120% at 95% 90%, rgba(80,120,140,0.4), transparent 60%), linear-gradient(150deg, #241f18, #13151a);">
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, #12110F);"></div>
+      <div style="position: absolute; top: 20px; right: 24px; display: flex; gap: 8px;">
+        <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(9,8,7,0.5);"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4z"/></svg></div>
+        <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(9,8,7,0.5);"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#EDE6D9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/><path d="M8 11l8-4.5M8 13l8 4.5"/></svg></div>
+      </div>
+      <div style="position: absolute; left: 40px; right: 120px; bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;"><span class="meta" style="color: rgba(237,230,217,0.7);">news.ycombinator</span><span style="color: rgba(237,230,217,0.3);">·</span><span class="meta" style="color: rgba(237,230,217,0.7);">2h</span><span style="color: rgba(237,230,217,0.3);">·</span><span class="mono" style="font-size: 12px; color: #E8B86D;">▲ 842</span></div>
+        <div class="serif" style="font-size: 32px; line-height: 1.14; font-weight: 600;">The hidden cost of abstraction layers in modern Android runtimes</div>
+      </div>
+    </div>
+    <div style="padding: 8px 40px 0 40px; max-width: 640px;">
+      <!-- AI summary chip -->
+      <div style="padding: 14px 16px; border-radius: 14px; background: linear-gradient(160deg, rgba(232,184,109,0.10), rgba(232,184,109,0.03)); border: 1px solid rgba(232,184,109,0.26); margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M5 12H2M22 12h-3"/></svg><span class="mono" style="font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #E8B86D;">Resumo on-device</span></div>
+        <div class="sans" style="font-size: 14px; line-height: 1.5; color: rgba(237,230,217,0.82);">Camadas de abstração trocam controle por portabilidade; a conta reaparece em aparelhos antigos sob throttling térmico.</div>
+      </div>
+      <div class="serif" style="font-size: 17px; line-height: 1.55; color: rgba(237,230,217,0.85);">Every layer you add between the app and the metal promises safety and portability. Most of the time it delivers — until the frame budget runs out and the abstraction becomes the thing you profile against.</div>
+      <div class="serif" style="font-size: 17px; line-height: 1.55; color: rgba(237,230,217,0.85); margin-top: 14px;">On Android, the runtime has spent a decade absorbing this cost quietly.</div>
+    </div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: linear-gradient(180deg, transparent, #12110F);"></div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

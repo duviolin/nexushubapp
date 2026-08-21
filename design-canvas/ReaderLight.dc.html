@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #8A5510; text-decoration: none; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 390px; height: 960px; background: #F4EFE5; color: #241F18; position: relative; overflow: hidden;">
+
+  <!-- ReaderHeader: cover + scrim + display title -->
+  <div style="height: 340px; position: relative; overflow: hidden; background:
+      radial-gradient(120% 90% at 15% 5%, rgba(232,184,109,0.34), transparent 55%),
+      radial-gradient(150% 130% at 95% 90%, rgba(80,120,140,0.4), transparent 60%),
+      linear-gradient(150deg, #241f18, #13151a);">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,8,7,0.35) 0%, transparent 30%, rgba(9,8,7,0.4) 62%, #F4EFE5 100%);"></div>
+
+    <!-- top bar over cover -->
+    <div style="position: absolute; top: 44px; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 8px 12px;">
+      <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(9,8,7,0.5); backdrop-filter: blur(4px);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#241F18" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(9,8,7,0.5); backdrop-filter: blur(4px);">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#8A5510" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4z"/></svg>
+        </div>
+        <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(9,8,7,0.5); backdrop-filter: blur(4px);">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#241F18" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.4"/><circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="19" r="2.4"/><path d="M8 11l8-4.5M8 13l8 4.5"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- title block -->
+    <div style="position: absolute; left: 20px; right: 20px; bottom: 20px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.7);">news.ycombinator</span>
+        <span style="color: rgba(31,27,21,0.3);">·</span>
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.7);">2h</span>
+        <span style="color: rgba(31,27,21,0.3);">·</span>
+        <span class="mono" style="font-size: 12px; color: #8A5510;">▲ 842</span>
+      </div>
+      <div class="serif" style="font-size: 28px; line-height: 1.16; font-weight: 600; color: #241F18;">The hidden cost of abstraction layers in modern Android runtimes</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div style="padding: 24px 20px 0 20px;">
+    <div class="serif" style="font-size: 17px; line-height: 1.55; color: rgba(31,27,21,0.86);">
+      Every layer you add between the app and the metal promises safety and portability. Most of the time it delivers — until the frame budget runs out and the abstraction becomes the thing you profile against.
+    </div>
+    <div class="serif" style="font-size: 17px; line-height: 1.55; color: rgba(31,27,21,0.86); margin-top: 16px;">
+      On Android, the runtime has spent a decade absorbing this cost quietly: ahead-of-time compilation, baseline profiles, and a garbage collector tuned for interactive latency rather than raw throughput.
+    </div>
+    <div class="serif" style="font-size: 17px; line-height: 1.55; color: rgba(31,27,21,0.86); margin-top: 16px;">
+      The question is no longer whether to abstract, but where to place the seam — and who pays for it when the device is three years old and thermally throttled.
+    </div>
+  </div>
+
+  <!-- fade + reading progress -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 96px; background: linear-gradient(180deg, transparent, #F4EFE5 60%);"></div>
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 24px; display: flex; align-items: center; gap: 12px;">
+    <div style="flex: 1; height: 3px; border-radius: 3px; background: rgba(26,20,12,0.1); overflow: hidden;">
+      <div style="width: 38%; height: 100%; background: #E8B86D;"></div>
+    </div>
+    <span class="mono" style="font-size: 11px; color: rgba(31,27,21,0.5);">6 min</span>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

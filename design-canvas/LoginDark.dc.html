@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #E8B86D; text-decoration: none; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .authbtn { height: 52px; border-radius: 14px; font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: 15px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 390px; height: 844px; background: #12110F; color: #EDE6D9; position: relative; overflow: hidden;">
+
+  <!-- edge-to-edge atmospheric background (draws under status + nav bars) -->
+  <div style="position: absolute; inset: 0; background:
+      radial-gradient(90% 55% at 20% 8%, rgba(232,184,109,0.30), transparent 55%),
+      radial-gradient(120% 80% at 95% 30%, rgba(80,120,140,0.28), transparent 60%),
+      linear-gradient(180deg, #1a1712 0%, #12110F 55%, #0d0c0a 100%);"></div>
+  <!-- faint grid texture -->
+  <div style="position: absolute; inset: 0; opacity: 0.05; background-image: linear-gradient(rgba(237,230,217,1) 1px, transparent 1px), linear-gradient(90deg, rgba(237,230,217,1) 1px, transparent 1px); background-size: 28px 28px;"></div>
+
+  <!-- brand lockup -->
+  <div style="position: absolute; left: 28px; top: 150px;">
+    <div style="display: flex; align-items: baseline; gap: 10px;">
+      <span class="serif" style="font-size: 48px; font-weight: 600; letter-spacing: 0.01em;">Nexus</span>
+      <span class="mono" style="font-size: 15px; color: #E8B86D; letter-spacing: 0.18em;">HUB</span>
+    </div>
+    <div class="serif" style="font-size: 22px; line-height: 1.34; color: rgba(237,230,217,0.75); margin-top: 16px; max-width: 300px;">Seu command center de leitura técnica — Hacker News, NewsAPI e resumo on-device, offline-first.</div>
+  </div>
+
+  <!-- auth block, bottom-anchored -->
+  <div style="position: absolute; left: 24px; right: 24px; bottom: 40px; display: flex; flex-direction: column; gap: 12px;">
+
+    <div class="authbtn" style="background: #EDE6D9; color: #1A140C; font-weight: 600;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21.6 12.2c0-.7-.06-1.4-.18-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285F4"/><path d="M12 22c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 .95-3.4.95-2.6 0-4.8-1.75-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" fill="#34A853"/><path d="M6.4 13.85a6 6 0 0 1 0-3.7V7.55H3.1a10 10 0 0 0 0 8.9l3.3-2.6z" fill="#FBBC05"/><path d="M12 6.15c1.5 0 2.8.5 3.8 1.5l2.85-2.85A10 10 0 0 0 3.1 7.55l3.3 2.6C7.2 7.9 9.4 6.15 12 6.15z" fill="#EA4335"/></svg>
+      Continuar com Google
+    </div>
+
+    <div class="authbtn" style="background: transparent; color: #EDE6D9; border: 1px solid rgba(255,255,255,0.16);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#EDE6D9"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+      Continuar com GitHub
+    </div>
+
+    <div class="authbtn" style="background: #E8B86D; color: #1A140C; font-weight: 600;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A140C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      Entrar com e-mail
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px;">
+      <span class="sans" style="font-size: 14px; color: rgba(237,230,217,0.6);">Só experimentando?</span>
+      <span class="sans" style="font-size: 14px; color: #E8B86D; font-weight: 500;">Entrar no modo demo</span>
+    </div>
+
+    <div class="sans" style="font-size: 11px; line-height: 1.5; color: rgba(237,230,217,0.4); text-align: center; margin-top: 8px;">Ao continuar você concorda com os <span style="color: rgba(237,230,217,0.65);">Termos</span> e a <span style="color: rgba(237,230,217,0.65);">Política de Privacidade</span>.</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

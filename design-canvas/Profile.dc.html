@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 390px; height: 844px; background: #12110F; color: #EDE6D9; position: relative; overflow: hidden;">
+
+  <div style="height: 44px;"></div>
+
+  <!-- Top bar -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 14px 20px;">
+    <span class="serif" style="font-size: 24px; font-weight: 600;">Ler depois</span>
+    <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EDE6D9" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+    </div>
+  </div>
+
+  <!-- summary row -->
+  <div style="display: flex; gap: 10px; padding: 0 20px 20px 20px;">
+    <div style="flex: 1; background: #1C1B18; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px;">
+      <div class="mono" style="font-size: 26px; color: #E8B86D; font-weight: 500;">14</div>
+      <div class="sans" style="font-size: 12px; color: rgba(237,230,217,0.55); margin-top: 2px;">salvos</div>
+    </div>
+    <div style="flex: 1; background: #1C1B18; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px;">
+      <div class="mono" style="font-size: 26px; color: #EDE6D9; font-weight: 500;">3h</div>
+      <div class="sans" style="font-size: 12px; color: rgba(237,230,217,0.55); margin-top: 2px;">de leitura</div>
+    </div>
+    <div style="flex: 1; background: #1C1B18; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px;">
+      <div class="mono" style="font-size: 26px; color: #EDE6D9; font-weight: 500;">92%</div>
+      <div class="sans" style="font-size: 12px; color: rgba(237,230,217,0.55); margin-top: 2px;">concluídos</div>
+    </div>
+  </div>
+
+  <div class="mono" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(237,230,217,0.45); padding: 0 20px 12px 20px;">Salvos recentemente</div>
+
+  <!-- saved list -->
+  <div style="display: flex; flex-direction: column;">
+    <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.07);">
+      <div style="width: 64px; height: 64px; border-radius: 10px; flex-shrink: 0; background: radial-gradient(120% 100% at 20% 10%, rgba(232,184,109,0.35), transparent 60%), linear-gradient(135deg, #241f18, #14161a);"></div>
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.55);">news.ycombinator</span>
+          <span style="color: rgba(237,230,217,0.28);">·</span>
+          <span class="mono" style="font-size: 11px; color: #E8B86D;">▲ 842</span>
+        </div>
+        <div class="serif" style="font-size: 17px; line-height: 1.28; margin-top: 4px; color: #EDE6D9;">The hidden cost of abstraction layers in modern runtimes</div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.07);">
+      <div style="width: 64px; height: 64px; border-radius: 10px; flex-shrink: 0; background: linear-gradient(135deg, #201a16, #16130f); border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.4)" stroke-width="1.6"><path d="M4 5h16v14H4z"/><path d="M4 9h16"/></svg>
+      </div>
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.55);">theverge.com</span>
+          <span style="color: rgba(237,230,217,0.28);">·</span>
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.55);">ontem</span>
+        </div>
+        <div class="serif" style="font-size: 17px; line-height: 1.28; margin-top: 4px; color: #EDE6D9;">Kotlin 2.2 ships context parameters</div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.07);">
+      <div style="width: 64px; height: 64px; border-radius: 10px; flex-shrink: 0; background: radial-gradient(120% 100% at 80% 0%, rgba(196,89,62,0.32), transparent 55%), linear-gradient(135deg, #201a16, #16130f);"></div>
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.55);">NewsAPI</span>
+          <span style="color: rgba(237,230,217,0.28);">·</span>
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.55);">2 dias</span>
+        </div>
+        <div class="serif" style="font-size: 17px; line-height: 1.28; margin-top: 4px; color: #EDE6D9;">On-device inference is quietly reshaping the mobile stack</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 72px; padding: 12px 44px 0 44px; display: flex; align-items: flex-start; justify-content: space-between; background: rgba(18,17,15,0.9); border-top: 1px solid rgba(255,255,255,0.07);">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.5)" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>
+      <span class="sans" style="font-size: 11px; color: rgba(237,230,217,0.5);">Feed</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#E8B86D" stroke="#E8B86D" stroke-width="1.8" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4z"/></svg>
+      <span class="sans" style="font-size: 11px; color: #E8B86D; font-weight: 500;">Ler depois</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      <span class="sans" style="font-size: 11px; color: rgba(237,230,217,0.5);">Perfil</span>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

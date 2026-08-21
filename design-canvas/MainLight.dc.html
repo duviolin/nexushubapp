@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #8A5510; text-decoration: none; } a:hover { color: #6E4109; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 390px; height: 844px; background: #F4EFE5; color: #241F18; position: relative; overflow: hidden;">
+
+  <!-- status bar space left intentionally blank (real OS bar renders here) -->
+  <div style="height: 44px;"></div>
+
+  <!-- NexusTopBar -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 20px 14px 20px;">
+    <div style="display: flex; align-items: baseline; gap: 8px;">
+      <span class="serif" style="font-size: 22px; font-weight: 600; letter-spacing: 0.01em; color: #241F18;">Nexus</span>
+      <span class="mono" style="font-size: 12px; color: #8A5510; letter-spacing: 0.14em; text-transform: uppercase;">HUB</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#241F18" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </div>
+      <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; position: relative;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#241F18" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        <span style="position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: #E8B86D;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter chip row -->
+  <div style="display: flex; gap: 8px; padding: 0 20px 16px 20px; overflow: hidden;">
+    <div class="sans" style="padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; background: rgba(232,184,109,0.30); color: #8A5510; border: 1px solid rgba(232,184,109,0.34);">Todos</div>
+    <div class="sans" style="padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; color: rgba(31,27,21,0.62); border: 1px solid rgba(26,20,12,0.12);">Hacker News</div>
+    <div class="sans" style="padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; color: rgba(31,27,21,0.62); border: 1px solid rgba(26,20,12,0.12);">Só não lidos</div>
+  </div>
+
+  <!-- Feed list -->
+  <div style="display: flex; flex-direction: column; gap: 20px; padding: 0 20px;">
+
+    <!-- Card 1 — with image, unread -->
+    <div style="display: flex; flex-direction: column;">
+      <div style="height: 176px; border-radius: 14px; overflow: hidden; position: relative; background:
+          radial-gradient(120% 90% at 20% 10%, rgba(232,184,109,0.30), transparent 55%),
+          radial-gradient(140% 120% at 90% 100%, rgba(80,120,140,0.35), transparent 60%),
+          linear-gradient(135deg, #241f18, #14161a);">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(9,8,7,0.55));"></div>
+        <div style="position: absolute; left: 12px; top: 12px; display: flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 999px; background: rgba(9,8,7,0.55); backdrop-filter: blur(4px);">
+          <span class="mono" style="font-size: 11px; color: #241F18; letter-spacing: 0.04em;">Hacker News</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.55);">news.ycombinator</span>
+        <span style="color: rgba(31,27,21,0.28);">·</span>
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.55);">2h</span>
+        <span style="color: rgba(31,27,21,0.28);">·</span>
+        <span class="mono" style="font-size: 12px; color: #8A5510;">▲ 842</span>
+        <span style="flex: 1;"></span>
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #E8B86D;"></span>
+      </div>
+      <div class="serif" style="font-size: 21px; line-height: 1.26; font-weight: 500; margin-top: 8px; color: #241F18;">The hidden cost of abstraction layers in modern Android runtimes</div>
+    </div>
+
+    <!-- Card 2 — no image, read -->
+    <div style="display: flex; flex-direction: column; padding-top: 20px; border-top: 1px solid rgba(26,20,12,0.07);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.55);">theverge.com</span>
+        <span style="color: rgba(31,27,21,0.28);">·</span>
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.55);">5h</span>
+        <span style="color: rgba(31,27,21,0.28);">·</span>
+        <span class="mono" style="font-size: 12px; color: rgba(232,184,109,0.55);">▲ 311</span>
+      </div>
+      <div class="serif" style="font-size: 19px; line-height: 1.28; font-weight: 500; margin-top: 8px; color: rgba(31,27,21,0.72);">Kotlin 2.2 ships context parameters — what changes for library authors</div>
+    </div>
+
+    <!-- Card 3 — with image, unread -->
+    <div style="display: flex; flex-direction: column; padding-top: 20px; border-top: 1px solid rgba(26,20,12,0.07);">
+      <div style="height: 176px; border-radius: 14px; overflow: hidden; position: relative; background:
+          radial-gradient(130% 100% at 80% 0%, rgba(196,89,62,0.32), transparent 55%),
+          linear-gradient(135deg, #201a16, #16130f);">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(9,8,7,0.5));"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.55);">NewsAPI</span>
+        <span style="color: rgba(31,27,21,0.28);">·</span>
+        <span class="mono" style="font-size: 12px; color: rgba(31,27,21,0.55);">just now</span>
+        <span style="flex: 1;"></span>
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #E8B86D;"></span>
+      </div>
+      <div class="serif" style="font-size: 21px; line-height: 1.26; font-weight: 500; margin-top: 8px; color: #241F18;">On-device inference is quietly reshaping the mobile stack</div>
+    </div>
+  </div>
+
+  <!-- fade to bottom -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 72px; height: 64px; background: linear-gradient(180deg, transparent, #F4EFE5);"></div>
+
+  <!-- Bottom nav -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 72px; padding: 0 44px; display: flex; align-items: flex-start; justify-content: space-between; padding-top: 12px; background: rgba(244,239,229,0.9); border-top: 1px solid rgba(26,20,12,0.07); backdrop-filter: blur(8px);">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5510" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>
+      <span class="sans" style="font-size: 11px; color: #8A5510; font-weight: 500;">Feed</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(31,27,21,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4z"/></svg>
+      <span class="sans" style="font-size: 11px; color: rgba(31,27,21,0.5);">Ler depois</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(31,27,21,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      <span class="sans" style="font-size: 11px; color: rgba(31,27,21,0.5);">Perfil</span>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

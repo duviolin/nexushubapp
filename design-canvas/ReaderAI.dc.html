@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .phone { width: 390px; height: 720px; background: #12110F; color: #EDE6D9; border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; position: relative; overflow: hidden; }
+    .cap { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(237,230,217,0.5); margin-bottom: 14px; }
+    .cover { height: 150px; position: relative; background: radial-gradient(120% 90% at 15% 5%, rgba(232,184,109,0.3), transparent 55%), linear-gradient(150deg, #241f18, #13151a); }
+    .htitle { font-family: "Newsreader", Georgia, serif; font-size: 21px; line-height: 1.2; font-weight: 600; padding: 16px 20px 0 20px; }
+    .aihdr { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .aibadge { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #E8B86D; }
+  </style>
+</helmet>
+
+<div class="sans" style="display: flex; gap: 40px; padding: 40px; background: #0b0a09; align-items: flex-start;">
+
+  <!-- AVAILABLE -->
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div class="cap">Sumário IA · Available</div>
+    <div class="phone">
+      <div class="cover"></div>
+      <div class="htitle">The hidden cost of abstraction layers</div>
+      <div style="margin: 20px; padding: 16px; border-radius: 16px; background: linear-gradient(160deg, rgba(232,184,109,0.10), rgba(232,184,109,0.03)); border: 1px solid rgba(232,184,109,0.28);">
+        <div class="aihdr">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8B86D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M5 12H2M22 12h-3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/><circle cx="12" cy="12" r="3.2"/></svg>
+          <span class="aibadge">Resumo on-device · Gemini Nano</span>
+        </div>
+        <div class="sans" style="font-size: 14px; line-height: 1.55; color: rgba(237,230,217,0.85);">Camadas de abstração trocam controle por portabilidade. No Android, o runtime absorveu esse custo com AOT e baseline profiles — mas a conta reaparece em aparelhos antigos sob throttling térmico.</div>
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 14px;">
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.45);">gerado localmente · não sai do aparelho</span>
+        </div>
+      </div>
+      <div style="padding: 0 20px;"><div class="serif" style="font-size: 15px; line-height: 1.55; color: rgba(237,230,217,0.7);">Every layer you add between the app and the metal promises safety…</div></div>
+    </div>
+  </div>
+
+  <!-- DOWNLOADING -->
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div class="cap">Sumário IA · Downloading</div>
+    <div class="phone">
+      <div class="cover"></div>
+      <div class="htitle">The hidden cost of abstraction layers</div>
+      <div style="margin: 20px; padding: 16px; border-radius: 16px; background: #1C1B18; border: 1px solid rgba(255,255,255,0.09);">
+        <div class="aihdr">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11M8 10l4 4 4-4M5 20h14"/></svg>
+          <span class="aibadge" style="color: rgba(237,230,217,0.6);">Preparando o modelo</span>
+        </div>
+        <div class="sans" style="font-size: 14px; line-height: 1.5; color: rgba(237,230,217,0.7);">O modelo on-device está sendo baixado uma única vez. O resumo aparece assim que terminar.</div>
+        <div style="height: 6px; border-radius: 6px; background: rgba(255,255,255,0.08); margin-top: 14px; overflow: hidden;"><div style="width: 64%; height: 100%; background: #E8B86D;"></div></div>
+        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.45);">64% · 340 MB</span>
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.45);">só no Wi‑Fi</span>
+        </div>
+      </div>
+      <div style="padding: 0 20px;"><div class="serif" style="font-size: 15px; line-height: 1.55; color: rgba(237,230,217,0.7);">Every layer you add between the app and the metal promises safety…</div></div>
+    </div>
+  </div>
+
+  <!-- UNAVAILABLE -->
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div class="cap">Sumário IA · Unavailable</div>
+    <div class="phone">
+      <div class="cover"></div>
+      <div class="htitle">The hidden cost of abstraction layers</div>
+      <div style="margin: 20px; padding: 16px; border-radius: 16px; background: #1C1B18; border: 1px dashed rgba(255,255,255,0.16);">
+        <div class="aihdr">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,217,0.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v0.5"/></svg>
+          <span class="aibadge" style="color: rgba(237,230,217,0.5);">Resumo indisponível</span>
+        </div>
+        <div class="sans" style="font-size: 14px; line-height: 1.5; color: rgba(237,230,217,0.7);">Este aparelho não tem o AICore necessário para o resumo on-device. Você pode ler o artigo completo abaixo, sem IA.</div>
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 14px;">
+          <span class="mono" style="font-size: 11px; color: rgba(237,230,217,0.4);">nada é enviado para a nuvem</span>
+        </div>
+      </div>
+      <div style="padding: 0 20px;"><div class="serif" style="font-size: 15px; line-height: 1.55; color: rgba(237,230,217,0.7);">Every layer you add between the app and the metal promises safety…</div></div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
