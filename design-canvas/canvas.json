@@ -1,21 +1,35 @@
 {
   "pages": [
+    { "id": "identidade", "name": "Identidade & fundação" },
+    { "id": "componentes", "name": "Componentes · specs" },
     { "id": "telas", "name": "Telas · escuro ↕ claro" },
     { "id": "estados", "name": "Estados · escuro ↕ claro" },
-    { "id": "adaptativo", "name": "Adaptativo + Fundação" },
+    { "id": "adaptativo", "name": "Adaptativo" },
     { "id": "motion", "name": "Motion & interações" }
   ],
   "artboards": [
+    { "file": "Palette.dc.html", "title": "Identidade visual & cor", "page": "identidade", "x": 0, "y": 0, "w": 1240, "h": 1500 },
+    { "file": "Typography.dc.html", "title": "Tipografia", "page": "identidade", "x": 1340, "y": 0, "w": 1240, "h": 1420 },
+    { "file": "SpacingShape.dc.html", "title": "Espaço, forma & elevação", "page": "identidade", "x": 2680, "y": 0, "w": 1240, "h": 1180 },
+
+    { "file": "SpecButton.dc.html", "title": "NexusButton", "page": "componentes", "x": 0, "y": 0, "w": 1280, "h": 1200 },
+    { "file": "SpecCard.dc.html", "title": "ArticleCard", "page": "componentes", "x": 1380, "y": 0, "w": 1280, "h": 1120 },
+    { "file": "SpecInputs.dc.html", "title": "Entrada & controles", "page": "componentes", "x": 2760, "y": 0, "w": 1280, "h": 1120 },
+    { "file": "SpecNav.dc.html", "title": "Navegação & barras", "page": "componentes", "x": 0, "y": 1300, "w": 1280, "h": 1080 },
+    { "file": "SpecFeedback.dc.html", "title": "Feedback & estados", "page": "componentes", "x": 1380, "y": 1300, "w": 1280, "h": 940 },
+
     { "file": "Main.dc.html", "title": "Feed · escuro", "page": "telas", "x": 0, "y": 0, "w": 390, "h": 844 },
     { "file": "Reader.dc.html", "title": "Reader · escuro", "page": "telas", "x": 460, "y": 0, "w": 390, "h": 960 },
     { "file": "Filters.dc.html", "title": "Filtros · escuro", "page": "telas", "x": 920, "y": 0, "w": 390, "h": 844 },
-    { "file": "Profile.dc.html", "title": "Perfil · escuro", "page": "telas", "x": 1380, "y": 0, "w": 390, "h": 844 },
-    { "file": "LoginDark.dc.html", "title": "Login · escuro", "page": "telas", "x": 1840, "y": 0, "w": 390, "h": 844 },
-    { "file": "MainLight.dc.html", "title": "Feed · claro", "page": "telas", "x": 0, "y": 1050, "w": 390, "h": 844 },
-    { "file": "ReaderLight.dc.html", "title": "Reader · claro", "page": "telas", "x": 460, "y": 1050, "w": 390, "h": 960 },
-    { "file": "FiltersLight.dc.html", "title": "Filtros · claro", "page": "telas", "x": 920, "y": 1050, "w": 390, "h": 844 },
-    { "file": "ProfileLight.dc.html", "title": "Perfil · claro", "page": "telas", "x": 1380, "y": 1050, "w": 390, "h": 844 },
-    { "file": "LoginLight.dc.html", "title": "Login · claro", "page": "telas", "x": 1840, "y": 1050, "w": 390, "h": 844 },
+    { "file": "Profile.dc.html", "title": "Ler depois · escuro", "page": "telas", "x": 1380, "y": 0, "w": 390, "h": 844 },
+    { "file": "Account.dc.html", "title": "Perfil · escuro", "page": "telas", "x": 1840, "y": 0, "w": 390, "h": 940 },
+    { "file": "LoginDark.dc.html", "title": "Login · escuro", "page": "telas", "x": 2300, "y": 0, "w": 390, "h": 844 },
+    { "file": "MainLight.dc.html", "title": "Feed · claro", "page": "telas", "x": 0, "y": 1080, "w": 390, "h": 844 },
+    { "file": "ReaderLight.dc.html", "title": "Reader · claro", "page": "telas", "x": 460, "y": 1080, "w": 390, "h": 960 },
+    { "file": "FiltersLight.dc.html", "title": "Filtros · claro", "page": "telas", "x": 920, "y": 1080, "w": 390, "h": 844 },
+    { "file": "ProfileLight.dc.html", "title": "Ler depois · claro", "page": "telas", "x": 1380, "y": 1080, "w": 390, "h": 844 },
+    { "file": "AccountLight.dc.html", "title": "Perfil · claro", "page": "telas", "x": 1840, "y": 1080, "w": 390, "h": 940 },
+    { "file": "LoginLight.dc.html", "title": "Login · claro", "page": "telas", "x": 2300, "y": 1080, "w": 390, "h": 844 },
 
     { "file": "FeedStates.dc.html", "title": "Feed · estados · escuro", "page": "estados", "x": 0, "y": 0, "w": 1760, "h": 940 },
     { "file": "ReaderAI.dc.html", "title": "Sumário IA · escuro", "page": "estados", "x": 1860, "y": 0, "w": 1330, "h": 866 },
@@ -24,16 +38,18 @@
 
     { "file": "ListDetail.dc.html", "title": "List-Detail · escuro", "page": "adaptativo", "x": 0, "y": 0, "w": 1180, "h": 820 },
     { "file": "ListDetailLight.dc.html", "title": "List-Detail · claro", "page": "adaptativo", "x": 0, "y": 920, "w": 1180, "h": 820 },
-    { "file": "Insets.dc.html", "title": "Edge-to-edge & window insets", "page": "adaptativo", "x": 0, "y": 1840, "w": 1000, "h": 900 },
+    { "file": "Insets.dc.html", "title": "Edge-to-edge & insets", "page": "adaptativo", "x": 0, "y": 1840, "w": 1000, "h": 900 },
     { "file": "Catalog.dc.html", "title": "Nexus Catalog · escuro", "page": "adaptativo", "x": 1280, "y": 0, "w": 980, "h": 1300 },
     { "file": "CatalogLight.dc.html", "title": "Nexus Catalog · claro", "page": "adaptativo", "x": 1280, "y": 1400, "w": 980, "h": 1300 },
 
     { "file": "Motion.dc.html", "title": "Motion & interações", "page": "motion", "x": 0, "y": 0, "w": 1420, "h": 920 }
   ],
   "annotations": [
-    { "id": "compare", "page": "telas", "x": 0, "y": -180, "w": 640, "text": "Escuro (linha de cima) ↕ Claro (linha de baixo)\nMesmos tokens, papéis invertidos. O tema claro é a tabela IRMÃ, não uma segunda paleta: marfim↔grafite trocam; o âmbar vira âmbar profundo quando é texto/ícone (contraste WCAG); capas de imagem não invertem." },
+    { "id": "idnote", "page": "identidade", "x": 0, "y": -150, "w": 660, "text": "A fundação NexusUI. Cor, tipografia, espaço e forma como tokens (papel), não tinta. Tudo o que vem depois — telas e componentes — monta com estas peças. Feature nunca escreve hex." },
+    { "id": "compnote", "page": "componentes", "x": 0, "y": -150, "w": 660, "text": "Cada componente com anatomia, dimensões (dp), estados e API. KDoc = contrato de uso. É o Nexus Catalog em forma de spec: se o componente não tem do/don't aqui, não entra no :core:ui." },
+    { "id": "compare", "page": "telas", "x": 0, "y": -180, "w": 640, "text": "Escuro (linha de cima) ↕ Claro (linha de baixo). Mesmos tokens, papéis invertidos: marfim↔grafite trocam; o âmbar vira âmbar profundo quando é texto/ícone (contraste WCAG); capas de imagem não invertem." },
     { "id": "estadosnote", "page": "estados", "x": 0, "y": -140, "w": 520, "text": "Todo estado de tela cheia é um StatePanel (nunca só um spinner central): loading com skeleton, empty, offline e error — cada um com no máximo um NexusButton. Nos dois temas." },
-    { "id": "adaptnote", "page": "adaptativo", "x": 0, "y": -140, "w": 560, "text": "Compact = feed full-bleed. Medium/Expanded = List-Detail (lista ~360–420dp + artigo persistente). Insets tratados pelo NexusScaffold. O Catalog é o Storybook que prova o DS — fotografado pelo Roborazzi em dark + light." }
+    { "id": "adaptnote", "page": "adaptativo", "x": 0, "y": -140, "w": 560, "text": "Compact = feed full-bleed. Medium/Expanded = List-Detail (lista ~360–420dp + artigo persistente). Insets tratados pelo NexusScaffold. O Catalog é o Storybook que prova o DS." }
   ],
-  "launch": { "view": "canvas", "page": "telas" }
+  "launch": { "view": "canvas", "page": "identidade" }
 }

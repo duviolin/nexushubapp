@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    :root {
+      --surface: #12110F; --container: #1C1B18; --ink: #EDE6D9;
+      --ink-2: rgba(237,230,217,0.6); --line: rgba(255,255,255,0.09);
+      --accent: #E8B86D; --onAccent: #1A140C; --danger: #C4593E;
+      --serif: "Newsreader", Georgia, serif; --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .mono { font-family: var(--mono); } .sans { font-family: var(--sans); } .serif { font-family: var(--serif); }
+    .sect { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 16px; }
+    .card { background: var(--container); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+    .b { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans); font-weight: 600; white-space: nowrap; }
+    .P { background: var(--accent); color: var(--onAccent); }
+    .S { background: transparent; color: var(--accent); border: 1px solid rgba(232,184,109,0.5); }
+    .G { background: transparent; color: var(--ink); }
+    .D { background: transparent; color: var(--danger); border: 1px solid rgba(196,89,62,0.5); }
+    .tag { font-family: var(--mono); font-size: 11px; color: var(--ink-2); margin-top: 10px; }
+    th, td { text-align: left; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid var(--line); }
+    th { font-family: var(--mono); color: var(--accent); font-weight: 500; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+    td { font-family: var(--sans); color: var(--ink-2); }
+    td .mono { color: var(--ink); }
+  </style>
+</helmet>
+
+<div style="width: 1280px; height: 1200px; background: var(--surface); color: var(--ink); font-family: var(--sans); padding: 48px 52px; position: relative; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; gap: 14px;">
+    <span class="serif" style="font-size: 38px; font-weight: 600;">NexusButton</span>
+    <span class="mono" style="font-size: 13px; color: var(--accent); letter-spacing: 0.1em;">:core:ui/component · o botão da plataforma</span>
+  </div>
+  <div class="sans" style="font-size: 15px; line-height: 1.55; color: var(--ink-2); margin-top: 12px; max-width: 900px;">Ação com <strong style="color:var(--ink);">label</strong>. Cor, ripple, press-scale, disable-alpha, min-height 48dp e Reduce Motion já vivem dentro. A feature pede intenção (<span class="mono" style="color:var(--accent);">style</span>, <span class="mono" style="color:var(--accent);">size</span>), nunca cor.</div>
+
+  <!-- ANATOMY -->
+  <div style="margin-top: 34px;" class="sect">Anatomia — size Medium (default)</div>
+  <div class="card" style="display: flex; align-items: center; gap: 60px;">
+    <div style="position: relative; padding: 40px 60px;">
+      <div class="b P" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A140C" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4z"/></svg>
+        Ler depois
+      </div>
+      <!-- dimension guides -->
+      <div style="position: absolute; left: 60px; right: 60px; top: 22px; border-top: 1px dashed rgba(232,184,109,0.5);"></div>
+      <div style="position: absolute; left: 60px; top: 14px;"><span class="mono" style="font-size: 10px; color: var(--accent);">height 48dp</span></div>
+      <div style="position: absolute; left: 20px; bottom: 14px;"><span class="mono" style="font-size: 10px; color: var(--accent);">radius 12dp</span></div>
+      <div style="position: absolute; right: 30px; bottom: 40px;"><span class="mono" style="font-size: 10px; color: var(--accent);">padding-h 20dp</span></div>
+    </div>
+    <div style="flex: 1;">
+      <div class="mono" style="font-size: 12px; color: var(--ink-2); line-height: 2;">
+        <span style="color:var(--accent);">•</span> icon slot 18dp · gap 8dp (opcional, leading)<br>
+        <span style="color:var(--accent);">•</span> label · Plex Sans 600 · 14sp · 1 linha<br>
+        <span style="color:var(--accent);">•</span> área de toque semântica ≥ 48×48dp<br>
+        <span style="color:var(--accent);">•</span> largura: hug conteúdo · full-width só em StatePanel/sheet
+      </div>
+    </div>
+  </div>
+
+  <!-- STYLES x STATES -->
+  <div style="margin-top: 34px;" class="sect">4 styles × estados</div>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+    <!-- Primary -->
+    <div class="card">
+      <div class="b P" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%;">Primary</div>
+      <div class="b P" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; background: #d9a95d; box-shadow: 0 0 0 3px rgba(232,184,109,0.18); transform: scale(0.97);">pressed 0.97</div>
+      <div class="b P" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; opacity: 0.38;">disabled</div>
+      <div class="tag">Máx 1 por região. Ação principal.</div>
+    </div>
+    <!-- Secondary -->
+    <div class="card">
+      <div class="b S" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%;">Secondary</div>
+      <div class="b S" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; background: rgba(232,184,109,0.12);">pressed</div>
+      <div class="b S" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px;"><span style="width:14px;height:14px;border-radius:50%;border:2px solid rgba(232,184,109,0.35);border-top-color:var(--accent);"></span>loading</div>
+      <div class="tag">Ação secundária ao lado da primária.</div>
+    </div>
+    <!-- Ghost -->
+    <div class="card">
+      <div class="b G" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%;">Ghost</div>
+      <div class="b G" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; background: rgba(255,255,255,0.06);">pressed</div>
+      <div class="b G" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; opacity: 0.38;">disabled</div>
+      <div class="tag">Ação terciária / dismiss. Sem borda.</div>
+    </div>
+    <!-- Destructive -->
+    <div class="card">
+      <div class="b D" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%;">Destructive</div>
+      <div class="b D" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; background: rgba(196,89,62,0.12);">pressed</div>
+      <div class="b D" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px; width: 100%; margin-top: 10px; opacity: 0.38;">disabled</div>
+      <div class="tag">Arquivar/apagar. Confirmação é da feature.</div>
+    </div>
+  </div>
+
+  <!-- SIZES + API -->
+  <div style="margin-top: 34px; display: grid; grid-template-columns: 380px 1fr; gap: 24px; align-items: start;">
+    <div>
+      <div class="sect">3 tamanhos</div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
+        <div style="display: flex; align-items: center; gap: 16px;"><div class="b P" style="height: 36px; padding: 0 14px; border-radius: 10px; font-size: 13px;">Small</div><span class="mono" style="font-size: 11px; color: var(--ink-2);">36dp · chips de barra</span></div>
+        <div style="display: flex; align-items: center; gap: 16px;"><div class="b P" style="height: 48px; padding: 0 20px; border-radius: 12px; font-size: 14px;">Medium</div><span class="mono" style="font-size: 11px; color: var(--ink-2);">48dp · default</span></div>
+        <div style="display: flex; align-items: center; gap: 16px;"><div class="b P" style="height: 56px; padding: 0 26px; border-radius: 14px; font-size: 15px;">Large</div><span class="mono" style="font-size: 11px; color: var(--ink-2);">56dp · CTA de StatePanel</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="sect">API pública (KDoc = contrato)</div>
+      <div class="card" style="padding: 6px 10px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><th>param</th><th>tipo</th><th>nota</th></tr>
+          <tr><td><span class="mono">label</span></td><td><span class="mono">String</span></td><td>obrigatório · 1 linha</td></tr>
+          <tr><td><span class="mono">onClick</span></td><td><span class="mono">() -&gt; Unit</span></td><td>—</td></tr>
+          <tr><td><span class="mono">style</span></td><td><span class="mono">NexusButtonStyle</span></td><td>Primary · Secondary · Ghost · Destructive</td></tr>
+          <tr><td><span class="mono">size</span></td><td><span class="mono">NexusButtonSize</span></td><td>Small · Medium · Large</td></tr>
+          <tr><td><span class="mono">leadingIcon</span></td><td><span class="mono">Painter?</span></td><td>opcional</td></tr>
+          <tr><td><span class="mono">loading</span></td><td><span class="mono">Boolean</span></td><td>troca label por spinner, desabilita</td></tr>
+          <tr><td><span class="mono">enabled</span></td><td><span class="mono">Boolean</span></td><td>alpha 0.38</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DO / DONT -->
+  <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="background: rgba(232,184,109,0.06); border: 1px solid rgba(232,184,109,0.28); border-radius: 14px; padding: 18px 20px;">
+      <div class="mono" style="font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">✓ Usar quando</div>
+      <div class="sans" style="font-size: 13px; color: var(--ink-2); line-height: 1.7;">Ação com label · CTA de empty/error · confirmar arquivar (Destructive).</div>
+    </div>
+    <div style="background: rgba(196,89,62,0.06); border: 1px solid rgba(196,89,62,0.3); border-radius: 14px; padding: 18px 20px;">
+      <div class="mono" style="font-size: 12px; color: var(--danger); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;">✕ Não usar</div>
+      <div class="sans" style="font-size: 13px; color: var(--ink-2); line-height: 1.7;">Só ícone → NexusIconButton · navegação de tab → barra · toggle on/off → switch/chip.</div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

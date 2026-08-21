@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .sect { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 18px; }
+    .sw { border-radius: 14px; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; min-height: 132px; border: 1px solid rgba(255,255,255,0.06); }
+    .swname { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; font-weight: 500; }
+    .swhex { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; opacity: 0.7; margin-top: 2px; }
+    .swrole { font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: 11px; margin-top: 8px; line-height: 1.4; opacity: 0.65; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 1240px; height: 1500px; background: #12110F; color: #EDE6D9; padding: 48px 52px; position: relative; overflow: hidden;">
+
+  <!-- header -->
+  <div style="display: flex; align-items: baseline; gap: 14px;">
+    <span class="serif" style="font-size: 40px; font-weight: 600;">Identidade visual</span>
+    <span class="mono" style="font-size: 13px; color: #E8B86D; letter-spacing: 0.12em;">NexusUI · editorial dark-tech</span>
+  </div>
+  <div class="serif" style="font-size: 21px; line-height: 1.5; color: rgba(237,230,217,0.78); margin-top: 18px; max-width: 940px;">
+    O Nexus Hub é um produto de <em>leitura</em>. A cor trabalha como a de um terminal de inteligência lido à noite: um <strong style="color:#E8B86D;">grafite quente</strong> que descansa a vista e um <strong style="color:#E8B86D;">âmbar fosfórico</strong> único — a cor de um abajur sobre a página. Um só acento significa foco: o âmbar aponta a ação, o não-lido, o dado que importa. Nada de roxo Material, nada de arco-íris de estados.
+  </div>
+
+  <!-- primary palette -->
+  <div style="margin-top: 40px;" class="sect">Paleta — tema escuro (a fonte da verdade)</div>
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px;">
+    <div class="sw" style="background: #12110F; border-color: rgba(255,255,255,0.14);"><div class="swname" style="color:#EDE6D9;">surface</div><div class="swhex" style="color:#EDE6D9;">#12110F</div><div class="swrole" style="color:#EDE6D9;">Fundo do app. Grafite quente, nunca preto puro.</div></div>
+    <div class="sw" style="background: #1C1B18;"><div class="swname" style="color:#EDE6D9;">surfaceContainer</div><div class="swhex" style="color:#EDE6D9;">#1C1B18</div><div class="swrole" style="color:#EDE6D9;">Cards, sheets, barras. Um degrau acima do fundo.</div></div>
+    <div class="sw" style="background: #E8B86D;"><div class="swname" style="color:#1A140C;">accent</div><div class="swhex" style="color:#1A140C;">#E8B86D</div><div class="swrole" style="color:#1A140C;">Âmbar fosfórico. O único acento — ação, não-lido, score.</div></div>
+    <div class="sw" style="background: #1C1B18; position: relative;"><div style="position:absolute;inset:16px;bottom:auto;height:44px;border-radius:8px;background:rgba(232,184,109,0.20);border:1px solid rgba(232,184,109,0.34);"></div><div class="swname" style="color:#EDE6D9;">accentMuted</div><div class="swhex" style="color:#EDE6D9;">amber @ 20%</div><div class="swrole" style="color:#EDE6D9;">Chips selecionados, realce de não-lido.</div></div>
+
+    <div class="sw" style="background: #EDE6D9;"><div class="swname" style="color:#1A140C;">onSurface</div><div class="swhex" style="color:#1A140C;">#EDE6D9</div><div class="swrole" style="color:#1A140C;">Texto. Marfim — nunca branco 100%, que "grita".</div></div>
+    <div class="sw" style="background: #1C1B18;"><div class="swname" style="color:rgba(237,230,217,0.6);">onSurfaceMuted</div><div class="swhex" style="color:rgba(237,230,217,0.6);">ivory @ 55%</div><div class="swrole" style="color:rgba(237,230,217,0.6);">Meta, legendas, texto secundário.</div></div>
+    <div class="sw" style="background: #1C1B18; position: relative;"><div style="position:absolute;left:16px;right:16px;top:22px;height:1px;background:rgba(255,255,255,0.1);"></div><div class="swname" style="color:#EDE6D9;">outline</div><div class="swhex" style="color:#EDE6D9;">white @ 8–12%</div><div class="swrole" style="color:#EDE6D9;">Separadores, bordas de card. Quase sussurro.</div></div>
+    <div class="sw" style="background: #C4593E;"><div class="swname" style="color:#EDE6D9;">danger</div><div class="swhex" style="color:#EDE6D9;">#C4593E</div><div class="swrole" style="color:#EDE6D9;">Vermelho terroso. Destrutivo/erro — combina com o âmbar.</div></div>
+  </div>
+
+  <!-- accent deep dive -->
+  <div style="margin-top: 44px;" class="sect">O acento em dois contextos (contraste WCAG)</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="background: #1C1B18; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px; display: flex; gap: 18px; align-items: center;">
+      <div style="width: 72px; height: 72px; border-radius: 14px; background: #E8B86D; flex-shrink: 0;"></div>
+      <div>
+        <div class="mono" style="font-size: 13px; color: #EDE6D9;">accent como <strong>preenchimento</strong></div>
+        <div class="sans" style="font-size: 13px; color: rgba(237,230,217,0.6); margin-top: 6px; line-height: 1.5;">Botão primary, toggle, dot de não-lido. Texto por cima = <span class="mono" style="color:#1A140C;background:#E8B86D;padding:1px 5px;border-radius:4px;">onAccent #1A140C</span>. Contraste 8.9:1.</div>
+      </div>
+    </div>
+    <div style="background: #1C1B18; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px; display: flex; gap: 18px; align-items: center;">
+      <div style="width: 72px; height: 72px; border-radius: 14px; background: #1C1B18; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; display: flex; align-items: center; justify-content: center;"><span class="mono" style="font-size: 22px; color: #E8B86D;">▲</span></div>
+      <div>
+        <div class="mono" style="font-size: 13px; color: #EDE6D9;">accent como <strong>texto/ícone</strong></div>
+        <div class="sans" style="font-size: 13px; color: rgba(237,230,217,0.6); margin-top: 6px; line-height: 1.5;">Score HN, links. No escuro usa <span class="mono" style="color:#E8B86D;">#E8B86D</span> (7.4:1). No claro escurece para <span class="mono" style="color:#8A5510;">#8A5510</span> para manter contraste.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- light siblings -->
+  <div style="margin-top: 44px;" class="sect">Tabela irmã — tema claro (mesmos papéis, valores invertidos)</div>
+  <div style="display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 14px;">
+    <div><div style="height: 76px; border-radius: 12px; background: #F4EFE5; border: 1px solid rgba(26,20,12,0.14);"></div><div class="mono" style="font-size: 11px; color: rgba(237,230,217,0.7); margin-top: 8px;">surface</div><div class="mono" style="font-size: 10px; color: rgba(237,230,217,0.4);">#F4EFE5</div></div>
+    <div><div style="height: 76px; border-radius: 12px; background: #FBF7EF; border: 1px solid rgba(26,20,12,0.1);"></div><div class="mono" style="font-size: 11px; color: rgba(237,230,217,0.7); margin-top: 8px;">container</div><div class="mono" style="font-size: 10px; color: rgba(237,230,217,0.4);">#FBF7EF</div></div>
+    <div><div style="height: 76px; border-radius: 12px; background: #E8B86D;"></div><div class="mono" style="font-size: 11px; color: rgba(237,230,217,0.7); margin-top: 8px;">accent (fill)</div><div class="mono" style="font-size: 10px; color: rgba(237,230,217,0.4);">#E8B86D</div></div>
+    <div><div style="height: 76px; border-radius: 12px; background: #8A5510;"></div><div class="mono" style="font-size: 11px; color: rgba(237,230,217,0.7); margin-top: 8px;">accent (texto)</div><div class="mono" style="font-size: 10px; color: rgba(237,230,217,0.4);">#8A5510</div></div>
+    <div><div style="height: 76px; border-radius: 12px; background: #241F18;"></div><div class="mono" style="font-size: 11px; color: rgba(237,230,217,0.7); margin-top: 8px;">onSurface</div><div class="mono" style="font-size: 10px; color: rgba(237,230,217,0.4);">#241F18</div></div>
+    <div><div style="height: 76px; border-radius: 12px; background: #A6412A;"></div><div class="mono" style="font-size: 11px; color: rgba(237,230,217,0.7); margin-top: 8px;">danger</div><div class="mono" style="font-size: 10px; color: rgba(237,230,217,0.4);">#A6412A</div></div>
+  </div>
+
+  <!-- forbidden -->
+  <div style="margin-top: 44px; display: flex; gap: 16px; align-items: stretch;">
+    <div style="flex: 1; background: rgba(196,89,62,0.08); border: 1px solid rgba(196,89,62,0.3); border-radius: 16px; padding: 20px 22px;">
+      <div class="mono" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4593E; margin-bottom: 12px;">✕ Proibido</div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <span style="width: 34px; height: 34px; border-radius: 8px; background: #6650a4;"></span>
+        <span style="width: 34px; height: 34px; border-radius: 8px; background: #D0BCFF;"></span>
+        <span style="width: 34px; height: 34px; border-radius: 8px; background: linear-gradient(135deg,#7f5af0,#2cb1bc);"></span>
+        <span class="sans" style="font-size: 13px; color: rgba(237,230,217,0.7); margin-left: 8px;">Roxo/indigo Material · dynamicColor · gradiente mesh · glassmorphism em tudo</span>
+      </div>
+    </div>
+    <div style="flex: 1; background: rgba(232,184,109,0.06); border: 1px solid rgba(232,184,109,0.28); border-radius: 16px; padding: 20px 22px;">
+      <div class="mono" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #E8B86D; margin-bottom: 12px;">✓ Regra</div>
+      <div class="sans" style="font-size: 13px; color: rgba(237,230,217,0.75); line-height: 1.55;">Cor entra por <span class="mono" style="color:#E8B86D;">NexusTheme.colors.accent</span> — token, nunca hex na feature. Um Primary por região. Screenshot Roborazzi nos dois temas + fontScale 1.0 e 1.3.</div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

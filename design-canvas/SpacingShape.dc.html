@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    :root {
+      --surface: #12110F; --container: #1C1B18; --ink: #EDE6D9;
+      --ink-2: rgba(237,230,217,0.6); --line: rgba(255,255,255,0.09); --accent: #E8B86D;
+      --serif: "Newsreader", Georgia, serif; --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .sect { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 18px; }
+    .card { background: var(--container); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+    .mono { font-family: var(--mono); } .sans { font-family: var(--sans); } .serif { font-family: var(--serif); }
+  </style>
+</helmet>
+
+<div style="width: 1240px; height: 1180px; background: var(--surface); color: var(--ink); font-family: var(--sans); padding: 48px 52px; position: relative; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; gap: 14px;">
+    <span class="serif" style="font-size: 40px; font-weight: 600;">Espaço, forma & elevação</span>
+    <span class="mono" style="font-size: 13px; color: var(--accent); letter-spacing: 0.12em;">NexusTheme.spacing · .shapes</span>
+  </div>
+  <div class="serif" style="font-size: 20px; line-height: 1.5; color: rgba(237,230,217,0.75); margin-top: 16px; max-width: 940px;">Ritmo fechado, sem <span class="mono" style="font-size:16px;">16.dp</span> solto. Cantos suaves mas não infantis. Elevação por <em>superfície e outline</em>, quase sem sombra — o escuro já dá profundidade.</div>
+
+  <!-- spacing scale -->
+  <div style="margin-top: 40px;" class="sect">Escala de espaçamento — NexusSpacing</div>
+  <div style="display: flex; gap: 20px; align-items: flex-end;">
+    <div style="text-align: center;"><div style="width: 4px; height: 4px; background: var(--accent); margin: 0 auto 10px;"></div><div class="mono" style="font-size: 12px; color: var(--ink);">xxs</div><div class="mono" style="font-size: 11px; color: var(--ink-2);">4dp</div></div>
+    <div style="text-align: center;"><div style="width: 8px; height: 8px; background: var(--accent); margin: 0 auto 10px;"></div><div class="mono" style="font-size: 12px; color: var(--ink);">xs</div><div class="mono" style="font-size: 11px; color: var(--ink-2);">8dp</div></div>
+    <div style="text-align: center;"><div style="width: 12px; height: 12px; background: var(--accent); margin: 0 auto 10px;"></div><div class="mono" style="font-size: 12px; color: var(--ink);">sm</div><div class="mono" style="font-size: 11px; color: var(--ink-2);">12dp</div></div>
+    <div style="text-align: center;"><div style="width: 20px; height: 20px; background: var(--accent); margin: 0 auto 10px;"></div><div class="mono" style="font-size: 12px; color: var(--ink);">md</div><div class="mono" style="font-size: 11px; color: var(--ink-2);">20dp</div></div>
+    <div style="text-align: center;"><div style="width: 32px; height: 32px; background: var(--accent); margin: 0 auto 10px;"></div><div class="mono" style="font-size: 12px; color: var(--ink);">lg</div><div class="mono" style="font-size: 11px; color: var(--ink-2);">32dp</div></div>
+    <div style="flex: 1; padding-left: 20px; border-left: 1px solid var(--line);">
+      <div class="sans" style="font-size: 13px; color: var(--ink-2); line-height: 1.6;">Aplicações fixas: margem lateral do feed = <span class="mono" style="color:var(--accent);">md (20)</span> · meta→título = <span class="mono" style="color:var(--accent);">sm (12)</span> · gap entre cards = <span class="mono" style="color:var(--accent);">md (20)</span> · padding interno de card = <span class="mono" style="color:var(--accent);">md (16–20)</span>. Sem valores fora da escala.</div>
+    </div>
+  </div>
+
+  <!-- radii / shapes -->
+  <div style="margin-top: 44px;" class="sect">Formas — NexusShapes (raio de canto)</div>
+  <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+    <div class="card" style="align-items: center; text-align: center;"><div style="width: 72px; height: 56px; background: #2a2823; border: 1px solid var(--line); border-radius: 8px; margin: 0 auto;"></div><div class="mono" style="font-size: 12px; color: var(--ink); margin-top: 14px;">sm · 8dp</div><div class="sans" style="font-size: 11px; color: var(--ink-2); margin-top: 4px;">chips internos, thumb</div></div>
+    <div class="card" style="align-items: center; text-align: center;"><div style="width: 72px; height: 56px; background: #2a2823; border: 1px solid var(--line); border-radius: 12px; margin: 0 auto;"></div><div class="mono" style="font-size: 12px; color: var(--ink); margin-top: 14px;">md · 12dp</div><div class="sans" style="font-size: 11px; color: var(--ink-2); margin-top: 4px;">botões, ícones</div></div>
+    <div class="card" style="align-items: center; text-align: center;"><div style="width: 72px; height: 56px; background: #2a2823; border: 1px solid var(--line); border-radius: 14px; margin: 0 auto;"></div><div class="mono" style="font-size: 12px; color: var(--ink); margin-top: 14px;">lg · 14dp</div><div class="sans" style="font-size: 11px; color: var(--ink-2); margin-top: 4px;">ArticleCard</div></div>
+    <div class="card" style="align-items: center; text-align: center;"><div style="width: 72px; height: 56px; background: #2a2823; border: 1px solid var(--line); border-radius: 22px; margin: 0 auto;"></div><div class="mono" style="font-size: 12px; color: var(--ink); margin-top: 14px;">xl · 22dp</div><div class="sans" style="font-size: 11px; color: var(--ink-2); margin-top: 4px;">bottom sheet</div></div>
+    <div class="card" style="align-items: center; text-align: center;"><div style="width: 72px; height: 40px; background: #2a2823; border: 1px solid var(--line); border-radius: 999px; margin: 0 auto;"></div><div class="mono" style="font-size: 12px; color: var(--ink); margin-top: 14px;">pill · full</div><div class="sans" style="font-size: 11px; color: var(--ink-2); margin-top: 4px;">FilterChip, switch</div></div>
+  </div>
+
+  <!-- elevation -->
+  <div style="margin-top: 44px;" class="sect">Elevação — por superfície + outline, não por sombra pesada</div>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+    <div style="background: #12110F; border-radius: 16px; padding: 22px; border: 1px solid rgba(255,255,255,0.04);"><div class="mono" style="font-size: 12px; color: var(--accent);">z0 · surface</div><div class="sans" style="font-size: 12px; color: var(--ink-2); margin-top: 6px; line-height: 1.5;">Fundo do app. Sem borda.</div></div>
+    <div style="background: #1C1B18; border-radius: 16px; padding: 22px; border: 1px solid rgba(255,255,255,0.08);"><div class="mono" style="font-size: 12px; color: var(--accent);">z1 · container</div><div class="sans" style="font-size: 12px; color: var(--ink-2); margin-top: 6px; line-height: 1.5;">Card. +superfície +outline 8%.</div></div>
+    <div style="background: #222019; border-radius: 16px; padding: 22px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.4);"><div class="mono" style="font-size: 12px; color: var(--accent);">z2 · raised</div><div class="sans" style="font-size: 12px; color: var(--ink-2); margin-top: 6px; line-height: 1.5;">Sheet/menu. Sombra sutil só aqui.</div></div>
+    <div style="background: #26231b; border-radius: 16px; padding: 22px; border: 1px solid rgba(232,184,109,0.25); box-shadow: 0 12px 34px rgba(0,0,0,0.5);"><div class="mono" style="font-size: 12px; color: var(--accent);">z3 · overlay</div><div class="sans" style="font-size: 12px; color: var(--ink-2); margin-top: 6px; line-height: 1.5;">Dialog. Scrim por trás.</div></div>
+  </div>
+
+  <!-- touch target -->
+  <div style="margin-top: 40px; display: flex; gap: 16px; align-items: center; padding: 18px 24px; border-radius: 16px; background: var(--container); border: 1px solid var(--line);">
+    <div style="width: 48px; height: 48px; border: 1px dashed rgba(232,184,109,0.6); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><div style="width: 24px; height: 24px; background: rgba(232,184,109,0.3); border-radius: 6px;"></div></div>
+    <div class="sans" style="font-size: 13px; color: var(--ink-2); line-height: 1.55;"><span style="color: var(--ink); font-weight: 600;">Alvo de toque mínimo 48×48dp</span> — mesmo quando o ícone visível tem 24dp. Todo componente clicável já nasce com essa área semântica (embutida no <span class="mono" style="color:var(--accent);">nexusClickable</span>).</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

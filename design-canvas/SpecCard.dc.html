@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    :root {
+      --surface: #12110F; --container: #1C1B18; --ink: #EDE6D9;
+      --ink-2: rgba(237,230,217,0.6); --ink-3: rgba(237,230,217,0.55); --line: rgba(255,255,255,0.09);
+      --accent: #E8B86D; --danger: #C4593E;
+      --serif: "Newsreader", Georgia, serif; --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .mono { font-family: var(--mono); } .sans { font-family: var(--sans); } .serif { font-family: var(--serif); }
+    .sect { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 16px; }
+    .card { background: var(--container); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+    .callout { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+    .cnote { font-family: var(--sans); font-size: 12px; color: var(--ink-2); }
+  </style>
+</helmet>
+
+<div style="width: 1280px; height: 1120px; background: var(--surface); color: var(--ink); font-family: var(--sans); padding: 48px 52px; position: relative; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; gap: 14px;">
+    <span class="serif" style="font-size: 38px; font-weight: 600;">ArticleCard</span>
+    <span class="mono" style="font-size: 13px; color: var(--accent); letter-spacing: 0.1em;">:core:ui/pattern · unidade do feed</span>
+  </div>
+  <div class="sans" style="font-size: 15px; line-height: 1.55; color: var(--ink-2); margin-top: 12px; max-width: 900px;">Imagem opcional, MetaRow, título e marca de não-lido. <span class="mono" style="color:var(--accent);">onClick</span> e <span class="mono" style="color:var(--accent);">onArchive</span> são parâmetros; a animação de swipe é do card. Não usar fora de lista de artigos.</div>
+
+  <div style="margin-top: 32px; display: grid; grid-template-columns: 420px 1fr; gap: 40px; align-items: start;">
+
+    <!-- anatomy with leader labels -->
+    <div>
+      <div class="sect">Anatomia — com imagem</div>
+      <div style="position: relative;">
+        <div style="background: var(--container); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;">
+          <div style="height: 200px; position: relative; background: radial-gradient(120% 90% at 20% 10%, rgba(232,184,109,0.30), transparent 55%), linear-gradient(135deg,#241f18,#14161a);">
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(9,8,7,0.55));"></div>
+            <div style="position: absolute; left: 12px; top: 12px; padding: 4px 9px; border-radius: 999px; background: rgba(9,8,7,0.55);"><span class="mono" style="font-size: 11px; color: var(--ink);">Hacker News</span></div>
+          </div>
+          <div style="padding: 14px 16px 18px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="mono" style="font-size: 12px; color: var(--ink-3);">news.ycombinator</span><span style="color: rgba(237,230,217,0.28);">·</span>
+              <span class="mono" style="font-size: 12px; color: var(--ink-3);">2h</span><span style="color: rgba(237,230,217,0.28);">·</span>
+              <span class="mono" style="font-size: 12px; color: var(--accent);">▲ 842</span>
+              <span style="flex: 1;"></span>
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent);"></span>
+            </div>
+            <div class="serif" style="font-size: 20px; line-height: 1.26; font-weight: 500; margin-top: 8px;">The hidden cost of abstraction layers in modern runtimes</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 9px;">
+        <div><span class="callout">① media slot</span> <span class="cnote">— 16:9, radius topo 14dp, scrim tokenizado. Coil na feature; o slot é do card.</span></div>
+        <div><span class="callout">② MetaRow</span> <span class="cnote">— source · tempo · score HN (mono). gap 8dp.</span></div>
+        <div><span class="callout">③ unread dot</span> <span class="cnote">— 7dp, accent. Some quando lido.</span></div>
+        <div><span class="callout">④ title</span> <span class="cnote">— serif 500 · 20sp · máx 3 linhas · meta→título 12dp.</span></div>
+      </div>
+    </div>
+
+    <!-- variants + swipe + perf -->
+    <div>
+      <div class="sect">Variantes</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="card" style="padding: 16px;">
+          <div class="mono" style="font-size: 11px; color: var(--ink-2); margin-bottom: 12px;">SEM IMAGEM · lido</div>
+          <div style="display: flex; align-items: center; gap: 8px;"><span class="mono" style="font-size: 12px; color: var(--ink-3);">theverge.com</span><span style="color:rgba(237,230,217,0.28);">·</span><span class="mono" style="font-size: 12px; color: var(--ink-3);">5h</span></div>
+          <div class="serif" style="font-size: 18px; line-height: 1.28; margin-top: 6px; color: rgba(237,230,217,0.72);">Kotlin 2.2 ships context parameters</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div class="mono" style="font-size: 11px; color: var(--ink-2); margin-bottom: 12px;">COMPACTO · List-Detail</div>
+          <div style="display: flex; gap: 12px;">
+            <div style="width: 52px; height: 52px; border-radius: 8px; flex-shrink: 0; background: radial-gradient(120% 100% at 20% 10%, rgba(232,184,109,0.35), transparent 60%), linear-gradient(135deg,#241f18,#14161a);"></div>
+            <div><div class="mono" style="font-size: 11px; color: var(--ink-3);">▲ 121</div><div class="serif" style="font-size: 15px; line-height: 1.24; margin-top: 3px;">A pragmatic guide to R8 full mode</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sect" style="margin-top: 28px;">Swipe-to-archive (estado do gesto)</div>
+      <div class="card" style="padding: 0; overflow: hidden; position: relative; height: 88px; background: linear-gradient(90deg, var(--container) 45%, rgba(196,89,62,0.9));">
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; padding: 0 18px;"><div style="opacity: 0.55;"><div class="mono" style="font-size: 11px; color: var(--ink-3);">news.ycombinator · ▲ 842</div><div class="serif" style="font-size: 16px; margin-top: 4px;">The hidden cost of abstraction…</div></div></div>
+        <div style="position: absolute; right: 22px; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          <span class="mono" style="font-size: 10px; color: var(--ink);">Arquivar</span>
+        </div>
+      </div>
+      <div class="cnote" style="margin-top: 10px;">Passou do threshold → spring resolve. Abaixo, volta. Undo via snackbar do NexusScaffold — o card não apaga sozinho.</div>
+
+      <div class="sect" style="margin-top: 28px;">Performance (contrato)</div>
+      <div class="card" style="padding: 18px 20px;">
+        <div class="mono" style="font-size: 12px; color: var(--ink-2); line-height: 1.9;">
+          <span style="color:var(--accent);">•</span> modelo <span style="color:var(--ink);">@Immutable</span> · <span style="color:var(--ink);">ImmutableList</span> no feed<br>
+          <span style="color:var(--accent);">•</span> press na fase Draw / graphicsLayer (não animate*AsState por item)<br>
+          <span style="color:var(--accent);">•</span> feature passa <span style="color:var(--ink);">key</span> + <span style="color:var(--ink);">contentType</span> no LazyColumn<br>
+          <span style="color:var(--accent);">•</span> alvo: 0 jank no scroll 30s (Macrobenchmark, prodRelease)
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

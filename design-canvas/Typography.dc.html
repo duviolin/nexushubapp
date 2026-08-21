@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .sect { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 18px; }
+    .rowspec { display: grid; grid-template-columns: 300px 1fr; gap: 24px; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.07); align-items: center; }
+    .specm { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: rgba(237,230,217,0.6); line-height: 1.7; }
+    .tokn { color: #E8B86D; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 1240px; height: 1420px; background: #12110F; color: #EDE6D9; padding: 48px 52px; position: relative; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; gap: 14px;">
+    <span class="serif" style="font-size: 40px; font-weight: 600;">Tipografia</span>
+    <span class="mono" style="font-size: 13px; color: #E8B86D; letter-spacing: 0.12em;">NexusTheme.typography · dois eixos + mono</span>
+  </div>
+  <div class="serif" style="font-size: 20px; line-height: 1.5; color: rgba(237,230,217,0.75); margin-top: 16px; max-width: 940px;">Serif editorial para o que se <em>lê</em>; sans para o que se <em>opera</em>; mono para o que se <em>mede</em>. Escala em <span class="mono" style="font-size:16px;">sp</span> (respeita fontScale). Reader com line-height 1.5–1.55.</div>
+
+  <!-- families -->
+  <div style="margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+    <div style="background: #1C1B18; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px;">
+      <div class="serif" style="font-size: 46px; font-weight: 600; line-height: 1;">Ag</div>
+      <div class="mono" style="font-size: 12px; color: #E8B86D; margin-top: 12px;">Newsreader</div>
+      <div class="specm" style="margin-top: 4px;">Display / serif · títulos, Reader<br>weights 400 · 500 · 600 · 700</div>
+    </div>
+    <div style="background: #1C1B18; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px;">
+      <div class="sans" style="font-size: 46px; font-weight: 600; line-height: 1;">Ag</div>
+      <div class="mono" style="font-size: 12px; color: #E8B86D; margin-top: 12px;">IBM Plex Sans</div>
+      <div class="specm" style="margin-top: 4px;">UI / sans · chips, botões, meta<br>weights 400 · 500 · 600</div>
+    </div>
+    <div style="background: #1C1B18; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 22px;">
+      <div class="mono" style="font-size: 46px; font-weight: 500; line-height: 1;">Ag</div>
+      <div class="mono" style="font-size: 12px; color: #E8B86D; margin-top: 12px;">IBM Plex Mono</div>
+      <div class="specm" style="margin-top: 4px;">Mono · score HN, tempo, overlay debug<br>weights 400 · 500 · tabular</div>
+    </div>
+  </div>
+
+  <!-- type scale -->
+  <div style="margin-top: 40px;" class="sect">Escala tipográfica — papel · família · tamanho · peso · line-height</div>
+
+  <div class="rowspec" style="border-top: none;">
+    <div class="serif" style="font-size: 34px; font-weight: 600; line-height: 1.1;">Reader title</div>
+    <div class="specm"><span class="tokn">display.large</span> · Newsreader 600 · 28–34sp · LH 1.14 · tracking −0.5 · <span style="color:rgba(237,230,217,0.85);">ReaderHeader, capa</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="serif" style="font-size: 21px; font-weight: 500; line-height: 1.26;">Título de artigo no feed</div>
+    <div class="specm"><span class="tokn">title.card</span> · Newsreader 500 · 20–21sp · LH 1.26 · 2–3 linhas · <span style="color:rgba(237,230,217,0.85);">ArticleCard</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="serif" style="font-size: 17px; font-weight: 400; line-height: 1.55;">Corpo do artigo, altura de linha generosa para leitura contínua.</div>
+    <div class="specm"><span class="tokn">body.reader</span> · Newsreader 400 · 17sp · LH 1.55 · <span style="color:rgba(237,230,217,0.85);">corpo do Reader</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="sans" style="font-size: 15px; font-weight: 400; line-height: 1.5;">Corpo de interface e listas de ajustes.</div>
+    <div class="specm"><span class="tokn">body.ui</span> · Plex Sans 400 · 15sp · LH 1.5 · <span style="color:rgba(237,230,217,0.85);">settings, sheets</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="sans" style="font-size: 14px; font-weight: 600;">Label de botão</div>
+    <div class="specm"><span class="tokn">label.button</span> · Plex Sans 600 · 14sp · tracking 0 · <span style="color:rgba(237,230,217,0.85);">NexusButton</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="sans" style="font-size: 13px; font-weight: 500;">Chip / filtro</div>
+    <div class="specm"><span class="tokn">label.chip</span> · Plex Sans 500 · 13sp · <span style="color:rgba(237,230,217,0.85);">NexusFilterChip</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="mono" style="font-size: 12px; color: rgba(237,230,217,0.7);">news.ycombinator · 2h · ▲ 842</div>
+    <div class="specm"><span class="tokn">meta.mono</span> · Plex Mono 400 · 12sp · tracking 0.02 · <span style="color:rgba(237,230,217,0.85);">MetaRow, score</span></div>
+  </div>
+  <div class="rowspec">
+    <div class="mono" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(237,230,217,0.5);">SEÇÃO / OVERLINE</div>
+    <div class="specm"><span class="tokn">overline</span> · Plex Mono 500 · 11sp · tracking 0.14 · UPPER · <span style="color:rgba(237,230,217,0.85);">headers de grupo</span></div>
+  </div>
+
+  <div style="margin-top: 28px; display: flex; gap: 16px; align-items: center; padding: 16px 22px; border-radius: 14px; background: #1C1B18; border: 1px solid rgba(255,255,255,0.08);">
+    <span class="mono" style="font-size: 12px; color: #E8B86D;">fontScale 1.0 → 1.3</span>
+    <span class="sans" style="font-size: 13px; color: rgba(237,230,217,0.65);">Toda tela é fotografada nos dois tamanhos. Título de card pode ir a 3 linhas; nada de texto cortado ou <span class="mono" style="font-size:12px;">maxLines</span> mentiroso. Nunca px — sempre sp.</span>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

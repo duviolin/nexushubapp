@@ -2,7 +2,7 @@
 // Substituição por token (papel), não por tinta — espelha a "tabela irmã" do NEXUS_HUB_DESIGN.md.
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const SCREENS = ['Main', 'Reader', 'Filters', 'Profile', 'FeedStates', 'ReaderAI', 'ListDetail', 'Catalog'];
+const SCREENS = ['Main', 'Reader', 'Filters', 'Profile', 'FeedStates', 'ReaderAI', 'ListDetail', 'Catalog', 'Account'];
 
 // ordem importa: tints primeiro, depois âmbar-como-texto (qualificado), depois canais e sólidos.
 const MAP = [
@@ -17,6 +17,10 @@ const MAP = [
   ['fill="#E8B86D"', 'fill="#8A5510"'],
   ['border-top-color: #E8B86D', 'border-top-color: #8A5510'],
   ['border-top-color:#E8B86D', 'border-top-color:#8A5510'],
+  // acento via CSS var como TEXTO/ícone (telas com :root) -> âmbar profundo. Fills usam var(--accent) e ficam.
+  ['color: var(--accent)', 'color: #8A5510'],
+  ['stroke="var(--accent)"', 'stroke="#8A5510"'],
+  ['fill="var(--accent)"', 'fill="#8A5510"'],
   ['#f0c98a', '#6E4109'],            // hover de link
   // navbar translúcida
   ['rgba(18,17,15,', 'rgba(244,239,229,'],
