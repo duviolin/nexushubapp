@@ -1,40 +1,39 @@
 {
   "pages": [
-    { "id": "escuro", "name": "Telas · escuro" },
+    { "id": "telas", "name": "Telas · escuro ↕ claro" },
+    { "id": "estados", "name": "Estados · escuro ↕ claro" },
     { "id": "adaptativo", "name": "Adaptativo + Fundação" },
-    { "id": "claro", "name": "Tema claro (irmão)" },
     { "id": "motion", "name": "Motion & interações" }
   ],
   "artboards": [
-    { "file": "Main.dc.html", "title": "Feed", "page": "escuro", "x": 0, "y": 0, "w": 390, "h": 844 },
-    { "file": "Reader.dc.html", "title": "Reader", "page": "escuro", "x": 460, "y": 0, "w": 390, "h": 960 },
-    { "file": "Filters.dc.html", "title": "Filtros (bottom sheet)", "page": "escuro", "x": 920, "y": 0, "w": 390, "h": 844 },
-    { "file": "Profile.dc.html", "title": "Ler depois / Perfil", "page": "escuro", "x": 1380, "y": 0, "w": 390, "h": 844 },
-    { "file": "LoginDark.dc.html", "title": "Login / Auth", "page": "escuro", "x": 1840, "y": 0, "w": 390, "h": 844 },
-    { "file": "FeedStates.dc.html", "title": "Feed · estados (StatePanel)", "page": "escuro", "x": 0, "y": 1120, "w": 1760, "h": 940 },
-    { "file": "ReaderAI.dc.html", "title": "Reader · sumário IA on-device", "page": "escuro", "x": 1860, "y": 1120, "w": 1330, "h": 866 },
+    { "file": "Main.dc.html", "title": "Feed · escuro", "page": "telas", "x": 0, "y": 0, "w": 390, "h": 844 },
+    { "file": "Reader.dc.html", "title": "Reader · escuro", "page": "telas", "x": 460, "y": 0, "w": 390, "h": 960 },
+    { "file": "Filters.dc.html", "title": "Filtros · escuro", "page": "telas", "x": 920, "y": 0, "w": 390, "h": 844 },
+    { "file": "Profile.dc.html", "title": "Perfil · escuro", "page": "telas", "x": 1380, "y": 0, "w": 390, "h": 844 },
+    { "file": "LoginDark.dc.html", "title": "Login · escuro", "page": "telas", "x": 1840, "y": 0, "w": 390, "h": 844 },
+    { "file": "MainLight.dc.html", "title": "Feed · claro", "page": "telas", "x": 0, "y": 1050, "w": 390, "h": 844 },
+    { "file": "ReaderLight.dc.html", "title": "Reader · claro", "page": "telas", "x": 460, "y": 1050, "w": 390, "h": 960 },
+    { "file": "FiltersLight.dc.html", "title": "Filtros · claro", "page": "telas", "x": 920, "y": 1050, "w": 390, "h": 844 },
+    { "file": "ProfileLight.dc.html", "title": "Perfil · claro", "page": "telas", "x": 1380, "y": 1050, "w": 390, "h": 844 },
+    { "file": "LoginLight.dc.html", "title": "Login · claro", "page": "telas", "x": 1840, "y": 1050, "w": 390, "h": 844 },
 
-    { "file": "ListDetail.dc.html", "title": "List-Detail · tablet / foldable", "page": "adaptativo", "x": 0, "y": 0, "w": 1180, "h": 820 },
-    { "file": "Insets.dc.html", "title": "Edge-to-edge & window insets", "page": "adaptativo", "x": 1280, "y": 0, "w": 1000, "h": 900 },
-    { "file": "Catalog.dc.html", "title": "Nexus Catalog · Storybook", "page": "adaptativo", "x": 0, "y": 940, "w": 980, "h": 1300 },
+    { "file": "FeedStates.dc.html", "title": "Feed · estados · escuro", "page": "estados", "x": 0, "y": 0, "w": 1760, "h": 940 },
+    { "file": "ReaderAI.dc.html", "title": "Sumário IA · escuro", "page": "estados", "x": 1860, "y": 0, "w": 1330, "h": 866 },
+    { "file": "FeedStatesLight.dc.html", "title": "Feed · estados · claro", "page": "estados", "x": 0, "y": 1080, "w": 1760, "h": 940 },
+    { "file": "ReaderAILight.dc.html", "title": "Sumário IA · claro", "page": "estados", "x": 1860, "y": 1080, "w": 1330, "h": 866 },
 
-    { "file": "MainLight.dc.html", "title": "Feed", "page": "claro", "x": 0, "y": 0, "w": 390, "h": 844 },
-    { "file": "ReaderLight.dc.html", "title": "Reader", "page": "claro", "x": 460, "y": 0, "w": 390, "h": 960 },
-    { "file": "FiltersLight.dc.html", "title": "Filtros", "page": "claro", "x": 920, "y": 0, "w": 390, "h": 844 },
-    { "file": "ProfileLight.dc.html", "title": "Ler depois / Perfil", "page": "claro", "x": 1380, "y": 0, "w": 390, "h": 844 },
-    { "file": "LoginLight.dc.html", "title": "Login / Auth", "page": "claro", "x": 1840, "y": 0, "w": 390, "h": 844 },
-    { "file": "FeedStatesLight.dc.html", "title": "Feed · estados", "page": "claro", "x": 0, "y": 1120, "w": 1760, "h": 940 },
-    { "file": "ReaderAILight.dc.html", "title": "Reader · sumário IA", "page": "claro", "x": 1860, "y": 1120, "w": 1330, "h": 866 },
-    { "file": "ListDetailLight.dc.html", "title": "List-Detail · tablet", "page": "claro", "x": 0, "y": 2120, "w": 1180, "h": 820 },
-    { "file": "CatalogLight.dc.html", "title": "Nexus Catalog", "page": "claro", "x": 1280, "y": 2120, "w": 980, "h": 1300 },
+    { "file": "ListDetail.dc.html", "title": "List-Detail · escuro", "page": "adaptativo", "x": 0, "y": 0, "w": 1180, "h": 820 },
+    { "file": "ListDetailLight.dc.html", "title": "List-Detail · claro", "page": "adaptativo", "x": 0, "y": 920, "w": 1180, "h": 820 },
+    { "file": "Insets.dc.html", "title": "Edge-to-edge & window insets", "page": "adaptativo", "x": 0, "y": 1840, "w": 1000, "h": 900 },
+    { "file": "Catalog.dc.html", "title": "Nexus Catalog · escuro", "page": "adaptativo", "x": 1280, "y": 0, "w": 980, "h": 1300 },
+    { "file": "CatalogLight.dc.html", "title": "Nexus Catalog · claro", "page": "adaptativo", "x": 1280, "y": 1400, "w": 980, "h": 1300 },
 
     { "file": "Motion.dc.html", "title": "Motion & interações", "page": "motion", "x": 0, "y": 0, "w": 1420, "h": 920 }
   ],
   "annotations": [
-    { "id": "intro", "page": "escuro", "x": 0, "y": -170, "w": 620, "text": "Nexus Hub — NexusUI\nEstética editorial dark-tech: grafite quente + acento âmbar único, serif Newsreader nos títulos, mono IBM Plex nos números (score HN, tempo). Anti-Material default.\nDials: variance 6 · motion 5 · density 7 · edge-to-edge." },
-    { "id": "states", "page": "escuro", "x": 0, "y": 1030, "w": 480, "text": "Todo estado de tela cheia é um StatePanel (nunca só um spinner central): loading com skeleton, empty, offline e error — cada um com no máximo um NexusButton." },
-    { "id": "claronote", "page": "claro", "x": 0, "y": -150, "w": 600, "text": "Tema claro = tabela IRMÃ dos mesmos tokens (papel), não uma segunda paleta. Marfim↔grafite invertem; o âmbar vira âmbar profundo quando é texto/ícone (contraste WCAG); capas de imagem não invertem. Screenshot nos dois temas + fontScale 1.0 e 1.3." },
-    { "id": "adaptnote", "page": "adaptativo", "x": 0, "y": -140, "w": 560, "text": "Compact = feed full-bleed. Medium/Expanded = List-Detail (lista ~360–420dp + artigo persistente). Insets tratados pelo NexusScaffold. O Catalog é o Storybook que prova o DS." }
+    { "id": "compare", "page": "telas", "x": 0, "y": -180, "w": 640, "text": "Escuro (linha de cima) ↕ Claro (linha de baixo)\nMesmos tokens, papéis invertidos. O tema claro é a tabela IRMÃ, não uma segunda paleta: marfim↔grafite trocam; o âmbar vira âmbar profundo quando é texto/ícone (contraste WCAG); capas de imagem não invertem." },
+    { "id": "estadosnote", "page": "estados", "x": 0, "y": -140, "w": 520, "text": "Todo estado de tela cheia é um StatePanel (nunca só um spinner central): loading com skeleton, empty, offline e error — cada um com no máximo um NexusButton. Nos dois temas." },
+    { "id": "adaptnote", "page": "adaptativo", "x": 0, "y": -140, "w": 560, "text": "Compact = feed full-bleed. Medium/Expanded = List-Detail (lista ~360–420dp + artigo persistente). Insets tratados pelo NexusScaffold. O Catalog é o Storybook que prova o DS — fotografado pelo Roborazzi em dark + light." }
   ],
-  "launch": { "view": "canvas", "page": "escuro" }
+  "launch": { "view": "canvas", "page": "telas" }
 }
