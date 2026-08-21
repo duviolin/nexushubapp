@@ -2,6 +2,8 @@
 
 Este arquivo serve como a "memória" do projeto, garantindo que o Agente e o Desenvolvedor estejam sempre alinhados sobre o estado atual da engenharia.
 
+> 🎨 **Norte do produto:** o objetivo final é reproduzir os artboards de [`design-canvas/`](design-canvas/) (abra `nexus-hub-telas.html`). O planejamento em `NEXUS_HUB_PLAN.md` / `NEXUS_HUB_DAILY_PLAN.md` já aponta, dia a dia, qual tela cada incremento constrói. Projeto **hands-on**: o Desenvolvedor escreve o código; a IA orienta e revisa.
+
 ---
 
 ## ✅ DIA 1: O Coração do Build (Concluído)
