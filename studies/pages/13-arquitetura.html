@@ -13,30 +13,31 @@
     <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
     <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
     <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
-    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
-    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
-    <a href="05-compose.html"><span class="n">05</span><span class="e">🎨</span><span class="t">Jetpack Compose</span></a>
-    <a href="06-material.html"><span class="n">06</span><span class="e">🧩</span><span class="t">Material 3 & Design</span></a>
-    <a href="07-acessibilidade.html"><span class="n">07</span><span class="e">♿</span><span class="t">Acessibilidade</span></a>
-    <a href="08-play-store.html"><span class="n">08</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
-    <a href="09-git-ci.html"><span class="n">09</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
-    <a href="10-qualidade.html"><span class="n">10</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
-    <a href="11-ofuscacao.html"><span class="n">11</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
-    <a href="12-arquitetura.html" class="active"><span class="n">12</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
-    <a href="13-padroes.html"><span class="n">13</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
-    <a href="14-testes.html"><span class="n">14</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
-    <a href="15-ia-claude-code.html"><span class="n">15</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
-    <a href="16-sdd-tdd-bdd.html"><span class="n">16</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
+    <a href="03-android-studio.html"><span class="n">03</span><span class="e">🛠️</span><span class="t">Android Studio a Fundo</span></a>
+    <a href="04-edge-to-edge.html"><span class="n">04</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
+    <a href="05-densidade.html"><span class="n">05</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
+    <a href="06-compose.html"><span class="n">06</span><span class="e">🎨</span><span class="t">Jetpack Compose</span></a>
+    <a href="07-material.html"><span class="n">07</span><span class="e">🧩</span><span class="t">Material 3 & Design</span></a>
+    <a href="08-acessibilidade.html"><span class="n">08</span><span class="e">♿</span><span class="t">Acessibilidade</span></a>
+    <a href="09-play-store.html"><span class="n">09</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
+    <a href="10-git-ci.html"><span class="n">10</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
+    <a href="11-qualidade.html"><span class="n">11</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
+    <a href="12-ofuscacao.html"><span class="n">12</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
+    <a href="13-arquitetura.html" class="active"><span class="n">13</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
+    <a href="14-padroes.html"><span class="n">14</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
+    <a href="15-testes.html"><span class="n">15</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="16-ia-claude-code.html"><span class="n">16</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="17-sdd-tdd-bdd.html"><span class="n">17</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
     <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
   </nav>
 <main>
-  <p class="crumb">Artigo <strong>12</strong> de 16 · trilha de estudos</p>
+  <p class="crumb">Artigo <strong>13</strong> de 17 · trilha de estudos</p>
   <article class="content">
 <h1>🏛️ Arquitetura &amp; código limpo no Android: camadas que aguentam crescer (2026)</h1>
 
 <p>Existe uma pergunta que revela a saúde de um app: <strong>“consigo mudar isto sem medo?”</strong>. Se trocar a fonte de dados obriga a mexer na tela, se testar uma regra exige subir a UI inteira, se dois devs não conseguem tocar features diferentes sem colidir — o problema não é o código, é a <strong>arquitetura</strong>. Este artigo constrói, do básico ao avançado, a arquitetura que o próprio Google recomenda para Android — e o <em>porquê</em> de cada peça, ancorado na teoria-base de <strong>Robert C. Martin</strong> (o “tio Bob”), dos livros <em>Clean Code</em> e <em>Clean Architecture</em>.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> este artigo desenha a estrutura; o <strong>próximo (13 · Padrões)</strong> desce ao nível dos <em>tijolos</em> — os padrões que preenchem cada camada (Repository, Factory, Observer…) — e o <strong>14 · Testes</strong> mostra como tudo isso vira teste barato. Não é coincidência — arquitetura boa é a que se testa fácil.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> este artigo desenha a estrutura; o <strong>próximo (14 · Padrões)</strong> desce ao nível dos <em>tijolos</em> — os padrões que preenchem cada camada (Repository, Factory, Observer…) — e o <strong>15 · Testes</strong> mostra como tudo isso vira teste barato. Não é coincidência — arquitetura boa é a que se testa fácil.</p></blockquote>
 
 <hr>
 
@@ -102,7 +103,7 @@ class AuthRepositoryImpl(private val api: AuthApi) : AuthRepository {
 
 <p>Na tela, o padrão moderno é o <strong>MVVM</strong> evoluído para <strong>MVI</strong>: a tela é uma <strong>função do estado</strong>. O ViewModel expõe um <code>UiState</code> imutável; o Composable o desenha; toda interação vira um <strong>evento</strong> que sobe. Um sentido só.</p>
 
-<blockquote><p>🔗 <strong>Aqui é o essencial;</strong> a comparação <strong>MVVM × MVI</strong> lado a lado (quando cada um vale a pena, o “estado impossível”, o canal de efeitos) está aprofundada no <strong>artigo 13 · Padrões de Projeto</strong>, junto com a linhagem MVC→MVP→MVVM→MVI.</p></blockquote>
+<blockquote><p>🔗 <strong>Aqui é o essencial;</strong> a comparação <strong>MVVM × MVI</strong> lado a lado (quando cada um vale a pena, o “estado impossível”, o canal de efeitos) está aprofundada no <strong>artigo 14 · Padrões de Projeto</strong>, junto com a linhagem MVC→MVP→MVVM→MVI.</p></blockquote>
 
 <p><img src="../assets/fluxo-unidirecional.svg" alt="Fluxo unidirecional de dados. O ViewModel expõe um StateFlow de UiState e faz reduce (evento vira novo estado imutável). O estado desce para o Composable (UI), que coleta com collectAsStateWithLifecycle e recompõe quando o estado muda; os eventos (onClick, onType) sobem de volta como lambdas para o ViewModel. Embaixo, o state hoisting: a Screen da rota conecta o ViewModel e coleta o estado, enquanto o Content stateless só recebe estado e lambdas, ficando fácil de testar e de fazer preview."></p>
 
@@ -184,7 +185,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel()
 </code></pre>
 
-<blockquote><p>🔒 <strong>Visão Specialist:</strong> o valor da DI aparece no teste (artigo 14): como o ViewModel recebe a <strong>interface</strong>, no teste você entrega um <code>FakeAuthRepository</code> em vez do real — sem rede, sem Hilt, em milissegundos. Um ViewModel que faz <code>Retrofit.create()</code> por dentro é <strong>intestável</strong>. Teste difícil é sempre um sintoma de dependência mal invertida.</p></blockquote>
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o valor da DI aparece no teste (artigo 15): como o ViewModel recebe a <strong>interface</strong>, no teste você entrega um <code>FakeAuthRepository</code> em vez do real — sem rede, sem Hilt, em milissegundos. Um ViewModel que faz <code>Retrofit.create()</code> por dentro é <strong>intestável</strong>. Teste difícil é sempre um sintoma de dependência mal invertida.</p></blockquote>
 
 <hr>
 
@@ -329,7 +330,7 @@ class FazerLogin(private val repo: AuthRepository) {
 <p><img src="../assets/ciclo-virtuoso.svg" alt="Ciclo virtuoso em triângulo. Arquitetura limpa (camadas, injeção de dependência, ViewModel isolado, Compose stateless) torna tudo testável; Testes rápidos (isolados, na JVM, confiáveis, a base larga da pirâmide) dão segurança para separar em módulos; Modularização (core, data, feature-x, build incremental e paralelo) força fronteiras limpas de volta para a arquitetura. No centro: testabilidade é consequência, não esforço à parte."></p>
 
 <ul>
-<li><strong>Arquitetura → testes:</strong> camadas e injeção <strong>permitem</strong> testar cada peça isolada (artigo 14).</li>
+<li><strong>Arquitetura → testes:</strong> camadas e injeção <strong>permitem</strong> testar cada peça isolada (artigo 15).</li>
 <li><strong>Testes → modularização:</strong> fronteiras cobertas <strong>dão segurança</strong> para partir o app sem medo.</li>
 <li><strong>Modularização → arquitetura:</strong> o módulo <code>:domain</code> puro <strong>força</strong> a Regra da Dependência a valer de verdade.</li>
 </ul>
@@ -416,8 +417,8 @@ class FazerLogin(private val repo: AuthRepository) {
 </table>
   </article>
     <nav class="pager">
-      <a class="pg prev" href="11-ofuscacao.html"><span>← Anterior</span><strong>🕶️ Encolher & Ofuscar (R8)</strong></a>
-      <a class="pg next" href="13-padroes.html"><span>Próximo →</span><strong>🧱 Padrões de Projeto</strong></a>
+      <a class="pg prev" href="12-ofuscacao.html"><span>← Anterior</span><strong>🕶️ Encolher & Ofuscar (R8)</strong></a>
+      <a class="pg next" href="14-padroes.html"><span>Próximo →</span><strong>🧱 Padrões de Projeto</strong></a>
     </nav>
 </main>
 </body>

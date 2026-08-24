@@ -1,6 +1,6 @@
 <h1>🕶️ Encolher e ofuscar: R8, keep rules &amp; ler crash em produção (2026)</h1>
 
-<p>No artigo 08 você marcou <code>isMinifyEnabled = true</code> e guardou o <code>mapping.txt</code> — sem entender direito o que aquilo fazia. Este artigo abre a caixa: o que o <strong>R8</strong> faz com o seu código no build de release, por que ele às vezes <strong>quebra o app</strong> (e só no release), como consertar com <strong>keep rules</strong>, e como transformar um crash ofuscado da Play em uma linha que você consegue ler.</p>
+<p>No artigo 09 você marcou <code>isMinifyEnabled = true</code> e guardou o <code>mapping.txt</code> — sem entender direito o que aquilo fazia. Este artigo abre a caixa: o que o <strong>R8</strong> faz com o seu código no build de release, por que ele às vezes <strong>quebra o app</strong> (e só no release), como consertar com <strong>keep rules</strong>, e como transformar um crash ofuscado da Play em uma linha que você consegue ler.</p>
 
 <blockquote><p>🔗 <strong>Fio condutor:</strong> o 05 tratou a ofuscação como um interruptor a ligar antes de publicar. Aqui vemos <em>o que</em> ele liga — e por que “funciona no debug, quebra no release” é, quase sempre, uma keep rule faltando.</p></blockquote>
 
@@ -106,7 +106,7 @@ retrace  mapping.txt  crash-ofuscado.txt
 # → at com.nexus.LoginViewModel.onClick(LoginViewModel.kt:42)
 </code></pre>
 
-<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>mapping.txt</code> é <strong>único por build</strong>. O da versão 1.2.0 não decodifica um crash da 1.3.0 — os nomes <code>a</code>, <code>b</code> são reatribuídos a cada compilação. Por isso a esteira do artigo 09 <strong>arquiva o mapping de toda release</strong>: sem o arquivo certo, o crash daquela versão é indecifrável para sempre.</p></blockquote>
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>mapping.txt</code> é <strong>único por build</strong>. O da versão 1.2.0 não decodifica um crash da 1.3.0 — os nomes <code>a</code>, <code>b</code> são reatribuídos a cada compilação. Por isso a esteira do artigo 10 <strong>arquiva o mapping de toda release</strong>: sem o arquivo certo, o crash daquela versão é indecifrável para sempre.</p></blockquote>
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> na prática você não roda <code>retrace</code> à mão. Suba o <code>mapping.txt</code> para a <strong>Play Console</strong> (ela desofusca os crashes sozinha) ou para o seu monitor de erros (Crashlytics, Sentry) — a esteira faz esse upload no mesmo passo em que publica o <code>.aab</code>. O <code>retrace</code> manual fica para quando você tem só um log solto na mão.</p></blockquote>
 

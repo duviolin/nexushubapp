@@ -1,0 +1,224 @@
+<h1>🛠️ Android Studio a fundo: a bancada do dev (iniciante → especialista)</h1>
+
+<p>O SDK (artigo 02) é o almoxarifado; o <strong>Android Studio</strong> é a bancada onde você passa o dia. Baseado no IntelliJ da JetBrains, ele é muito mais que um editor: é debugger, profiler, gerenciador de emulador, cliente de Git e inspetor de banco/rede — tudo numa janela. A maioria dos cursos ensina só “aperte ▶ e veja rodar”. Este artigo cobre o resto: a <strong>estrutura de pasta</strong> que confunde todo iniciante, os atalhos que economizam horas, e as ferramentas de <strong>debug e profiling</strong> que separam quem chuta de quem mede.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>02 · SDK</strong> montou o ambiente; aqui você aprende a <em>operar</em> a ferramenta que usa esse ambiente. Vários temas ganham profundidade própria depois — testes no <strong>15</strong>, Git e CI no <strong>10</strong>, performance de Compose no <strong>06</strong> — e aqui você vê a <em>face de IDE</em> de cada um.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Anatomia da janela (e navegar sem o mouse)</h2>
+
+<p>A janela tem quatro zonas: a <strong>barra de topo</strong> (menu, ▶ Run / 🐞 Debug, seletor de dispositivo), a <strong>janela de projeto</strong> à esquerda, o <strong>editor</strong> no centro (com a <em>sarjeta</em> — a coluna à esquerda das linhas onde nascem breakpoints), e as <strong>tool windows</strong> em baixo e nas laterais (Logcat, Build, Terminal, Profiler, App Inspection…). O pulo do gato do iniciante para o intermediário é largar o mouse.</p>
+
+<p><img src="../assets/as-anatomia.svg" alt="Anatomia da janela do Android Studio e como navegar sem o mouse. Um mock da IDE mostra a barra de topo com Run e Debug e o seletor de dispositivo Pixel 8 API 35; à esquerda a janela Project com app, kotlin, ui, data e res; no centro o editor com HomeScreen.kt, a sarjeta com um breakpoint e código Composable; embaixo a barra de tool windows: Logcat, Build, Terminal, Problems, Profiler e App Inspection, com uma linha de log. Um painel lista a navegação por teclado que economiza horas: Shift Shift abre Search Everywhere para achar classe, arquivo, ação ou símbolo; Command E os arquivos recentes, o mais usado; Command B vai para a declaração; Option F7 Find Usages mostra quem usa aquilo; Shift F6 faz Rename seguro em todo o projeto; Option Enter é o Quick Fix da lampadinha; Command F12 mostra a estrutura do arquivo para pular por método; Command Shift A é o Find Action, toda ação por nome. Destaca ainda o Local History, o salva-vidas esquecido: clicando com o botão direito e Local History a IDE guarda cada alteração mesmo sem commit, permitindo recuperar código apagado. Atalhos são de macOS; no Windows ou Linux troque Command por Ctrl."></p>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> dois atalhos pagam o ingresso: <strong>Shift+Shift</strong> (Search Everywhere — acha <em>qualquer</em> coisa: arquivo, classe, ação, símbolo) e <strong>⌘E / Ctrl+E</strong> (arquivos recentes). Um sênior quase não usa a árvore de projeto para abrir arquivo — ele digita o nome. E <strong>⌘⇧A “Find Action”</strong> te dá <em>toda</em> função da IDE por nome, então você nunca precisa decorar onde fica um menu.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · A estrutura do projeto (o que cursos explicam mal)</h2>
+
+<p>Aqui mora a confusão nº 1 do iniciante: <strong>a “Android view” que você vê ao abrir o projeto não é a estrutura real no disco</strong>. Ela reagrupa por tipo e esconde arquivos gerados. Trocar para a “Project view” (seletor no topo da janela de projeto) revela a verdade.</p>
+
+<p><img src="../assets/as-estrutura.svg" alt="Estrutura de um projeto Android e por que a Android view não é a estrutura real no disco. Árvore: NexusHub é a raiz; app é o módulo do app (pode haver vários, artigo 13); dentro dele build.gradle.kts traz deps e plugins do módulo, e src contém main com AndroidManifest.xml (componentes e permissões), kotlin (o seu código) e res (strings, temas, drawables, XML), além de test (testes JVM unit, artigo 15) e androidTest (testes instrumentados). Na raiz: build.gradle.kts é a config do projeto; settings.gradle.kts lista os módulos e repositórios; gradle/libs.versions.toml é o catálogo de versões; gradle.properties traz flags do Gradle e JVM; local.properties tem o caminho do SDK e não deve ser versionado; build é gerado e vai no gitignore (artigo 12); gradlew é o wrapper (artigo 01) que roda o Gradle certo. Legenda de cores: azul módulo e pastas, laranja config, vermelho não versionar, cinza gerado. Existem dois build.gradle, um do projeto na raiz e um por módulo, a confusão clássica. Painel Android view versus Project view: o seletor no topo muda o que você enxerga; Android agrupa por tipo, junta os res e esconde gerados, bom para produtividade; Project mostra o disco real pasta por pasta, bom para entender e achar arquivos de build. Painel onde você realmente mexe: código em src/main/kotlin; textos, cores e tema em res; permissões e telas no Manifest; libs e versões em libs.versions.toml; SDK local em local.properties; nunca edite build, .gradle ou arquivos gerados, e nunca comite local.properties."></p>
+
+<table>
+<thead><tr><th align="left">Arquivo/pasta</th><th align="left">O que é — e a pegadinha</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>build.gradle.kts</code> (2×)</td><td align="left">um na <strong>raiz</strong> (projeto) e um em <code>app/</code> (módulo). Deps do app vão no <strong>do módulo</strong></td></tr>
+<tr><td align="left"><code>AndroidManifest.xml</code></td><td align="left">declara componentes, permissões, ícone. Menos usado hoje (muito virou Gradle/Compose)</td></tr>
+<tr><td align="left"><code>res/</code></td><td align="left">recursos: <code>values/</code> (strings, cores, temas), <code>drawable/</code>, <code>mipmap/</code> (ícone)</td></tr>
+<tr><td align="left"><code>libs.versions.toml</code></td><td align="left">o <strong>version catalog</strong>: um lugar só para versões de libs (o jeito 2026)</td></tr>
+<tr><td align="left"><code>local.properties</code></td><td align="left">caminho do seu SDK — <strong>é da sua máquina</strong>, nunca vai para o Git</td></tr>
+<tr><td align="left"><code>build/</code>, <code>.gradle/</code></td><td align="left">gerados. Sumindo bug estranho? “<em>Clean Project</em>” apaga e refaz</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> quando você adiciona uma dependência, ela vai no <code>build.gradle.kts</code> <strong>do módulo</strong> (<code>app/</code>), não no da raiz. Colar no arquivo errado gera um erro que parece de sintaxe mas é de lugar. E ao aparecer uma barra “<em>Gradle files have changed</em>”, clique <strong>Sync Now</strong> — sem sincronizar, a IDE não conhece a lib nova.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · O editor: navegar, refatorar e desfazer o “irreversível”</h2>
+
+<p>O editor do IntelliJ é o motivo de gente migrar para o Android Studio. O que vale dominar cedo:</p>
+
+<table>
+<thead><tr><th align="left">Ação</th><th align="left">Atalho (macOS)</th><th align="left">Para quê</th></tr></thead>
+<tbody>
+<tr><td align="left">Quick Fix / intenção</td><td align="left"><code>⌥⏎</code></td><td align="left">a lampadinha: importar, criar função, converter, corrigir</td></tr>
+<tr><td align="left">Reformatar código</td><td align="left"><code>⌘⌥L</code></td><td align="left">arruma indentação/espaços pelo estilo do projeto (art. 11)</td></tr>
+<tr><td align="left">Renomear (seguro)</td><td align="left"><code>⇧F6</code></td><td align="left">renomeia em todo o projeto, sem quebrar referência</td></tr>
+<tr><td align="left">Extrair variável/função</td><td align="left"><code>⌘⌥V</code> / <code>⌘⌥M</code></td><td align="left">refatorar um trecho sem medo</td></tr>
+<tr><td align="left">Find Usages</td><td align="left"><code>⌥F7</code></td><td align="left">quem chama isto? (antes de mudar uma assinatura)</td></tr>
+<tr><td align="left">Multi-cursor</td><td align="left"><code>⌥</code> + clique</td><td align="left">editar várias linhas de uma vez</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> duas jóias que quase ninguém mostra. <strong>Live Templates</strong> — digite um atalho (<code>comp</code> → esqueleto de <code>@Composable</code>) e a IDE expande; você cria os seus. E <strong>Local History</strong> (botão direito num arquivo/pasta → <em>Local History</em>): a IDE grava <em>cada</em> alteração local, com ou sem commit. Apagou uma função ontem e o Git não tinha? O Local History recupera. É a rede de segurança que salva antes do Git existir no fluxo.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Rodar e depurar: pausar o app e testar hipóteses</h2>
+
+<p>Rodar é ▶; <strong>depurar</strong> é 🐞. No modo debug você pausa o app num ponto e vê o estado <em>real</em> — o fim do “encher o código de <code>Log.d</code>”. Um breakpoint não é só uma linha vermelha: há vários tipos, e é aí que mora o poder.</p>
+
+<p><img src="../assets/as-debug.svg" alt="Depurar no Android Studio é mais que um breakpoint: pausar o app, inspecionar o estado real e testar hipóteses sem recompilar. Tipos de breakpoint, clicando na sarjeta: Linha para naquela linha; Condicional só dispara se uma condição como id igual a 42 for verdadeira, configurado com o botão direito no ponto; Logpoint imprime e segue sem parar nem mexer no código; Método para ao entrar ou sair de uma função; Field watchpoint para quando um campo muda; Exception para quando qualquer exceção é lançada. Condicional mais logpoint permite achar bug raro sem poluir o código com prints. A janela de debug tem três partes: Frames é a pilha de chamadas, como você chegou ali, e clicar num frame mostra o estado daquele ponto; Variables mostra o valor real de tudo em escopo agora; Watches são expressões fixadas que você acompanha. Evaluate Expression é a arma secreta: rode qualquer Kotlin no ponto pausado, chame um método, mude um valor, teste a correção antes de escrever. Controles de execução: Step Over F8 roda a linha, Step Into F7 entra na função, Step Out volta um nível; Resume continua, Drop Frame desfaz a chamada atual para tentar de novo, Run to Cursor. Apply Changes é diferente de Run e economiza minutos por dia: Apply Code Changes troca o corpo de métodos sem reiniciar o app, Apply Changes and Restart Activity reinicia só a tela; mudou assinatura ou estrutura de classe, aí sim precisa de um Run completo."></p>
+
+<blockquote><p>🧠 <strong>Termo — Evaluate Expression:</strong> um console que roda <strong>qualquer</strong> Kotlin no ponto pausado, com acesso a todas as variáveis em escopo. Você testa a correção — chamar um método, recalcular um valor — <em>antes</em> de escrever no código. É o que transforma debug de “observar” em “experimentar”.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o <strong>breakpoint condicional</strong> é como se caça bug de lista: em vez de parar nas 500 iterações, pare só quando <code>item.id == "abc"</code> (botão direito no breakpoint → condição). E o <strong>logpoint</strong> (breakpoint que só imprime, sem pausar) substitui os <code>println</code> temporários que você sempre esquece de apagar — some ao remover o breakpoint. Junte os dois e você depura o que antes era impossível sem sujar o código.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · Logcat: ler o que o app está gritando</h2>
+
+<p>O <strong>Logcat</strong> é o fluxo de logs do dispositivo. O erro do iniciante é rolar um mar de linhas; o intermediário <strong>filtra</strong>. A sintaxe de consulta moderna é poderosa:</p>
+
+<pre><code class="language-text">package:mine level:error            # só erros do MEU app
+tag:NexusVM  level:warn             # avisos de uma tag específica
+package:mine -tag:OkHttp            # tudo meu, menos o ruído do OkHttp
+message:timeout                     # qualquer log contendo "timeout"
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> um <em>stack trace</em> de crash se lê <strong>de cima para baixo</strong> até a <strong>primeira linha do seu pacote</strong> — é ali, quase sempre, que está a causa (o resto é encanamento do framework). E cada linha <code>at com.nexus…(Arquivo.kt:42)</code> é <strong>clicável</strong>: leva direto à linha. Em <code>release</code>, o trace vem ofuscado — aí entra o <code>mapping.txt</code> do artigo 12.</p></blockquote>
+
+<hr>
+
+<h2>Parte 6 · Profiling: a parte sênior de verdade</h2>
+
+<p>Quando o app trava, vaza memória ou drena bateria, você <strong>não adivinha</strong> — abre o <strong>Profiler</strong>. São quatro lentes, cada uma para uma classe de problema. E a regra vale para todas: meça em build <code>release</code> (o <code>debug</code> mente sobre performance — artigo 06).</p>
+
+<p><img src="../assets/as-profiler.svg" alt="O Profiler serve para medir em vez de adivinhar: quatro lentes sobre o app rodando, cada uma pega uma classe de problema, sempre em build release. CPU: grava um trace de métodos ou do sistema todo e mostra um flame chart, em que quem chamou quem aparece e a largura é o tempo gasto; pega jank, função lenta, trabalho na main thread e recomposição excessiva do artigo 06; leia de cima para baixo, a barra mais larga é o gargalo. Memory: tira um heap dump, uma foto da memória, e rastreia alocações ao vivo; pega memory leak, Activity retida e churn de alocação, que causa GC toda hora e jank; o teste do leak é girar a tela cinco vezes, forçar GC e procurar cinco Activities vivas onde deveria haver uma. Network: mostra cada requisição com tamanho, tempo e payload; pega chamada duplicada, JSON gigante, falta de cache e request na thread errada; no App Inspection há o Network Inspector mais detalhado. Energy ou Power: consumo por CPU, rede, GPS e wakelocks; pega dreno de bateria, GPS preso, wakelock esquecido e job em excesso, o que faz o usuário desinstalar sem reclamar. A ordem certa: primeiro reproduza o problema, depois meça com a lente certa, só então mude e meça de novo; otimizar por achismo costuma piorar a legibilidade sem tocar no gargalo real, e o Profiler é a diferença entre sênior e chute."></p>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o teste de <strong>memory leak</strong> mais rápido: abra a tela, <strong>gire o dispositivo 5 vezes</strong>, tire um <em>heap dump</em> e conte quantas instâncias da sua <code>Activity</code>/<code>ViewModel</code> estão vivas. Deveria ser <strong>1</strong>; se há 5, algo está segurando as antigas (um listener não removido, um <code>Context</code> num singleton — artigo 14). No CPU, leia o <em>flame chart</em> de cima para baixo: a barra <strong>mais larga</strong> no seu pacote é onde o tempo vai. Não otimize nada que o profiler não apontou.</p></blockquote>
+
+<hr>
+
+<h2>Parte 7 · Emulador (AVD) e dispositivo físico</h2>
+
+<p>No <strong>Device Manager</strong> você cria um <strong>AVD</strong> (Android Virtual Device): escolhe o hardware (Pixel 8), a imagem de sistema (API 35) e pronto. Mas o emulador é muito mais capaz do que “uma tela de celular”.</p>
+
+<table>
+<thead><tr><th align="left">Recurso</th><th align="left">Onde / para quê</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Extended controls</strong> (⋯)</td><td align="left">GPS falso, bateria, chamada/SMS, sensores, dobra de foldable</td></tr>
+<tr><td align="left"><strong>Network throttling</strong></td><td align="left">simular 3G/edge/offline — testar o app em conexão ruim</td></tr>
+<tr><td align="left"><strong>Locale &amp; font size</strong></td><td align="left">trocar idioma e fonte a 200% — testar a11y (artigo 08)</td></tr>
+<tr><td align="left"><strong>Snapshots / Quick Boot</strong></td><td align="left">liga em segundos guardando o estado (vs. <em>cold boot</em>)</td></tr>
+<tr><td align="left"><strong>Deep link por adb</strong></td><td align="left"><code>adb shell am start -d "nexus://pedido/42"</code> testa uma rota</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o emulador usa a <strong>GPU do seu PC</strong> — num Mac/PC moderno ele costuma ser <em>mais rápido</em> que um celular de entrada. Mas para medir <strong>performance real</strong> (jank, bateria, câmera, biometria), use um <strong>dispositivo físico</strong>: o emulador não reproduz o gargalo de um aparelho fraco. Regra: <strong>desenvolva no emulador</strong> (rápido, controlável), <strong>valide performance no device</strong>.</p></blockquote>
+
+<hr>
+
+<h2>Parte 8 · Rodar e depurar testes pela IDE</h2>
+
+<p>Você não precisa do terminal para testar. Ao lado de toda classe/função de teste aparece um <strong>ícone verde na sarjeta</strong> (▶). O detalhe que confunde: há <strong>duas pastas</strong> de teste (artigo 15) e a IDE trata cada uma diferente.</p>
+
+<table>
+<thead><tr><th align="left">Pasta</th><th align="left">Roda onde</th><th align="left">Velocidade</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>src/test/</code></td><td align="left">JVM da sua máquina (unit)</td><td align="left">milissegundos — o dia a dia</td></tr>
+<tr><td align="left"><code>src/androidTest/</code></td><td align="left">emulador/device (instrumentado)</td><td align="left">segundos — precisa de aparelho</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> clique no ícone com o menu e escolha <strong>“Run with Coverage”</strong> — a IDE pinta de verde/vermelho as linhas cobertas <em>no próprio editor</em>. E um teste que falha pode ser <strong>depurado como qualquer código</strong> (🐞 no ícone): breakpoint dentro do teste, <em>Evaluate Expression</em> no assert. Depois de rodar a suíte, o painel oferece <strong>“Rerun Failed Tests”</strong> — você itera só no que quebrou, não na suíte toda.</p></blockquote>
+
+<hr>
+
+<h2>Parte 9 · Git dentro do Android Studio</h2>
+
+<p>Dá para viver sem digitar <code>git</code> no terminal — e para conflitos, a IDE é <em>melhor</em> que a linha de comando. O fluxo do artigo 10, aqui em botões:</p>
+
+<table>
+<thead><tr><th align="left">Tarefa</th><th align="left">Na IDE</th></tr></thead>
+<tbody>
+<tr><td align="left">Commit</td><td align="left">tool window <strong>Commit</strong> — e você escolhe <strong>por “hunk”</strong> (pedaço), não o arquivo todo</td></tr>
+<tr><td align="left">Trocar/criar branch</td><td align="left"><strong>Branches</strong> popup (canto inferior direito)</td></tr>
+<tr><td align="left">Ver o diff</td><td align="left">clique no arquivo no Commit/Log — diff lado a lado</td></tr>
+<tr><td align="left">Resolver conflito</td><td align="left"><strong>merge de 3 vias</strong>: seu lado, o deles, e o resultado no meio</td></tr>
+<tr><td align="left">Quem escreveu esta linha?</td><td align="left"><strong>Annotate / Blame</strong> (botão direito na sarjeta)</td></tr>
+<tr><td align="left">Guardar sem commitar</td><td align="left"><strong>Shelve</strong> (guarda mudanças à parte, reversível)</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> duas coisas que a linha de comando não faz tão bem. O <strong>commit por hunk</strong>: numa mesma alteração você separou uma correção e uma refatoração — no Commit da IDE você marca só as linhas da correção e comita <em>isso</em>, deixando o resto para depois (é o <code>git add -p</code>, mas visual). E o <strong>resolvedor de conflito de 3 vias</strong>: em vez de decifrar <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> no texto, você vê as três versões lado a lado e escolhe com um clique. Só isso já justifica abrir a IDE num merge feio.</p></blockquote>
+
+<hr>
+
+<h2>Parte 10 · Inspetores: ver o app por dentro em tempo real</h2>
+
+<p>O menu <strong>App Inspection</strong> (e alguns vizinhos) abre janelas que mostram o app <em>vivo</em> — sem log, sem chute:</p>
+
+<table>
+<thead><tr><th align="left">Inspetor</th><th align="left">Mostra</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Database Inspector</strong></td><td align="left">as tabelas do <strong>Room</strong> ao vivo — dá para rodar SQL e ver mudar</td></tr>
+<tr><td align="left"><strong>Network Inspector</strong></td><td align="left">cada requisição, cabeçalho e corpo, em tempo real</td></tr>
+<tr><td align="left"><strong>Background Task Inspector</strong></td><td align="left">o estado dos jobs do <strong>WorkManager</strong> (artigo 14)</td></tr>
+<tr><td align="left"><strong>Layout Inspector</strong></td><td align="left">a árvore de UI viva + <strong>contagem de recomposição</strong> por composable</td></tr>
+<tr><td align="left"><strong>APK Analyzer</strong></td><td align="left">abra o <code>.apk</code>/<code>.aab</code> e veja o que pesa (artigo 12)</td></tr>
+<tr><td align="left"><strong>Build Analyzer</strong></td><td align="left">por que o build está lento — qual task, qual plugin (artigo 01)</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o <strong>Layout Inspector</strong> com “<em>recomposition counts</em>” é o raio-X do Compose: ele mostra, ao vivo, <strong>quantas vezes cada composable recompôs</strong>. Um número que dispara ao rolar a tela denuncia a instabilidade que o artigo 06 explica — sem ele, você otimiza no escuro. Junte com o <strong>APK Analyzer</strong> antes de cada release para ver o que engordou o app, e o <strong>Build Analyzer</strong> quando o build começar a doer.</p></blockquote>
+
+<hr>
+
+<h2>Parte 11 · Truques de especialista que não te contam</h2>
+
+<ul>
+<li><strong>⌘⇧A é o único atalho que você <em>precisa</em> decorar</strong> — “Find Action” acha qualquer comando por nome; por ele você chega em tudo.</li>
+<li><strong>Bookmarks</strong> (<code>F3</code>/<code>⌘F3</code>) — marque pontos quentes de uma investigação e salte entre eles.</li>
+<li><strong>Distraction-free mode</strong> (View → Appearance) — só o editor, para foco total.</li>
+<li><strong>Structural Search &amp; Replace</strong> — buscar por <em>padrão de código</em> (“toda chamada a <code>Log.d</code> sem tag”), não por texto.</li>
+<li><strong>Analyze → Inspect Code</strong> — roda todas as inspeções de uma vez num escopo; acha problemas antes do lint no CI (artigo 11).</li>
+<li><strong>Profile ‘app’ / Debug ‘app’ como configs</strong> — você pode ter build variants dedicados a medir.</li>
+<li><strong>Keymap</strong> — se vem de VS Code/Eclipse, importe o keymap para não brigar com atalhos.</li>
+</ul>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> não versione a pasta <code>.idea/</code> inteira nem os <code>*.iml</code> (config da IDE, por máquina) — o <code>.gitignore</code> padrão do Android já cuida disso, mas projetos antigos às vezes vazam esses arquivos e geram conflito bobo a cada commit.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left">Navegação</td><td align="left">viver de <code>⇧⇧</code> (Search Everywhere), <code>⌘E</code> (recentes), <code>⌘⇧A</code> (ações)</td></tr>
+<tr><td align="left">Estrutura</td><td align="left">saber os 2 <code>build.gradle</code>; nunca comitar <code>local.properties</code>; Sync Now ao mudar deps</td></tr>
+<tr><td align="left">Debug</td><td align="left">breakpoint condicional + logpoint; <em>Evaluate Expression</em> no lugar de <code>Log.d</code></td></tr>
+<tr><td align="left">Profiling</td><td align="left">medir em <code>release</code>; leak test girando a tela; flame chart de cima p/ baixo</td></tr>
+<tr><td align="left">Emulador</td><td align="left">throttling p/ rede ruim; fonte 200% p/ a11y; validar performance em device</td></tr>
+<tr><td align="left">Testes</td><td align="left">rodar/depurar pela sarjeta; “Run with Coverage”; “Rerun Failed”</td></tr>
+<tr><td align="left">Git</td><td align="left">commit por hunk; resolver conflito no merge de 3 vias; Local History como rede</td></tr>
+<tr><td align="left">Inspetores</td><td align="left">Layout Inspector p/ recomposição; APK/Build Analyzer antes do release</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>tool window</strong></td><td align="left">painel acoplável da IDE (Logcat, Build, Profiler, Terminal…)</td></tr>
+<tr><td align="left"><strong>sarjeta (gutter)</strong></td><td align="left">a coluna à esquerda das linhas: breakpoints, run, blame</td></tr>
+<tr><td align="left"><strong>Android view / Project view</strong></td><td align="left">visão reagrupada por tipo vs. o disco real</td></tr>
+<tr><td align="left"><strong>Sync (Gradle)</strong></td><td align="left">reler os arquivos de build para a IDE conhecer deps novas</td></tr>
+<tr><td align="left"><strong>breakpoint condicional</strong></td><td align="left">só pausa quando uma expressão é verdadeira</td></tr>
+<tr><td align="left"><strong>logpoint</strong></td><td align="left">breakpoint que só imprime, sem parar nem mexer no código</td></tr>
+<tr><td align="left"><strong>Evaluate Expression</strong></td><td align="left">rodar Kotlin no ponto pausado do debugger</td></tr>
+<tr><td align="left"><strong>Apply Changes</strong></td><td align="left">aplicar mudança de código sem reiniciar o app</td></tr>
+<tr><td align="left"><strong>Profiler</strong></td><td align="left">CPU/Memory/Network/Energy do app rodando</td></tr>
+<tr><td align="left"><strong>flame chart</strong></td><td align="left">gráfico de chamadas onde a largura é o tempo gasto</td></tr>
+<tr><td align="left"><strong>heap dump</strong></td><td align="left">foto da memória para caçar leaks</td></tr>
+<tr><td align="left"><strong>AVD</strong></td><td align="left">Android Virtual Device — o emulador configurado</td></tr>
+<tr><td align="left"><strong>App Inspection</strong></td><td align="left">inspetores ao vivo: Database, Network, Background Task</td></tr>
+<tr><td align="left"><strong>Local History</strong></td><td align="left">histórico local da IDE, independente do Git</td></tr>
+</tbody>
+</table>

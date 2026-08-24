@@ -13,30 +13,31 @@
     <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
     <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
     <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
-    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
-    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
-    <a href="05-compose.html" class="active"><span class="n">05</span><span class="e">🎨</span><span class="t">Jetpack Compose</span></a>
-    <a href="06-material.html"><span class="n">06</span><span class="e">🧩</span><span class="t">Material 3 & Design</span></a>
-    <a href="07-acessibilidade.html"><span class="n">07</span><span class="e">♿</span><span class="t">Acessibilidade</span></a>
-    <a href="08-play-store.html"><span class="n">08</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
-    <a href="09-git-ci.html"><span class="n">09</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
-    <a href="10-qualidade.html"><span class="n">10</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
-    <a href="11-ofuscacao.html"><span class="n">11</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
-    <a href="12-arquitetura.html"><span class="n">12</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
-    <a href="13-padroes.html"><span class="n">13</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
-    <a href="14-testes.html"><span class="n">14</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
-    <a href="15-ia-claude-code.html"><span class="n">15</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
-    <a href="16-sdd-tdd-bdd.html"><span class="n">16</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
+    <a href="03-android-studio.html"><span class="n">03</span><span class="e">🛠️</span><span class="t">Android Studio a Fundo</span></a>
+    <a href="04-edge-to-edge.html"><span class="n">04</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
+    <a href="05-densidade.html"><span class="n">05</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
+    <a href="06-compose.html" class="active"><span class="n">06</span><span class="e">🎨</span><span class="t">Jetpack Compose</span></a>
+    <a href="07-material.html"><span class="n">07</span><span class="e">🧩</span><span class="t">Material 3 & Design</span></a>
+    <a href="08-acessibilidade.html"><span class="n">08</span><span class="e">♿</span><span class="t">Acessibilidade</span></a>
+    <a href="09-play-store.html"><span class="n">09</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
+    <a href="10-git-ci.html"><span class="n">10</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
+    <a href="11-qualidade.html"><span class="n">11</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
+    <a href="12-ofuscacao.html"><span class="n">12</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
+    <a href="13-arquitetura.html"><span class="n">13</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
+    <a href="14-padroes.html"><span class="n">14</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
+    <a href="15-testes.html"><span class="n">15</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="16-ia-claude-code.html"><span class="n">16</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="17-sdd-tdd-bdd.html"><span class="n">17</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
     <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
   </nav>
 <main>
-  <p class="crumb">Artigo <strong>5</strong> de 16 · trilha de estudos</p>
+  <p class="crumb">Artigo <strong>6</strong> de 17 · trilha de estudos</p>
   <article class="content">
 <h1>🎨 Jetpack Compose: a UI como função do estado (2026)</h1>
 
 <p>Até aqui a trilha cuidou do <em>chão</em> da UI — desenhar sob as barras (03), dp e densidade (04). Agora entra a <strong>ferramenta</strong> com que você realmente constrói tela no Android moderno: o <strong>Jetpack Compose</strong>. Ele troca o velho jeito imperativo (inflar XML, achar <code>View</code> por id e mandar cada mudança na mão) por um jeito <strong>declarativo</strong>: você descreve como a tela deve ficar <em>para um dado estado</em>, e o Compose se encarrega de atualizar o que mudou. Este artigo vai do básico (composables, layout, <code>Modifier</code>, estado) ao avançado (recomposição, estabilidade, side-effects e performance) — porque é fácil escrever Compose que funciona e difícil escrever Compose que não trava.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>04 · Densidade</strong> deu as unidades (dp); aqui você monta a tela com elas. O <strong>próximo (06 · Material 3)</strong> veste esses composables com o sistema de design, e o <strong>12 · Arquitetura</strong> mostra quem alimenta o estado que a tela desenha.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>05 · Densidade</strong> deu as unidades (dp); aqui você monta a tela com elas. O <strong>próximo (07 · Material 3)</strong> veste esses composables com o sistema de design, e o <strong>13 · Arquitetura</strong> mostra quem alimenta o estado que a tela desenha.</p></blockquote>
 
 <hr>
 
@@ -78,7 +79,7 @@ fun CartaoUsuario(usuario: Usuario) {
 </tbody>
 </table>
 
-<p>O <strong>Modifier</strong> é o que ajusta tamanho, espaçamento, clique, fundo, borda — encadeado, e a <strong>ordem importa</strong> (é o padrão Decorator do artigo 13). Sempre receba um <code>Modifier</code> como parâmetro para o chamador poder posicionar seu componente.</p>
+<p>O <strong>Modifier</strong> é o que ajusta tamanho, espaçamento, clique, fundo, borda — encadeado, e a <strong>ordem importa</strong> (é o padrão Decorator do artigo 14). Sempre receba um <code>Modifier</code> como parâmetro para o chamador poder posicionar seu componente.</p>
 
 <pre><code class="language-kotlin">@Composable
 fun Saudacao(nome: String, modifier: Modifier = Modifier) {   // convenção: modifier é o 1º opcional
@@ -130,7 +131,7 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 
 <h3>Responsivo de verdade: BoxWithConstraints e intrinsics</h3>
 
-<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>06 · Material</strong> e às Window Size Classes do <strong>03</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
+<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>07 · Material</strong> e às Window Size Classes do <strong>03</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
 
 <pre><code class="language-kotlin">BoxWithConstraints {
     if (maxWidth &lt; 600.dp) ListaEmColuna()      // celular
@@ -196,7 +197,7 @@ fun Contador() {
 <pre><code class="language-kotlin">// stateful: guarda o próprio estado — difícil de controlar/testar
 @Composable fun CampoBusca() { var texto by remember { mutableStateOf("") } /* … */ }
 
-// stateless (hoisted): estado DESCE, evento SOBE — a mesma ideia do UDF (art. 12)
+// stateless (hoisted): estado DESCE, evento SOBE — a mesma ideia do UDF (art. 13)
 @Composable
 fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifier = Modifier) {
     TextField(value = texto, onValueChange = onTextoMuda, modifier = modifier)
@@ -379,7 +380,7 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 <thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
 <tbody>
 <tr><td align="left">Estado só visual e efêmero (expandido, scroll)</td><td align="left"><code>remember</code> / <code>rememberSaveable</code> no composable</td></tr>
-<tr><td align="left">Estado de tela / regra de negócio</td><td align="left">no <strong>ViewModel</strong> como <code>StateFlow</code> (art. 12)</td></tr>
+<tr><td align="left">Estado de tela / regra de negócio</td><td align="left">no <strong>ViewModel</strong> como <code>StateFlow</code> (art. 13)</td></tr>
 <tr><td align="left">Rodar <code>suspend</code> ao abrir a tela</td><td align="left"><code>LaunchedEffect(key)</code>, nunca no corpo solto</td></tr>
 <tr><td align="left">Valor derivado de outro estado</td><td align="left"><code>derivedStateOf</code> — evita recomposição por scroll</td></tr>
 <tr><td align="left">Lista longa</td><td align="left"><code>LazyColumn</code> com <code>key</code> estável</td></tr>
@@ -434,8 +435,8 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 </table>
   </article>
     <nav class="pager">
-      <a class="pg prev" href="04-densidade.html"><span>← Anterior</span><strong>📏 Densidade & Tamanhos de Tela</strong></a>
-      <a class="pg next" href="06-material.html"><span>Próximo →</span><strong>🧩 Material 3 & Design</strong></a>
+      <a class="pg prev" href="05-densidade.html"><span>← Anterior</span><strong>📏 Densidade & Tamanhos de Tela</strong></a>
+      <a class="pg next" href="07-material.html"><span>Próximo →</span><strong>🧩 Material 3 & Design</strong></a>
     </nav>
 </main>
 </body>

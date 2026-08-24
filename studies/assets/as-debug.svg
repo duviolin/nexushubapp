@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="430" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="32" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Depurar no Android Studio: mais que um breakpoint</text>
+  <text x="400" y="53" text-anchor="middle" font-size="12.5" fill="#8A97A3">pausar o app, inspecionar o estado real e <tspan font-style="italic" fill="#B7BFC7">testar hip&#243;teses</tspan> sem recompilar</text>
+
+  <!-- tipos de breakpoint -->
+  <rect x="24" y="70" width="360" height="180" rx="10" fill="#2E2A22" stroke="#CC7832"/>
+  <text x="40" y="92" font-size="12.5" font-weight="700" fill="#E8A15C">Tipos de breakpoint (clique na sarjeta)</text>
+  <circle cx="48" cy="112" r="5" fill="#E0928A"/><text x="62" y="116" font-size="10" fill="#C9A97E"><tspan font-weight="700">Linha</tspan> &#8212; para naquela linha</text>
+  <circle cx="48" cy="134" r="5" fill="#E0928A"/><text x="62" y="138" font-size="10" fill="#C9A97E"><tspan font-weight="700">Condicional</tspan> &#8212; s&#243; se <tspan font-family="ui-monospace,monospace">id == 42</tspan> (bot&#227;o direito no ponto)</text>
+  <circle cx="48" cy="156" r="5" fill="#AEB7F2"/><text x="62" y="160" font-size="10" fill="#C9A97E"><tspan font-weight="700">Logpoint</tspan> &#8212; imprime e segue, <tspan font-style="italic">sem</tspan> parar nem mexer no c&#243;digo</text>
+  <circle cx="48" cy="178" r="5" fill="#8ECB98"/><text x="62" y="182" font-size="10" fill="#C9A97E"><tspan font-weight="700">M&#233;todo</tspan> &#8212; ao entrar/sair de uma fun&#231;&#227;o</text>
+  <circle cx="48" cy="200" r="5" fill="#8ECB98"/><text x="62" y="204" font-size="10" fill="#C9A97E"><tspan font-weight="700">Field watchpoint</tspan> &#8212; quando um campo <tspan font-style="italic">muda</tspan></text>
+  <circle cx="48" cy="222" r="5" fill="#CC7832"/><text x="62" y="226" font-size="10" fill="#C9A97E"><tspan font-weight="700">Exception</tspan> &#8212; para quando <tspan font-family="ui-monospace,monospace">qualquer</tspan> exce&#231;&#227;o &#233; lan&#231;ada</text>
+  <text x="40" y="244" font-size="9" fill="#8A97A3">condicional + logpoint = achar bug raro sem poluir o c&#243;digo com prints</text>
+
+  <!-- painéis -->
+  <rect x="400" y="70" width="376" height="180" rx="10" fill="#2E3350" stroke="#6366F1"/>
+  <text x="416" y="92" font-size="12.5" font-weight="700" fill="#AEB7F2">A janela de debug tem tr&#234;s partes</text>
+  <text x="416" y="114" font-size="10" fill="#AAB6C0"><tspan font-weight="700" fill="#CDD3FF">Frames</tspan> &#8212; a pilha de chamadas: como voc&#234; chegou aqui</text>
+  <text x="416" y="132" font-size="10" fill="#AAB6C0">(clique num frame p/ ver o estado <tspan font-style="italic">daquele</tspan> ponto)</text>
+  <text x="416" y="154" font-size="10" fill="#AAB6C0"><tspan font-weight="700" fill="#CDD3FF">Variables</tspan> &#8212; o valor real de tudo em escopo agora</text>
+  <text x="416" y="176" font-size="10" fill="#AAB6C0"><tspan font-weight="700" fill="#CDD3FF">Watches</tspan> &#8212; express&#245;es fixadas que voc&#234; acompanha</text>
+  <text x="416" y="200" font-size="10" fill="#8ECB98" font-weight="700">Evaluate Expression (a arma secreta)</text>
+  <text x="416" y="218" font-size="10" fill="#AAB6C0">rode <tspan font-family="ui-monospace,monospace">qualquer</tspan> Kotlin no ponto pausado: chame</text>
+  <text x="416" y="234" font-size="10" fill="#AAB6C0">um m&#233;todo, mude um valor, teste a corre&#231;&#227;o <tspan font-style="italic">antes</tspan> de escrever</text>
+
+  <!-- passo a passo -->
+  <rect x="24" y="262" width="752" height="72" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="40" y="284" font-size="11.5" font-weight="700" fill="#DFE1E5">Controles de execu&#231;&#227;o</text>
+  <text x="40" y="305" font-size="10" fill="#AAB6C0"><tspan font-weight="700" fill="#B7BFC7">Step Over</tspan> (F8) roda a linha &#183; <tspan font-weight="700" fill="#B7BFC7">Step Into</tspan> (F7) entra na fun&#231;&#227;o &#183; <tspan font-weight="700" fill="#B7BFC7">Step Out</tspan> volta um n&#237;vel</text>
+  <text x="40" y="323" font-size="10" fill="#AAB6C0"><tspan font-weight="700" fill="#B7BFC7">Resume</tspan> continua &#183; <tspan font-weight="700" fill="#B7BFC7">Drop Frame</tspan> &#8220;desfaz&#8221; a chamada atual e volta p/ tentar de novo &#183; <tspan font-weight="700" fill="#B7BFC7">Run to Cursor</tspan></text>
+
+  <!-- apply changes -->
+  <rect x="24" y="346" width="752" height="68" rx="10" fill="#25392A" stroke="#84C48D"/>
+  <text x="40" y="368" font-size="11.5" font-weight="700" fill="#8ECB98">Apply Changes &#8800; Run (economiza minutos por dia)</text>
+  <text x="40" y="389" font-size="10" fill="#9DBDB6"><tspan font-weight="700">Apply Code Changes</tspan> (&#8984;&#8679;F10) troca o corpo de m&#233;todos sem reiniciar o app &#183; <tspan font-weight="700">Apply Changes and Restart Activity</tspan> reinicia s&#243; a tela</text>
+  <text x="40" y="406" font-size="9.5" fill="#8A97A3">mudou assinatura/estrutura de classe? a&#237; sim precisa de um Run completo. Para o resto, Apply Changes mant&#233;m o estado.</text>
+</svg>

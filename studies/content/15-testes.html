@@ -1,42 +1,8 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Testes no Android · Estudos Android</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir menu">☰</button>
-<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
-  <nav class="side">
-    <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
-    <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
-    <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
-    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
-    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
-    <a href="05-compose.html"><span class="n">05</span><span class="e">🎨</span><span class="t">Jetpack Compose</span></a>
-    <a href="06-material.html"><span class="n">06</span><span class="e">🧩</span><span class="t">Material 3 & Design</span></a>
-    <a href="07-acessibilidade.html"><span class="n">07</span><span class="e">♿</span><span class="t">Acessibilidade</span></a>
-    <a href="08-play-store.html"><span class="n">08</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
-    <a href="09-git-ci.html"><span class="n">09</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
-    <a href="10-qualidade.html"><span class="n">10</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
-    <a href="11-ofuscacao.html"><span class="n">11</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
-    <a href="12-arquitetura.html"><span class="n">12</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
-    <a href="13-padroes.html"><span class="n">13</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
-    <a href="14-testes.html" class="active"><span class="n">14</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
-    <a href="15-ia-claude-code.html"><span class="n">15</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
-    <a href="16-sdd-tdd-bdd.html"><span class="n">16</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
-    <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
-  </nav>
-<main>
-  <p class="crumb">Artigo <strong>14</strong> de 16 · trilha de estudos</p>
-  <article class="content">
 <h1>🧪 Testes no Android: da pirâmide ao Robot Pattern (2026)</h1>
 
-<p>No artigo 12 você montou uma arquitetura em camadas. Agora vem a recompensa: cada camada daquele desenho vira um <strong>tipo de teste</strong> — e os mais valiosos rodam na JVM em milissegundos, sem emulador. Este artigo percorre <strong>como testar cada peça</strong> (domínio, dados, ViewModel, Compose) e fecha com um padrão que deixa os testes de UI limpos e escaláveis: o <strong>Robot Pattern + AAA</strong>.</p>
+<p>No artigo 13 você montou uma arquitetura em camadas. Agora vem a recompensa: cada camada daquele desenho vira um <strong>tipo de teste</strong> — e os mais valiosos rodam na JVM em milissegundos, sem emulador. Este artigo percorre <strong>como testar cada peça</strong> (domínio, dados, ViewModel, Compose) e fecha com um padrão que deixa os testes de UI limpos e escaláveis: o <strong>Robot Pattern + AAA</strong>.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> a testabilidade não é um esforço à parte — é a <em>consequência</em> da arquitetura do 12. Injeção de dependência vira fake; UI stateless vira teste de Compose; domínio puro vira JUnit sem Android. Aqui colhemos tudo isso.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> a testabilidade não é um esforço à parte — é a <em>consequência</em> da arquitetura do 13. Injeção de dependência vira fake; UI stateless vira teste de Compose; domínio puro vira JUnit sem Android. Aqui colhemos tudo isso.</p></blockquote>
 
 <hr>
 
@@ -69,7 +35,7 @@ tasks.withType&lt;Test&gt; { useJUnitPlatform() }
 
 <h2>Parte 2 · Testar cada camada</h2>
 
-<p>Cada camada do artigo 12 pede um estilo de teste. Do mais barato para o mais caro:</p>
+<p>Cada camada do artigo 13 pede um estilo de teste. Do mais barato para o mais caro:</p>
 
 <p><img src="../assets/camadas-teste.svg" alt="As três camadas e o teste de cada uma. UI (Compose, ViewModel, estado MVI, navegação) depende do Android e testa com Compose UI test na JVM, Robolectric e ViewModel via JUnit puro. Domínio no centro, destacado (UseCases, entidades, regras de negócio) é Kotlin puro com zero Android, testado só com JUnit5 sem emulador, o mais rápido. Data (repositórios, Room, Retrofit, DataStore) fala com o mundo externo e testa com Room in-memory, MockWebServer e fakes de repositório. As setas de dependência apontam para dentro; por isso o domínio roda na JVM em milissegundos e a base da pirâmide vem de graça."></p>
 
@@ -141,7 +107,7 @@ val server = MockWebServer().apply {
 </tbody>
 </table>
 
-<h3>Onde cada um encaixa na arquitetura (art. 12)</h3>
+<h3>Onde cada um encaixa na arquitetura (art. 13)</h3>
 
 <p>A escolha não é gosto — é <strong>o que você está provando</strong> e <strong>em que camada</strong>. O eixo que decide: você verifica <strong>estado</strong> (o valor que saiu) ou <strong>interação</strong> (a chamada que foi feita)?</p>
 
@@ -175,7 +141,7 @@ class FakeAuthRepository : AuthRepository {
 
 <blockquote><p>🧠 <strong>Termo — verificação de estado × de interação:</strong> testar <strong>estado</strong> é olhar o <em>resultado</em> (“o <code>UiState</code> virou <code>Sucesso</code>?”) — robusto, sobrevive a refatoração. Testar <strong>interação</strong> é olhar as <em>chamadas</em> (“chamou <code>repo.login()</code> uma vez?”) — frágil, quebra quando você reorganiza o interior. Prefira estado; reserve interação para quando a chamada externa <em>é</em> o efeito observável.</p></blockquote>
 
-<blockquote><p>🔒 <strong>Visão Specialist:</strong> o conselho do Google (e do tio Bob) é <strong>“fakes, não mocks”</strong>. Mock verifica <em>implementação</em> — todo teste vira refém do jeito interno, e refatorar (sem mudar o comportamento) quebra dezenas de testes vermelhos falsos. Fake verifica <em>comportamento</em> — você reescreve o miolo e os testes continuam verdes porque o resultado é o mesmo. Regra prática: <strong>o dono da interface escreve o Fake dela</strong> e o coloca num módulo <code>:core-testing</code> (art. 12), reusável por todo mundo. Você escreve o Fake <strong>uma vez</strong>; escreveria o mesmo <code>every/returns</code> em cada teste com mock.</p></blockquote>
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o conselho do Google (e do tio Bob) é <strong>“fakes, não mocks”</strong>. Mock verifica <em>implementação</em> — todo teste vira refém do jeito interno, e refatorar (sem mudar o comportamento) quebra dezenas de testes vermelhos falsos. Fake verifica <em>comportamento</em> — você reescreve o miolo e os testes continuam verdes porque o resultado é o mesmo. Regra prática: <strong>o dono da interface escreve o Fake dela</strong> e o coloca num módulo <code>:core-testing</code> (art. 13), reusável por todo mundo. Você escreve o Fake <strong>uma vez</strong>; escreveria o mesmo <code>every/returns</code> em cada teste com mock.</p></blockquote>
 
 <blockquote><p>⚠️ <strong>Pegadinha:</strong> <strong>não faça mock de tipos que você não possui</strong> — nem de classes do Android (<code>Context</code>, <code>SharedPreferences</code>), nem de tipos de biblioteca. Mock desses amarra seu teste ao contrato interno de um código alheio que pode mudar. Para dependências do Android, use um <strong>Fake</strong> (um <code>FakePreferences</code>) ou o <strong>Robolectric</strong> (Parte 1), que roda o Android de verdade na JVM. Mock é para <em>suas</em> interfaces, e mesmo assim com parcimônia.</p></blockquote>
 
@@ -210,7 +176,7 @@ class FakeAuthRepository : AuthRepository {
 
 <blockquote><p>🧠 <strong>Termo — testTag:</strong> uma etiqueta invisível (<code>Modifier.testTag("...")</code>) para o teste encontrar um nó sem depender do texto exato (que muda com tradução). Use tag quando o texto for volátil; use texto/descrição quando quiser testar o que o usuário realmente vê.</p></blockquote>
 
-<blockquote><p>🔒 <strong>Visão Specialist — as duas estradas do Compose:</strong> o <strong>mesmo</strong> teste roda em duas velocidades. Com <strong>Robolectric</strong> (pasta <code>src/test/</code>) ele roda na JVM em segundos e entra em todo PR. <strong>Instrumentado</strong> (<code>src/androidTest/</code>) roda no emulador, pega renderização real e gestos, mas é lento — reserve para o fluxo crítico. Escrever a UI <strong>stateless</strong> (artigo 12) é o que permite testar sem subir rede.</p></blockquote>
+<blockquote><p>🔒 <strong>Visão Specialist — as duas estradas do Compose:</strong> o <strong>mesmo</strong> teste roda em duas velocidades. Com <strong>Robolectric</strong> (pasta <code>src/test/</code>) ele roda na JVM em segundos e entra em todo PR. <strong>Instrumentado</strong> (<code>src/androidTest/</code>) roda no emulador, pega renderização real e gestos, mas é lento — reserve para o fluxo crítico. Escrever a UI <strong>stateless</strong> (artigo 13) é o que permite testar sem subir rede.</p></blockquote>
 
 <h3>Screenshot testing (o estado da arte)</h3>
 
@@ -288,7 +254,7 @@ class MyScreenTest {
 <tr><td align="left"><strong>Compose</strong></td><td align="left">Encontrar→agir→verificar; Robolectric no PR, instrumentado só no crítico</td></tr>
 <tr><td align="left"><strong>Robot Pattern</strong></td><td align="left">Um Robot por tela + AAA; teste lê como caso de uso</td></tr>
 <tr><td align="left"><strong>Screenshot</strong></td><td align="left">Paparazzi/Roborazzi para regressão visual do design system</td></tr>
-<tr><td align="left"><strong>Esteira</strong></td><td align="left">Testes + cobertura no CI (artigos 09–10); Quality Gate no código novo</td></tr>
+<tr><td align="left"><strong>Esteira</strong></td><td align="left">Testes + cobertura no CI (artigos 10–11); Quality Gate no código novo</td></tr>
 </tbody>
 </table>
 
@@ -317,11 +283,3 @@ class MyScreenTest {
 <tr><td align="left"><strong>AAA</strong></td><td align="left">Arrange–Act–Assert: as três etapas de um teste.</td></tr>
 </tbody>
 </table>
-  </article>
-    <nav class="pager">
-      <a class="pg prev" href="13-padroes.html"><span>← Anterior</span><strong>🧱 Padrões de Projeto</strong></a>
-      <a class="pg next" href="15-ia-claude-code.html"><span>Próximo →</span><strong>🤖 Desenvolver com IA</strong></a>
-    </nav>
-</main>
-</body>
-</html>

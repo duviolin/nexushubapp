@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="420" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="32" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O Profiler: medir em vez de adivinhar</text>
+  <text x="400" y="53" text-anchor="middle" font-size="12.5" fill="#8A97A3">quatro lentes sobre o app rodando &#8212; cada uma pega uma classe de problema (sempre em build <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">release</tspan>)</text>
+
+  <!-- CPU -->
+  <rect x="24" y="70" width="368" height="150" rx="10" fill="#2E3350" stroke="#6366F1"/>
+  <text x="40" y="92" font-size="13" font-weight="700" fill="#AEB7F2">&#9201; CPU</text>
+  <text x="40" y="112" font-size="10" fill="#AAB6C0">grava um <tspan font-weight="700">trace</tspan> de m&#233;todos ou o sistema todo</text>
+  <text x="40" y="128" font-size="10" fill="#AAB6C0">e mostra um <tspan font-weight="700">flame chart</tspan> (quem chamou quem,</text>
+  <text x="40" y="144" font-size="10" fill="#AAB6C0">largura = tempo gasto).</text>
+  <text x="40" y="166" font-size="10" fill="#8ECB98" font-weight="700">pega:</text>
+  <text x="82" y="166" font-size="10" fill="#AAB6C0">jank, fun&#231;&#227;o lenta, trabalho na main thread,</text>
+  <text x="40" y="182" font-size="10" fill="#AAB6C0">recomposi&#231;&#227;o excessiva (art. 06).</text>
+  <text x="40" y="204" font-size="9" fill="#8A97A3">leia de cima p/ baixo: a barra mais larga &#233; o seu gargalo</text>
+
+  <!-- Memory -->
+  <rect x="408" y="70" width="368" height="150" rx="10" fill="#25392A" stroke="#84C48D"/>
+  <text x="424" y="92" font-size="13" font-weight="700" fill="#8ECB98">&#128190; Memory</text>
+  <text x="424" y="112" font-size="10" fill="#9DBDB6">tira um <tspan font-weight="700">heap dump</tspan> (foto da mem&#243;ria) e</text>
+  <text x="424" y="128" font-size="10" fill="#9DBDB6">rastreia aloca&#231;&#245;es ao vivo.</text>
+  <text x="424" y="150" font-size="10" fill="#8ECB98" font-weight="700">pega:</text>
+  <text x="466" y="150" font-size="10" fill="#9DBDB6">memory leak, <tspan font-family="ui-monospace,monospace">Activity</tspan> retida,</text>
+  <text x="424" y="166" font-size="10" fill="#9DBDB6">churn de aloca&#231;&#227;o (GC toda hora = jank).</text>
+  <text x="424" y="188" font-size="9.5" fill="#8A97A3">o teste do leak: gire a tela 5&#215;, force GC, procure 5 <tspan font-family="ui-monospace,monospace">Activity</tspan></text>
+  <text x="424" y="203" font-size="9.5" fill="#8A97A3">vivas onde deveria haver 1.</text>
+
+  <!-- Network -->
+  <rect x="24" y="232" width="368" height="110" rx="10" fill="#2E2A22" stroke="#CC7832"/>
+  <text x="40" y="254" font-size="13" font-weight="700" fill="#E8A15C">&#127760; Network</text>
+  <text x="40" y="274" font-size="10" fill="#C9A97E">cada requisi&#231;&#227;o: tamanho, tempo, payload.</text>
+  <text x="40" y="294" font-size="10" fill="#8ECB98" font-weight="700">pega:</text>
+  <text x="82" y="294" font-size="10" fill="#C9A97E">chamada duplicada, JSON gigante,</text>
+  <text x="40" y="310" font-size="10" fill="#C9A97E">falta de cache, request na thread errada.</text>
+  <text x="40" y="330" font-size="9" fill="#8A97A3">(no App Inspection: Network Inspector, mais detalhado)</text>
+
+  <!-- Energy -->
+  <rect x="408" y="232" width="368" height="110" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="424" y="254" font-size="13" font-weight="700" fill="#B7BFC7">&#128267; Energy / Power</text>
+  <text x="424" y="274" font-size="10" fill="#AAB6C0">consumo por CPU, rede, GPS, wakelocks.</text>
+  <text x="424" y="294" font-size="10" fill="#8ECB98" font-weight="700">pega:</text>
+  <text x="466" y="294" font-size="10" fill="#AAB6C0">dreno de bateria, GPS preso,</text>
+  <text x="424" y="310" font-size="10" fill="#AAB6C0">wakelock esquecido, job em excesso.</text>
+  <text x="424" y="330" font-size="9" fill="#8A97A3">o que faz o usu&#225;rio desinstalar sem reclamar</text>
+
+  <!-- regra -->
+  <rect x="24" y="354" width="752" height="52" rx="10" fill="#3A2E20" stroke="#7A5A34"/>
+  <text x="40" y="376" font-size="11" font-weight="700" fill="#E8A15C">&#128274; A ordem certa:</text>
+  <text x="152" y="376" font-size="10" fill="#C9A97E">primeiro <tspan font-weight="700">reproduza</tspan> o problema, depois <tspan font-weight="700">meça</tspan> com a lente certa, s&#243; ent&#227;o <tspan font-weight="700">mude</tspan> e <tspan font-weight="700">me&#231;a de novo</tspan>.</text>
+  <text x="40" y="396" font-size="9.5" fill="#8A97A3">otimizar por &#8220;achismo&#8221; costuma piorar a legibilidade sem tocar no gargalo real. Profiler &#233; a diferen&#231;a entre s&#234;nior e chute.</text>
+</svg>

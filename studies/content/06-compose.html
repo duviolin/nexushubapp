@@ -2,7 +2,7 @@
 
 <p>Até aqui a trilha cuidou do <em>chão</em> da UI — desenhar sob as barras (03), dp e densidade (04). Agora entra a <strong>ferramenta</strong> com que você realmente constrói tela no Android moderno: o <strong>Jetpack Compose</strong>. Ele troca o velho jeito imperativo (inflar XML, achar <code>View</code> por id e mandar cada mudança na mão) por um jeito <strong>declarativo</strong>: você descreve como a tela deve ficar <em>para um dado estado</em>, e o Compose se encarrega de atualizar o que mudou. Este artigo vai do básico (composables, layout, <code>Modifier</code>, estado) ao avançado (recomposição, estabilidade, side-effects e performance) — porque é fácil escrever Compose que funciona e difícil escrever Compose que não trava.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>04 · Densidade</strong> deu as unidades (dp); aqui você monta a tela com elas. O <strong>próximo (06 · Material 3)</strong> veste esses composables com o sistema de design, e o <strong>12 · Arquitetura</strong> mostra quem alimenta o estado que a tela desenha.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>05 · Densidade</strong> deu as unidades (dp); aqui você monta a tela com elas. O <strong>próximo (07 · Material 3)</strong> veste esses composables com o sistema de design, e o <strong>13 · Arquitetura</strong> mostra quem alimenta o estado que a tela desenha.</p></blockquote>
 
 <hr>
 
@@ -44,7 +44,7 @@ fun CartaoUsuario(usuario: Usuario) {
 </tbody>
 </table>
 
-<p>O <strong>Modifier</strong> é o que ajusta tamanho, espaçamento, clique, fundo, borda — encadeado, e a <strong>ordem importa</strong> (é o padrão Decorator do artigo 13). Sempre receba um <code>Modifier</code> como parâmetro para o chamador poder posicionar seu componente.</p>
+<p>O <strong>Modifier</strong> é o que ajusta tamanho, espaçamento, clique, fundo, borda — encadeado, e a <strong>ordem importa</strong> (é o padrão Decorator do artigo 14). Sempre receba um <code>Modifier</code> como parâmetro para o chamador poder posicionar seu componente.</p>
 
 <pre><code class="language-kotlin">@Composable
 fun Saudacao(nome: String, modifier: Modifier = Modifier) {   // convenção: modifier é o 1º opcional
@@ -96,7 +96,7 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 
 <h3>Responsivo de verdade: BoxWithConstraints e intrinsics</h3>
 
-<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>06 · Material</strong> e às Window Size Classes do <strong>03</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
+<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>07 · Material</strong> e às Window Size Classes do <strong>03</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
 
 <pre><code class="language-kotlin">BoxWithConstraints {
     if (maxWidth &lt; 600.dp) ListaEmColuna()      // celular
@@ -162,7 +162,7 @@ fun Contador() {
 <pre><code class="language-kotlin">// stateful: guarda o próprio estado — difícil de controlar/testar
 @Composable fun CampoBusca() { var texto by remember { mutableStateOf("") } /* … */ }
 
-// stateless (hoisted): estado DESCE, evento SOBE — a mesma ideia do UDF (art. 12)
+// stateless (hoisted): estado DESCE, evento SOBE — a mesma ideia do UDF (art. 13)
 @Composable
 fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifier = Modifier) {
     TextField(value = texto, onValueChange = onTextoMuda, modifier = modifier)
@@ -345,7 +345,7 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 <thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
 <tbody>
 <tr><td align="left">Estado só visual e efêmero (expandido, scroll)</td><td align="left"><code>remember</code> / <code>rememberSaveable</code> no composable</td></tr>
-<tr><td align="left">Estado de tela / regra de negócio</td><td align="left">no <strong>ViewModel</strong> como <code>StateFlow</code> (art. 12)</td></tr>
+<tr><td align="left">Estado de tela / regra de negócio</td><td align="left">no <strong>ViewModel</strong> como <code>StateFlow</code> (art. 13)</td></tr>
 <tr><td align="left">Rodar <code>suspend</code> ao abrir a tela</td><td align="left"><code>LaunchedEffect(key)</code>, nunca no corpo solto</td></tr>
 <tr><td align="left">Valor derivado de outro estado</td><td align="left"><code>derivedStateOf</code> — evita recomposição por scroll</td></tr>
 <tr><td align="left">Lista longa</td><td align="left"><code>LazyColumn</code> com <code>key</code> estável</td></tr>

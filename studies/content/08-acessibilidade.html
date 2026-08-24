@@ -1,42 +1,8 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Acessibilidade · Estudos Android</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir menu">☰</button>
-<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
-  <nav class="side">
-    <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
-    <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
-    <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
-    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
-    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
-    <a href="05-compose.html"><span class="n">05</span><span class="e">🎨</span><span class="t">Jetpack Compose</span></a>
-    <a href="06-material.html"><span class="n">06</span><span class="e">🧩</span><span class="t">Material 3 & Design</span></a>
-    <a href="07-acessibilidade.html" class="active"><span class="n">07</span><span class="e">♿</span><span class="t">Acessibilidade</span></a>
-    <a href="08-play-store.html"><span class="n">08</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
-    <a href="09-git-ci.html"><span class="n">09</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
-    <a href="10-qualidade.html"><span class="n">10</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
-    <a href="11-ofuscacao.html"><span class="n">11</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
-    <a href="12-arquitetura.html"><span class="n">12</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
-    <a href="13-padroes.html"><span class="n">13</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
-    <a href="14-testes.html"><span class="n">14</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
-    <a href="15-ia-claude-code.html"><span class="n">15</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
-    <a href="16-sdd-tdd-bdd.html"><span class="n">16</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
-    <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
-  </nav>
-<main>
-  <p class="crumb">Artigo <strong>7</strong> de 16 · trilha de estudos</p>
-  <article class="content">
 <h1>♿ Acessibilidade no Android: o app que todo mundo usa (2026)</h1>
 
 <p>Um app bonito que só funciona para quem enxerga bem, toca com precisão e lê letra miúda é um app <strong>quebrado para milhões de pessoas</strong>. Acessibilidade (a11y) é fazer a interface funcionar com leitor de tela, com fonte gigante, com pouca visão, com controle por teclado ou switch, com daltonismo. No Android há <strong>muitas diretrizes</strong> — por isso este é um artigo só delas — mas a boa notícia é que a maioria é <strong>barata quando feita desde o início</strong> e o Compose expõe tudo pela API de <strong>semântica</strong>. Além de ser o certo a fazer, é requisito de qualidade das lojas e, em muitos contextos, exigência legal.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>05 · Compose</strong> e o <strong>06 · Material</strong> te deram componentes que já vêm acessíveis; aqui você aprende a <em>não estragar</em> isso e a cobrir os casos que a máquina não adivinha. O alvo de 48dp vem do <strong>04 · Densidade</strong>; o teste de a11y fecha no <strong>14 · Testes</strong>.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>06 · Compose</strong> e o <strong>07 · Material</strong> te deram componentes que já vêm acessíveis; aqui você aprende a <em>não estragar</em> isso e a cobrir os casos que a máquina não adivinha. O alvo de 48dp vem do <strong>05 · Densidade</strong>; o teste de a11y fecha no <strong>15 · Testes</strong>.</p></blockquote>
 
 <hr>
 
@@ -74,7 +40,7 @@ Row(Modifier.semantics(mergeDescendants = true) {}) {
 <table>
 <thead><tr><th align="left">Família</th><th align="left">Regra prática</th><th align="left">Como no Compose</th></tr></thead>
 <tbody>
-<tr><td align="left"><strong>Contraste</strong></td><td align="left">texto ≥ 4.5:1; texto grande/ícone ≥ 3:1</td><td align="left">cores do <code>colorScheme</code> (art. 06) já pensadas para isso</td></tr>
+<tr><td align="left"><strong>Contraste</strong></td><td align="left">texto ≥ 4.5:1; texto grande/ícone ≥ 3:1</td><td align="left">cores do <code>colorScheme</code> (art. 07) já pensadas para isso</td></tr>
 <tr><td align="left"><strong>Alvo de toque</strong></td><td align="left">≥ 48×48dp mesmo com ícone pequeno</td><td align="left"><code>minimumInteractiveComponentSize()</code>; <code>IconButton</code> já garante</td></tr>
 <tr><td align="left"><strong>Rótulos</strong></td><td align="left">ícone informativo tem descrição; decorativo é <code>null</code></td><td align="left"><code>contentDescription</code> descrevendo a <em>ação</em></td></tr>
 <tr><td align="left"><strong>Escala de fonte</strong></td><td align="left">usar <code>sp</code>; layout aguenta 200%</td><td align="left"><code>fontSize</code> em <code>.sp</code>; evitar altura fixa em texto</td></tr>
@@ -121,11 +87,11 @@ Text("$qtd itens", Modifier.semantics { liveRegion = LiveRegionMode.Polite })
 <tr><td align="left"><strong>Ligar o TalkBack</strong> e navegar por gesto</td><td align="left">a verdade final: ordem de leitura, rótulos faltando, focos presos</td></tr>
 <tr><td align="left"><strong>Accessibility Scanner</strong> (app da Google)</td><td align="left">contraste baixo, alvo pequeno, rótulo ausente — varredura na tela</td></tr>
 <tr><td align="left"><strong>Fonte grande + Display size</strong> no sistema</td><td align="left">corte de texto e layout que quebra em 200%</td></tr>
-<tr><td align="left"><strong>Testes de UI com asserções de semântica</strong></td><td align="left">regressão: <code>onNodeWithContentDescription</code>, <code>assertIsSelected</code> (art. 14)</td></tr>
+<tr><td align="left"><strong>Testes de UI com asserções de semântica</strong></td><td align="left">regressão: <code>onNodeWithContentDescription</code>, <code>assertIsSelected</code> (art. 15)</td></tr>
 </tbody>
 </table>
 
-<pre><code class="language-kotlin">// Teste de Compose que trava a acessibilidade como contrato (art. 14 · Testes)
+<pre><code class="language-kotlin">// Teste de Compose que trava a acessibilidade como contrato (art. 15 · Testes)
 composeTestRule.onNodeWithContentDescription("Excluir tarefa").assertIsDisplayed()
 composeTestRule.onNode(hasContentDescription("Ligar para Ana")).assertHasClickAction()
 </code></pre>
@@ -197,7 +163,7 @@ TextField(senhaTxt, { senhaTxt = it }, modifier = Modifier.focusRequester(senha)
 <tr><td align="left">Alvo de toque</td><td align="left">≥ 48×48dp; <code>minimumInteractiveComponentSize()</code></td></tr>
 <tr><td align="left">Escala de fonte</td><td align="left"><code>sp</code> em texto; testar com fonte a 200%</td></tr>
 <tr><td align="left">Semântica</td><td align="left">agrupar com <code>mergeDescendants</code>; <code>role</code>/<code>stateDescription</code> no custom</td></tr>
-<tr><td align="left">Verificação</td><td align="left">TalkBack no fluxo crítico + Accessibility Scanner + asserções (art. 14)</td></tr>
+<tr><td align="left">Verificação</td><td align="left">TalkBack no fluxo crítico + Accessibility Scanner + asserções (art. 15)</td></tr>
 </tbody>
 </table>
 
@@ -221,11 +187,3 @@ TextField(senhaTxt, { senhaTxt = it }, modifier = Modifier.focusRequester(senha)
 <tr><td align="left"><strong>customActions</strong></td><td align="left">alternativa acessível a um gesto complexo (arrastar p/ excluir)</td></tr>
 </tbody>
 </table>
-  </article>
-    <nav class="pager">
-      <a class="pg prev" href="06-material.html"><span>← Anterior</span><strong>🧩 Material 3 & Design</strong></a>
-      <a class="pg next" href="08-play-store.html"><span>Próximo →</span><strong>🚀 Publicar na Google Play</strong></a>
-    </nav>
-</main>
-</body>
-</html>

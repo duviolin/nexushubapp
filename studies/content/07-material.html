@@ -2,7 +2,7 @@
 
 <p>No artigo anterior você aprendeu a <em>mecânica</em> do Compose — como emitir e recompor UI. Mas “funcionar” não é “parecer profissional”. O <strong>Material 3</strong> (também chamado <em>Material You</em>) é a <strong>linguagem de design</strong> do Android: um sistema de cor, tipografia, forma, elevação, movimento e componentes prontos que fazem o app parecer nativo, coeso e — de graça — acessível. A ideia central é simples e poderosa: componentes <strong>não têm estilo próprio</strong>; eles perguntam ao <strong>tema</strong>. Você define o tema uma vez, e a marca inteira responde.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>05 · Compose</strong> deu os blocos; aqui você os <em>veste</em> com um sistema coerente. A grade de 8dp e o alvo de 48dp do <strong>04 · Densidade</strong> voltam como regra de layout, e o <strong>07 · Acessibilidade</strong> pega o bastão do contraste e do <em>dynamic type</em>.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>06 · Compose</strong> deu os blocos; aqui você os <em>veste</em> com um sistema coerente. A grade de 8dp e o alvo de 48dp do <strong>05 · Densidade</strong> voltam como regra de layout, e o <strong>08 · Acessibilidade</strong> pega o bastão do contraste e do <em>dynamic type</em>.</p></blockquote>
 
 <hr>
 
@@ -65,13 +65,13 @@ fun TelaNexus(vm: HomeViewModel) {
 }
 </code></pre>
 
-<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>Scaffold</code> te entrega um <code>PaddingValues</code> no <code>content</code>. <strong>Aplique-o</strong> (como <code>contentPadding</code> ou <code>Modifier.padding</code>) — senão o conteúdo fica <em>embaixo</em> da <code>TopAppBar</code> ou do sistema. É o elo com o edge-to-edge do artigo 03.</p></blockquote>
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>Scaffold</code> te entrega um <code>PaddingValues</code> no <code>content</code>. <strong>Aplique-o</strong> (como <code>contentPadding</code> ou <code>Modifier.padding</code>) — senão o conteúdo fica <em>embaixo</em> da <code>TopAppBar</code> ou do sistema. É o elo com o edge-to-edge do artigo 04.</p></blockquote>
 
 <hr>
 
 <h2>Parte 3 · Layout adaptativo: um app, várias telas</h2>
 
-<p>Desde o artigo 03, a Google <strong>exige</strong> que o app funcione em tela grande e não trave orientação. O Material 3 traz os componentes que se adaptam à <strong>Window Size Class</strong>: a navegação muda de forma conforme a largura.</p>
+<p>Desde o artigo 04, a Google <strong>exige</strong> que o app funcione em tela grande e não trave orientação. O Material 3 traz os componentes que se adaptam à <strong>Window Size Class</strong>: a navegação muda de forma conforme a largura.</p>
 
 <p><img src="../assets/material-adaptive.svg" alt="Layout adaptativo: a navegação muda com a largura, usando as Window Size Classes. Compact abaixo de 600dp (celular em pé): NavigationBar, uma barra embaixo. Medium de 600 a 840dp (tablet em pé ou dobrável): NavigationRail, um trilho lateral. Expanded acima de 840dp (tablet deitado ou desktop): Navigation Drawer combinado com layout List-Detail, dois painéis lado a lado com lista e detalhe. O Material 3 já traz esses componentes prontos."></p>
 
@@ -141,7 +141,7 @@ fun BotaoNexus(texto: String, onClick: () -&gt; Unit, modifier: Modifier = Modif
         onClick = onClick,                    // e o clique acessível + ripple
         shape = MaterialTheme.shapes.large,
         color = NexusTheme.cores.sucesso,
-        modifier = modifier.heightIn(min = 48.dp),   // alvo de toque (art. 07)
+        modifier = modifier.heightIn(min = 48.dp),   // alvo de toque (art. 08)
     ) { Box(Modifier.padding(16.dp), Alignment.Center) { Text(texto) } }
 }
 </code></pre>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="470" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="32" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Estrutura de um projeto Android &#8212; o que cada pasta &#233;</text>
+  <text x="400" y="53" text-anchor="middle" font-size="12.5" fill="#8A97A3">e por que a &#8220;Android view&#8221; que voc&#234; v&#234; <tspan font-style="italic" fill="#B7BFC7">n&#227;o</tspan> &#233; a estrutura real no disco</text>
+
+  <!-- árvore -->
+  <rect x="24" y="70" width="470" height="384" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <g font-family="ui-monospace, monospace" font-size="11">
+    <text x="40" y="92" fill="#E8A15C">NexusHub/</text><text x="150" y="92" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">a raiz do projeto</text>
+    <text x="52" y="112" fill="#AEB7F2">&#9500;&#9472; app/</text><text x="150" y="112" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">o m&#243;dulo do app (pode haver v&#225;rios &#8212; art. 13)</text>
+    <text x="70" y="130" fill="#A9B7C6">&#9474;  &#9500;&#9472; build.gradle.kts</text><text x="250" y="130" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">deps + plugins do M&#211;DULO</text>
+    <text x="70" y="148" fill="#A9B7C6">&#9474;  &#9492;&#9472; src/</text>
+    <text x="90" y="166" fill="#8ECB98">&#9474;     &#9500;&#9472; main/</text>
+    <text x="112" y="184" fill="#A9B7C6">&#9474;     &#9474;  &#9500;&#9472; AndroidManifest.xml</text><text x="330" y="184" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">componentes + permiss&#245;es</text>
+    <text x="112" y="202" fill="#A9B7C6">&#9474;     &#9474;  &#9500;&#9472; kotlin/</text><text x="270" y="202" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">o seu c&#243;digo</text>
+    <text x="112" y="220" fill="#A9B7C6">&#9474;     &#9474;  &#9492;&#9472; res/</text><text x="270" y="220" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">strings, temas, drawables, XML</text>
+    <text x="90" y="238" fill="#CC7832">&#9474;     &#9500;&#9472; test/</text><text x="270" y="238" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">testes JVM &#8212; unit (art. 15)</text>
+    <text x="90" y="256" fill="#CC7832">&#9474;     &#9492;&#9472; androidTest/</text><text x="270" y="256" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">testes instrumentados</text>
+    <text x="52" y="276" fill="#A9B7C6">&#9500;&#9472; build.gradle.kts</text><text x="250" y="276" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">config do PROJETO (raiz)</text>
+    <text x="52" y="294" fill="#A9B7C6">&#9500;&#9472; settings.gradle.kts</text><text x="250" y="294" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">lista os m&#243;dulos + reposit&#243;rios</text>
+    <text x="52" y="312" fill="#A9B7C6">&#9500;&#9472; gradle/libs.versions.toml</text><text x="290" y="312" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">cat&#225;logo de vers&#245;es</text>
+    <text x="52" y="330" fill="#A9B7C6">&#9500;&#9472; gradle.properties</text><text x="250" y="330" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">flags do Gradle/JVM</text>
+    <text x="52" y="348" fill="#E0928A">&#9500;&#9472; local.properties</text><text x="250" y="348" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#E0928A">caminho do SDK &#8212; N&#195;O versionar</text>
+    <text x="52" y="366" fill="#6B7480">&#9500;&#9472; build/</text><text x="250" y="366" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#6B7480">gerado &#8212; no .gitignore (art. 12)</text>
+    <text x="52" y="384" fill="#A9B7C6">&#9492;&#9472; gradlew</text><text x="250" y="384" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">o wrapper (art. 01) &#8212; roda o Gradle certo</text>
+  </g>
+  <text x="40" y="414" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">azul = m&#243;dulo/pastas &#183; laranja = config &#183; vermelho = n&#227;o versionar &#183; cinza = gerado</text>
+  <text x="40" y="434" font-family="'Segoe UI',sans-serif" font-size="9.5" fill="#8A97A3">dois <tspan fill="#B7BFC7">build.gradle</tspan>: um do projeto (raiz), um por m&#243;dulo &#8212; a confus&#227;o cl&#225;ssica</text>
+
+  <!-- painel: Android view vs Project view -->
+  <rect x="510" y="70" width="266" height="182" rx="10" fill="#2E3350" stroke="#6366F1"/>
+  <text x="526" y="92" font-size="12" font-weight="700" fill="#AEB7F2">&#8220;Android&#8221; view &#215; &#8220;Project&#8221; view</text>
+  <text x="526" y="114" font-size="10" fill="#AAB6C0">o seletor no topo da janela de</text>
+  <text x="526" y="129" font-size="10" fill="#AAB6C0">projeto muda <tspan font-style="italic">o que</tspan> voc&#234; enxerga:</text>
+  <text x="526" y="153" font-size="10" fill="#CDD3FF" font-weight="700">Android</text>
+  <text x="586" y="153" font-size="10" fill="#AAB6C0">&#8212; agrupa por tipo,</text>
+  <text x="526" y="168" font-size="10" fill="#AAB6C0">junta os <tspan font-family="ui-monospace,monospace">res/</tspan>, esconde gerados.</text>
+  <text x="526" y="183" font-size="10" fill="#AAB6C0">Bom p/ produtividade.</text>
+  <text x="526" y="207" font-size="10" fill="#8ECB98" font-weight="700">Project</text>
+  <text x="586" y="207" font-size="10" fill="#AAB6C0">&#8212; o disco REAL,</text>
+  <text x="526" y="222" font-size="10" fill="#AAB6C0">pasta por pasta. Bom p/ entender</text>
+  <text x="526" y="237" font-size="10" fill="#AAB6C0">e para achar arquivos de build.</text>
+
+  <!-- painel: onde mexer -->
+  <rect x="510" y="264" width="266" height="190" rx="10" fill="#2E2A22" stroke="#CC7832"/>
+  <text x="526" y="286" font-size="12" font-weight="700" fill="#E8A15C">Onde voc&#234; realmente mexe</text>
+  <text x="526" y="308" font-size="10" fill="#C9A97E">&#8226; c&#243;digo &#8594; <tspan font-family="ui-monospace,monospace">src/main/kotlin</tspan></text>
+  <text x="526" y="326" font-size="10" fill="#C9A97E">&#8226; textos/cores/tema &#8594; <tspan font-family="ui-monospace,monospace">res/</tspan></text>
+  <text x="526" y="344" font-size="10" fill="#C9A97E">&#8226; permiss&#245;es/telas &#8594; Manifest</text>
+  <text x="526" y="362" font-size="10" fill="#C9A97E">&#8226; libs/vers&#245;es &#8594; <tspan font-family="ui-monospace,monospace">libs.versions.toml</tspan></text>
+  <text x="526" y="380" font-size="10" fill="#C9A97E">&#8226; SDK local &#8594; <tspan font-family="ui-monospace,monospace">local.properties</tspan></text>
+  <text x="526" y="404" font-size="9.5" fill="#8A97A3">nunca edite <tspan font-family="ui-monospace,monospace">build/</tspan>, <tspan font-family="ui-monospace,monospace">.gradle/</tspan> ou</text>
+  <text x="526" y="419" font-size="9.5" fill="#8A97A3">arquivos gerados &#8212; somem no rebuild.</text>
+  <text x="526" y="440" font-size="9.5" fill="#8A97A3">nunca comite <tspan font-family="ui-monospace,monospace">local.properties</tspan>.</text>
+</svg>
