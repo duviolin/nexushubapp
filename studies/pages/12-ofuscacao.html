@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>O que é o R8</h2>
+<h2 id="o-que-é-o-r8">O que é o R8</h2>
 
 <p>Quando você compila em <strong>release</strong>, o R8 entra entre o seu código e o <code>.aab</code> e faz <strong>quatro trabalhos</strong> numa passada só. O antecessor dele, o ProGuard, fazia parecido; hoje o R8 é o padrão do Android e usa a <strong>mesma sintaxe</strong> de regras.</p>
 
@@ -76,7 +76,7 @@ android {
 
 <hr>
 
-<h2>Por que o app quebra (só no release)</h2>
+<h2 id="por-que-o-app-quebra-só-no-release">Por que o app quebra (só no release)</h2>
 
 <p>O estágio de <strong>ofuscação</strong> renomeia tudo por baixo dos panos. Isso é invisível para código que chama método <strong>diretamente</strong> — o compilador atualiza a chamada junto. Mas quebra código que encontra classes <strong>por nome em texto</strong>, em tempo de execução: a <strong>reflexão</strong>.</p>
 
@@ -98,7 +98,7 @@ android {
 
 <hr>
 
-<h2>Keep rules: a exceção controlada</h2>
+<h2 id="keep-rules-a-exceção-controlada">Keep rules: a exceção controlada</h2>
 
 <p>Uma <strong>keep rule</strong> é uma linha no <code>proguard-rules.pro</code> que diz ao R8: <em>“esta classe, não mexa”</em>. É como você protege o que a reflexão precisa encontrar pelo nome original.</p>
 
@@ -132,7 +132,7 @@ data class Usuario(val name: String, val email: String)
 
 <hr>
 
-<h2>Ler o crash de produção: o retrace</h2>
+<h2 id="ler-o-crash-de-produção-o-retrace">Ler o crash de produção: o retrace</h2>
 
 <p>Com o app ofuscado, o relatório de crash da Play chega assim: <code>at a.b.c(Unknown:0)</code>. Ilegível — de propósito. O <strong>mapping.txt</strong> daquele build é o dicionário que desfaz isso, e a ferramenta <strong>retrace</strong> aplica o dicionário no stacktrace:</p>
 
@@ -147,7 +147,7 @@ retrace  mapping.txt  crash-ofuscado.txt
 
 <hr>
 
-<h2>Até onde a ofuscação protege</h2>
+<h2 id="até-onde-a-ofuscação-protege">Até onde a ofuscação protege</h2>
 
 <p>É tentador achar que ofuscar “esconde” o app. Protege <strong>um pouco</strong> — encarece a engenharia reversa —, mas não é segurança de verdade. Seja realista sobre o limite:</p>
 
@@ -165,7 +165,7 @@ retrace  mapping.txt  crash-ofuscado.txt
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -181,7 +181,7 @@ retrace  mapping.txt  crash-ofuscado.txt
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

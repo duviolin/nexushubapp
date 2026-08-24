@@ -14,7 +14,7 @@
 <p>🧠 <strong>Termo — mandato / behavior change:</strong> uma mudança de comportamento que a Google <strong>atrela ao <code>targetSdk</code></strong>. Quando você sobe o <code>targetSdk</code>, seu app &quot;aceita&quot; as regras novas daquela versão. Por isso subir o <code>targetSdk</code> nunca é só um número — é assinar um contrato de comportamento. (Veja <code>compileSdk</code>/<code>targetSdk</code> no <a href="02-sdk.html#4-a-confus%C3%A3o-n%C2%BA-2-compilesdk-vs-minsdk-vs-targetsdk">artigo do SDK</a>.)</p>
 </blockquote>
 <hr>
-<h1>PARTE 1 — Edge-to-Edge</h1>
+<h2>PARTE 1 — Edge-to-Edge</h2>
 <h2>O que é (e o que muda na tela)</h2>
 <p><strong>Edge-to-edge</strong> = seu app desenha <strong>de ponta a ponta</strong>, ocupando a tela inteira, inclusive a área <strong>atrás</strong> da barra de status (topo) e da barra de navegação (base). Antes, o sistema &quot;reservava&quot; essas faixas e seu conteúdo começava abaixo delas.</p>
 <p><img src="../assets/edge-to-edge-insets.svg" alt="Comparação antes e depois do edge-to-edge: antes o sistema reserva faixas opacas para status e navegação; depois o conteúdo vai edge-to-edge atrás de barras transparentes, e a área segura fica afastada pelos insets do topo (status) e da base (gestos)"></p>
@@ -135,7 +135,7 @@ Modifier.safeDrawingPadding()                            // atalho equivalente
 <p>🔒 <strong>Visão Specialist:</strong> desenhar edge-to-edge <strong>de propósito</strong> é o que dá o visual moderno (fundo passando atrás das barras). O erro não é o conteúdo passar por trás — é o conteúdo <strong>interativo ou textual</strong> ficar escondido. Deixe o <em>fundo</em> ir até a borda; <strong>afaste só</strong> o que precisa ser tocado ou lido, com <code>safeDrawing</code>.</p>
 </blockquote>
 <hr>
-<h1>PARTE 2 — Orientação e Redimensionamento em Telas Grandes</h1>
+<h2>PARTE 2 — Orientação e Redimensionamento em Telas Grandes</h2>
 <h2>O mandato exato</h2>
 <p>Para apps que targetam <strong>Android 16 (API 36)</strong>, em telas com <strong>largura mínima ≥ 600dp</strong> (tablets, dobráveis abertos, ChromeOS, desktop), o sistema <strong>ignora</strong> qualquer tentativa de travar orientação, proibir redimensionamento ou fixar proporção:</p>
 <table>

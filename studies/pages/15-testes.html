@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>Parte 1 · A pirâmide de testes</h2>
+<h2 id="parte-1-a-pirâmide-de-testes">Parte 1 · A pirâmide de testes</h2>
 
 <p>Nem todo teste custa igual. Você quer <strong>muitos</strong> testes baratos e rápidos, e <strong>pouquíssimos</strong> caros e lentos. Essa proporção é a pirâmide.</p>
 
@@ -49,7 +49,7 @@
 
 <blockquote><p>⚠️ <strong>Pegadinha — a pirâmide invertida:</strong> testar “tudo pela tela” gera uma suíte de horas que <strong>pisca</strong> (passa e falha sem o código mudar — os <em>flaky tests</em>). Teste de UI é caro; use-o só onde nada mais alcança.</p></blockquote>
 
-<h3>O básico de configuração (JUnit5 + amigos)</h3>
+<h3 id="o-básico-de-configuração-junit5-amigos">O básico de configuração (JUnit5 + amigos)</h3>
 
 <pre><code class="language-kotlin">dependencies {
     testImplementation(platform("org.junit:junit-bom:5.11.3"))
@@ -68,13 +68,13 @@ tasks.withType&lt;Test&gt; { useJUnitPlatform() }
 
 <hr>
 
-<h2>Parte 2 · Testar cada camada</h2>
+<h2 id="parte-2-testar-cada-camada">Parte 2 · Testar cada camada</h2>
 
 <p>Cada camada do artigo 13 pede um estilo de teste. Do mais barato para o mais caro:</p>
 
 <p><img src="../assets/camadas-teste.svg" alt="As três camadas e o teste de cada uma. UI (Compose, ViewModel, estado MVI, navegação) depende do Android e testa com Compose UI test na JVM, Robolectric e ViewModel via JUnit puro. Domínio no centro, destacado (UseCases, entidades, regras de negócio) é Kotlin puro com zero Android, testado só com JUnit5 sem emulador, o mais rápido. Data (repositórios, Room, Retrofit, DataStore) fala com o mundo externo e testa com Room in-memory, MockWebServer e fakes de repositório. As setas de dependência apontam para dentro; por isso o domínio roda na JVM em milissegundos e a base da pirâmide vem de graça."></p>
 
-<h3>Domínio — o teste mais fácil que existe</h3>
+<h3 id="domínio-o-teste-mais-fácil-que-existe">Domínio — o teste mais fácil que existe</h3>
 
 <p>Kotlin puro, sem Android. Um UseCase é uma função: entra dado, sai resultado.</p>
 
@@ -86,7 +86,7 @@ tasks.withType&lt;Test&gt; { useJUnitPlatform() }
 }
 </code></pre>
 
-<h3>Dados — fakes, Room in-memory e MockWebServer</h3>
+<h3 id="dados-fakes-room-in-memory-e-mockwebserver">Dados — fakes, Room in-memory e MockWebServer</h3>
 
 <p>Aqui você prova que o Repository combina as fontes certo — sem tocar na rede real nem num banco de verdade.</p>
 
@@ -102,7 +102,7 @@ val server = MockWebServer().apply {
 
 <blockquote><p>🧠 <strong>Termo — fake, mock, stub:</strong> substitutos da dependência real. <strong>Fake</strong> = implementação leve de verdade (um repositório que guarda numa lista). <strong>Stub</strong> = devolve respostas fixas. <strong>Mock</strong> = além disso, verifica <em>como</em> foi chamado. Regra: <strong>prefira fakes</strong> — eles não amarram o teste aos detalhes internos. A taxonomia completa e <em>onde</em> cada um entra na arquitetura estão na <strong>Parte 3</strong>, logo abaixo.</p></blockquote>
 
-<h3>ViewModel — estado, corrotinas e Turbine</h3>
+<h3 id="viewmodel-estado-corrotinas-e-turbine">ViewModel — estado, corrotinas e Turbine</h3>
 
 <p>O teste mais valioso do app (a lógica de tela). Troque o repositório real por um fake e observe o <code>StateFlow</code> emissão a emissão com o <strong>Turbine</strong>.</p>
 
@@ -125,7 +125,7 @@ val server = MockWebServer().apply {
 
 <hr>
 
-<h2>Parte 3 · Test doubles: dummy, stub, fake, spy, mock</h2>
+<h2 id="parte-3-test-doubles-dummy-stub-fake-spy-mock">Parte 3 · Test doubles: dummy, stub, fake, spy, mock</h2>
 
 <p>“Trocar a dependência real por uma de mentira” tem nome e tem <strong>cinco tipos</strong> — a taxonomia de Gerard Meszaros que Martin Fowler popularizou. Saber <em>qual</em> usar e <em>onde</em> é o que separa uma suíte que protege de uma que só atrapalha. O termo guarda-chuva para todos é <strong>test double</strong> (dublê de teste, como o dublê de cinema).</p>
 
@@ -142,7 +142,7 @@ val server = MockWebServer().apply {
 </tbody>
 </table>
 
-<h3>Onde cada um encaixa na arquitetura (art. 13)</h3>
+<h3 id="onde-cada-um-encaixa-na-arquitetura-art-13">Onde cada um encaixa na arquitetura (art. 13)</h3>
 
 <p>A escolha não é gosto — é <strong>o que você está provando</strong> e <strong>em que camada</strong>. O eixo que decide: você verifica <strong>estado</strong> (o valor que saiu) ou <strong>interação</strong> (a chamada que foi feita)?</p>
 
@@ -182,7 +182,7 @@ class FakeAuthRepository : AuthRepository {
 
 <hr>
 
-<h2>Parte 4 · Testar componentes Compose</h2>
+<h2 id="parte-4-testar-componentes-compose">Parte 4 · Testar componentes Compose</h2>
 
 <p>A UI do Compose é testada por <strong>semântica</strong> — a mesma árvore que dá acessibilidade. O ritmo é sempre <strong>encontrar um nó → agir → verificar</strong>.</p>
 
@@ -213,7 +213,7 @@ class FakeAuthRepository : AuthRepository {
 
 <blockquote><p>🔒 <strong>Visão Specialist — as duas estradas do Compose:</strong> o <strong>mesmo</strong> teste roda em duas velocidades. Com <strong>Robolectric</strong> (pasta <code>src/test/</code>) ele roda na JVM em segundos e entra em todo PR. <strong>Instrumentado</strong> (<code>src/androidTest/</code>) roda no emulador, pega renderização real e gestos, mas é lento — reserve para o fluxo crítico. Escrever a UI <strong>stateless</strong> (artigo 13) é o que permite testar sem subir rede.</p></blockquote>
 
-<h3>Screenshot testing (o estado da arte)</h3>
+<h3 id="screenshot-testing-o-estado-da-arte">Screenshot testing (o estado da arte)</h3>
 
 <p>Para pegar <strong>regressão visual</strong> (um padding que quebrou, o dark theme torto), há o <strong>teste de captura</strong>: a ferramenta renderiza o Composable, salva um PNG de referência e, no próximo PR, compara pixel a pixel.</p>
 
@@ -221,7 +221,7 @@ class FakeAuthRepository : AuthRepository {
 
 <hr>
 
-<h2>Parte 5 · Robot Pattern + AAA: testes de UI limpos</h2>
+<h2 id="parte-5-robot-pattern-aaa-testes-de-ui-limpos">Parte 5 · Robot Pattern + AAA: testes de UI limpos</h2>
 
 <p>Um teste de UI cru mistura <strong>o que</strong> se testa com <strong>como</strong> se clica — e vira ilegível. Ao ler um teste, você quer entender o <strong>cenário</strong>, não os detalhes de <code>onNodeWithText(...).performClick()</code>. O <strong>Robot Pattern</strong> (de Jake Wharton) separa os dois papéis.</p>
 
@@ -264,7 +264,7 @@ class MyScreenTest {
 
 <hr>
 
-<h2>Parte 6 · Fechando com a esteira</h2>
+<h2 id="parte-6-fechando-com-a-esteira">Parte 6 · Fechando com a esteira</h2>
 
 <p>Testes só valem se rodarem <strong>sozinhos</strong>, em todo PR. Os artigos anteriores já montaram esse encaixe:</p>
 
@@ -277,7 +277,7 @@ class MyScreenTest {
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -293,7 +293,7 @@ class MyScreenTest {
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

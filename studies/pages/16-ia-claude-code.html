@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>Chatbot responde. Agente age.</h2>
+<h2 id="chatbot-responde-agente-age">Chatbot responde. Agente age.</h2>
 
 <p>Um chatbot devolve texto. Um <strong>agente</strong> tem ferramentas: abre <code>build.gradle.kts</code>, roda <code>./gradlew testDebugUnitTest</code>, aplica um diff, lê o stacktrace e tenta de novo. A pasta do projeto é a sua <strong>bancada</strong>: cada arquivo que ele lê entra na conversa e ocupa espaço. Por isso o pedido bom tem sempre a mesma forma: <strong>uma intenção, um artefato, um limite</strong>.</p>
 
@@ -57,7 +57,7 @@
 
 <hr>
 
-<h2>Parte 1 · O loop e o custo do modelo</h2>
+<h2 id="parte-1-o-loop-e-o-custo-do-modelo">Parte 1 · O loop e o custo do modelo</h2>
 
 <p>Você não paga só o que digitou. Paga <strong>cada volta</strong> do laço: ler, editar, olhar a saída, tentar de novo. Entender o loop é entender a conta.</p>
 
@@ -80,7 +80,7 @@
 
 <hr>
 
-<h2>Parte 2 · Contexto: a janela é uma mochila</h2>
+<h2 id="parte-2-contexto-a-janela-é-uma-mochila">Parte 2 · Contexto: a janela é uma mochila</h2>
 
 <p>A <strong>janela de contexto</strong> é finita. Prompt do sistema, seu <code>CLAUDE.md</code>, skills disparadas, cada arquivo lido e todo o papo competem pelo mesmo espaço. Quando enche, as respostas pioram <em>e</em> ficam mais caras. Você tem três gestos para controlar o peso.</p>
 
@@ -99,7 +99,7 @@
 
 <hr>
 
-<h2>Parte 3 · Memória: o caderno na parede</h2>
+<h2 id="parte-3-memória-o-caderno-na-parede">Parte 3 · Memória: o caderno na parede</h2>
 
 <p>Sessão nova, cabeça nova. O que precisa valer em <em>toda</em> sessão mora no <code>CLAUDE.md</code>, lido no arranque. Como ele viaja em cada conversa deste repo, cada linha custa — mantenha-o curto e permanente.</p>
 
@@ -120,7 +120,7 @@
 
 <hr>
 
-<h2>Parte 4 · Skills, comandos e MCP</h2>
+<h2 id="parte-4-skills-comandos-e-mcp">Parte 4 · Skills, comandos e MCP</h2>
 
 <p>Repetir o mesmo briefing em todo prompt é o vazamento mais caro. A saída é o <strong>progressive disclosure</strong>: carregar o detalhe só quando o pedido casa.</p>
 
@@ -146,7 +146,7 @@
 
 <hr>
 
-<h2>Parte 5 · O squad de um dev só</h2>
+<h2 id="parte-5-o-squad-de-um-dev-só">Parte 5 · O squad de um dev só</h2>
 
 <p>PO, Tech Lead, UX/Dev e QA não são pessoas nem telas — são <strong>jeitos de usar o agente</strong>. Quando o <em>tipo</em> de trabalho muda, você troca de papel, de preferência em sessão nova, lendo o arquivo que o papel anterior deixou. Uma pessoa toca as quatro sessões; o <strong>bastão é um arquivo</strong>.</p>
 
@@ -175,7 +175,7 @@ erros possíveis, critérios de pronto. Máximo 50 linhas.
 
 <hr>
 
-<h2>Parte 6 · Guardrails para código Android gerado por IA</h2>
+<h2 id="parte-6-guardrails-para-código-android-gerado-por-ia">Parte 6 · Guardrails para código Android gerado por IA</h2>
 
 <p>A IA gera Kotlin <em>plausível</em> — que compila e parece certo — e às vezes está errado. O especialista não confia: ele cerca. Estes são os guard-rails específicos de Android.</p>
 
@@ -195,7 +195,7 @@ erros possíveis, critérios de pronto. Máximo 50 linhas.
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
   <thead><tr><th>Item</th><th>Ação</th></tr></thead>
@@ -209,7 +209,7 @@ erros possíveis, critérios de pronto. Máximo 50 linhas.
   </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
   <thead><tr><th>Termo</th><th>Em uma linha</th></tr></thead>

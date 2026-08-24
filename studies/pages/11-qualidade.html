@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>Quem pega o quê (divisão de trabalho)</h2>
+<h2 id="quem-pega-o-quê-divisão-de-trabalho">Quem pega o quê (divisão de trabalho)</h2>
 
 <p>As quatro ferramentas não competem — cada uma é uma <strong>peneira</strong> com uma malha diferente. Configurar bem começa por saber qual regra mora em qual peneira.</p>
 
@@ -51,7 +51,7 @@
 
 <hr>
 
-<h2>Parte 1 · ktlint / Spotless (formatação)</h2>
+<h2 id="parte-1-ktlint-spotless-formatação">Parte 1 · ktlint / Spotless (formatação)</h2>
 
 <p>Formatação não é opinião a se discutir em PR — é para o robô resolver. O <strong>ktlint</strong> aplica o estilo oficial do Kotlin; o <strong>Spotless</strong> é um guarda-chuva que roda ktlint (e outros) e ainda <strong>conserta</strong> o arquivo.</p>
 
@@ -76,7 +76,7 @@ spotless {
 
 <hr>
 
-<h2>Parte 2 · Detekt (code smell de Kotlin)</h2>
+<h2 id="parte-2-detekt-code-smell-de-kotlin">Parte 2 · Detekt (code smell de Kotlin)</h2>
 
 <p>O Detekt olha a <strong>estrutura</strong> do seu Kotlin: funções longas demais, complexidade alta, aninhamento profundo, <code>!!</code> arriscado. Tudo vive num arquivo <code>detekt.yml</code> — cada regra tem <code>active</code> e limiares.</p>
 
@@ -112,7 +112,7 @@ detekt {
 }
 </code></pre>
 
-<h3>Silenciar um caso pontual</h3>
+<h3 id="silenciar-um-caso-pontual">Silenciar um caso pontual</h3>
 
 <p>Às vezes a regra está certa 99% das vezes, mas <em>naquele</em> ponto o código é assim de propósito. Suprima <strong>local e justificado</strong>, nunca a regra inteira:</p>
 
@@ -120,13 +120,13 @@ detekt {
 fun horaEmSegundos() = 3600
 </code></pre>
 
-<h3>Escrever uma regra sua</h3>
+<h3 id="escrever-uma-regra-sua">Escrever uma regra sua</h3>
 
 <p>Detekt permite regras <strong>custom</strong> — úteis para padrões do próprio time (“nenhum <code>import</code> de <code>android.util.Log</code>; use nosso <code>Logger</code>”). Você estende <code>Rule</code>, registra num <code>RuleSetProvider</code> e o Detekt passa a aplicá-la como qualquer outra. É o pulo do gato para transformar <strong>convenção verbal em regra automática</strong>.</p>
 
 <hr>
 
-<h2>Parte 3 · Android Lint (regras da plataforma)</h2>
+<h2 id="parte-3-android-lint-regras-da-plataforma">Parte 3 · Android Lint (regras da plataforma)</h2>
 
 <p>O Lint já vem no AGP e conhece o <strong>Android</strong>: uso de API acima do <code>minSdk</code> sem checagem, <code>contentDescription</code> faltando (acessibilidade), permissão declarada e não usada, recurso órfão. Você o afina no bloco <code>lint {}</code> e num <code>lint.xml</code>.</p>
 
@@ -155,7 +155,7 @@ android {
 
 <hr>
 
-<h2>Parte 4 · Sonar (o portão do time)</h2>
+<h2 id="parte-4-sonar-o-portão-do-time">Parte 4 · Sonar (o portão do time)</h2>
 
 <p>Lint e Detekt vivem em cada máquina. O <strong>Sonar</strong> é o servidor que junta tudo, guarda o histórico e aplica o <strong>Quality Gate</strong> que barra o PR (artigo 10). Configurar aqui é dizer <strong>o que o Sonar analisa</strong> e <strong>de onde ele lê a cobertura</strong>.</p>
 
@@ -181,7 +181,7 @@ sonar {
 
 <blockquote><p>🧠 <strong>Termo — cobertura de código:</strong> a fatia das linhas que os testes de fato executam. O <strong>Kover</strong> (ou Jacoco) mede e gera um XML; o Sonar lê esse XML e mostra no painel. Sem esse caminho configurado, o Sonar reporta <strong>0% de cobertura</strong> mesmo que você tenha testes — um susto comum.</p></blockquote>
 
-<h3>Desenhando o seu Quality Gate</h3>
+<h3 id="desenhando-o-seu-quality-gate">Desenhando o seu Quality Gate</h3>
 
 <p>Na interface do Sonar você define as regras do portão. Um gate sensato para começar:</p>
 
@@ -199,7 +199,7 @@ sonar {
 
 <hr>
 
-<h2>Parte 5 · Baseline: adotar sem parar o mundo</h2>
+<h2 id="parte-5-baseline-adotar-sem-parar-o-mundo">Parte 5 · Baseline: adotar sem parar o mundo</h2>
 
 <p>O maior obstáculo de ligar essas ferramentas num projeto que já existe: o primeiro build cospe <strong>centenas</strong> de avisos reais. Consertar tudo antes de mesclar qualquer coisa é inviável. A saída é o <strong>baseline</strong>: uma foto dos problemas <em>atuais</em>, que a ferramenta passa a <strong>ignorar</strong> — cobrando só o que for <strong>novo</strong>.</p>
 
@@ -218,7 +218,7 @@ sonar {
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -234,7 +234,7 @@ sonar {
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

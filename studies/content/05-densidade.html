@@ -1,5 +1,5 @@
 <h1>📏 Densidade, <code>dp</code> e Tamanhos de Tela: O Guia Adaptável (2026)</h1>
-<p>O <a href="03-edge-to-edge.html">artigo anterior</a> mostrou o <strong>mandato</strong>: a Google te obriga a ser adaptável — não pode travar orientação em tela grande, e o conteúdo desenha edge-to-edge. Este artigo é o <strong>&quot;como&quot;</strong>: entender densidade de pixel, <code>dp</code>, <code>sw600dp</code> e as <em>size classes</em>, e saber <strong>quando e como</strong> criar layouts variantes que ficam bons do celular ao tablet.</p>
+<p>O <a href="04-edge-to-edge.html">artigo anterior</a> mostrou o <strong>mandato</strong>: a Google te obriga a ser adaptável — não pode travar orientação em tela grande, e o conteúdo desenha edge-to-edge. Este artigo é o <strong>&quot;como&quot;</strong>: entender densidade de pixel, <code>dp</code>, <code>sw600dp</code> e as <em>size classes</em>, e saber <strong>quando e como</strong> criar layouts variantes que ficam bons do celular ao tablet.</p>
 <blockquote>
 <p>🔗 <strong>Fio condutor:</strong> o número mágico <strong>600dp</strong> que apareceu como fronteira do mandato (&quot;telas ≥ 600dp giram obrigatoriamente&quot;) é o mesmo que você vai usar aqui para <strong>decidir o layout</strong>. Entender de onde ele vem é o objetivo.</p>
 </blockquote>
@@ -133,7 +133,7 @@
 <td align="left">24dp+</td>
 </tr>
 </tbody></table>
-<p>No mundo de recursos, isso é um <code>values-sw600dp/dimens.xml</code> (visto adiante). Em Compose, é um valor escolhido pela size class. E há um caso especial ligado ao <a href="03-edge-to-edge.html">edge-to-edge</a>: em listas roláveis, você quer o <strong>fundo</strong> indo até a borda, mas os <strong>itens</strong> afastados das barras — isso é <code>contentPadding</code>, não <code>padding</code>:</p>
+<p>No mundo de recursos, isso é um <code>values-sw600dp/dimens.xml</code> (visto adiante). Em Compose, é um valor escolhido pela size class. E há um caso especial ligado ao <a href="04-edge-to-edge.html">edge-to-edge</a>: em listas roláveis, você quer o <strong>fundo</strong> indo até a borda, mas os <strong>itens</strong> afastados das barras — isso é <code>contentPadding</code>, não <code>padding</code>:</p>
 <pre><code class="language-kotlin">LazyColumn(
     contentPadding = WindowInsets.safeDrawing.asPaddingValues(),  // itens afastados
     verticalArrangement = Arrangement.spacedBy(8.dp)              // gap entre itens
@@ -381,7 +381,7 @@ when (sizeClass.widthSizeClass) {
 </tr>
 <tr>
 <td align="left"><strong>Não</strong> travar orientação (mandato)</td>
-<td align="left">Deixar refluir — ver <a href="03-edge-to-edge.html">artigo anterior</a></td>
+<td align="left">Deixar refluir — ver <a href="04-edge-to-edge.html">artigo anterior</a></td>
 </tr>
 </tbody></table>
 <hr>
@@ -459,4 +459,4 @@ when (sizeClass.widthSizeClass) {
 </tr>
 </tbody></table>
 <hr>
-<p><em>Trilogia + adaptável do NexusHub: <a href="01-gradle.html">Gradle</a> · <a href="02-sdk.html">Android SDK</a> · <a href="03-edge-to-edge.html">Edge-to-Edge &amp; Telas Grandes</a> · <strong>este artigo</strong>.</em></p>
+<p><em>Trilogia + adaptável do NexusHub: <a href="01-gradle.html">Gradle</a> · <a href="02-sdk.html">Android SDK</a> · <a href="04-edge-to-edge.html">Edge-to-Edge &amp; Telas Grandes</a> · <strong>este artigo</strong>.</em></p>

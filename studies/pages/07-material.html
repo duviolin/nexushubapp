@@ -41,13 +41,13 @@
 
 <hr>
 
-<h2>Parte 1 · Os três pilares do tema</h2>
+<h2 id="parte-1-os-três-pilares-do-tema">Parte 1 · Os três pilares do tema</h2>
 
 <p>Um <code>MaterialTheme</code> envolve o app e expõe três coisas que todo componente lê: <strong>cor</strong>, <strong>tipografia</strong> e <strong>forma</strong>. Trocar qualquer uma muda o app inteiro sem tocar em cada tela.</p>
 
 <p><img src="../assets/material-theming.svg" alt="Os três pilares do MaterialTheme que todo componente lê. colorScheme: papéis em vez de cores fixas — primary e onPrimary, secondary, tertiary, surface e onSurface, error e onError; no Android 12+ o Dynamic Color gera a paleta a partir do papel de parede. typography: a escala tipográfica com papéis Display, Headline, Title, Body e Label, cada um com tamanho, peso e espaçamento definidos para consistência. shapes: cantos por tamanho de componente — small 4dp, medium 12dp, large 20dp — chips usam small, cards medium, bottom sheets large, mais elevação por tonal color. Um componente consome assim: Text com color igual a MaterialTheme.colorScheme.primary e style igual a MaterialTheme.typography.headlineMedium; nunca uma cor cravada como Color(0xFF6750A4) no componente, o que quebraria tema escuro, dynamic color e acessibilidade."></p>
 
-<h3>Cor por papel, não por valor</h3>
+<h3 id="cor-por-papel-não-por-valor">Cor por papel, não por valor</h3>
 
 <p>O pulo do gato do Material 3: a cor tem <strong>papel semântico</strong> (<code>primary</code>, <code>surface</code>, <code>error</code>…), com um par de contraste automático (<code>onPrimary</code> é o que se lê <em>sobre</em> <code>primary</code>). Você nunca escreve um hexadecimal no componente — escreve o <strong>papel</strong>. Isso é o que faz tema claro/escuro e <em>dynamic color</em> funcionarem sem `if` espalhado.</p>
 
@@ -69,7 +69,7 @@ fun NexusTheme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -&
 
 <hr>
 
-<h2>Parte 2 · Componentes: use os prontos</h2>
+<h2 id="parte-2-componentes-use-os-prontos">Parte 2 · Componentes: use os prontos</h2>
 
 <p>O Material 3 traz dezenas de componentes que já resolvem estado, acessibilidade e animação. A regra do especialista: <strong>não reinvente</strong> um botão ou um campo — componha os prontos e ajuste por <code>Modifier</code> e pelo tema.</p>
 
@@ -104,7 +104,7 @@ fun TelaNexus(vm: HomeViewModel) {
 
 <hr>
 
-<h2>Parte 3 · Layout adaptativo: um app, várias telas</h2>
+<h2 id="parte-3-layout-adaptativo-um-app-várias-telas">Parte 3 · Layout adaptativo: um app, várias telas</h2>
 
 <p>Desde o artigo 04, a Google <strong>exige</strong> que o app funcione em tela grande e não trave orientação. O Material 3 traz os componentes que se adaptam à <strong>Window Size Class</strong>: a navegação muda de forma conforme a largura.</p>
 
@@ -123,7 +123,7 @@ fun TelaNexus(vm: HomeViewModel) {
 
 <hr>
 
-<h2>Parte 4 · Tema claro/escuro, elevação e movimento</h2>
+<h2 id="parte-4-tema-claroescuro-elevação-e-movimento">Parte 4 · Tema claro/escuro, elevação e movimento</h2>
 
 <ul>
 <li><strong>Claro/escuro sai de graça</strong> — porque você usou papéis de cor. <code>isSystemInDarkTheme()</code> troca o <code>colorScheme</code>; nenhum componente precisa saber.</li>
@@ -135,7 +135,7 @@ fun TelaNexus(vm: HomeViewModel) {
 
 <hr>
 
-<h2>Parte 5 · Tema customizado avançado</h2>
+<h2 id="parte-5-tema-customizado-avançado">Parte 5 · Tema customizado avançado</h2>
 
 <p>O Material 3 cobre o comum, mas toda marca acaba precisando de algo que <strong>não existe</strong> no sistema: uma cor semântica própria (um <em>“sucesso”</em> verde, um <em>“aviso”</em> âmbar), um espaçamento padrão da marca, uma tipografia extra. O jeito certo <strong>não</strong> é cravar valores nos componentes — é <strong>estender o tema</strong> com seus próprios tokens, expostos por um <code>CompositionLocal</code>, do mesmo jeito que o <code>MaterialTheme</code> expõe os dele.</p>
 
@@ -166,7 +166,7 @@ object NexusTheme { val cores: CoresNexus @Composable get() = LocalCoresNexus.cu
 
 <blockquote><p>🧠 <strong>Termo — design token:</strong> um nome semântico para um valor de design (<code>cor.sucesso</code>, <code>espaco.card</code>), em vez do valor cru. Tokens deixam o time falar em <em>intenção</em> e trocar o valor num lugar só — é o que torna um tema escalável e o que ferramentas de design (Figma) exportam.</p></blockquote>
 
-<h3>Componente customizado: herde, não reescreva</h3>
+<h3 id="componente-customizado-herde-não-reescreva">Componente customizado: herde, não reescreva</h3>
 
 <p>Quando um componente da marca não existe no M3, construa-o <strong>sobre as primitivas</strong> (<code>Surface</code>, <code>ProvideTextStyle</code>, <code>ripple</code>, <code>Modifier.clickable</code>) — assim você herda estados (pressed/disabled/focus), acessibilidade e <em>ripple</em> de graça, e só pinta a diferença.</p>
 
@@ -185,7 +185,7 @@ fun BotaoNexus(texto: String, onClick: () -&gt; Unit, modifier: Modifier = Modif
 
 <hr>
 
-<h2>Quando (não) usar</h2>
+<h2 id="quando-não-usar">Quando (não) usar</h2>
 
 <table>
 <thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
@@ -202,7 +202,7 @@ fun BotaoNexus(texto: String, onClick: () -&gt; Unit, modifier: Modifier = Modif
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -216,7 +216,7 @@ fun BotaoNexus(texto: String, onClick: () -&gt; Unit, modifier: Modifier = Modif
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

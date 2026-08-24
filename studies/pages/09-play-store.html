@@ -37,7 +37,7 @@
 <p>Passo a passo para quem <strong>nunca publicou</strong>. Sem jargão solto: quando aparecer um termo técnico, a frase seguinte diz o que isso é na prática.</p>
 <p>A Google muda regra. Na hora de pagar e de pedir para ir à loja de verdade, confira a <a href="https://support.google.com/googleplay/android-developer">Central de Ajuda</a>.</p>
 <hr>
-<h2>Antes: o que é cada coisa</h2>
+<h2 id="antes-o-que-é-cada-coisa">Antes: o que é cada coisa</h2>
 <table>
 <thead>
 <tr>
@@ -91,7 +91,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>1. Abrir a conta</h2>
+<h2 id="1-abrir-a-conta">1. Abrir a conta</h2>
 <p>Você precisa:</p>
 <ul>
 <li>ter <strong>18 anos ou mais</strong></li>
@@ -131,7 +131,7 @@
 </tbody></table>
 <p>Empresa: use e-mail do domínio da empresa (<code>@suaempresa.com</code>), site e telefone comercial. Quem cria a conta tem que ser quem aparece como responsável no Cartão CNPJ / contrato social.</p>
 <hr>
-<h2>2. Documentos</h2>
+<h2 id="2-documentos">2. Documentos</h2>
 <p>O Google cruza seus papéis com o <strong>perfil de pagamentos</strong> (cadastro de cobrança da conta Google). Nome no RG diferente do nome no cartão = recusa. Os <strong>US$ 25 não voltam</strong>.</p>
 <p><strong>Pessoa física (Brasil)</strong></p>
 <ul>
@@ -148,7 +148,7 @@
 <li>Telefone da empresa + telefone da pessoa</li>
 </ul>
 <hr>
-<h2>3. Quanto custa</h2>
+<h2 id="3-quanto-custa">3. Quanto custa</h2>
 <table>
 <thead>
 <tr>
@@ -179,7 +179,7 @@
 </tbody></table>
 <p>Os US$ 25 são só a <strong>taxa de cadastro</strong>. Não incluem a fatia das vendas.</p>
 <hr>
-<h2>4. Testes: as quatro filas</h2>
+<h2 id="4-testes-as-quatro-filas">4. Testes: as quatro filas</h2>
 <p>Antes de o mundo baixar, você manda o arquivo do app para uma <strong>trilha</strong> (fila). Em todas elas o arquivo tem que estar <strong>assinado</strong> (com o carimbo digital).</p>
 <p><img src="../assets/play-tracks.svg" alt="As quatro filas em sequência: Interna (time, e-mails cadastrados), Fechada (grupo de testers por lista/inscrição), Aberta (beta público) e Produção (a loja de verdade)"></p>
 <table>
@@ -214,7 +214,7 @@
 <p><strong>Se sua conta pessoal é nova:</strong> precisa de <strong>12 testadores inscritos</strong> (opt-in = clicaram no link e aceitaram) durante os <strong>últimos 14 dias sem faltar um</strong>. Se um sair e cair para 11, os 14 dias <strong>recomeçam</strong>. Convide 15 a 20. Depois aparece o botão para <strong>pedir acesso à produção</strong> (Apply for production): um formulário (como achou os testers, o que eles testaram, o que você corrigiu). A Google lê isso na mão.</p>
 <p>A fila interna <strong>não</strong> substitui a fechada nessa regra.</p>
 <hr>
-<h2>5. Página do app na loja (a “ficha”)</h2>
+<h2 id="5-página-do-app-na-loja-a-ficha">5. Página do app na loja (a “ficha”)</h2>
 <p>Sem isso a Google <strong>nem começa</strong> a analisar o app.</p>
 <ul>
 <li>Nome, texto curto, texto longo, ícone 512×512 pixels, imagem de destaque 1024×500, prints da tela (celular é obrigatório)</li>
@@ -226,7 +226,7 @@
 </ul>
 <p>Mentir no Data safety = recusa agora ou remoção depois. Não é texto de marketing.</p>
 <hr>
-<h2>6. Dois carimbos (não misture)</h2>
+<h2 id="6-dois-carimbos-não-misture">6. Dois carimbos (não misture)</h2>
 <p>O celular só instala app <strong>carimbado</strong>. Desde agosto de 2021, app <strong>novo</strong> na Play usa o <strong>Play App Signing</strong>: a Google guarda o carimbo “oficial” do app.</p>
 <p>Imagine dois selos:</p>
 <table>
@@ -252,7 +252,7 @@
 <p>O arquivo do cofre (keystore) <strong>não vai para o GitHub</strong>. Senha em arquivo local que o Git ignora, ou no computador/CI, nunca no código público.</p>
 <p>A chave de envio precisa valer <strong>depois de 22/10/2033</strong> (regra da Play).</p>
 <hr>
-<h2>7. APK vs AAB — o que você manda para quem</h2>
+<h2 id="7-apk-vs-aab-o-que-você-manda-para-quem">7. APK vs AAB — o que você manda para quem</h2>
 <table>
 <thead>
 <tr>
@@ -293,7 +293,7 @@
 </code></pre>
 <p><code>./gradlew</code> é o comando que <strong>empacota</strong> o app (o “Gradle” é a ferramenta de build). Se o projeto tem “sabores” (ex.: versão <code>prod</code> + acabamento <code>release</code>), o nome do comando junta os dois: <code>./gradlew :app:bundleProdRelease</code>.</p>
 <hr>
-<h2>8. Como tem que estar o pacote da loja</h2>
+<h2 id="8-como-tem-que-estar-o-pacote-da-loja">8. Como tem que estar o pacote da loja</h2>
 <p>A versão de loja se chama <strong>release</strong> (lançamento). A de desenvolvimento se chama <strong>debug</strong> (com logs, ferramentas de caça-bug). Não suba o debug.</p>
 <p>O que ligar na versão de loja:</p>
 <ul>
@@ -307,7 +307,7 @@
 </ul>
 <p>Antes de mandar: instale uma vez (pela fila interna da Play, ou gerando um APK de teste). Se abrir e crashar, a análise da Google é tempo jogado fora.</p>
 <hr>
-<h2>9. Enviar e esperar</h2>
+<h2 id="9-enviar-e-esperar">9. Enviar e esperar</h2>
 <ol>
 <li>Entre na <strong>Play Console</strong> → seu app → escolha a fila (interna, fechada ou produção)</li>
 <li>Envie o arquivo <code>.aab</code></li>
@@ -317,7 +317,7 @@
 </ol>
 <p>Se recusarem: leia o e-mail. Motivos comuns: ficha de dados mentindo, permissão no app que você não usa, política da loja, conta pessoal sem os 12 testers. Corrija, <strong>aumente o versionCode</strong>, envie de novo.</p>
 <hr>
-<h2>Ordem do dia (cole na parede)</h2>
+<h2 id="ordem-do-dia-cole-na-parede">Ordem do dia (cole na parede)</h2>
 <p><img src="../assets/play-release-pipeline.svg" alt="Pipeline de release: Conta (2FA, docs, US$25) → App na Console → Chave de envio → gerar .aab assinado → Fila interna → decisão 'conta pessoal nova?': se sim, passa pela Fila fechada (12 testers, 14 dias) antes da Produção; se não, vai direto para Produção com lançamento gradual 5% a 100%"></p>
 <ol>
 <li>Ligar verificação em duas etapas + documentos + cartão com o <strong>mesmo nome</strong></li>

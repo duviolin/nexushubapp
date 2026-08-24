@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>Parte 1 · Declarativo: a virada de chave</h2>
+<h2 id="parte-1-declarativo-a-virada-de-chave">Parte 1 · Declarativo: a virada de chave</h2>
 
 <p>No mundo antigo (Views/XML) a UI é um objeto que você <strong>muta</strong>: <code>textView.text = "Oi"</code>, <code>button.isEnabled = false</code>. O bug clássico é a tela e os dados <strong>saírem de sincronia</strong> — você esqueceu de atualizar um dos dez lugares. No Compose, você não muta a tela: você escreve uma <strong>função</strong> que, dado o estado, produz a UI. Mudou o estado? O Compose <strong>re-executa</strong> a função e reconcilia a diferença.</p>
 
@@ -65,7 +65,7 @@ fun CartaoUsuario(usuario: Usuario) {
 
 <hr>
 
-<h2>Parte 2 · Os blocos de construção</h2>
+<h2 id="parte-2-os-blocos-de-construção">Parte 2 · Os blocos de construção</h2>
 
 <p>Três containers resolvem 90% do layout — e todos empilham por <strong>ordem de chamada</strong>:</p>
 
@@ -108,7 +108,7 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 
 <hr>
 
-<h2>Parte 3 · Layout: como o Compose mede — e como fazer o complexo</h2>
+<h2 id="parte-3-layout-como-o-compose-mede-e-como-fazer-o-complexo">Parte 3 · Layout: como o Compose mede — e como fazer o complexo</h2>
 
 <p>Para ir além de empilhar coisas, você precisa entender <strong>como</strong> o Compose calcula tamanhos e posições. O modelo é enxuto e é o que torna o layout rápido: <strong>as restrições descem, os tamanhos sobem, e mede-se cada nó uma vez só</strong>.</p>
 
@@ -116,7 +116,7 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 
 <blockquote><p>🧠 <strong>Termo — Constraints:</strong> o “orçamento” de espaço que o pai dá ao filho: largura mínima/máxima e altura mínima/máxima. <code>fillMaxWidth()</code> diz “ocupe o máximo”; <code>wrapContentWidth()</code>, “o mínimo que couber”; <code>width(200.dp)</code> fixa os dois. O filho responde com um tamanho <em>dentro</em> desse limite.</p></blockquote>
 
-<h3>Distribuir espaço: arrangement, alignment e weight</h3>
+<h3 id="distribuir-espaço-arrangement-alignment-e-weight">Distribuir espaço: arrangement, alignment e weight</h3>
 
 <p>Dentro de <code>Row</code>/<code>Column</code>, três eixos resolvem quase todo alinhamento — e o <code>weight</code> reparte o espaço que sobra, como o do XML, mas <strong>sem</strong> o custo de remedir.</p>
 
@@ -129,7 +129,7 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 }
 </code></pre>
 
-<h3>Responsivo de verdade: BoxWithConstraints e intrinsics</h3>
+<h3 id="responsivo-de-verdade-boxwithconstraints-e-intrinsics">Responsivo de verdade: BoxWithConstraints e intrinsics</h3>
 
 <p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>07 · Material</strong> e às Window Size Classes do <strong>04</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
 
@@ -144,7 +144,7 @@ Row(Modifier.height(IntrinsicSize.Min)) {
 }
 </code></pre>
 
-<h3>Layouts complexos: ConstraintLayout &amp; custom Layout</h3>
+<h3 id="layouts-complexos-constraintlayout-custom-layout">Layouts complexos: ConstraintLayout &amp; custom Layout</h3>
 
 <p><strong>Sim, o ConstraintLayout existe no Compose</strong> (dependência <code>androidx.constraintlayout:constraintlayout-compose</code>), com <code>guidelines</code>, <code>barriers</code> e <code>chains</code> como no XML. Mas o motivo nº 1 de usá-lo lá — <strong>achatar a hierarquia</strong> para não pagar remedições caras — <strong>não existe aqui</strong>: aninhar <code>Row</code>/<code>Column</code>/<code>Box</code> no Compose é barato (passada única). Então a régua muda: use ConstraintLayout quando ele deixa o código <strong>mais legível</strong> (muitas relações entre irmãos, alinhar por uma linha-guia percentual, um <em>barrier</em> que segue o mais largo) — não por reflexo do XML.</p>
 
@@ -176,7 +176,7 @@ fun ColunaSimples(modifier: Modifier = Modifier, content: @Composable () -&gt; U
 
 <hr>
 
-<h2>Parte 4 · Estado: o coração do Compose</h2>
+<h2 id="parte-4-estado-o-coração-do-compose">Parte 4 · Estado: o coração do Compose</h2>
 
 <p>Um composable que lê um <code>State</code> vira <strong>reativo</strong>: quando o valor muda, ele recompõe. A pergunta que define tudo é <em>onde esse estado mora</em> — e disso depende quais eventos ele sobrevive.</p>
 
@@ -190,7 +190,7 @@ fun Contador() {
 }
 </code></pre>
 
-<h3>State hoisting: componente burro, dono esperto</h3>
+<h3 id="state-hoisting-componente-burro-dono-esperto">State hoisting: componente burro, dono esperto</h3>
 
 <p>O padrão-chave: <strong>ice o estado para fora</strong> do componente. Um composable <strong>stateless</strong> (recebe valor + lambda de evento) é reutilizável, testável e previsível. Quem segura o estado é o pai (ou o ViewModel).</p>
 
@@ -208,7 +208,7 @@ fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifi
 
 <hr>
 
-<h2>Parte 5 · As três fases de um frame</h2>
+<h2 id="parte-5-as-três-fases-de-um-frame">Parte 5 · As três fases de um frame</h2>
 
 <p>Para entender performance, você precisa saber o que o Compose faz a cada quadro. São <strong>três fases</strong>, e a chave é: cada uma pode ser <strong>pulada</strong> se a entrada dela não mudou.</p>
 
@@ -218,7 +218,7 @@ fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifi
 
 <hr>
 
-<h2>Parte 6 · Recomposição inteligente e estabilidade</h2>
+<h2 id="parte-6-recomposição-inteligente-e-estabilidade">Parte 6 · Recomposição inteligente e estabilidade</h2>
 
 <p>Recompor é re-executar funções <code>@Composable</code>. O Compose faz isso de forma <strong>cirúrgica</strong>: só os escopos que <em>leram</em> o estado alterado são refeitos; os irmãos são <strong>pulados</strong> (skipped) — desde que seus parâmetros sejam <strong>estáveis</strong>.</p>
 
@@ -239,7 +239,7 @@ data class Item(val id: String, val titulo: String)
 
 <hr>
 
-<h2>Parte 7 · Side-effects: falar com o mundo de fora</h2>
+<h2 id="parte-7-side-effects-falar-com-o-mundo-de-fora">Parte 7 · Side-effects: falar com o mundo de fora</h2>
 
 <p>Uma função <code>@Composable</code> deve ser <strong>sem efeito colateral</strong>: ela pode rodar muitas vezes, em qualquer ordem, e ser cancelada. Então “rodar código de verdade” (chamar API, mostrar snackbar, iniciar animação) precisa de <strong>APIs de efeito</strong> que amarram o trabalho ao ciclo de vida da composição.</p>
 
@@ -272,7 +272,7 @@ fun TelaPerfil(id: String, vm: PerfilViewModel) {
 
 <hr>
 
-<h2>Parte 8 · Performance: as regras que evitam jank</h2>
+<h2 id="parte-8-performance-as-regras-que-evitam-jank">Parte 8 · Performance: as regras que evitam jank</h2>
 
 <table>
 <thead><tr><th align="left">Regra</th><th align="left">Por quê</th></tr></thead>
@@ -290,7 +290,7 @@ fun TelaPerfil(id: String, vm: PerfilViewModel) {
 
 <hr>
 
-<h2>Parte 9 · Animação: movimento sem recompor à toa</h2>
+<h2 id="parte-9-animação-movimento-sem-recompor-à-toa">Parte 9 · Animação: movimento sem recompor à toa</h2>
 
 <p>Animar no Compose é, na maioria das vezes, <strong>animar um estado</strong> — você troca o valor-alvo e o framework interpola. A dificuldade não é fazer mexer; é escolher a API certa e não pagar recomposição por frame. Comece sempre pela pergunta “<em>o que está animando?</em>”.</p>
 
@@ -321,7 +321,7 @@ Box(Modifier.graphicsLayer { translationX = deslize }) // lê o estado na fase t
 
 <hr>
 
-<h2>Parte 10 · Efeitos visuais: sombra, gradiente, blur e Canvas</h2>
+<h2 id="parte-10-efeitos-visuais-sombra-gradiente-blur-e-canvas">Parte 10 · Efeitos visuais: sombra, gradiente, blur e Canvas</h2>
 
 <p>“Deixar bonito” no Compose é quase sempre <strong>um <code>Modifier</code> na fase de desenho</strong> — e como essa fase é a última (Parte 5), mudar aparência é barato: não recompõe nem refaz layout. Há quatro caixas de ferramentas.</p>
 
@@ -355,7 +355,7 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 
 <hr>
 
-<h2>Parte 11 · Além do básico: as portas que você vai abrir</h2>
+<h2 id="parte-11-além-do-básico-as-portas-que-você-vai-abrir">Parte 11 · Além do básico: as portas que você vai abrir</h2>
 
 <p>Além do layout (Parte 3) e dos efeitos (Parte 10), estas portas aparecem quando o app cresce — cada uma merece um estudo próprio, mas é bom saber que existem e <em>quando</em> alcançá-las.</p>
 
@@ -374,7 +374,7 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 
 <hr>
 
-<h2>Quando (não) usar cada coisa</h2>
+<h2 id="quando-não-usar-cada-coisa">Quando (não) usar cada coisa</h2>
 
 <table>
 <thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
@@ -390,7 +390,7 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -406,7 +406,7 @@ Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeh
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

@@ -41,13 +41,13 @@
 
 <hr>
 
-<h2>Parte 1 · Git no dia a dia (a linha de comando)</h2>
+<h2 id="parte-1-git-no-dia-a-dia-a-linha-de-comando">Parte 1 · Git no dia a dia (a linha de comando)</h2>
 
 <p>Git é uma <strong>máquina do tempo</strong> para o seu código. Cada <strong>commit</strong> é uma foto do projeto inteiro, com data, autor e um bilhete dizendo o que mudou. Você pode voltar, comparar duas fotos, ou trabalhar numa linha do tempo paralela sem estragar a principal.</p>
 
 <blockquote><p>🧠 <strong>Termo — commit:</strong> um ponto salvo no histórico. Não é “salvar o arquivo” (isso o editor já faz) — é gravar no histórico do Git uma versão fechada, com mensagem, para poder voltar a ela depois.</p></blockquote>
 
-<h3>As três áreas (o modelo mental que resolve 90% da confusão)</h3>
+<h3 id="as-três-áreas-o-modelo-mental-que-resolve-90-da-confusão">As três áreas (o modelo mental que resolve 90% da confusão)</h3>
 
 <p>O Git não tem “dois lugares” (meu PC / o servidor). Tem <strong>quatro</strong>. O mesmo arquivo caminha por eles, e cada comando do dia a dia é só “mover de uma caixa para a próxima”.</p>
 
@@ -63,7 +63,7 @@
 </tbody>
 </table>
 
-<h3>Começando um repositório</h3>
+<h3 id="começando-um-repositório">Começando um repositório</h3>
 
 <pre><code class="language-bash">git init                       # cria um repositório novo na pasta atual
 git clone git@github.com:org/nexushub.git   # baixa um repositório que já existe
@@ -74,7 +74,7 @@ git config --global user.email "voce@email.com"
 
 <blockquote><p>⚠️ <strong>Pegadinha:</strong> o e-mail do <code>git config</code> precisa ser o mesmo cadastrado no GitHub — senão seus commits aparecem “de um estranho” e não contam no seu perfil.</p></blockquote>
 
-<h3>O ciclo do dia (é isto 20× por dia)</h3>
+<h3 id="o-ciclo-do-dia-é-isto-20-por-dia">O ciclo do dia (é isto 20× por dia)</h3>
 
 <pre><code class="language-bash">git status                     # o que mudou? o que está no palco? em que branch estou?
 git diff                       # mostra, linha a linha, o que eu mudei (ainda fora do palco)
@@ -92,7 +92,7 @@ git push                       # envia seus commits para o remoto
 
 <blockquote><p>🧠 <strong>Termo — branch:</strong> uma linha do tempo paralela. Você cria uma para cada tarefa, trabalha isolado, e depois “junta” (merge) na principal. A branch principal geralmente se chama <code>main</code>.</p></blockquote>
 
-<h3>Branches: trabalhar sem quebrar a dos outros</h3>
+<h3 id="branches-trabalhar-sem-quebrar-a-dos-outros">Branches: trabalhar sem quebrar a dos outros</h3>
 
 <pre><code class="language-bash">git switch -c feat/carrinho    # cria e entra numa branch nova (git checkout -b faz o mesmo)
 git switch main                # volta para a principal
@@ -102,7 +102,7 @@ git merge feat/carrinho        # traz os commits da feature para a branch atual
 git branch -d feat/carrinho    # apaga a branch já mesclada
 </code></pre>
 
-<h3>Desfazer (o kit de primeiros socorros)</h3>
+<h3 id="desfazer-o-kit-de-primeiros-socorros">Desfazer (o kit de primeiros socorros)</h3>
 
 <table>
 <thead><tr><th align="left">Situação</th><th align="left">Comando</th><th align="left">O que faz</th></tr></thead>
@@ -117,7 +117,7 @@ git branch -d feat/carrinho    # apaga a branch já mesclada
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> em código já enviado ao remoto e compartilhado, use <code>git revert</code>, nunca <code>git reset --hard</code> seguido de <code>push --force</code>. O <code>revert</code> anula sem apagar história; o <code>reset --force</code> reescreve o passado e <strong>quebra o repositório de todo mundo</strong> que já baixou aqueles commits.</p></blockquote>
 
-<h3>O <code>.gitignore</code>: o que NÃO versionar</h3>
+<h3 id="o-gitignore-o-que-não-versionar">O <code>.gitignore</code>: o que NÃO versionar</h3>
 
 <p>Nem tudo entra no Git. Coisa gerada (o <code>build/</code>), segredo (o <code>keystore</code> e senhas do artigo 09) e configuração de máquina ficam de fora, listados no <code>.gitignore</code>:</p>
 
@@ -135,9 +135,9 @@ keystore.properties       # senhas do keystore
 
 <hr>
 
-<h2>Parte 2 · Convenção de commits e Git Flow</h2>
+<h2 id="parte-2-convenção-de-commits-e-git-flow">Parte 2 · Convenção de commits e Git Flow</h2>
 
-<h3>Mensagens de commit que o robô entende</h3>
+<h3 id="mensagens-de-commit-que-o-robô-entende">Mensagens de commit que o robô entende</h3>
 
 <p>Uma mensagem boa não é só educação com o colega — a esteira pode <strong>lê-la</strong> para decidir o número da versão. O padrão mais usado é o <strong>Conventional Commits</strong>: <code>tipo: descrição</code>.</p>
 
@@ -153,7 +153,7 @@ keystore.properties       # senhas do keystore
 
 <blockquote><p>🧠 <strong>Termo — SemVer (Versionamento Semântico):</strong> o <code>MAJOR.MINOR.PATCH</code> do <code>versionName</code> (artigo 09). <em>Major</em> = quebrou algo; <em>minor</em> = recurso novo compatível; <em>patch</em> = só conserto. O robô consegue calcular isso lendo os commits.</p></blockquote>
 
-<h3>Git Flow: um lugar para cada branch</h3>
+<h3 id="git-flow-um-lugar-para-cada-branch">Git Flow: um lugar para cada branch</h3>
 
 <p>Conforme o time cresce, “todo mundo commita na <code>main</code>” vira caos. O <strong>Git Flow</strong> é um combinado de nomes de branch, cada uma com um papel:</p>
 
@@ -174,7 +174,7 @@ keystore.properties       # senhas do keystore
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> Git Flow é ótimo para apps com <strong>versões planejadas</strong> (o caso do app de loja, que passa por review da Google). Times que entregam várias vezes ao dia preferem o <strong>GitHub Flow / Trunk-Based</strong>: só <code>main</code> + branches curtas de feature que voltam em horas. Para o NexusHub, comece simples (<code>main</code> + <code>feature/*</code> + PR) e adote <code>develop</code>/<code>release</code> só quando o ciclo de release justificar.</p></blockquote>
 
-<h3>A tag: o que dispara o lançamento</h3>
+<h3 id="a-tag-o-que-dispara-o-lançamento">A tag: o que dispara o lançamento</h3>
 
 <pre><code class="language-bash">git tag -a v1.2.0 -m "Release 1.2.0"   # marca este commit como a versão 1.2.0
 git push origin v1.2.0                 # envia a tag — é ISSO que a esteira de CD escuta
@@ -182,7 +182,7 @@ git push origin v1.2.0                 # envia a tag — é ISSO que a esteira d
 
 <hr>
 
-<h2>Parte 3 · A esteira: CI/CD explicado</h2>
+<h2 id="parte-3-a-esteira-cicd-explicado">Parte 3 · A esteira: CI/CD explicado</h2>
 
 <p>Toda vez que alguém dá <code>push</code>, seria bom rodar o lint, os testes e um build “de verdade” — mas ninguém faz isso à mão toda vez. A <strong>esteira</strong> faz: um servidor na nuvem que, a cada <code>push</code>, executa uma receita de passos e só deixa o código avançar se <strong>todos</strong> passarem.</p>
 
@@ -190,7 +190,7 @@ git push origin v1.2.0                 # envia a tag — é ISSO que a esteira d
 
 <p><img src="../assets/esteira-ci.svg" alt="Esteira de CI/CD em duas faixas. Gatilho: push ou pull request. Faixa CI (roda em todo PR): checkout + setup JDK + cache Gradle → lint + detekt + ktlint → testes com cobertura → Sonar Quality Gate → build de verificação (assembleDebug). Portão: tudo verde? Só então a faixa CD (só em tag/release): bundleRelease gera o .aab, assinar com keystore dos secrets, guardar o artefato, e deploy na Play via fastlane/GPP da faixa interna à produção."></p>
 
-<h3>Os estágios, um por um</h3>
+<h3 id="os-estágios-um-por-um">Os estágios, um por um</h3>
 
 <table>
 <thead><tr><th align="left">Estágio</th><th align="left">Comando típico</th><th align="left">Por que existe</th></tr></thead>
@@ -206,7 +206,7 @@ git push origin v1.2.0                 # envia a tag — é ISSO que a esteira d
 </tbody>
 </table>
 
-<h3>Na prática: um workflow do GitHub Actions</h3>
+<h3 id="na-prática-um-workflow-do-github-actions">Na prática: um workflow do GitHub Actions</h3>
 
 <p>A receita mora num arquivo YAML dentro do repositório, em <code>.github/workflows/ci.yml</code>. Este roda a faixa de <strong>CI</strong> em todo push e PR:</p>
 
@@ -253,7 +253,7 @@ jobs:
 
 <hr>
 
-<h2>Parte 4 · Qualidade: Lint, Detekt e Sonar</h2>
+<h2 id="parte-4-qualidade-lint-detekt-e-sonar">Parte 4 · Qualidade: Lint, Detekt e Sonar</h2>
 
 <p>Os três olham seu código sem rodá-lo (<strong>análise estática</strong>), mas em camadas diferentes. Não competem — se somam.</p>
 
@@ -267,7 +267,7 @@ jobs:
 </tbody>
 </table>
 
-<h3>O que é o Sonar, afinal</h3>
+<h3 id="o-que-é-o-sonar-afinal">O que é o Sonar, afinal</h3>
 
 <p>Lint e Detekt rodam e cospem uma lista no terminal — que ninguém lê depois de um tempo. O <strong>Sonar</strong> é o nível acima: um <strong>servidor</strong> que recebe os resultados de cada análise, guarda o histórico, mostra num painel (“a dívida técnica subiu ou caiu esta semana?”) e — o mais importante — aplica um <strong>Quality Gate</strong>: um conjunto de regras que, se não forem cumpridas, <strong>reprova o Pull Request</strong>.</p>
 
@@ -275,13 +275,13 @@ jobs:
 
 <p><img src="../assets/quality-gate.svg" alt="O Quality Gate do Sonar como um portão em losango que recebe quatro métricas do código novo do PR: cobertura ≥ 80%, duplicação ≤ 3%, zero bug e zero vulnerabilidade nova, e security hotspots revisados. Saída Passed libera o merge e a esteira segue para o build; saída Failed bloqueia o PR até corrigir e dar push de novo. Rodapé explica que medir só o código novo evita travar o time com o legado."></p>
 
-<h3>O truque do “código novo”</h3>
+<h3 id="o-truque-do-código-novo">O truque do “código novo”</h3>
 
 <p>O Quality Gate mede, por padrão, só o <strong>código que o PR adicionou ou mudou</strong> — não o legado inteiro. Isso é o que torna a ferramenta usável num projeto real: você não precisa parar tudo para consertar 5 anos de dívida técnica; só precisa garantir que <strong>cada PR não piore</strong>. A qualidade sobe de forma incremental, sem travar o time.</p>
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> cobertura de teste é um <strong>piso, não um troféu</strong>. 80% de cobertura com testes que não verificam nada é pior que 60% com testes de verdade, porque dá falsa segurança. Use o Quality Gate para impedir <em>regressão</em> (o número cair), não para caçar 100% — os últimos 20% costumam ser getters e código de UI que o teste unitário não alcança bem.</p></blockquote>
 
-<h3>Ligando no Gradle</h3>
+<h3 id="ligando-no-gradle">Ligando no Gradle</h3>
 
 <pre><code class="language-kotlin">// build.gradle.kts (raiz) — plugins de qualidade
 plugins {
@@ -302,11 +302,11 @@ sonar {
 
 <hr>
 
-<h2>Parte 5 · CD: publicar na Play sozinho</h2>
+<h2 id="parte-5-cd-publicar-na-play-sozinho">Parte 5 · CD: publicar na Play sozinho</h2>
 
 <p>A faixa de <strong>CD</strong> só roda quando você empurra uma <strong>tag de versão</strong> (Parte 2). Ela repete os passos manuais do artigo 09 — mas o robô é quem assina o <code>.aab</code> e o envia para a Play. Dois problemas precisam ser resolvidos: <strong>a assinatura</strong> e <strong>a credencial da Play</strong>.</p>
 
-<h3>1) Assinar sem colocar o keystore no Git</h3>
+<h3 id="1-assinar-sem-colocar-o-keystore-no-git">1) Assinar sem colocar o keystore no Git</h3>
 
 <p>O keystore (o cofre da chave, artigo 09) <strong>não vai para o repositório</strong>. O truque: converter o arquivo para texto (<strong>base64</strong>), guardar esse texto num <strong>Secret</strong>, e a esteira reconstrói o arquivo em memória na hora do build.</p>
 
@@ -315,7 +315,7 @@ base64 -i release.jks | pbcopy      # macOS (no Linux: base64 release.jks)
 # cole em: repositório → Settings → Secrets → KEYSTORE_BASE64
 </code></pre>
 
-<h3>2) A credencial da Play: a conta de serviço</h3>
+<h3 id="2-a-credencial-da-play-a-conta-de-serviço">2) A credencial da Play: a conta de serviço</h3>
 
 <blockquote><p>🧠 <strong>Termo — Service Account (conta de serviço):</strong> um “usuário robô” do Google Cloud, com um arquivo <strong>JSON</strong> de credencial. Você o cria uma vez, dá a ele permissão na Play Console para publicar, e a esteira usa esse JSON para se autenticar — sem senha humana, sem 2FA. É o que substitui “você logando na Console”.</p></blockquote>
 
@@ -324,7 +324,7 @@ base64 -i release.jks | pbcopy      # macOS (no Linux: base64 release.jks)
 <pre><code class="language-bash">./gradlew publishReleaseBundle       # envia o .aab para a faixa configurada da Play
 </code></pre>
 
-<h3>O workflow de release completo</h3>
+<h3 id="o-workflow-de-release-completo">O workflow de release completo</h3>
 
 <pre><code class="language-yaml">name: Release
 on:
@@ -371,7 +371,7 @@ jobs:
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -387,7 +387,7 @@ jobs:
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

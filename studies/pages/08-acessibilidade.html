@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>Parte 1 · Semântica: o que o leitor de tela realmente “vê”</h2>
+<h2 id="parte-1-semântica-o-que-o-leitor-de-tela-realmente-vê">Parte 1 · Semântica: o que o leitor de tela realmente “vê”</h2>
 
 <p>O <strong>TalkBack</strong> (leitor de tela do Android) não enxerga pixels. Ele lê uma árvore paralela — a <strong>árvore de semântica</strong> — que cada composable preenche: um rótulo, um papel (botão? imagem?), um estado (selecionado? desabilitado?). Componentes do Material já preenchem isso; o seu trabalho é completar o que falta e <strong>agrupar</strong> o que deve ser lido junto.</p>
 
@@ -66,7 +66,7 @@ Row(Modifier.semantics(mergeDescendants = true) {}) {
 
 <hr>
 
-<h2>Parte 2 · As diretrizes que todo app precisa cumprir</h2>
+<h2 id="parte-2-as-diretrizes-que-todo-app-precisa-cumprir">Parte 2 · As diretrizes que todo app precisa cumprir</h2>
 
 <p>São muitas, mas cabem em seis famílias. Trate como <strong>piso</strong>, não como extra.</p>
 
@@ -88,7 +88,7 @@ Row(Modifier.semantics(mergeDescendants = true) {}) {
 
 <hr>
 
-<h2>Parte 3 · Estado, papel e mudanças anunciadas</h2>
+<h2 id="parte-3-estado-papel-e-mudanças-anunciadas">Parte 3 · Estado, papel e mudanças anunciadas</h2>
 
 <p>Componentes prontos já anunciam seu papel e estado; ao construir algo <strong>custom</strong> (um chip de seleção feito na mão, um card clicável), você precisa dizer ao leitor o que ele é e como está.</p>
 
@@ -114,7 +114,7 @@ Text("$qtd itens", Modifier.semantics { liveRegion = LiveRegionMode.Polite })
 
 <hr>
 
-<h2>Parte 4 · Testar acessibilidade (não confie no olho)</h2>
+<h2 id="parte-4-testar-acessibilidade-não-confie-no-olho">Parte 4 · Testar acessibilidade (não confie no olho)</h2>
 
 <table>
 <thead><tr><th align="left">Ferramenta</th><th align="left">Pega</th></tr></thead>
@@ -135,7 +135,7 @@ composeTestRule.onNode(hasContentDescription("Ligar para Ana")).assertHasClickAc
 
 <hr>
 
-<h2>Parte 5 · Teclado, switch e foco: quem não toca na tela</h2>
+<h2 id="parte-5-teclado-switch-e-foco-quem-não-toca-na-tela">Parte 5 · Teclado, switch e foco: quem não toca na tela</h2>
 
 <p>Leitor de tela é só metade da acessibilidade motora. Muita gente navega <strong>sem tocar</strong>: por <strong>teclado</strong> físico (mobilidade reduzida), por <strong>D-pad</strong> num controle de Android TV, ou por <strong>Switch Access</strong> — um ou dois botões que varrem a tela e o usuário aciona no elemento certo. Todos dependem de uma coisa: um <strong>foco</strong> que percorre a UI numa ordem que faça sentido.</p>
 
@@ -172,7 +172,7 @@ TextField(senhaTxt, { senhaTxt = it }, modifier = Modifier.focusRequester(senha)
 
 <hr>
 
-<h2>Quando (não) usar cada recurso</h2>
+<h2 id="quando-não-usar-cada-recurso">Quando (não) usar cada recurso</h2>
 
 <table>
 <thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
@@ -188,7 +188,7 @@ TextField(senhaTxt, { senhaTxt = it }, modifier = Modifier.focusRequester(senha)
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -202,7 +202,7 @@ TextField(senhaTxt, { senhaTxt = it }, modifier = Modifier.focusRequester(senha)
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

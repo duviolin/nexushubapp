@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>A pergunta que trava a IA</h2>
+<h2 id="a-pergunta-que-trava-a-ia">A pergunta que trava a IA</h2>
 
 <p>Peça “faça a tela de login” e você recebe <em>uma</em> das mil telas possíveis — a que o modelo achou mais provável, não a que o produto precisa. O antídoto é sempre o mesmo: escrever o critério de aceite antes. As três metodologias fazem isso em <strong>níveis diferentes</strong>.</p>
 
@@ -49,7 +49,7 @@
 
 <hr>
 
-<h2>Parte 1 · SDD — dirigir por especificação</h2>
+<h2 id="parte-1-sdd-dirigir-por-especificação">Parte 1 · SDD — dirigir por especificação</h2>
 
 <p><strong>Spec-Driven Development</strong>: o humano escreve a <em>especificação</em>; a IA a executa. O código deixa de ser a fonte da verdade — a spec é. É exatamente o fluxo do artigo 16: o PO recorta o problema, o Tech trava o “como”, e só então o Dev implementa <em>obedecendo</em> ao documento.</p>
 
@@ -77,7 +77,7 @@ data class ResetUiState(carregando, enviado, erro: String?)
 
 <hr>
 
-<h2>Parte 2 · TDD — o teste como coleira da alucinação</h2>
+<h2 id="parte-2-tdd-o-teste-como-coleira-da-alucinação">Parte 2 · TDD — o teste como coleira da alucinação</h2>
 
 <p><strong>Test-Driven Development</strong> inverte a ordem intuitiva: o <strong>teste vem primeiro</strong>. Você escreve um teste que falha (RED), faz o mínimo para passar (GREEN) e então limpa o código com a rede de segurança verde (REFACTOR). Com IA, esse ciclo ganha um superpoder: o teste é um <strong>alvo objetivo</strong> que o modelo não consegue “contornar com lábia”.</p>
 
@@ -106,7 +106,7 @@ class SolicitarResetTest {
 
 <hr>
 
-<h2>Parte 3 · BDD — a linguagem única</h2>
+<h2 id="parte-3-bdd-a-linguagem-única">Parte 3 · BDD — a linguagem única</h2>
 
 <p><strong>Behavior-Driven Development</strong> sobe um degrau: descreve <strong>comportamento</strong> na linguagem do negócio, no formato <strong>Given-When-Then</strong> (Dado-Quando-Então). A frase é a mesma para o PO que aprova, o dev que implementa e a IA que recebe o alvo — acaba a tradução perdida entre “o que o produto pediu” e “o que o código faz”.</p>
 
@@ -136,7 +136,7 @@ class SolicitarResetTest {
 
 <hr>
 
-<h2>Parte 4 · Como se encaixam (com IA no meio)</h2>
+<h2 id="parte-4-como-se-encaixam-com-ia-no-meio">Parte 4 · Como se encaixam (com IA no meio)</h2>
 
 <p>A confusão comum é achar que você escolhe <em>uma</em>. Na verdade cada uma responde a uma pergunta diferente, e num fluxo com IA elas se encadeiam:</p>
 
@@ -161,7 +161,7 @@ class SolicitarResetTest {
 
 <hr>
 
-<h2>Parte 5 · Outros padrões que o especialista soma</h2>
+<h2 id="parte-5-outros-padrões-que-o-especialista-soma">Parte 5 · Outros padrões que o especialista soma</h2>
 
 <p>SDD/TDD/BDD não vivem sozinhos. Estes padrões se conectam e valem a pena conhecer para conduzir a IA bem:</p>
 
@@ -180,7 +180,7 @@ class SolicitarResetTest {
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
   <thead><tr><th>Item</th><th>Ação</th></tr></thead>
@@ -194,7 +194,7 @@ class SolicitarResetTest {
   </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
   <thead><tr><th>Termo</th><th>Em uma linha</th></tr></thead>

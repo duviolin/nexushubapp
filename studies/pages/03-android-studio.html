@@ -41,7 +41,7 @@
 
 <hr>
 
-<h2>Parte 1 · Anatomia da janela (e navegar sem o mouse)</h2>
+<h2 id="parte-1-anatomia-da-janela-e-navegar-sem-o-mouse">Parte 1 · Anatomia da janela (e navegar sem o mouse)</h2>
 
 <p>A janela tem quatro zonas: a <strong>barra de topo</strong> (menu, ▶ Run / 🐞 Debug, seletor de dispositivo), a <strong>janela de projeto</strong> à esquerda, o <strong>editor</strong> no centro (com a <em>sarjeta</em> — a coluna à esquerda das linhas onde nascem breakpoints), e as <strong>tool windows</strong> em baixo e nas laterais (Logcat, Build, Terminal, Profiler, App Inspection…). O pulo do gato do iniciante para o intermediário é largar o mouse.</p>
 
@@ -51,7 +51,7 @@
 
 <hr>
 
-<h2>Parte 2 · A estrutura do projeto (o que cursos explicam mal)</h2>
+<h2 id="parte-2-a-estrutura-do-projeto-o-que-cursos-explicam-mal">Parte 2 · A estrutura do projeto (o que cursos explicam mal)</h2>
 
 <p>Aqui mora a confusão nº 1 do iniciante: <strong>a “Android view” que você vê ao abrir o projeto não é a estrutura real no disco</strong>. Ela reagrupa por tipo e esconde arquivos gerados. Trocar para a “Project view” (seletor no topo da janela de projeto) revela a verdade.</p>
 
@@ -73,7 +73,7 @@
 
 <hr>
 
-<h2>Parte 3 · O editor: navegar, refatorar e desfazer o “irreversível”</h2>
+<h2 id="parte-3-o-editor-navegar-refatorar-e-desfazer-o-irreversível">Parte 3 · O editor: navegar, refatorar e desfazer o “irreversível”</h2>
 
 <p>O editor do IntelliJ é o motivo de gente migrar para o Android Studio. O que vale dominar cedo:</p>
 
@@ -93,7 +93,7 @@
 
 <hr>
 
-<h2>Parte 4 · Rodar e depurar: pausar o app e testar hipóteses</h2>
+<h2 id="parte-4-rodar-e-depurar-pausar-o-app-e-testar-hipóteses">Parte 4 · Rodar e depurar: pausar o app e testar hipóteses</h2>
 
 <p>Rodar é ▶; <strong>depurar</strong> é 🐞. No modo debug você pausa o app num ponto e vê o estado <em>real</em> — o fim do “encher o código de <code>Log.d</code>”. Um breakpoint não é só uma linha vermelha: há vários tipos, e é aí que mora o poder.</p>
 
@@ -105,7 +105,7 @@
 
 <hr>
 
-<h2>Parte 5 · Logcat: ler o que o app está gritando</h2>
+<h2 id="parte-5-logcat-ler-o-que-o-app-está-gritando">Parte 5 · Logcat: ler o que o app está gritando</h2>
 
 <p>O <strong>Logcat</strong> é o fluxo de logs do dispositivo. O erro do iniciante é rolar um mar de linhas; o intermediário <strong>filtra</strong>. A sintaxe de consulta moderna é poderosa:</p>
 
@@ -119,7 +119,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>Parte 6 · Profiling: a parte sênior de verdade</h2>
+<h2 id="parte-6-profiling-a-parte-sênior-de-verdade">Parte 6 · Profiling: a parte sênior de verdade</h2>
 
 <p>Quando o app trava, vaza memória ou drena bateria, você <strong>não adivinha</strong> — abre o <strong>Profiler</strong>. São quatro lentes, cada uma para uma classe de problema. E a regra vale para todas: meça em build <code>release</code> (o <code>debug</code> mente sobre performance — artigo 06).</p>
 
@@ -129,7 +129,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>Parte 7 · Emulador (AVD) e dispositivo físico</h2>
+<h2 id="parte-7-emulador-avd-e-dispositivo-físico">Parte 7 · Emulador (AVD) e dispositivo físico</h2>
 
 <p>No <strong>Device Manager</strong> você cria um <strong>AVD</strong> (Android Virtual Device): escolhe o hardware (Pixel 8), a imagem de sistema (API 35) e pronto. Mas o emulador é muito mais capaz do que “uma tela de celular”.</p>
 
@@ -148,7 +148,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>Parte 8 · Rodar e depurar testes pela IDE</h2>
+<h2 id="parte-8-rodar-e-depurar-testes-pela-ide">Parte 8 · Rodar e depurar testes pela IDE</h2>
 
 <p>Você não precisa do terminal para testar. Ao lado de toda classe/função de teste aparece um <strong>ícone verde na sarjeta</strong> (▶). O detalhe que confunde: há <strong>duas pastas</strong> de teste (artigo 15) e a IDE trata cada uma diferente.</p>
 
@@ -164,7 +164,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>Parte 9 · Git dentro do Android Studio</h2>
+<h2 id="parte-9-git-dentro-do-android-studio">Parte 9 · Git dentro do Android Studio</h2>
 
 <p>Dá para viver sem digitar <code>git</code> no terminal — e para conflitos, a IDE é <em>melhor</em> que a linha de comando. O fluxo do artigo 10, aqui em botões:</p>
 
@@ -184,7 +184,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>Parte 10 · Inspetores: ver o app por dentro em tempo real</h2>
+<h2 id="parte-10-inspetores-ver-o-app-por-dentro-em-tempo-real">Parte 10 · Inspetores: ver o app por dentro em tempo real</h2>
 
 <p>O menu <strong>App Inspection</strong> (e alguns vizinhos) abre janelas que mostram o app <em>vivo</em> — sem log, sem chute:</p>
 
@@ -204,7 +204,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>Parte 11 · Truques de especialista que não te contam</h2>
+<h2 id="parte-11-truques-de-especialista-que-não-te-contam">Parte 11 · Truques de especialista que não te contam</h2>
 
 <ul>
 <li><strong>⌘⇧A é o único atalho que você <em>precisa</em> decorar</strong> — “Find Action” acha qualquer comando por nome; por ele você chega em tudo.</li>
@@ -220,7 +220,7 @@ message:timeout                     # qualquer log contendo "timeout"
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -236,7 +236,7 @@ message:timeout                     # qualquer log contendo "timeout"
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

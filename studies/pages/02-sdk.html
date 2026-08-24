@@ -47,7 +47,7 @@
 <blockquote>
 <p>📌 <strong>Aterrando no ambiente real deste projeto</strong> (o que estava instalado ao escrever este guia):</p>
 <ul>
-<li><strong>SDK:</strong> <code>/Users/eduardolimanascimento/Library/Android/sdk</code></li>
+<li><strong>SDK:</strong> <code>~/Library/Android/sdk</code></li>
 <li><strong>Plataformas (para compilar):</strong> <code>android-35</code>, <code>android-36.1</code></li>
 <li><strong>System image (para o emulador rodar):</strong> <code>android-37.1</code></li>
 <li><strong>Emulador criado (AVD):</strong> <code>Pixel_9a</code></li>
@@ -55,7 +55,7 @@
 </ul>
 </blockquote>
 <hr>
-<h2>1. O que você instala quando &quot;instala o SDK&quot;</h2>
+<h2 id="1-o-que-você-instala-quando-instala-o-sdk">1. O que você instala quando &quot;instala o SDK&quot;</h2>
 <p>Instalar o Android SDK <strong>não</strong> é instalar um programa único. É montar um <strong>guarda-roupa de gavetas</strong>, cada uma baixada e versionada de forma independente. Você quase nunca precisa de todas — mas precisa saber pra que serve cada uma.</p>
 <pre><code>~/Library/Android/sdk/
 ├── platforms/
@@ -116,7 +116,7 @@
 <p>🔒 <strong>Visão Specialist:</strong> o <code>local.properties</code> (que <strong>não</strong> vai pro Git) tem a linha <code>sdk.dir=...</code> dizendo ao Gradle <strong>onde</strong> fica o almoxarifado. Em CI usa-se a variável de ambiente <code>ANDROID_HOME</code> no lugar. Mesma informação, canal diferente.</p>
 </blockquote>
 <hr>
-<h2>2. A confusão nº 1: <code>platforms/</code> ≠ <code>system-images/</code></h2>
+<h2 id="2-a-confusão-nº-1-platforms-system-images">2. A confusão nº 1: <code>platforms/</code> ≠ <code>system-images/</code></h2>
 <p>Essas duas gavetas têm nomes parecidos (<code>android-35</code>, <code>android-37</code>) e é aqui que nasce 90% da confusão. <strong>São coisas opostas:</strong></p>
 <pre><code>   COMPILAR (na sua máquina)          RODAR (no emulador)
    ┌───────────────────────┐         ┌───────────────────────┐
@@ -170,7 +170,7 @@
 <p>🧠 <strong>Analogia:</strong> a <code>platform</code> é o <strong>manual + molde</strong> de um carro (contra o que o engenheiro projeta). A <code>system-image</code> é uma <strong>pista com um carro real rodando</strong>. Projetar contra o molde de 2024 e testar numa pista de 2026 é perfeitamente normal.</p>
 </blockquote>
 <hr>
-<h2>3. API Level: o número que amarra tudo</h2>
+<h2 id="3-api-level-o-número-que-amarra-tudo">3. API Level: o número que amarra tudo</h2>
 <p>Toda versão do Android tem <strong>três nomes</strong>, e o build só liga para um: o <strong>API Level</strong> (um inteiro que só cresce).</p>
 <pre><code>API:   24        26      29        31       33      34      35      36
        │         │       │         │        │       │       │       │
@@ -240,7 +240,7 @@
 </tbody></table>
 <p>Quando você lê <code>compileSdk = 35</code>, traduza: <strong>&quot;API Level 35&quot; = &quot;Android 15&quot;</strong>. O número comercial (&quot;Android 15&quot;) é para humanos; o <strong>API Level</strong> (&quot;35&quot;) é para o build.</p>
 <hr>
-<h2>4. A confusão nº 2: <code>compileSdk</code> vs <code>minSdk</code> vs <code>targetSdk</code></h2>
+<h2 id="4-a-confusão-nº-2-compilesdk-vs-minsdk-vs-targetsdk">4. A confusão nº 2: <code>compileSdk</code> vs <code>minSdk</code> vs <code>targetSdk</code></h2>
 <p>Os três aparecem juntos e parecem sinônimos. <strong>Não são</strong> — cada um responde a uma pergunta diferente:</p>
 <pre><code class="language-kotlin">android {
     compileSdk = 35          // (A) COM QUAL kit de APIs eu compilo?
@@ -258,23 +258,23 @@
  minSdk             (aparelhos       compileSdk
  (o piso)            reais)          targetSdk
 </code></pre>
-<h3>(A) <code>compileSdk</code> — a régua de compilação</h3>
+<h3 id="a-compilesdk-a-régua-de-compilação">(A) <code>compileSdk</code> — a régua de compilação</h3>
 <p>&quot;Quais APIs o compilador conhece.&quot; Se você usa uma função que só existe no Android 15, precisa de <code>compileSdk = 35</code>. <strong>Puxa a gaveta <code>platforms/android-35</code>.</strong> Não afeta em quais celulares o app roda — só o que o compilador <strong>enxerga</strong>. Regra: mantenha sempre no <strong>mais recente estável</strong>.</p>
-<h3>(B) <code>minSdk</code> — o piso de compatibilidade</h3>
+<h3 id="b-minsdk-o-piso-de-compatibilidade">(B) <code>minSdk</code> — o piso de compatibilidade</h3>
 <p>&quot;O Android mais antigo em que o app instala.&quot; <code>minSdk = 24</code> = &quot;funciona a partir do Android 7.0&quot;. <strong>Não baixa nada.</strong> Quanto menor, mais aparelhos você alcança — mas mais código de compatibilidade. Usar uma API acima do <code>minSdk</code> exige checar em runtime:</p>
 <pre><code class="language-kotlin">if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.S) {  // só no Android 12+
     // usa a API nova aqui
 }
 </code></pre>
-<h3>(C) <code>targetSdk</code> — a declaração de intenção</h3>
+<h3 id="c-targetsdk-a-declaração-de-intenção">(C) <code>targetSdk</code> — a declaração de intenção</h3>
 <p>&quot;A versão para a qual eu testei.&quot; O Android usa isso para decidir se liga <strong>mudanças de comportamento</strong> novas para o seu app ou mantém o modo de compatibilidade. A <strong>Play Store exige</strong> um <code>targetSdk</code> recente (o mínimo sobe todo ano). Regra: mantenha alto, junto do <code>compileSdk</code>.</p>
-<h3>A Regra de Ouro</h3>
+<h3 id="a-regra-de-ouro">A Regra de Ouro</h3>
 <p><img src="../assets/sdk-api-levels.svg" alt="Régua de API levels: minSdk 24 é o piso (onde o app roda), targetSdk 35 é a promessa e compileSdk 35 é a régua de compilação; o app roda da API 24 para cima"></p>
 <blockquote>
 <p>🧠 <strong>Guarde a frase:</strong> <strong><code>compile</code> é o que eu vejo · <code>min</code> é onde eu rodo · <code>target</code> é o que eu prometo.</strong></p>
 </blockquote>
 <hr>
-<h2>5. O que tem dentro do <code>build-tools/</code>: as máquinas da montagem</h2>
+<h2 id="5-o-que-tem-dentro-do-build-tools-as-máquinas-da-montagem">5. O que tem dentro do <code>build-tools/</code>: as máquinas da montagem</h2>
 <p>Você quase nunca chama essas ferramentas na mão — o AGP as invoca por baixo. Mas conhecer os nomes muda o jogo quando um erro de build aparece. Este é o <strong>fluxo de montagem</strong> de um APK:</p>
 <p><img src="../assets/sdk-apk-pipeline.svg" alt="Fluxo de montagem do APK: Kotlin/Java passa por d8/r8 virando DEX; res/XML passa por aapt2 virando a classe R; ambos entram no ZIP, que por zipalign vira APK e por apksigner vira o APK instalável"></p>
 <table>
@@ -323,7 +323,7 @@
 <p>🔒 <strong>Visão Specialist:</strong> o <code>./gradlew installDebug</code> (visto no <a href="01-gradle.html#8-o-arsenal-do-terminal">artigo do Gradle</a>) usa essas máquinas + o <code>adb</code>. Quando o build falha com um erro de <code>aapt2</code> ou <code>d8</code>, você agora sabe <strong>em qual etapa</strong> foi.</p>
 </blockquote>
 <hr>
-<h2>6. <code>adb</code>: seu telefone direto com o aparelho</h2>
+<h2 id="6-adb-seu-telefone-direto-com-o-aparelho">6. <code>adb</code>: seu telefone direto com o aparelho</h2>
 <p>O <strong><code>adb</code></strong> (<em>Android Debug Bridge</em>) mora em <code>platform-tools/</code> e é a ferramenta que você <strong>vai</strong> digitar no terminal. É a ponte entre o seu Mac e o device (emulador ou celular real por USB).</p>
 <pre><code>   Seu Mac  ◄──── adb ────►  Emulador / Celular
    (comandos)               (instala, lê logs, shell)
@@ -364,7 +364,7 @@
 <p>🧠 <strong>Termo — logcat:</strong> o sistema de logs do Android. Tudo que seu app escreve com <code>Log.d(...)</code>, <code>Log.e(...)</code> etc. sai por aqui — é a principal ferramenta de depuração.</p>
 </blockquote>
 <hr>
-<h2>7. Emuladores: qual API escolher (o fim da paralisia)</h2>
+<h2 id="7-emuladores-qual-api-escolher-o-fim-da-paralisia">7. Emuladores: qual API escolher (o fim da paralisia)</h2>
 <p>O emulador é <strong>independente</strong> do <code>compileSdk</code>. Ele só precisa rodar uma system image com <strong>API ≥ <code>minSdk</code></strong>. Criar um emulador = criar um <strong>AVD</strong> (<em>Android Virtual Device</em>): &quot;modelo de aparelho (Pixel 9a) + system image (API 37) + config&quot;.</p>
 <pre><code>   AVD &quot;Pixel_9a&quot;
    ┌────────────────────────────────┐
@@ -375,7 +375,7 @@
    │  arquitetura: arm64-v8a         │  ← Apple Silicon
    └────────────────────────────────┘
 </code></pre>
-<h3>7.1 Sabores de system image (importa!)</h3>
+<h3 id="71-sabores-de-system-image-importa">7.1 Sabores de system image (importa!)</h3>
 <p>Ao baixar uma system image você escolhe uma <strong>variante</strong>:</p>
 <table>
 <thead>
@@ -409,7 +409,7 @@
 <blockquote>
 <p>🧠 <strong>Termos — AOSP e arquitetura:</strong> <strong>AOSP</strong> (<em>Android Open Source Project</em>) é o Android puro, sem os apps do Google. <strong>Arquitetura</strong> (<code>arm64-v8a</code>, <code>x86_64</code>) é o &quot;tipo de processador&quot; que a imagem emula — tem que combinar com o do seu Mac para ser rápido.</p>
 </blockquote>
-<h3>7.2 A receita prática (pare de sofrer)</h3>
+<h3 id="72-a-receita-prática-pare-de-sofrer">7.2 A receita prática (pare de sofrer)</h3>
 <p>Tenha <strong>dois</strong> emuladores e acabou a dúvida:</p>
 <table>
 <thead>
@@ -435,7 +435,7 @@
 <p>No seu setup, o AVD <strong><code>Pixel_9a</code></strong> (API 37) serve como o &quot;Principal&quot;. Falta só, um dia, um AVD <strong>API 24</strong> para o teste de piso.</p>
 </blockquote>
 <hr>
-<h2>8. <code>sdkmanager</code> &amp; <code>avdmanager</code>: o almoxarifado pelo terminal</h2>
+<h2 id="8-sdkmanager-avdmanager-o-almoxarifado-pelo-terminal">8. <code>sdkmanager</code> &amp; <code>avdmanager</code>: o almoxarifado pelo terminal</h2>
 <p>Tudo o que o Android Studio faz na tela &quot;SDK Manager&quot; tem equivalente de terminal — é o que o <strong>CI</strong> usa (CI não clica em botão). Ambos vivem em <code>cmdline-tools/latest/bin/</code>.</p>
 <pre><code class="language-bash"># Ver tudo que existe e o que já está instalado
 sdkmanager --list
@@ -459,7 +459,7 @@ avdmanager delete avd -n Pixel_API35
 <p>🔒 <strong>Visão Specialist:</strong> em CI a sequência é sempre: baixar <code>cmdline-tools</code> → <code>sdkmanager --licenses</code> → <code>sdkmanager</code> instala as gavetas exatas → <code>./gradlew</code>. Nada de Android Studio no servidor. Saber os IDs (<code>platforms;android-35</code>) é o que torna o build <strong>reprodutível</strong>.</p>
 </blockquote>
 <hr>
-<h2>9. O mapa final: quem-baixa-o-quê</h2>
+<h2 id="9-o-mapa-final-quem-baixa-o-quê">9. O mapa final: quem-baixa-o-quê</h2>
 <p>Fechando o ciclo — ligando este almoxarifado à <a href="01-gradle.html">fábrica do Gradle</a> e ao AGP:</p>
 <p><img src="../assets/sdk-who-downloads.svg" alt="Do build.gradle.kts ao emulador: você escreve compileSdk=35, o AGP pede platforms/android-35, o Gradle acha o SDK e usa três gavetas — platforms (compilar), build-tools (montar) e platform-tools (instalar) — gerando o APK assinado que o adb instala no emulador"></p>
 <ul>
@@ -469,7 +469,7 @@ avdmanager delete avd -n Pixel_API35
 <li><strong><code>local.properties</code></strong> é o mapa que diz onde o almoxarifado fica.</li>
 </ul>
 <hr>
-<h2>📖 Colinha de sobrevivência</h2>
+<h2 id="-colinha-de-sobrevivência">📖 Colinha de sobrevivência</h2>
 <table>
 <thead>
 <tr>
@@ -515,7 +515,7 @@ avdmanager delete avd -n Pixel_API35
 </tr>
 </tbody></table>
 <hr>
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 <table>
 <thead>
 <tr>
@@ -577,7 +577,7 @@ avdmanager delete avd -n Pixel_API35
 </tr>
 </tbody></table>
 <hr>
-<p><em>Companheiro do <a href="01-gradle.html">GRADLE_UNDER_THE_HOOD.md</a>: a fábrica (Gradle) + o especialista (AGP) + o almoxarifado (SDK).</em></p>
+<p><em>Companheiro do <a href="01-gradle.html">artigo do Gradle</a>: a fábrica (Gradle) + o especialista (AGP) + o almoxarifado (SDK).</em></p>
   </article>
     <nav class="pager">
       <a class="pg prev" href="01-gradle.html"><span>← Anterior</span><strong>🐘 Gradle por Dentro</strong></a>

@@ -43,7 +43,7 @@
 
 <hr>
 
-<h2>Parte 1 · Padrões de apresentação: a linhagem MVC → MVP → MVVM → MVI</h2>
+<h2 id="parte-1-padrões-de-apresentação-a-linhagem-mvc-mvp-mvvm-mvi">Parte 1 · Padrões de apresentação: a linhagem MVC → MVP → MVVM → MVI</h2>
 
 <p>Antes dos padrões “pequenos”, o padrão <strong>grande</strong> que rege a tela. Toda a história desses padrões de apresentação é <strong>uma pergunta só</strong>: <em>onde mora o estado da tela?</em> Cada geração tira estado e lógica de dentro da <code>View</code> e os empurra para um lugar mais testável e mais resistente ao ciclo de vida do Android.</p>
 
@@ -61,7 +61,7 @@
 
 <blockquote><p>🧠 <strong>Termo — “Model-View-*”:</strong> em todos, o <strong>Model</strong> é a mesma coisa (dados + regras: Repository/UseCase do artigo 13). O que muda é o pedaço do meio — <em>Presenter</em>, <em>ViewModel</em> — e a <strong>direção</strong> em que a informação corre.</p></blockquote>
 
-<h3>MVVM × MVI, lado a lado</h3>
+<h3 id="mvvm-mvi-lado-a-lado">MVVM × MVI, lado a lado</h3>
 
 <p>Na prática, hoje 99% dos apps Android são <strong>MVVM</strong> (o <code>ViewModel</code> do Jetpack já entrega o padrão de graça). A dúvida real do especialista é: <em>meu ViewModel expõe vários observables (MVVM “clássico”) ou um único estado imutável (MVI)?</em> Não são rivais — <strong>MVI é o MVVM levado ao extremo</strong> da disciplina de estado.</p>
 
@@ -105,13 +105,13 @@ class LoginViewModelMvi(private val fazerLogin: FazerLogin) : ViewModel() {
 
 <hr>
 
-<h2>Parte 2 · Criacionais: como um objeto nasce</h2>
+<h2 id="parte-2-criacionais-como-um-objeto-nasce">Parte 2 · Criacionais: como um objeto nasce</h2>
 
 <p>Agora os padrões “pequenos”. A boa notícia: o Android SDK é feito deles — você já os usa sem perceber. Ver o padrão por trás da API é o que permite estender ou testar com segurança.</p>
 
 <p><img src="../assets/padroes-catalogo.svg" alt="Catálogo dos padrões GoF que o Android já usa, em três famílias. Criacionais (como um objeto nasce): Builder em NotificationCompat.Builder, Retrofit.Builder e OkHttpClient; Factory Method em LayoutInflater.from e ViewModelProvider.Factory; Abstract Factory em módulos Hilt/Dagger que montam famílias do grafo de DI; Singleton com object Kotlin, @Singleton e Room.databaseBuilder; Prototype com data class .copy clonando o UiState; DSL como builder tipado em buildList, Compose e Gradle KTS. Estruturais (como objetos se compõem): Adapter em RecyclerView.Adapter; Facade no Repository que esconde Room e API; Decorator em OkHttp Interceptor e no Modifier encadeado do Compose; Composite na árvore de composables; Proxy no cliente gerado pelo Retrofit; Bridge entre interface de domínio e implementação de dados. Comportamentais (como objetos conversam): Observer em Flow, StateFlow e LiveData; Strategy passando uma lambda de ordenação; State com sealed UiState Loading/Success/Error; Chain of Responsibility na cadeia de Interceptors; Command com Intent/Action como objeto e WorkManager enfileirando trabalho; Template Method no ciclo de vida da Activity."></p>
 
-<h3>Builder — montar passo a passo, construir no fim</h3>
+<h3 id="builder-montar-passo-a-passo-construir-no-fim">Builder — montar passo a passo, construir no fim</h3>
 
 <p>O padrão que você <strong>mais</strong> vê no Android. Em vez de um construtor com 12 parâmetros na ordem exata, você encadeia <code>.setX()</code> — cada um devolve <code>this</code> — e só materializa o objeto (imutável) no <code>.build()</code>.</p>
 
@@ -119,7 +119,7 @@ class LoginViewModelMvi(private val fazerLogin: FazerLogin) : ViewModel() {
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> em <strong>Java</strong> o Builder é quase obrigatório para objetos com muitos campos opcionais. Em <strong>Kotlin</strong>, <strong>argumentos nomeados + valores default</strong> resolvem o mesmo problema sem escrever a classe Builder — então <em>não</em> crie um Builder à mão para suas <code>data class</code>. Você ainda <em>consome</em> Builders o tempo todo (Retrofit, OkHttp, Notification) porque essas APIs precisam ser compatíveis com Java.</p></blockquote>
 
-<h3>Factory Method &amp; Abstract Factory — delegar “qual classe instanciar”</h3>
+<h3 id="factory-method-abstract-factory-delegar-qual-classe-instanciar">Factory Method &amp; Abstract Factory — delegar “qual classe instanciar”</h3>
 
 <p><strong>Factory Method:</strong> um método que decide <em>qual</em> objeto criar, escondendo o <code>new</code>/construtor de quem chama. <code>LayoutInflater.from(context)</code> te devolve um inflater sem você saber a classe concreta. <strong>Abstract Factory</strong> sobe um degrau: cria <em>famílias</em> de objetos que combinam entre si — é exatamente o que um módulo <strong>Hilt</strong> faz ao prover o grafo de dependências coerente.</p>
 
@@ -149,7 +149,7 @@ object NetworkModule {
 }
 </code></pre>
 
-<h3>Singleton — uma instância para o app inteiro</h3>
+<h3 id="singleton-uma-instância-para-o-app-inteiro">Singleton — uma instância para o app inteiro</h3>
 
 <p>Uma única instância compartilhada: o banco Room, o <code>OkHttpClient</code> (caro de criar), o <code>DataStore</code>. Em Kotlin, <code>object</code> já é um Singleton <em>thread-safe</em> pronto — mas a forma que você vai usar de verdade é a anotação <code>@Singleton</code> do Hilt.</p>
 
@@ -169,7 +169,7 @@ class SessaoUsuario @Inject constructor() {           // o Hilt garante 1 só
 
 <hr>
 
-<h2>Parte 3 · Estruturais: como objetos se compõem</h2>
+<h2 id="parte-3-estruturais-como-objetos-se-compõem">Parte 3 · Estruturais: como objetos se compõem</h2>
 
 <table>
 <thead><tr><th align="left">Padrão</th><th align="left">Ideia em uma linha</th><th align="left">Onde no Android</th></tr></thead>
@@ -216,7 +216,7 @@ Modifier
 
 <hr>
 
-<h2>Parte 4 · Comportamentais: como objetos conversam</h2>
+<h2 id="parte-4-comportamentais-como-objetos-conversam">Parte 4 · Comportamentais: como objetos conversam</h2>
 
 <p>É a família mais presente na arquitetura reativa moderna. O <strong>Observer</strong> é literalmente a fundação do <strong>UDF</strong> do artigo 13: <code>Flow</code>/<code>StateFlow</code> <em>são</em> o padrão Observer — um sujeito (o ViewModel) notifica observadores (a UI) quando o estado muda, sem conhecê-los.</p>
 
@@ -286,7 +286,7 @@ class AuthInterceptor(private val sessao: SessaoUsuario) : Interceptor {
 
 <hr>
 
-<h2>Quando (não) usar um padrão</h2>
+<h2 id="quando-não-usar-um-padrão">Quando (não) usar um padrão</h2>
 
 <table>
 <thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
@@ -304,7 +304,7 @@ class AuthInterceptor(private val sessao: SessaoUsuario) : Interceptor {
 
 <hr>
 
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 
 <table>
 <thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
@@ -318,7 +318,7 @@ class AuthInterceptor(private val sessao: SessaoUsuario) : Interceptor {
 </tbody>
 </table>
 
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 
 <table>
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>

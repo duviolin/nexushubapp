@@ -43,28 +43,28 @@
 <p>📌 <strong>Conexão com o NexusHub:</strong> hoje o projeto está em <code>targetSdk = 35</code> → o <strong>edge-to-edge já está valendo</strong>. E o emulador instalado é <strong>API 37 (Android 17)</strong> → nele as <strong>restrições de orientação já são ignoradas</strong> de qualquer jeito. Ou seja: os dois mandatos já batem na sua porta <em>agora</em>.</p>
 </blockquote>
 <hr>
-<h2>A linha do tempo dos mandatos</h2>
+<h2 id="a-linha-do-tempo-dos-mandatos">A linha do tempo dos mandatos</h2>
 <p><img src="../assets/edge-timeline.svg" alt="Linha do tempo: API 35 (2024) edge-to-edge vira padrão e APIs de cor de barra são depreciadas; API 36 (2025) opt-out do edge-to-edge desligado e orientação/resize ignorados em telas ≥600dp; API 37 (2026, o emulador atual) opt-out de orientação removido e targetar 37 é sem volta"></p>
 <blockquote>
 <p>🧠 <strong>Termo — mandato / behavior change:</strong> uma mudança de comportamento que a Google <strong>atrela ao <code>targetSdk</code></strong>. Quando você sobe o <code>targetSdk</code>, seu app &quot;aceita&quot; as regras novas daquela versão. Por isso subir o <code>targetSdk</code> nunca é só um número — é assinar um contrato de comportamento. (Veja <code>compileSdk</code>/<code>targetSdk</code> no <a href="02-sdk.html#4-a-confus%C3%A3o-n%C2%BA-2-compilesdk-vs-minsdk-vs-targetsdk">artigo do SDK</a>.)</p>
 </blockquote>
 <hr>
-<h1>PARTE 1 — Edge-to-Edge</h1>
-<h2>O que é (e o que muda na tela)</h2>
+<h2 id="parte-1-edge-to-edge">PARTE 1 — Edge-to-Edge</h2>
+<h2 id="o-que-é-e-o-que-muda-na-tela">O que é (e o que muda na tela)</h2>
 <p><strong>Edge-to-edge</strong> = seu app desenha <strong>de ponta a ponta</strong>, ocupando a tela inteira, inclusive a área <strong>atrás</strong> da barra de status (topo) e da barra de navegação (base). Antes, o sistema &quot;reservava&quot; essas faixas e seu conteúdo começava abaixo delas.</p>
 <p><img src="../assets/edge-to-edge-insets.svg" alt="Comparação antes e depois do edge-to-edge: antes o sistema reserva faixas opacas para status e navegação; depois o conteúdo vai edge-to-edge atrás de barras transparentes, e a área segura fica afastada pelos insets do topo (status) e da base (gestos)"></p>
 <blockquote>
 <p>🧠 <strong>Termo — system bars (barras do sistema):</strong> a <strong>status bar</strong> (topo: horário, bateria, notificações) e a <strong>navigation bar</strong> (base: os botões ◄ ● ▬, ou a barrinha de gestos). No edge-to-edge elas ficam <strong>transparentes</strong> e flutuam sobre o seu conteúdo.</p>
 </blockquote>
-<h2>O mandato exato</h2>
+<h2 id="o-mandato-exato">O mandato exato</h2>
 <ul>
 <li><strong>Android 15 (API 35):</strong> ao <code>targetSdk = 35</code>, o edge-to-edge é <strong>aplicado automaticamente</strong> nos aparelhos com Android 15+.</li>
 <li><strong>Android 16 (API 36):</strong> o &quot;escape&quot; temporário — o atributo <strong><code>R.attr#windowOptOutEdgeToEdgeEnforcement</code></strong> — foi <strong>DESLIGADO</strong>. Não adianta mais tentar voltar ao modo antigo. (Ao targetar 36, ele é ignorado no Android 16.)</li>
 </ul>
 <p><strong>Tradução:</strong> edge-to-edge deixou de ser opção e virou obrigação.</p>
-<h2>O que quebra se você não fizer nada</h2>
+<h2 id="o-que-quebra-se-você-não-fizer-nada">O que quebra se você não fizer nada</h2>
 <p>Sem tratar, partes da UI ficam <strong>atrás</strong> das barras: um botão no rodapé fica embaixo da barra de gestos, um título no topo fica sob o relógio. O app &quot;funciona&quot;, mas parece quebrado.</p>
-<h2>APIs que morreram (não use mais)</h2>
+<h2 id="apis-que-morreram-não-use-mais">APIs que morreram (não use mais)</h2>
 <table>
 <thead>
 <tr>
@@ -89,7 +89,7 @@
 <td align="left">Desligado no Android 16</td>
 </tr>
 </tbody></table>
-<h2>Como fazer certo: <code>enableEdgeToEdge()</code> + Insets</h2>
+<h2 id="como-fazer-certo-enableedgetoedge-insets">Como fazer certo: <code>enableEdgeToEdge()</code> + Insets</h2>
 <p>O trabalho tem <strong>dois passos</strong>: (1) ligar o edge-to-edge, (2) <strong>respeitar os insets</strong> para o conteúdo importante não ficar escondido.</p>
 <blockquote>
 <p>🧠 <strong>Termo — WindowInsets:</strong> são as &quot;margens de segurança&quot; que o sistema informa ao app: <em>&quot;os primeiros 48dp do topo estão sob a status bar; os últimos 32dp da base estão sob a barra de gestos&quot;</em>. Você usa essas medidas para <strong>empurrar</strong> o conteúdo para a área visível.</p>
@@ -121,7 +121,7 @@ Modifier.safeDrawingPadding()                            // atalho equivalente
     insets
 }
 </code></pre>
-<h3>Os tipos de inset que importam</h3>
+<h3 id="os-tipos-de-inset-que-importam">Os tipos de inset que importam</h3>
 <pre><code>   ┌─────────────────────────────┐
    │ statusBars ▲                 │  ← topo: relógio/notificações
    │                             ⌐│  ← displayCutout (o &quot;furo&quot; da câmera)
@@ -170,8 +170,8 @@ Modifier.safeDrawingPadding()                            // atalho equivalente
 <p>🔒 <strong>Visão Specialist:</strong> desenhar edge-to-edge <strong>de propósito</strong> é o que dá o visual moderno (fundo passando atrás das barras). O erro não é o conteúdo passar por trás — é o conteúdo <strong>interativo ou textual</strong> ficar escondido. Deixe o <em>fundo</em> ir até a borda; <strong>afaste só</strong> o que precisa ser tocado ou lido, com <code>safeDrawing</code>.</p>
 </blockquote>
 <hr>
-<h1>PARTE 2 — Orientação e Redimensionamento em Telas Grandes</h1>
-<h2>O mandato exato</h2>
+<h2 id="parte-2-orientação-e-redimensionamento-em-telas-grandes">PARTE 2 — Orientação e Redimensionamento em Telas Grandes</h2>
+<h2 id="o-mandato-exato-1">O mandato exato</h2>
 <p>Para apps que targetam <strong>Android 16 (API 36)</strong>, em telas com <strong>largura mínima ≥ 600dp</strong> (tablets, dobráveis abertos, ChromeOS, desktop), o sistema <strong>ignora</strong> qualquer tentativa de travar orientação, proibir redimensionamento ou fixar proporção:</p>
 <table>
 <thead>
@@ -217,13 +217,13 @@ Modifier.safeDrawingPadding()                            // atalho equivalente
    │          │                    │                           │
    └──────────┘                    └───────────────────────────┘
 </code></pre>
-<h2>As exceções (quem escapa)</h2>
+<h2 id="as-exceções-quem-escapa">As exceções (quem escapa)</h2>
 <ol>
 <li><strong>Jogos</strong> — apps com <code>android:appCategory=&quot;game&quot;</code> no manifesto ficam de fora.</li>
 <li><strong>Opt-in do usuário</strong> — o próprio usuário pode escolher o comportamento nas configurações de proporção do aparelho.</li>
 <li><strong>Telas pequenas</strong> — abaixo de <code>sw600dp</code> (telefones), sua trava de orientação <strong>ainda funciona</strong>.</li>
 </ol>
-<h2>O opt-out temporário (e sua data de validade)</h2>
+<h2 id="o-opt-out-temporário-e-sua-data-de-validade">O opt-out temporário (e sua data de validade)</h2>
 <p>No Android 16 existe uma escapatória — mas com <strong>prazo de morte marcado</strong>:</p>
 <pre><code class="language-xml">&lt;!-- No manifesto, por activity OU na &lt;application&gt; inteira --&gt;
 &lt;property
@@ -233,7 +233,7 @@ Modifier.safeDrawingPadding()                            // atalho equivalente
 <blockquote>
 <p>⚠️ <strong>A pegadinha:</strong> esse opt-out <strong>para de funcionar ao targetar a API 37 (Android 17)</strong>. Como seu emulador <strong>já é API 37</strong>, tratá-lo como &quot;solução&quot; é enganação — é só um adiamento. O caminho real é tornar o app adaptável.</p>
 </blockquote>
-<h2>Como fazer certo: layouts adaptáveis</h2>
+<h2 id="como-fazer-certo-layouts-adaptáveis">Como fazer certo: layouts adaptáveis</h2>
 <p>A resposta <strong>não</strong> é lutar contra a rotação — é projetar telas que ficam boas em qualquer largura. A ferramenta oficial é a <strong>Window Size Class</strong>.</p>
 <blockquote>
 <p>🧠 <strong>Termo — Window Size Class:</strong> uma classificação da janela em <code>Compact</code> (telefone), <code>Medium</code> (dobrável/tablet pequeno) e <code>Expanded</code> (tablet/desktop). Você lê a classe e <strong>muda o layout</strong> — ex.: no <code>Compact</code> uma lista em tela cheia; no <code>Expanded</code>, lista + detalhe lado a lado.</p>
@@ -251,7 +251,7 @@ when (sizeClass.widthSizeClass) {
 <p>🔒 <strong>Visão Specialist — a regra de ouro:</strong> <strong>nunca trave orientação globalmente.</strong> Se precisar travar retrato num telefone específico (ex.: uma câmera), faça condicional por tamanho — trave só quando <code>&lt; 600dp</code>. Em tela grande, deixe fluir. O app que gira e reflui é o que passa na revisão da Play e não fica &quot;datado&quot;.</p>
 </blockquote>
 <hr>
-<h2>✅ Checklist para o NexusHub</h2>
+<h2 id="-checklist-para-o-nexushub">✅ Checklist para o NexusHub</h2>
 <table>
 <thead>
 <tr>
@@ -289,7 +289,7 @@ when (sizeClass.widthSizeClass) {
 </tr>
 </tbody></table>
 <hr>
-<h2>📖 Glossário-relâmpago</h2>
+<h2 id="-glossário-relâmpago">📖 Glossário-relâmpago</h2>
 <table>
 <thead>
 <tr>
@@ -343,7 +343,7 @@ when (sizeClass.widthSizeClass) {
 </tr>
 </tbody></table>
 <hr>
-<h2>🔗 Fontes oficiais</h2>
+<h2 id="-fontes-oficiais">🔗 Fontes oficiais</h2>
 <ul>
 <li><a href="https://developer.android.com/about/versions/15/behavior-changes-15">Behavior changes: Apps targeting Android 15 or higher</a></li>
 <li><a href="https://developer.android.com/about/versions/16/behavior-changes-16">Behavior changes: Apps targeting Android 16 or higher</a></li>

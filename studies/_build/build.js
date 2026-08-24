@@ -42,6 +42,30 @@ const articles = [
 
 const pageFile = (a) => a.frag; // páginas usam o mesmo nome do fragmento
 
+// Slug estilo GitHub (mesmo esquema dos links #ancora escritos nos artigos):
+// tira as tags inline, minúsculas, remove pontuação, espaços viram hífen — mantém acentos.
+function slugify(html) {
+  const text = html.replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+  return text.toLowerCase().trim()
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+// Injeta id="slug" em cada <h2>/<h3> para que os links #ancora entre artigos funcionem.
+function addHeadingIds(body) {
+  const seen = Object.create(null);
+  return body.replace(/<(h[23])>([\s\S]*?)<\/\1>/g, (m, tag, inner) => {
+    let slug = slugify(inner);
+    if (!slug) return m;
+    if (seen[slug] != null) { seen[slug] += 1; slug = `${slug}-${seen[slug]}`; }
+    else { seen[slug] = 0; }
+    return `<${tag} id="${slug}">${inner}</${tag}>`;
+  });
+}
+
 // Rodapé de transparência — honesto sobre o processo (IA + curadoria humana).
 const DISCLAIMER = 'Material de estudo escrito com <strong>auxílio de IA</strong>, sob <strong>curadoria e revisão</strong> de Eduardo; diagramas autorais. Pode conter imprecisões — confirme sempre na <a href="https://developer.android.com" target="_blank" rel="noopener">documentação oficial</a>. Código-fonte no <a href="https://github.com/duviolin/nexushubapp" target="_blank" rel="noopener">GitHub</a>.';
 
@@ -71,7 +95,7 @@ function pager(i) {
 
 function page(i) {
   const a = articles[i];
-  const body = fs.readFileSync(path.join(CONTENT, a.frag), 'utf8').trim();
+  const body = addHeadingIds(fs.readFileSync(path.join(CONTENT, a.frag), 'utf8').trim());
   return `<!doctype html>
 <html lang="pt-BR">
 <head>
