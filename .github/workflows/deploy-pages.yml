@@ -1,0 +1,56 @@
+name: Publicar estudos no GitHub Pages
+
+# Publica apenas a pasta studies/ como site estático.
+# Roda a cada push na main que toque em studies/, ou manualmente (Actions → Run workflow).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'studies/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita dois deploys simultâneos pisando um no outro.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Regenera pages/ + index.html a partir dos fragmentos em content/
+      - name: Montar a apostila
+        run: node studies/_build/build.js
+
+      # Desliga o Jekyll (preserva arquivos que começam com "_", como _guia.html)
+      - name: Adicionar .nojekyll
+        run: touch studies/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: studies
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
