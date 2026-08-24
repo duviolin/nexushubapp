@@ -1,8 +1,8 @@
 <h1>🤖 Desenvolver Android com IA: o agente na sua bancada (2026)</h1>
 
-<p>Você já sabe montar a arquitetura (artigo 09) e testar cada camada (artigo 10) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
+<p>Você já sabe montar a arquitetura (artigo 09) e testar cada camada (artigo 11) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 12 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 13 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
 
 <hr>
 
@@ -75,7 +75,7 @@
 - UI stateless + ViewModel com StateFlow (MVI). Sem lógica na @Composable.
 - Injeção com Hilt. Nada de singleton manual.
 - Textos de UI em português, via strings.xml (nunca hardcoded).
-- Teste novo acompanha código novo (ver artigo 10).
+- Teste novo acompanha código novo (ver artigo 11).
 - NÃO adicione dependência nova sem eu pedir.
 </code></pre>
 

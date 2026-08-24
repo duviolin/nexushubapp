@@ -30,10 +30,10 @@ const articles = [
   { frag: '07-qualidade.html',    emoji: '🔬', nav: 'Qualidade sob Medida',           desc: 'Configurar Lint, Detekt, ktlint e Sonar para pegar o que importa — e o baseline que adota tudo isso num projeto legado sem parar o mundo.' },
   { frag: '08-ofuscacao.html',    emoji: '🕶️', nav: 'Encolher & Ofuscar (R8)',        desc: 'O que o R8 faz no release, por que o app quebra só em produção, keep rules, @Keep e como ler um crash ofuscado com o mapping.txt.' },
   { frag: '09-arquitetura.html',   emoji: '🏛️', nav: 'Arquitetura & Código Limpo',    desc: 'Camadas, MVI/UDF, Repository, UseCase, Hilt e a Regra da Dependência — a arquitetura Android que aguenta crescer, do básico à modularização.' },
-  { frag: '10-testes.html',        emoji: '🧪', nav: 'Testes no Android',              desc: 'Da pirâmide ao Robot Pattern: como testar cada camada e cada componente Compose com JUnit5, Turbine, Robolectric e screenshot testing.' },
-  { frag: '11-ia-claude-code.html', emoji: '🤖', nav: 'Desenvolver com IA',            desc: 'A oficina do agente de código: o loop e o custo do modelo, contexto, memória, skills e o squad de um dev só (PO→Tech→Dev→QA) aplicado ao repositório Android.' },
-  { frag: '12-sdd-tdd-bdd.html',   emoji: '📐', nav: 'SDD · TDD · BDD',                desc: 'Dirigir a IA por especificação: o que é “pronto” antes de gerar código — spec, ciclo red-green-refactor, Given-When-Then e como se encaixam com DDD e Clean.' },
-  { frag: '13-padroes.html',       emoji: '🧱', nav: 'Padrões de Projeto',             desc: 'Do GoF ao MVI: MVVM × MVI lado a lado, e os padrões (Builder, Factory, Singleton, Observer, Strategy…) que o Android SDK já usa por você — quando aplicar e quando o Kotlin dissolve o padrão.' },
+  { frag: '10-padroes.html',       emoji: '🧱', nav: 'Padrões de Projeto',             desc: 'Do GoF ao MVI: MVVM × MVI lado a lado, e os padrões (Builder, Factory, Singleton, Observer, Strategy…) que o Android SDK já usa por você — quando aplicar e quando o Kotlin dissolve o padrão.' },
+  { frag: '11-testes.html',        emoji: '🧪', nav: 'Testes no Android',              desc: 'Da pirâmide ao Robot Pattern: como testar cada camada e cada componente Compose com JUnit5, Turbine, Robolectric e screenshot testing.' },
+  { frag: '12-ia-claude-code.html', emoji: '🤖', nav: 'Desenvolver com IA',            desc: 'A oficina do agente de código: o loop e o custo do modelo, contexto, memória, skills e o squad de um dev só (PO→Tech→Dev→QA) aplicado ao repositório Android.' },
+  { frag: '13-sdd-tdd-bdd.html',   emoji: '📐', nav: 'SDD · TDD · BDD',                desc: 'Dirigir a IA por especificação: o que é “pronto” antes de gerar código — spec, ciclo red-green-refactor, Given-When-Then e como se encaixam com DDD e Clean.' },
 ];
 
 const pageFile = (a) => a.frag; // páginas usam o mesmo nome do fragmento

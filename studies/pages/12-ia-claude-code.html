@@ -20,20 +20,20 @@
     <a href="07-qualidade.html"><span class="n">07</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
     <a href="08-ofuscacao.html"><span class="n">08</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
     <a href="09-arquitetura.html"><span class="n">09</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
-    <a href="10-testes.html"><span class="n">10</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
-    <a href="11-ia-claude-code.html" class="active"><span class="n">11</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
-    <a href="12-sdd-tdd-bdd.html"><span class="n">12</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
-    <a href="13-padroes.html"><span class="n">13</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
+    <a href="10-padroes.html"><span class="n">10</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
+    <a href="11-testes.html"><span class="n">11</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="12-ia-claude-code.html" class="active"><span class="n">12</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="13-sdd-tdd-bdd.html"><span class="n">13</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
     <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
   </nav>
 <main>
-  <p class="crumb">Artigo <strong>11</strong> de 13 · trilha de estudos</p>
+  <p class="crumb">Artigo <strong>12</strong> de 13 · trilha de estudos</p>
   <article class="content">
 <h1>🤖 Desenvolver Android com IA: o agente na sua bancada (2026)</h1>
 
-<p>Você já sabe montar a arquitetura (artigo 09) e testar cada camada (artigo 10) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
+<p>Você já sabe montar a arquitetura (artigo 09) e testar cada camada (artigo 11) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 12 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 13 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
 
 <hr>
 
@@ -106,7 +106,7 @@
 - UI stateless + ViewModel com StateFlow (MVI). Sem lógica na @Composable.
 - Injeção com Hilt. Nada de singleton manual.
 - Textos de UI em português, via strings.xml (nunca hardcoded).
-- Teste novo acompanha código novo (ver artigo 10).
+- Teste novo acompanha código novo (ver artigo 11).
 - NÃO adicione dependência nova sem eu pedir.
 </code></pre>
 
@@ -225,8 +225,8 @@ erros possíveis, critérios de pronto. Máximo 50 linhas.
 </table>
   </article>
     <nav class="pager">
-      <a class="pg prev" href="10-testes.html"><span>← Anterior</span><strong>🧪 Testes no Android</strong></a>
-      <a class="pg next" href="12-sdd-tdd-bdd.html"><span>Próximo →</span><strong>📐 SDD · TDD · BDD</strong></a>
+      <a class="pg prev" href="11-testes.html"><span>← Anterior</span><strong>🧪 Testes no Android</strong></a>
+      <a class="pg next" href="13-sdd-tdd-bdd.html"><span>Próximo →</span><strong>📐 SDD · TDD · BDD</strong></a>
     </nav>
 </main>
 </body>

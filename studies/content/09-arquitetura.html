@@ -2,7 +2,7 @@
 
 <p>Existe uma pergunta que revela a saúde de um app: <strong>“consigo mudar isto sem medo?”</strong>. Se trocar a fonte de dados obriga a mexer na tela, se testar uma regra exige subir a UI inteira, se dois devs não conseguem tocar features diferentes sem colidir — o problema não é o código, é a <strong>arquitetura</strong>. Este artigo constrói, do básico ao avançado, a arquitetura que o próprio Google recomenda para Android — e o <em>porquê</em> de cada peça.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> este artigo desenha a estrutura; o <strong>próximo (10 · Testes)</strong> mostra como cada camada aqui vira teste barato. Não é coincidência — arquitetura boa é a que se testa fácil.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> este artigo desenha a estrutura; o <strong>próximo (10 · Padrões)</strong> desce ao nível dos <em>tijolos</em> — os padrões que preenchem cada camada (Repository, Factory, Observer…) — e o <strong>11 · Testes</strong> mostra como tudo isso vira teste barato. Não é coincidência — arquitetura boa é a que se testa fácil.</p></blockquote>
 
 <hr>
 
@@ -59,6 +59,8 @@ class AuthRepositoryImpl(private val api: AuthApi) : AuthRepository {
 <h2>Parte 3 · A camada de UI: MVVM, MVI e fluxo unidirecional</h2>
 
 <p>Na tela, o padrão moderno é o <strong>MVVM</strong> evoluído para <strong>MVI</strong>: a tela é uma <strong>função do estado</strong>. O ViewModel expõe um <code>UiState</code> imutável; o Composable o desenha; toda interação vira um <strong>evento</strong> que sobe. Um sentido só.</p>
+
+<blockquote><p>🔗 <strong>Aqui é o essencial;</strong> a comparação <strong>MVVM × MVI</strong> lado a lado (quando cada um vale a pena, o “estado impossível”, o canal de efeitos) está aprofundada no <strong>artigo 10 · Padrões de Projeto</strong>, junto com a linhagem MVC→MVP→MVVM→MVI.</p></blockquote>
 
 <p><img src="../assets/fluxo-unidirecional.svg" alt="Fluxo unidirecional de dados. O ViewModel expõe um StateFlow de UiState e faz reduce (evento vira novo estado imutável). O estado desce para o Composable (UI), que coleta com collectAsStateWithLifecycle e recompõe quando o estado muda; os eventos (onClick, onType) sobem de volta como lambdas para o ViewModel. Embaixo, o state hoisting: a Screen da rota conecta o ViewModel e coleta o estado, enquanto o Content stateless só recebe estado e lambdas, ficando fácil de testar e de fazer preview."></p>
 
@@ -140,7 +142,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel()
 </code></pre>
 
-<blockquote><p>🔒 <strong>Visão Specialist:</strong> o valor da DI aparece no teste (artigo 10): como o ViewModel recebe a <strong>interface</strong>, no teste você entrega um <code>FakeAuthRepository</code> em vez do real — sem rede, sem Hilt, em milissegundos. Um ViewModel que faz <code>Retrofit.create()</code> por dentro é <strong>intestável</strong>. Teste difícil é sempre um sintoma de dependência mal invertida.</p></blockquote>
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o valor da DI aparece no teste (artigo 11): como o ViewModel recebe a <strong>interface</strong>, no teste você entrega um <code>FakeAuthRepository</code> em vez do real — sem rede, sem Hilt, em milissegundos. Um ViewModel que faz <code>Retrofit.create()</code> por dentro é <strong>intestável</strong>. Teste difícil é sempre um sintoma de dependência mal invertida.</p></blockquote>
 
 <hr>
 
@@ -182,7 +184,7 @@ class LoginViewModel @Inject constructor(
 <p><img src="../assets/ciclo-virtuoso.svg" alt="Ciclo virtuoso em triângulo. Arquitetura limpa (camadas, injeção de dependência, ViewModel isolado, Compose stateless) torna tudo testável; Testes rápidos (isolados, na JVM, confiáveis, a base larga da pirâmide) dão segurança para separar em módulos; Modularização (core, data, feature-x, build incremental e paralelo) força fronteiras limpas de volta para a arquitetura. No centro: testabilidade é consequência, não esforço à parte."></p>
 
 <ul>
-<li><strong>Arquitetura → testes:</strong> camadas e injeção <strong>permitem</strong> testar cada peça isolada (artigo 10).</li>
+<li><strong>Arquitetura → testes:</strong> camadas e injeção <strong>permitem</strong> testar cada peça isolada (artigo 11).</li>
 <li><strong>Testes → modularização:</strong> fronteiras cobertas <strong>dão segurança</strong> para partir o app sem medo.</li>
 <li><strong>Modularização → arquitetura:</strong> o módulo <code>:domain</code> puro <strong>força</strong> a Regra da Dependência a valer de verdade.</li>
 </ul>
