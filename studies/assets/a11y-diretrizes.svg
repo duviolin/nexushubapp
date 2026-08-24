@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">As diretrizes que todo app precisa cumprir</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">acessibilidade n&#227;o &#233; um recurso &#8212; &#233; o piso; a maioria &#233; barata se feita desde o come&#231;o</text>
+
+  <!-- 6 cards 3x2 -->
+  <!-- 1 contraste -->
+  <rect x="30" y="80" width="240" height="140" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.3"/>
+  <text x="50" y="106" font-size="13" font-weight="700" fill="#E8A15C">🎨 Contraste</text>
+  <text x="50" y="130" font-size="10.5" fill="#C9A97E">texto normal &#8805; <tspan fill="#DFE1E5" font-weight="700">4.5:1</tspan></text>
+  <text x="50" y="148" font-size="10.5" fill="#C9A97E">texto grande / &#237;cone &#8805; <tspan fill="#DFE1E5" font-weight="700">3:1</tspan></text>
+  <rect x="50" y="160" width="90" height="26" rx="5" fill="#1C1B1F"/><text x="95" y="177" text-anchor="middle" font-size="9" fill="#4A4A4A">cinza s/ cinza ✗</text>
+  <rect x="150" y="160" width="90" height="26" rx="5" fill="#1C1B1F"/><text x="195" y="177" text-anchor="middle" font-size="9" fill="#FFFFFF">branco ✓</text>
+  <text x="50" y="205" font-size="9" fill="#8A97A3">cor nunca &#233; o &#218;NICO sinal (erro tamb&#233;m em texto)</text>
+
+  <!-- 2 alvo de toque -->
+  <rect x="280" y="80" width="240" height="140" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.3"/>
+  <text x="300" y="106" font-size="13" font-weight="700" fill="#8ECB98">👆 Alvo de toque</text>
+  <text x="300" y="130" font-size="10.5" fill="#9DBDB6">m&#237;nimo <tspan fill="#DFE1E5" font-weight="700">48&#215;48dp</tspan> (art. 04)</text>
+  <rect x="300" y="142" width="48" height="48" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <circle cx="324" cy="166" r="7" fill="#8ECB98"/>
+  <text x="360" y="160" font-size="9.5" fill="#9DBDB6">&#237;cone pequeno,</text>
+  <text x="360" y="174" font-size="9.5" fill="#9DBDB6">&#225;rea de toque grande</text>
+  <text x="300" y="210" font-size="9" fill="#8A97A3">use <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">minimumInteractiveComponentSize</tspan></text>
+
+  <!-- 3 rótulos -->
+  <rect x="530" y="80" width="240" height="140" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.3"/>
+  <text x="550" y="106" font-size="13" font-weight="700" fill="#AEB7F2">🏷️ R&#243;tulos</text>
+  <text x="550" y="130" font-size="10.5" fill="#AAB6C0">todo &#237;cone/imagem informativa</text>
+  <text x="550" y="146" font-size="10.5" fill="#AAB6C0">tem <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">contentDescription</tspan></text>
+  <text x="550" y="170" font-size="10.5" fill="#AAB6C0">decorativo &#8594; <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">null</tspan> (n&#227;o l&#234;)</text>
+  <text x="550" y="196" font-size="9" fill="#8A97A3">descreva a A&#199;&#195;O (&#8220;Excluir&#8221;), n&#227;o o &#237;cone (&#8220;lixeira&#8221;)</text>
+
+  <!-- 4 dynamic type -->
+  <rect x="30" y="234" width="240" height="140" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.3"/>
+  <text x="50" y="260" font-size="13" font-weight="700" fill="#E8A15C">🔠 Escala de fonte</text>
+  <text x="50" y="284" font-size="10.5" fill="#C9A97E">tamanhos em <tspan fill="#DFE1E5" font-weight="700">sp</tspan>, nunca dp</text>
+  <text x="50" y="300" font-size="9" fill="#DFE1E5">A</text>
+  <text x="66" y="302" font-size="13" fill="#DFE1E5">A</text>
+  <text x="86" y="305" font-size="18" fill="#DFE1E5">A</text>
+  <text x="112" y="308" font-size="24" fill="#DFE1E5">A</text>
+  <text x="50" y="330" font-size="9.5" fill="#C9A97E">layout n&#227;o pode cortar em 200%</text>
+  <text x="50" y="352" font-size="9" fill="#8A97A3">teste com fonte grande do sistema ligada</text>
+
+  <!-- 5 foco / ordem -->
+  <rect x="280" y="234" width="240" height="140" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.3"/>
+  <text x="300" y="260" font-size="13" font-weight="700" fill="#8ECB98">🔀 Foco &amp; ordem</text>
+  <text x="300" y="284" font-size="10.5" fill="#9DBDB6">ordem de leitura l&#243;gica</text>
+  <text x="300" y="300" font-size="10.5" fill="#9DBDB6">(cima&#8594;baixo, in&#237;cio&#8594;fim)</text>
+  <text x="300" y="324" font-size="10.5" fill="#9DBDB6">agrupe com <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">mergeDescendants</tspan></text>
+  <text x="300" y="352" font-size="9" fill="#8A97A3">nada de foco preso ou ordem embaralhada</text>
+
+  <!-- 6 estado -->
+  <rect x="530" y="234" width="240" height="140" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.3"/>
+  <text x="550" y="260" font-size="13" font-weight="700" fill="#AEB7F2">🔘 Estado &amp; papel</text>
+  <text x="550" y="284" font-size="10.5" fill="#AAB6C0">selecionado / desabilitado /</text>
+  <text x="550" y="300" font-size="10.5" fill="#AAB6C0">marcado &#8594; anunciado</text>
+  <text x="550" y="324" font-size="10.5" fill="#AAB6C0"><tspan font-family="ui-monospace,monospace" fill="#B7BFC7">role</tspan>, <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">stateDescription</tspan></text>
+  <text x="550" y="352" font-size="9" fill="#8A97A3">mudan&#231;a importante &#8594; <tspan font-family="ui-monospace,monospace">liveRegion</tspan></text>
+</svg>

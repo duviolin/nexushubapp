@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="rc" markerWidth="12" markerHeight="12" refX="7" refY="3.4" orient="auto"><path d="M0 0 L8 3.4 L0 6.8 z" fill="#AEB7F2"/></marker>
+  </defs>
+  <rect x="0" y="0" width="800" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Recomposi&#231;&#227;o: refaz s&#243; quem leu o estado que mudou</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">o segredo da performance &#8212; escopos que <tspan fill="#8ECB98">n&#227;o leem</tspan> o estado s&#227;o <tspan fill="#8ECB98">pulados</tspan> (skipped)</text>
+
+  <!-- estado -->
+  <rect x="300" y="80" width="200" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="400" y="102" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">contador muda: 3 &#8594; 4</text>
+  <text x="400" y="118" text-anchor="middle" font-size="9.5" fill="#AAB6C0"><tspan font-family="ui-monospace,monospace">var n by remember { mutableStateOf(0) }</tspan></text>
+
+  <!-- árvore -->
+  <!-- Screen (raiz) -->
+  <rect x="60" y="164" width="680" height="210" rx="12" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="80" y="186" font-size="11.5" font-weight="700" fill="#DFE1E5">&#225;rvore de composables</text>
+
+  <!-- Header (skipped) -->
+  <rect x="90" y="204" width="180" height="70" rx="9" fill="#25392A" stroke="#84C48D" stroke-width="1.4"/>
+  <text x="180" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#8ECB98">Header</text>
+  <text x="180" y="247" text-anchor="middle" font-size="9.5" fill="#9DBDB6">n&#227;o l&#234; <tspan font-family="ui-monospace,monospace">n</tspan></text>
+  <text x="180" y="263" text-anchor="middle" font-size="10" font-weight="700" fill="#8ECB98">&#10003; SKIPPED</text>
+
+  <!-- Contador (recomposed) -->
+  <rect x="310" y="204" width="180" height="70" rx="9" fill="#3A2433" stroke="#C86B9B" stroke-width="1.6"/>
+  <text x="400" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#E79ECB">Texto(&quot;$n&quot;)</text>
+  <text x="400" y="247" text-anchor="middle" font-size="9.5" fill="#D9A9C4">L&#202; o estado <tspan font-family="ui-monospace,monospace">n</tspan></text>
+  <text x="400" y="263" text-anchor="middle" font-size="10" font-weight="700" fill="#E79ECB">&#8635; RECOMP&#212;E</text>
+
+  <!-- Rodape (skipped) -->
+  <rect x="530" y="204" width="180" height="70" rx="9" fill="#25392A" stroke="#84C48D" stroke-width="1.4"/>
+  <text x="620" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#8ECB98">Rodap&#233;</text>
+  <text x="620" y="247" text-anchor="middle" font-size="9.5" fill="#9DBDB6">n&#227;o l&#234; <tspan font-family="ui-monospace,monospace">n</tspan></text>
+  <text x="620" y="263" text-anchor="middle" font-size="10" font-weight="700" fill="#8ECB98">&#10003; SKIPPED</text>
+
+  <path d="M400 126 L400 202" fill="none" stroke="#AEB7F2" stroke-width="2" marker-end="url(#rc)"/>
+
+  <text x="400" y="306" text-anchor="middle" font-size="10.5" fill="#AAB6C0">S&#243; o escopo que L&#202; <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">n</tspan> recomp&#245;e. Os irm&#227;os s&#243; s&#227;o pulados se seus par&#226;metros forem <tspan fill="#8ECB98">est&#225;veis</tspan>.</text>
+
+  <rect x="90" y="320" width="620" height="42" rx="9" fill="#3A2E20" stroke="#7A5A34"/>
+  <text x="106" y="338" font-size="10.5" font-weight="700" fill="#E8A15C">&#9888; O que quebra o &#8220;skip&#8221;:</text>
+  <text x="106" y="354" font-size="10" fill="#C9A97E">par&#226;metro <tspan fill="#B7BFC7">inst&#225;vel</tspan> (ex.: <tspan font-family="ui-monospace,monospace">List</tspan> mut&#225;vel, lambda recriada) &#8594; o Compose recomp&#245;e por precau&#231;&#227;o. Use <tspan font-family="ui-monospace,monospace">@Immutable</tspan>/<tspan font-family="ui-monospace,monospace">ImmutableList</tspan>.</text>
+</svg>

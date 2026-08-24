@@ -1,0 +1,149 @@
+<h1>♿ Acessibilidade no Android: o app que todo mundo usa (2026)</h1>
+
+<p>Um app bonito que só funciona para quem enxerga bem, toca com precisão e lê letra miúda é um app <strong>quebrado para milhões de pessoas</strong>. Acessibilidade (a11y) é fazer a interface funcionar com leitor de tela, com fonte gigante, com pouca visão, com controle por teclado ou switch, com daltonismo. No Android há <strong>muitas diretrizes</strong> — por isso este é um artigo só delas — mas a boa notícia é que a maioria é <strong>barata quando feita desde o início</strong> e o Compose expõe tudo pela API de <strong>semântica</strong>. Além de ser o certo a fazer, é requisito de qualidade das lojas e, em muitos contextos, exigência legal.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>05 · Compose</strong> e o <strong>06 · Material</strong> te deram componentes que já vêm acessíveis; aqui você aprende a <em>não estragar</em> isso e a cobrir os casos que a máquina não adivinha. O alvo de 48dp vem do <strong>04 · Densidade</strong>; o teste de a11y fecha no <strong>14 · Testes</strong>.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Semântica: o que o leitor de tela realmente “vê”</h2>
+
+<p>O <strong>TalkBack</strong> (leitor de tela do Android) não enxerga pixels. Ele lê uma árvore paralela — a <strong>árvore de semântica</strong> — que cada composable preenche: um rótulo, um papel (botão? imagem?), um estado (selecionado? desabilitado?). Componentes do Material já preenchem isso; o seu trabalho é completar o que falta e <strong>agrupar</strong> o que deve ser lido junto.</p>
+
+<p><img src="../assets/a11y-semantics.svg" alt="A árvore de semântica: o que o TalkBack enxerga. À esquerda, o que aparece: um card com avatar, nome Ana Souza, status online agora e um botão Ligar. No meio, a semântica exposta. Sem cuidado, viram três paradas soltas: a imagem sem descrição, Ana Souza, e online agora, além de um botão Ligar que não diz para quem. Com mergeDescendants e labels, vira uma parada só: Ana Souza online, com contentDescription no avatar, e o botão vira Ligar para Ana com role Button e foco único. À direita, o TalkBack fala: Ana Souza online agora, imagem de perfil, e depois Ligar para Ana, botão, toque duplo — navegação por gesto, um foco de cada vez, na ordem de leitura. Só a semântica boa vira uma fala clara."></p>
+
+<pre><code class="language-kotlin">// Ícone-only: SEM rótulo o TalkBack anuncia "botão" e pronto — inútil
+IconButton(onClick = ::excluir) {
+    Icon(Icons.Default.Delete, contentDescription = "Excluir tarefa")   // descreva a AÇÃO
+}
+
+// Imagem decorativa: passe null para o leitor PULAR (não poluir a leitura)
+Icon(Icons.Default.Circle, contentDescription = null)
+
+// Agrupar um card para ser lido como UMA unidade, na ordem certa
+Row(Modifier.semantics(mergeDescendants = true) {}) {
+    Avatar(foto, contentDescription = null)   // já descrito pelo texto ao lado
+    Column { Text("Ana Souza"); Text("online agora") }
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — árvore de semântica:</strong> a representação da UI que serviços de acessibilidade consomem. Em Compose você a ajusta com o <code>Modifier.semantics { }</code> e com parâmetros como <code>contentDescription</code>. <code>mergeDescendants = true</code> funde os filhos num só nó focável — o card vira uma parada, não cinco.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · As diretrizes que todo app precisa cumprir</h2>
+
+<p>São muitas, mas cabem em seis famílias. Trate como <strong>piso</strong>, não como extra.</p>
+
+<p><img src="../assets/a11y-diretrizes.svg" alt="As seis famílias de diretrizes de acessibilidade. Contraste: texto normal com no mínimo 4.5:1, texto grande ou ícone com no mínimo 3:1, e cor nunca é o único sinal (o erro também aparece em texto). Alvo de toque: mínimo 48 por 48 dp, com ícone pequeno mas área de toque grande, usando minimumInteractiveComponentSize. Rótulos: todo ícone ou imagem informativa tem contentDescription, o decorativo recebe null para não ser lido, e descreve-se a ação (Excluir) e não o ícone (lixeira). Escala de fonte: tamanhos em sp e nunca dp, o layout não pode cortar em 200 por cento, testando com a fonte grande do sistema ligada. Foco e ordem: ordem de leitura lógica de cima para baixo e do início ao fim, agrupando com mergeDescendants, sem foco preso ou ordem embaralhada. Estado e papel: selecionado, desabilitado ou marcado precisam ser anunciados via role e stateDescription, e mudanças importantes usam liveRegion."></p>
+
+<table>
+<thead><tr><th align="left">Família</th><th align="left">Regra prática</th><th align="left">Como no Compose</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Contraste</strong></td><td align="left">texto ≥ 4.5:1; texto grande/ícone ≥ 3:1</td><td align="left">cores do <code>colorScheme</code> (art. 06) já pensadas para isso</td></tr>
+<tr><td align="left"><strong>Alvo de toque</strong></td><td align="left">≥ 48×48dp mesmo com ícone pequeno</td><td align="left"><code>minimumInteractiveComponentSize()</code>; <code>IconButton</code> já garante</td></tr>
+<tr><td align="left"><strong>Rótulos</strong></td><td align="left">ícone informativo tem descrição; decorativo é <code>null</code></td><td align="left"><code>contentDescription</code> descrevendo a <em>ação</em></td></tr>
+<tr><td align="left"><strong>Escala de fonte</strong></td><td align="left">usar <code>sp</code>; layout aguenta 200%</td><td align="left"><code>fontSize</code> em <code>.sp</code>; evitar altura fixa em texto</td></tr>
+<tr><td align="left"><strong>Foco &amp; ordem</strong></td><td align="left">ordem lógica; agrupar o que é uma coisa</td><td align="left"><code>mergeDescendants</code>; <code>clearAndSetSemantics</code></td></tr>
+<tr><td align="left"><strong>Estado &amp; papel</strong></td><td align="left">selecionado/desabilitado/marcado são anunciados</td><td align="left"><code>Modifier.semantics { role; stateDescription; selected }</code></td></tr>
+</tbody>
+</table>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <strong>cor não pode ser o único sinal</strong>. Um campo que fica só vermelho no erro é invisível para quem tem daltonismo — some um <strong>ícone e um texto</strong> (“E-mail inválido”). O mesmo vale para “item selecionado” marcado apenas por uma cor de fundo: precisa de estado semântico e, de preferência, um segundo indício visual.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · Estado, papel e mudanças anunciadas</h2>
+
+<p>Componentes prontos já anunciam seu papel e estado; ao construir algo <strong>custom</strong> (um chip de seleção feito na mão, um card clicável), você precisa dizer ao leitor o que ele é e como está.</p>
+
+<pre><code class="language-kotlin">// Um item de lista selecionável feito à mão: informe papel + estado
+@Composable
+fun ItemSelecionavel(texto: String, selecionado: Boolean, onClick: () -&gt; Unit) {
+    Row(
+        Modifier
+            .clickable(onClick = onClick)
+            .semantics {
+                role = Role.RadioButton                       // o QUE é
+                selected = selecionado                        // COMO está (TalkBack fala "selecionado")
+                stateDescription = if (selecionado) "selecionado" else "não selecionado"
+            }
+    ) { RadioButton(selected = selecionado, onClick = null); Text(texto) }
+}
+
+// Mudança dinâmica importante (ex.: "3 itens no carrinho") deve ser LIDA sem foco
+Text("$qtd itens", Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — <code>liveRegion</code>:</strong> marca um trecho cujas mudanças o TalkBack deve <strong>anunciar sozinho</strong>, sem o usuário navegar até lá (um contador que muda, uma mensagem de status). <code>Polite</code> espera a fala atual terminar; <code>Assertive</code> interrompe — use com parcimônia.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Testar acessibilidade (não confie no olho)</h2>
+
+<table>
+<thead><tr><th align="left">Ferramenta</th><th align="left">Pega</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Ligar o TalkBack</strong> e navegar por gesto</td><td align="left">a verdade final: ordem de leitura, rótulos faltando, focos presos</td></tr>
+<tr><td align="left"><strong>Accessibility Scanner</strong> (app da Google)</td><td align="left">contraste baixo, alvo pequeno, rótulo ausente — varredura na tela</td></tr>
+<tr><td align="left"><strong>Fonte grande + Display size</strong> no sistema</td><td align="left">corte de texto e layout que quebra em 200%</td></tr>
+<tr><td align="left"><strong>Testes de UI com asserções de semântica</strong></td><td align="left">regressão: <code>onNodeWithContentDescription</code>, <code>assertIsSelected</code> (art. 14)</td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">// Teste de Compose que trava a acessibilidade como contrato (art. 14 · Testes)
+composeTestRule.onNodeWithContentDescription("Excluir tarefa").assertIsDisplayed()
+composeTestRule.onNode(hasContentDescription("Ligar para Ana")).assertHasClickAction()
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a métrica que separa amador de sênior é <strong>navegar o app inteiro só com o TalkBack, de olhos fechados</strong>. Se você não consegue completar o fluxo principal, nenhum usuário de leitor de tela consegue. Faça isso uma vez por fluxo crítico — encontra em 5 minutos o que scanner automático nunca pega (rótulos que <em>existem</em> mas não fazem sentido, ordem que confunde). Acessibilidade boa também melhora SEO de app, testes de UI (nós têm rótulo) e a legibilidade para todos sob sol forte ou cansaço.</p></blockquote>
+
+<hr>
+
+<h2>Quando (não) usar cada recurso</h2>
+
+<table>
+<thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
+<tbody>
+<tr><td align="left">Ícone que faz uma ação</td><td align="left"><code>contentDescription</code> com a ação; alvo ≥ 48dp</td></tr>
+<tr><td align="left">Imagem puramente decorativa</td><td align="left"><code>contentDescription = null</code> — não poluir a leitura</td></tr>
+<tr><td align="left">Card/linha composta</td><td align="left"><code>mergeDescendants</code> para virar uma parada só</td></tr>
+<tr><td align="left">Componente custom clicável</td><td align="left">declarar <code>role</code> + <code>stateDescription</code></td></tr>
+<tr><td align="left">Status que muda sozinho</td><td align="left"><code>liveRegion = Polite</code> (Assertive só se urgente)</td></tr>
+<tr><td align="left">Sinalizar erro/seleção</td><td align="left">cor + ícone + texto — nunca só cor</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left">Rótulos</td><td align="left">todo ícone/ação com <code>contentDescription</code>; decorativo <code>null</code></td></tr>
+<tr><td align="left">Contraste</td><td align="left">≥ 4.5:1 (texto); cor nunca é o único sinal</td></tr>
+<tr><td align="left">Alvo de toque</td><td align="left">≥ 48×48dp; <code>minimumInteractiveComponentSize()</code></td></tr>
+<tr><td align="left">Escala de fonte</td><td align="left"><code>sp</code> em texto; testar com fonte a 200%</td></tr>
+<tr><td align="left">Semântica</td><td align="left">agrupar com <code>mergeDescendants</code>; <code>role</code>/<code>stateDescription</code> no custom</td></tr>
+<tr><td align="left">Verificação</td><td align="left">TalkBack no fluxo crítico + Accessibility Scanner + asserções (art. 14)</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>a11y</strong></td><td align="left">abreviação de <em>accessibility</em> (a + 11 letras + y)</td></tr>
+<tr><td align="left"><strong>TalkBack</strong></td><td align="left">o leitor de tela do Android; navega por gesto e fala a UI</td></tr>
+<tr><td align="left"><strong>árvore de semântica</strong></td><td align="left">a UI que serviços de acessibilidade leem (rótulo, papel, estado)</td></tr>
+<tr><td align="left"><strong>contentDescription</strong></td><td align="left">o rótulo falado de um ícone/imagem; <code>null</code> = decorativo</td></tr>
+<tr><td align="left"><strong>mergeDescendants</strong></td><td align="left">funde filhos num foco único — o card vira uma parada</td></tr>
+<tr><td align="left"><strong>role</strong></td><td align="left">o papel do elemento (Button, Checkbox, RadioButton…)</td></tr>
+<tr><td align="left"><strong>stateDescription</strong></td><td align="left">como o elemento está (selecionado, marcado, desabilitado)</td></tr>
+<tr><td align="left"><strong>liveRegion</strong></td><td align="left">trecho cujas mudanças o TalkBack anuncia sozinho</td></tr>
+<tr><td align="left"><strong>Accessibility Scanner</strong></td><td align="left">app da Google que varre a tela por problemas de a11y</td></tr>
+<tr><td align="left"><strong>dynamic type</strong></td><td align="left">texto em <code>sp</code> que respeita a escala de fonte do sistema</td></tr>
+</tbody>
+</table>

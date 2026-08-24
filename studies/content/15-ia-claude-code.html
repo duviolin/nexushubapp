@@ -1,8 +1,8 @@
 <h1>🤖 Desenvolver Android com IA: o agente na sua bancada (2026)</h1>
 
-<p>Você já sabe montar a arquitetura (artigo 09) e testar cada camada (artigo 11) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
+<p>Você já sabe montar a arquitetura (artigo 12) e testar cada camada (artigo 14) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 13 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 16 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
 
 <hr>
 
@@ -71,11 +71,11 @@
 <pre><code class="language-markdown"># NexusHub — regras do projeto
 
 - App Android nativo: Kotlin + Jetpack Compose, minSdk 24, targetSdk 35.
-- Arquitetura em camadas (ver artigo 09): domínio puro, sem Android no core.
+- Arquitetura em camadas (ver artigo 12): domínio puro, sem Android no core.
 - UI stateless + ViewModel com StateFlow (MVI). Sem lógica na @Composable.
 - Injeção com Hilt. Nada de singleton manual.
 - Textos de UI em português, via strings.xml (nunca hardcoded).
-- Teste novo acompanha código novo (ver artigo 11).
+- Teste novo acompanha código novo (ver artigo 14).
 - NÃO adicione dependência nova sem eu pedir.
 </code></pre>
 
@@ -148,13 +148,13 @@ erros possíveis, critérios de pronto. Máximo 50 linhas.
   <thead><tr><th>Risco</th><th>Guarda</th></tr></thead>
   <tbody>
     <tr><td><strong>API alucinada</strong> — método de Compose que não existe, parâmetro inventado.</td><td>O build é o juiz: <code>./gradlew assembleDebug</code> reprova na hora. Peça para o agente compilar antes de dizer “pronto”.</td></tr>
-    <tr><td><strong>API depreciada</strong> — o treino tem código antigo (<code>onActivityResult</code>, <code>AsyncTask</code>).</td><td>Fixe a regra no <code>CLAUDE.md</code> (“use Activity Result API, corrotinas”) e confie no Lint/Detekt do artigo 07.</td></tr>
-    <tr><td><strong>Quebra da Regra da Dependência</strong> — IA importa Android no domínio.</td><td>A arquitetura do artigo 09 vira teste: um teste de arquitetura (Konsist/ArchUnit) barra o import proibido.</td></tr>
+    <tr><td><strong>API depreciada</strong> — o treino tem código antigo (<code>onActivityResult</code>, <code>AsyncTask</code>).</td><td>Fixe a regra no <code>CLAUDE.md</code> (“use Activity Result API, corrotinas”) e confie no Lint/Detekt do artigo 10.</td></tr>
+    <tr><td><strong>Quebra da Regra da Dependência</strong> — IA importa Android no domínio.</td><td>A arquitetura do artigo 12 vira teste: um teste de arquitetura (Konsist/ArchUnit) barra o import proibido.</td></tr>
     <tr><td><strong>Diff gigante</strong> — impossível de revisar.</td><td>Uma intenção por commit. <strong>Você</strong> lê o diff antes de aceitar; código que você não entende não entra.</td></tr>
   </tbody>
 </table>
 
-<blockquote><p>🔗 <strong>Ligação:</strong> os guard-rails não são novos — são a esteira que você já montou. O CI do artigo 06 roda os testes em todo push; a qualidade do artigo 07 pega o cheiro; a arquitetura do 09 e os testes do 10 são a rede que segura a alucinação. <strong>A IA acelera quem já tem disciplina; ela amplifica a bagunça de quem não tem.</strong></p></blockquote>
+<blockquote><p>🔗 <strong>Ligação:</strong> os guard-rails não são novos — são a esteira que você já montou. O CI do artigo 09 roda os testes em todo push; a qualidade do artigo 10 pega o cheiro; a arquitetura do 12 e os testes do 14 são a rede que segura a alucinação. <strong>A IA acelera quem já tem disciplina; ela amplifica a bagunça de quem não tem.</strong></p></blockquote>
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> trate cada PR gerado por IA como PR de um júnior brilhante e apressado — revise o diff, exija o teste, questione a dependência nova. A responsabilidade pelo código que sobe é <strong>sua</strong>, não do modelo.</p></blockquote>
 

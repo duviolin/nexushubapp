@@ -1,0 +1,148 @@
+<h1>🧩 Material 3: o sistema de design do Android (2026)</h1>
+
+<p>No artigo anterior você aprendeu a <em>mecânica</em> do Compose — como emitir e recompor UI. Mas “funcionar” não é “parecer profissional”. O <strong>Material 3</strong> (também chamado <em>Material You</em>) é a <strong>linguagem de design</strong> do Android: um sistema de cor, tipografia, forma, elevação, movimento e componentes prontos que fazem o app parecer nativo, coeso e — de graça — acessível. A ideia central é simples e poderosa: componentes <strong>não têm estilo próprio</strong>; eles perguntam ao <strong>tema</strong>. Você define o tema uma vez, e a marca inteira responde.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>05 · Compose</strong> deu os blocos; aqui você os <em>veste</em> com um sistema coerente. A grade de 8dp e o alvo de 48dp do <strong>04 · Densidade</strong> voltam como regra de layout, e o <strong>07 · Acessibilidade</strong> pega o bastão do contraste e do <em>dynamic type</em>.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Os três pilares do tema</h2>
+
+<p>Um <code>MaterialTheme</code> envolve o app e expõe três coisas que todo componente lê: <strong>cor</strong>, <strong>tipografia</strong> e <strong>forma</strong>. Trocar qualquer uma muda o app inteiro sem tocar em cada tela.</p>
+
+<p><img src="../assets/material-theming.svg" alt="Os três pilares do MaterialTheme que todo componente lê. colorScheme: papéis em vez de cores fixas — primary e onPrimary, secondary, tertiary, surface e onSurface, error e onError; no Android 12+ o Dynamic Color gera a paleta a partir do papel de parede. typography: a escala tipográfica com papéis Display, Headline, Title, Body e Label, cada um com tamanho, peso e espaçamento definidos para consistência. shapes: cantos por tamanho de componente — small 4dp, medium 12dp, large 20dp — chips usam small, cards medium, bottom sheets large, mais elevação por tonal color. Um componente consome assim: Text com color igual a MaterialTheme.colorScheme.primary e style igual a MaterialTheme.typography.headlineMedium; nunca uma cor cravada como Color(0xFF6750A4) no componente, o que quebraria tema escuro, dynamic color e acessibilidade."></p>
+
+<h3>Cor por papel, não por valor</h3>
+
+<p>O pulo do gato do Material 3: a cor tem <strong>papel semântico</strong> (<code>primary</code>, <code>surface</code>, <code>error</code>…), com um par de contraste automático (<code>onPrimary</code> é o que se lê <em>sobre</em> <code>primary</code>). Você nunca escreve um hexadecimal no componente — escreve o <strong>papel</strong>. Isso é o que faz tema claro/escuro e <em>dynamic color</em> funcionarem sem `if` espalhado.</p>
+
+<pre><code class="language-kotlin">// tema: definido UMA vez, na raiz do app
+@Composable
+fun NexusTheme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -&gt; Unit) {
+    val cores = when {
+        // Dynamic Color: paleta tirada do papel de parede (Android 12+)
+        Build.VERSION.SDK_INT &gt;= 31 &amp;&amp; dark  -> dynamicDarkColorScheme(LocalContext.current)
+        Build.VERSION.SDK_INT &gt;= 31         -> dynamicLightColorScheme(LocalContext.current)
+        dark -> darkColorScheme(primary = NexusRoxo)     // fallback da marca
+        else -> lightColorScheme(primary = NexusRoxo)
+    }
+    MaterialTheme(colorScheme = cores, typography = NexusType, shapes = NexusShapes, content = content)
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — Dynamic Color / Material You:</strong> a partir do Android 12, o sistema gera uma paleta harmônica a partir do papel de parede do usuário. Optar por ele deixa seu app “combinar” com o aparelho — mas mantenha um <strong>colorScheme da marca</strong> como fallback (Android &lt; 12 e quando a identidade visual precisa mandar).</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · Componentes: use os prontos</h2>
+
+<p>O Material 3 traz dezenas de componentes que já resolvem estado, acessibilidade e animação. A regra do especialista: <strong>não reinvente</strong> um botão ou um campo — componha os prontos e ajuste por <code>Modifier</code> e pelo tema.</p>
+
+<table>
+<thead><tr><th align="left">Precisa de</th><th align="left">Componente M3</th></tr></thead>
+<tbody>
+<tr><td align="left">Ação primária / secundária</td><td align="left"><code>Button</code>, <code>FilledTonalButton</code>, <code>OutlinedButton</code>, <code>TextButton</code></td></tr>
+<tr><td align="left">Estrutura da tela</td><td align="left"><code>Scaffold</code> (topo + FAB + bottom bar + conteúdo)</td></tr>
+<tr><td align="left">Barra de topo</td><td align="left"><code>TopAppBar</code> (e variantes <em>large</em>/<em>center</em>)</td></tr>
+<tr><td align="left">Entrada de texto</td><td align="left"><code>TextField</code>, <code>OutlinedTextField</code></td></tr>
+<tr><td align="left">Contêiner de conteúdo</td><td align="left"><code>Card</code>, <code>ListItem</code></td></tr>
+<tr><td align="left">Seleção / filtro</td><td align="left"><code>Chip</code>, <code>Switch</code>, <code>Checkbox</code>, <code>SegmentedButton</code></td></tr>
+<tr><td align="left">Feedback temporário</td><td align="left"><code>Snackbar</code> (via <code>SnackbarHost</code> do Scaffold)</td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">@Composable
+fun TelaNexus(vm: HomeViewModel) {
+    val estado by vm.state.collectAsStateWithLifecycle()
+    Scaffold(                                            // estrutura padrão da tela
+        topBar = { TopAppBar(title = { Text("NexusHub") }) },
+        floatingActionButton = { FloatingActionButton(onClick = vm::novo) { Icon(Icons.Default.Add, null) } },
+    ) { padding -&gt;
+        LazyColumn(contentPadding = padding) {           // respeita a barra de topo/FAB
+            items(estado.itens, key = { it.id }) { Card { ListItem(headlineContent = { Text(it.titulo) }) } }
+        }
+    }
+}
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>Scaffold</code> te entrega um <code>PaddingValues</code> no <code>content</code>. <strong>Aplique-o</strong> (como <code>contentPadding</code> ou <code>Modifier.padding</code>) — senão o conteúdo fica <em>embaixo</em> da <code>TopAppBar</code> ou do sistema. É o elo com o edge-to-edge do artigo 03.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · Layout adaptativo: um app, várias telas</h2>
+
+<p>Desde o artigo 03, a Google <strong>exige</strong> que o app funcione em tela grande e não trave orientação. O Material 3 traz os componentes que se adaptam à <strong>Window Size Class</strong>: a navegação muda de forma conforme a largura.</p>
+
+<p><img src="../assets/material-adaptive.svg" alt="Layout adaptativo: a navegação muda com a largura, usando as Window Size Classes. Compact abaixo de 600dp (celular em pé): NavigationBar, uma barra embaixo. Medium de 600 a 840dp (tablet em pé ou dobrável): NavigationRail, um trilho lateral. Expanded acima de 840dp (tablet deitado ou desktop): Navigation Drawer combinado com layout List-Detail, dois painéis lado a lado com lista e detalhe. O Material 3 já traz esses componentes prontos."></p>
+
+<table>
+<thead><tr><th align="left">Largura</th><th align="left">Navegação</th><th align="left">Conteúdo</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Compact</strong> (&lt; 600dp)</td><td align="left"><code>NavigationBar</code> (barra inferior)</td><td align="left">uma coluna; lista OU detalhe</td></tr>
+<tr><td align="left"><strong>Medium</strong> (600–840dp)</td><td align="left"><code>NavigationRail</code> (trilho lateral)</td><td align="left">conteúdo mais largo, cards em grade</td></tr>
+<tr><td align="left"><strong>Expanded</strong> (&gt; 840dp)</td><td align="left"><code>PermanentNavigationDrawer</code></td><td align="left"><strong>List-Detail</strong> lado a lado</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> não escreva esse <code>when</code> na mão. A biblioteca <code>material3-adaptive</code> traz <code>NavigationSuiteScaffold</code> (escolhe bar/rail/drawer sozinho) e <code>ListDetailPaneScaffold</code> (gerencia os dois painéis e o “voltar” em telas pequenas). Você declara os destinos e o conteúdo; a biblioteca decide a forma pela largura. É o jeito 2026 de cumprir o mandato de telas grandes sem duplicar tela.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Tema claro/escuro, elevação e movimento</h2>
+
+<ul>
+<li><strong>Claro/escuro sai de graça</strong> — porque você usou papéis de cor. <code>isSystemInDarkTheme()</code> troca o <code>colorScheme</code>; nenhum componente precisa saber.</li>
+<li><strong>Elevação por tonal color</strong> — no M3, “levantar” uma superfície a tinge com o <code>primary</code> em vez de só sombra. Use <code>tonalElevation</code>/<code>Surface</code>, não sombras manuais.</li>
+<li><strong>Movimento com propósito</strong> — transições curtas (<code>AnimatedVisibility</code>, <code>animate*AsState</code>, transições de navegação compartilhadas) que <em>explicam</em> a mudança de estado. Movimento não é enfeite: orienta o olho.</li>
+</ul>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> respeite a preferência de <strong>reduzir movimento</strong> do sistema (acessibilidade). Animações longas ou paralaxe agressiva enjoam e prejudicam quem tem sensibilidade vestibular — encurte ou desligue quando o usuário pediu menos movimento.</p></blockquote>
+
+<hr>
+
+<h2>Quando (não) usar</h2>
+
+<table>
+<thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
+<tbody>
+<tr><td align="left">Precisa de um botão/campo/card</td><td align="left">componente M3 pronto + tema; não estilize do zero</td></tr>
+<tr><td align="left">Cor de um componente</td><td align="left"><code>MaterialTheme.colorScheme.X</code>; nunca hexadecimal cravado</td></tr>
+<tr><td align="left">App precisa de tela grande</td><td align="left"><code>NavigationSuiteScaffold</code> + <code>ListDetailPaneScaffold</code></td></tr>
+<tr><td align="left">Marca forte exige cor própria</td><td align="left"><code>colorScheme</code> da marca como fallback; dynamic color opcional</td></tr>
+<tr><td align="left">Identidade muito fora do Material</td><td align="left">tema customizado é ok — mas herde acessibilidade e estados dos componentes base</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a tentação de “desenhar tudo do zero para fugir do cara-de-Material” quase sempre custa caro: você reescreve estados (pressed, disabled, focus), acessibilidade e animação que os componentes já resolvem. O caminho maduro é <strong>tematizar forte</strong> (cor, forma, tipografia da marca) mantendo os componentes base — 95% da identidade com 5% do risco.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left">Tema único na raiz</td><td align="left"><code>MaterialTheme</code> com <code>colorScheme</code> + <code>typography</code> + <code>shapes</code> da marca</td></tr>
+<tr><td align="left">Cor por papel</td><td align="left">componentes leem <code>colorScheme</code>; zero hexadecimal cravado</td></tr>
+<tr><td align="left">Claro/escuro + dynamic color</td><td align="left"><code>isSystemInDarkTheme()</code> + <code>dynamic*ColorScheme</code> com fallback</td></tr>
+<tr><td align="left">Componentes prontos</td><td align="left"><code>Scaffold</code>, <code>TopAppBar</code>, <code>Button</code>, <code>Card</code>… ajustados por tema</td></tr>
+<tr><td align="left">Adaptativo</td><td align="left"><code>NavigationSuiteScaffold</code>/<code>ListDetailPaneScaffold</code> para telas grandes</td></tr>
+<tr><td align="left">Movimento</td><td align="left">curto e com propósito; respeitar “reduzir movimento”</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Material 3 / Material You</strong></td><td align="left">o sistema de design do Android: cor, tipo, forma, componentes</td></tr>
+<tr><td align="left"><strong>colorScheme</strong></td><td align="left">cores por papel (<code>primary</code>, <code>surface</code>, <code>error</code>) com par de contraste</td></tr>
+<tr><td align="left"><strong>Dynamic Color</strong></td><td align="left">paleta gerada do papel de parede (Android 12+)</td></tr>
+<tr><td align="left"><strong>type scale</strong></td><td align="left">escala tipográfica: Display/Headline/Title/Body/Label</td></tr>
+<tr><td align="left"><strong>Scaffold</strong></td><td align="left">esqueleto de tela: topo, FAB, bottom bar, snackbar, conteúdo</td></tr>
+<tr><td align="left"><strong>Window Size Class</strong></td><td align="left">Compact/Medium/Expanded — decide o layout adaptativo</td></tr>
+<tr><td align="left"><strong>tonal elevation</strong></td><td align="left">no M3, elevar tinge a superfície com a cor primária</td></tr>
+<tr><td align="left"><strong>List-Detail</strong></td><td align="left">lista + detalhe lado a lado em telas largas</td></tr>
+</tbody>
+</table>

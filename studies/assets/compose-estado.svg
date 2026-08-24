@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="360" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Onde guardar o estado &#8212; a escada da sobreviv&#234;ncia</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">quanto mais alto voc&#234; i&#231;a o estado, mais eventos ele sobrevive &#8212; e mais test&#225;vel fica</text>
+
+  <!-- degrau 1 -->
+  <rect x="60" y="80" width="680" height="58" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="80" y="104" font-size="12.5" font-weight="700" fill="#B7BFC7">1 · vari&#225;vel local</text>
+  <text x="80" y="123" font-size="10" fill="#8A97A3"><tspan font-family="ui-monospace,monospace">var x = 0</tspan> dentro do composable</text>
+  <rect x="470" y="94" width="252" height="30" rx="7" fill="#3A2420" stroke="#8A4A3A"/>
+  <text x="596" y="113" text-anchor="middle" font-size="10" fill="#E0928A">&#10007; perdido na 1&#170; recomposi&#231;&#227;o</text>
+
+  <!-- degrau 2 -->
+  <rect x="60" y="146" width="680" height="58" rx="10" fill="#2E2A22" stroke="#CC7832" stroke-width="1.3"/>
+  <text x="80" y="170" font-size="12.5" font-weight="700" fill="#E8A15C">2 · remember { }</text>
+  <text x="80" y="189" font-size="10" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">val x by remember { mutableStateOf(0) }</tspan></text>
+  <rect x="470" y="160" width="252" height="30" rx="7" fill="#3A2E20" stroke="#7A5A34"/>
+  <text x="596" y="179" text-anchor="middle" font-size="10" fill="#E8A15C">&#10003; sobrevive &#224; recomposi&#231;&#227;o</text>
+
+  <!-- degrau 3 -->
+  <rect x="60" y="212" width="680" height="58" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.3"/>
+  <text x="80" y="236" font-size="12.5" font-weight="700" fill="#8ECB98">3 · rememberSaveable { }</text>
+  <text x="80" y="255" font-size="10" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">val x by rememberSaveable { mutableStateOf(0) }</tspan></text>
+  <rect x="470" y="226" width="252" height="30" rx="7" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="596" y="245" text-anchor="middle" font-size="10" fill="#8ECB98">&#10003; sobrevive ao giro de tela</text>
+
+  <!-- degrau 4 -->
+  <rect x="60" y="278" width="680" height="62" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="80" y="302" font-size="12.5" font-weight="700" fill="#AEB7F2">4 · ViewModel (StateFlow)</text>
+  <text x="80" y="321" font-size="10" fill="#AAB6C0">estado de tela / de neg&#243;cio, compartilh&#225;vel e test&#225;vel fora da UI</text>
+  <rect x="470" y="298" width="252" height="30" rx="7" fill="#22273F" stroke="#4650A0"/>
+  <text x="596" y="317" text-anchor="middle" font-size="10" fill="#AEB7F2">&#10003; sobrevive + fora do Compose</text>
+</svg>

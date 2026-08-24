@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="350" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Layout adaptativo: a navega&#231;&#227;o muda com a largura</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">as Window Size Classes (art. 03) escolhem o padr&#227;o &#8212; o Material 3 j&#225; traz os componentes prontos</text>
+
+  <!-- Compact: bottom bar -->
+  <text x="150" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#E8A15C">Compact &lt; 600dp</text>
+  <text x="150" y="104" text-anchor="middle" font-size="9.5" fill="#8A97A3">celular em pé</text>
+  <rect x="98" y="112" width="104" height="180" rx="12" fill="#2B2D2F" stroke="#CC7832" stroke-width="1.4"/>
+  <rect x="106" y="120" width="88" height="140" rx="6" fill="#2E2A22"/>
+  <rect x="106" y="264" width="88" height="22" rx="6" fill="#3A2E20" stroke="#7A5A34"/>
+  <circle cx="122" cy="275" r="3" fill="#E8A15C"/><circle cx="150" cy="275" r="3" fill="#8A6A44"/><circle cx="178" cy="275" r="3" fill="#8A6A44"/>
+  <text x="150" y="308" text-anchor="middle" font-size="9.5" fill="#C9A97E">NavigationBar</text>
+  <text x="150" y="321" text-anchor="middle" font-size="8.5" fill="#8A97A3">(barra embaixo)</text>
+
+  <!-- Medium: rail -->
+  <text x="400" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#8ECB98">Medium 600&#8211;840dp</text>
+  <text x="400" y="104" text-anchor="middle" font-size="9.5" fill="#8A97A3">tablet em pé / dobrável</text>
+  <rect x="320" y="112" width="160" height="180" rx="12" fill="#2B2D2F" stroke="#84C48D" stroke-width="1.4"/>
+  <rect x="328" y="120" width="26" height="164" rx="6" fill="#1E3222" stroke="#3B6B47"/>
+  <circle cx="341" cy="140" r="3.5" fill="#8ECB98"/><circle cx="341" cy="164" r="3.5" fill="#4C7A55"/><circle cx="341" cy="188" r="3.5" fill="#4C7A55"/>
+  <rect x="360" y="120" width="112" height="164" rx="6" fill="#25392A"/>
+  <text x="400" y="308" text-anchor="middle" font-size="9.5" fill="#9DBDB6">NavigationRail</text>
+  <text x="400" y="321" text-anchor="middle" font-size="8.5" fill="#8A97A3">(trilho lateral)</text>
+
+  <!-- Expanded: drawer + list/detail -->
+  <text x="640" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">Expanded &gt; 840dp</text>
+  <text x="640" y="104" text-anchor="middle" font-size="9.5" fill="#8A97A3">tablet deitado / desktop</text>
+  <rect x="536" y="112" width="208" height="180" rx="12" fill="#2B2D2F" stroke="#6366F1" stroke-width="1.4"/>
+  <rect x="544" y="120" width="44" height="164" rx="6" fill="#22273F" stroke="#4650A0"/>
+  <text x="566" y="150" text-anchor="middle" font-size="7.5" fill="#AEB7F2">drawer</text>
+  <rect x="594" y="120" width="66" height="164" rx="6" fill="#2E3350"/>
+  <text x="627" y="204" text-anchor="middle" font-size="8" fill="#AAB6C0">lista</text>
+  <rect x="666" y="120" width="70" height="164" rx="6" fill="#2E3350"/>
+  <text x="701" y="204" text-anchor="middle" font-size="8" fill="#AAB6C0">detalhe</text>
+  <text x="640" y="308" text-anchor="middle" font-size="9.5" fill="#AAB6C0">Drawer + List-Detail</text>
+  <text x="640" y="321" text-anchor="middle" font-size="8.5" fill="#8A97A3">(dois painéis lado a lado)</text>
+</svg>

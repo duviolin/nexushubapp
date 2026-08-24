@@ -1,0 +1,237 @@
+<h1>🎨 Jetpack Compose: a UI como função do estado (2026)</h1>
+
+<p>Até aqui a trilha cuidou do <em>chão</em> da UI — desenhar sob as barras (03), dp e densidade (04). Agora entra a <strong>ferramenta</strong> com que você realmente constrói tela no Android moderno: o <strong>Jetpack Compose</strong>. Ele troca o velho jeito imperativo (inflar XML, achar <code>View</code> por id e mandar cada mudança na mão) por um jeito <strong>declarativo</strong>: você descreve como a tela deve ficar <em>para um dado estado</em>, e o Compose se encarrega de atualizar o que mudou. Este artigo vai do básico (composables, layout, <code>Modifier</code>, estado) ao avançado (recomposição, estabilidade, side-effects e performance) — porque é fácil escrever Compose que funciona e difícil escrever Compose que não trava.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>04 · Densidade</strong> deu as unidades (dp); aqui você monta a tela com elas. O <strong>próximo (06 · Material 3)</strong> veste esses composables com o sistema de design, e o <strong>12 · Arquitetura</strong> mostra quem alimenta o estado que a tela desenha.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Declarativo: a virada de chave</h2>
+
+<p>No mundo antigo (Views/XML) a UI é um objeto que você <strong>muta</strong>: <code>textView.text = "Oi"</code>, <code>button.isEnabled = false</code>. O bug clássico é a tela e os dados <strong>saírem de sincronia</strong> — você esqueceu de atualizar um dos dez lugares. No Compose, você não muta a tela: você escreve uma <strong>função</strong> que, dado o estado, produz a UI. Mudou o estado? O Compose <strong>re-executa</strong> a função e reconcilia a diferença.</p>
+
+<pre><code class="language-kotlin">// Imperativo (Views): você descreve os PASSOS de mudança
+nomeTextView.text = usuario.nome
+avatarImageView.setImageUrl(usuario.foto)
+badge.visibility = if (usuario.online) View.VISIBLE else View.GONE
+
+// Declarativo (Compose): você descreve o RESULTADO para aquele estado
+@Composable
+fun CartaoUsuario(usuario: Usuario) {
+    Column {
+        Text(usuario.nome)
+        Avatar(usuario.foto)
+        if (usuario.online) Badge()      // não existe "esconder": ou está na árvore, ou não
+    }
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — @Composable:</strong> uma função anotada que <strong>emite UI</strong> em vez de retornar valor. Ela não “desenha” na hora: descreve um nó na árvore de UI que o Compose gerencia. Só pode ser chamada de dentro de outra função <code>@Composable</code>.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · Os blocos de construção</h2>
+
+<p>Três containers resolvem 90% do layout — e todos empilham por <strong>ordem de chamada</strong>:</p>
+
+<table>
+<thead><tr><th align="left">Composable</th><th align="left">Faz</th><th align="left">Equivalente mental</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>Column</code></td><td align="left">empilha os filhos na vertical</td><td align="left">uma pilha de cima para baixo</td></tr>
+<tr><td align="left"><code>Row</code></td><td align="left">alinha os filhos na horizontal</td><td align="left">uma fila lado a lado</td></tr>
+<tr><td align="left"><code>Box</code></td><td align="left">empilha os filhos em camadas (z)</td><td align="left">um <code>FrameLayout</code>: um sobre o outro</td></tr>
+<tr><td align="left"><code>LazyColumn</code>/<code>LazyRow</code></td><td align="left">lista que só compõe o que está visível</td><td align="left">o <code>RecyclerView</code>, sem boilerplate</td></tr>
+</tbody>
+</table>
+
+<p>O <strong>Modifier</strong> é o que ajusta tamanho, espaçamento, clique, fundo, borda — encadeado, e a <strong>ordem importa</strong> (é o padrão Decorator do artigo 13). Sempre receba um <code>Modifier</code> como parâmetro para o chamador poder posicionar seu componente.</p>
+
+<pre><code class="language-kotlin">@Composable
+fun Saudacao(nome: String, modifier: Modifier = Modifier) {   // convenção: modifier é o 1º opcional
+    Text(
+        text = "Olá, $nome",
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)          // afasta ANTES…
+            .background(Azul)        // …então pinta só a área interna
+            .clickable { /* … */ }
+    )
+}
+
+// Lista performática: dê uma key estável para o Compose reusar os itens certos
+@Composable
+fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
+    LazyColumn {
+        items(tarefas, key = { it.id }) { tarefa ->    // key evita recomposição errada ao reordenar
+            LinhaTarefa(tarefa)
+        }
+    }
+}
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <code>Column</code> (e <code>Row</code>) compõem <strong>todos</strong> os filhos de uma vez — se a lista for grande, trava. Para listas roláveis use sempre <code>LazyColumn</code>: ela só compõe os itens na viewport. <code>Column</code> com <code>verticalScroll</code> é para conteúdo <strong>curto</strong> e conhecido.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · Estado: o coração do Compose</h2>
+
+<p>Um composable que lê um <code>State</code> vira <strong>reativo</strong>: quando o valor muda, ele recompõe. A pergunta que define tudo é <em>onde esse estado mora</em> — e disso depende quais eventos ele sobrevive.</p>
+
+<p><img src="../assets/compose-estado.svg" alt="A escada de sobrevivência do estado no Compose, em quatro degraus. 1: variável local var x = 0 dentro do composable — perdida na primeira recomposição. 2: remember { mutableStateOf(0) } — sobrevive à recomposição. 3: rememberSaveable { mutableStateOf(0) } — sobrevive também ao giro de tela. 4: ViewModel com StateFlow — estado de tela ou de negócio, compartilhável e testável fora da UI, sobrevive e vive fora do Compose. Regra: estado efêmero de UI como scroll ou expandido vai em remember/Saveable; estado de tela vai no ViewModel."></p>
+
+<pre><code class="language-kotlin">@Composable
+fun Contador() {
+    // mutableStateOf cria um State observável; remember o preserva entre recomposições
+    var n by remember { mutableStateOf(0) }
+    Button(onClick = { n++ }) { Text("Cliquei $n vezes") }   // ler n aqui "assina" as mudanças
+}
+</code></pre>
+
+<h3>State hoisting: componente burro, dono esperto</h3>
+
+<p>O padrão-chave: <strong>ice o estado para fora</strong> do componente. Um composable <strong>stateless</strong> (recebe valor + lambda de evento) é reutilizável, testável e previsível. Quem segura o estado é o pai (ou o ViewModel).</p>
+
+<pre><code class="language-kotlin">// stateful: guarda o próprio estado — difícil de controlar/testar
+@Composable fun CampoBusca() { var texto by remember { mutableStateOf("") } /* … */ }
+
+// stateless (hoisted): estado DESCE, evento SOBE — a mesma ideia do UDF (art. 12)
+@Composable
+fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifier = Modifier) {
+    TextField(value = texto, onValueChange = onTextoMuda, modifier = modifier)
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — <code>remember</code> vs <code>rememberSaveable</code>:</strong> <code>remember</code> guarda o valor enquanto o composable estiver na árvore (sobrevive à recomposição, <strong>não</strong> ao giro de tela). <code>rememberSaveable</code> salva no <code>Bundle</code> e sobrevive à recriação da Activity — mas só serve para tipos “salváveis” (primitivos, <code>Parcelable</code>).</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · As três fases de um frame</h2>
+
+<p>Para entender performance, você precisa saber o que o Compose faz a cada quadro. São <strong>três fases</strong>, e a chave é: cada uma pode ser <strong>pulada</strong> se a entrada dela não mudou.</p>
+
+<p><img src="../assets/compose-fases.svg" alt="As três fases de um frame no Compose. Fase 1 Composition: roda seus @Composable e monta a árvore de UI — o que mostrar; recompor significa refazer só esta fase. Fase 2 Layout: mede e posiciona cada nó numa passada só — onde e que tamanho; measure depois place. Fase 3 Drawing: desenha os pixels na tela — como aparece; via Canvas ou drawBehind. Nota de performance: se mudou só a cor, o Compose pula as fases 1 e 2 e refaz só o Drawing; se mudou só a posição, pula a Composition; ler o estado na fase mais tardia possível, como num Modifier.offset lambda, evita recompor a árvore toda."></p>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a otimização mais poderosa do Compose é <strong>adiar a leitura do estado</strong> para a fase mais tardia. <code>Modifier.offset { IntOffset(x, 0) }</code> (lambda) lê a posição na fase de <em>Layout</em>; <code>Modifier.offset(x.dp)</code> (valor) lê na <em>Composition</em>. O primeiro anima sem recompor nada — o segundo recompõe a cada frame. Mesma API, custo brutalmente diferente.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · Recomposição inteligente e estabilidade</h2>
+
+<p>Recompor é re-executar funções <code>@Composable</code>. O Compose faz isso de forma <strong>cirúrgica</strong>: só os escopos que <em>leram</em> o estado alterado são refeitos; os irmãos são <strong>pulados</strong> (skipped) — desde que seus parâmetros sejam <strong>estáveis</strong>.</p>
+
+<p><img src="../assets/compose-recomposicao.svg" alt="Recomposição refaz só quem leu o estado que mudou. Um contador muda de 3 para 4 (var n by remember mutableStateOf). Na árvore de composables, o Header não lê n e é SKIPPED (pulado); o Texto que exibe n LÊ o estado e RECOMPÕE; o Rodapé não lê n e é SKIPPED. Só o escopo que lê n recompõe, e os irmãos só são pulados se seus parâmetros forem estáveis. O que quebra o skip: um parâmetro instável como uma List mutável ou uma lambda recriada faz o Compose recompor por precaução; a solução é usar tipos @Immutable ou ImmutableList."></p>
+
+<blockquote><p>🧠 <strong>Termo — estabilidade / skipping:</strong> um tipo é <strong>estável</strong> se o Compose consegue saber quando ele mudou (imutável, ou notifica mudanças). Parâmetro estável e igual ao anterior ⇒ o Compose <strong>pula</strong> aquele composable. Tipos <strong>instáveis</strong> (uma <code>List</code>/<code>Map</code> comum, classes de outro módulo sem garantia) forçam recomposição “por via das dúvidas”.</p></blockquote>
+
+<pre><code class="language-kotlin">// ❌ instável: List é interface mutável → o Compose não pode pular este composable
+@Composable fun Lista(itens: List&lt;Item&gt;) { /* … */ }
+
+// ✅ estável: marque o modelo e use coleções imutáveis (kotlinx.collections.immutable)
+@Immutable
+data class Item(val id: String, val titulo: String)
+@Composable fun Lista(itens: ImmutableList&lt;Item&gt;) { /* … */ }
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> em 2026 o compilador do Compose tem <strong>strong skipping</strong> ligado por padrão, que pula composables mesmo com alguns parâmetros instáveis (comparando por instância) e lembra lambdas automaticamente. Isso reduz muito o problema — mas <strong>não</strong> substitui modelar dados imutáveis. Rode o <em>compiler metrics</em> para ver quais composables estão <code>restartable</code> mas não <code>skippable</code>: cada um desses é um suspeito de recomposição excessiva.</p></blockquote>
+
+<hr>
+
+<h2>Parte 6 · Side-effects: falar com o mundo de fora</h2>
+
+<p>Uma função <code>@Composable</code> deve ser <strong>sem efeito colateral</strong>: ela pode rodar muitas vezes, em qualquer ordem, e ser cancelada. Então “rodar código de verdade” (chamar API, mostrar snackbar, iniciar animação) precisa de <strong>APIs de efeito</strong> que amarram o trabalho ao ciclo de vida da composição.</p>
+
+<table>
+<thead><tr><th align="left">API</th><th align="left">Use para</th><th align="left">Dispara quando</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>LaunchedEffect(key)</code></td><td align="left">rodar <code>suspend</code> ao entrar / quando a key muda</td><td align="left">entra na composição ou <code>key</code> muda; cancela ao sair</td></tr>
+<tr><td align="left"><code>rememberCoroutineScope()</code></td><td align="left">disparar corrotina a partir de um evento (clique)</td><td align="left">você chama, dentro de uma lambda</td></tr>
+<tr><td align="left"><code>DisposableEffect(key)</code></td><td align="left">registrar/dar baixa em algo (listener, observer)</td><td align="left">entra; o <code>onDispose{}</code> roda ao sair</td></tr>
+<tr><td align="left"><code>derivedStateOf { }</code></td><td align="left">estado <em>calculado</em> de outro, sem recompor à toa</td><td align="left">só quando o resultado derivado muda</td></tr>
+<tr><td align="left"><code>snapshotFlow { }</code></td><td align="left">transformar State em <code>Flow</code></td><td align="left">quando o State lido muda</td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">@Composable
+fun TelaPerfil(id: String, vm: PerfilViewModel) {
+    // roda a busca ao abrir e SEMPRE que o id mudar; cancela sozinho ao sair da tela
+    LaunchedEffect(id) { vm.carregar(id) }
+
+    val listState = rememberLazyListState()
+    // derivedStateOf: só recompõe o botão quando o booleano VIRA, não a cada pixel de scroll
+    val mostrarTopo by remember {
+        derivedStateOf { listState.firstVisibleItemIndex &gt; 5 }
+    }
+    if (mostrarTopo) BotaoVoltarAoTopo()
+}
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> nunca chame <code>viewModel.carregar()</code> solto no corpo do composable — ele rodaria a cada recomposição, disparando dezenas de chamadas. Trabalho com efeito vai <strong>sempre</strong> dentro de um <code>LaunchedEffect</code>/evento. E cuide da <code>key</code>: <code>LaunchedEffect(Unit)</code> roda uma vez; <code>LaunchedEffect(id)</code> re-roda quando o <code>id</code> muda.</p></blockquote>
+
+<hr>
+
+<h2>Parte 7 · Performance: as regras que evitam jank</h2>
+
+<table>
+<thead><tr><th align="left">Regra</th><th align="left">Por quê</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Adie a leitura de estado</strong></td><td align="left">lambda no <code>Modifier</code> (<code>offset{}</code>, <code>drawBehind{}</code>) lê na fase tardia — anima sem recompor</td></tr>
+<tr><td align="left"><strong>Modelos imutáveis + <code>@Immutable</code></strong></td><td align="left">deixa o Compose <em>pular</em> composables com segurança</td></tr>
+<tr><td align="left"><strong><code>key</code> em <code>LazyColumn</code></strong></td><td align="left">identidade estável ao reordenar/inserir — reusa itens certos</td></tr>
+<tr><td align="left"><strong>Nada de alocação pesada na composição</strong></td><td align="left">ela roda muito; ordene/filtre em <code>remember(entrada){…}</code> ou no ViewModel</td></tr>
+<tr><td align="left"><strong>Baseline Profiles</strong></td><td align="left">pré-compila (AOT) o caminho crítico → primeira rolagem sem jank de JIT</td></tr>
+<tr><td align="left"><strong>Meça, não adivinhe</strong></td><td align="left">Layout Inspector (contagem de recomposição) + compiler metrics apontam o culpado</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> otimize <strong>depois</strong> de medir. O Compose em <code>debug</code> é enganosamente lento (sem R8, com asserts); toda medição de performance vale só em build <code>release</code> com <strong>Baseline Profile</strong>. A maioria do “jank” real vem de três coisas: recomposição excessiva por instabilidade, trabalho pesado dentro da composição, e listas sem <code>key</code>. Ataque nessa ordem.</p></blockquote>
+
+<hr>
+
+<h2>Quando (não) usar cada coisa</h2>
+
+<table>
+<thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
+<tbody>
+<tr><td align="left">Estado só visual e efêmero (expandido, scroll)</td><td align="left"><code>remember</code> / <code>rememberSaveable</code> no composable</td></tr>
+<tr><td align="left">Estado de tela / regra de negócio</td><td align="left">no <strong>ViewModel</strong> como <code>StateFlow</code> (art. 12)</td></tr>
+<tr><td align="left">Rodar <code>suspend</code> ao abrir a tela</td><td align="left"><code>LaunchedEffect(key)</code>, nunca no corpo solto</td></tr>
+<tr><td align="left">Valor derivado de outro estado</td><td align="left"><code>derivedStateOf</code> — evita recomposição por scroll</td></tr>
+<tr><td align="left">Lista longa</td><td align="left"><code>LazyColumn</code> com <code>key</code> estável</td></tr>
+<tr><td align="left">“Está lento”</td><td align="left">medir em release + Baseline Profile antes de mexer</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left">Composables stateless</td><td align="left">estado hoisted; recebe valor + lambda; <code>modifier</code> como 1º opcional</td></tr>
+<tr><td align="left">Estado no lugar certo</td><td align="left">efêmero → <code>remember</code>; de tela → ViewModel/<code>StateFlow</code></td></tr>
+<tr><td align="left">Efeitos</td><td align="left">trabalho só em <code>LaunchedEffect</code>/evento; cuidar da <code>key</code></td></tr>
+<tr><td align="left">Estabilidade</td><td align="left">modelos <code>@Immutable</code>, coleções imutáveis; rodar compiler metrics</td></tr>
+<tr><td align="left">Listas</td><td align="left"><code>LazyColumn</code> + <code>key</code>; nada de <code>Column</code> rolável para muitos itens</td></tr>
+<tr><td align="left">Performance</td><td align="left">medir em release + Baseline Profile; adiar leitura de estado</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>@Composable</strong></td><td align="left">função que emite UI em vez de retornar valor</td></tr>
+<tr><td align="left"><strong>declarativo</strong></td><td align="left">descrever a UI para um estado; o framework reconcilia a diferença</td></tr>
+<tr><td align="left"><strong>recomposição</strong></td><td align="left">re-executar composables que leram o estado que mudou</td></tr>
+<tr><td align="left"><strong>Modifier</strong></td><td align="left">cadeia que ajusta tamanho, espaço, clique, fundo — ordem importa</td></tr>
+<tr><td align="left"><strong>state hoisting</strong></td><td align="left">içar o estado para fora; componente stateless recebe valor + evento</td></tr>
+<tr><td align="left"><strong>remember</strong></td><td align="left">preserva valor entre recomposições (não ao giro de tela)</td></tr>
+<tr><td align="left"><strong>rememberSaveable</strong></td><td align="left">preserva também na recriação da Activity (Bundle)</td></tr>
+<tr><td align="left"><strong>estabilidade / skipping</strong></td><td align="left">tipo estável deixa o Compose pular o composable inalterado</td></tr>
+<tr><td align="left"><strong>LaunchedEffect</strong></td><td align="left">roda <code>suspend</code> atrelado à composição; cancela ao sair</td></tr>
+<tr><td align="left"><strong>derivedStateOf</strong></td><td align="left">estado calculado que só recompõe quando o resultado muda</td></tr>
+<tr><td align="left"><strong>Baseline Profile</strong></td><td align="left">pré-compilação AOT do caminho crítico; mata jank da 1ª rolagem</td></tr>
+</tbody>
+</table>

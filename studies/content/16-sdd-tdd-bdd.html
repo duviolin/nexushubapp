@@ -1,8 +1,8 @@
 <h1>📐 SDD, TDD e BDD: dirigir a IA por especificação (2026)</h1>
 
-<p>No artigo 12 você aprendeu a <em>operar</em> o agente. Agora vem a pergunta que decide se o código gerado presta: <strong>o que é “pronto”?</strong> A IA escreve Kotlin que compila e <em>parece</em> certo — mas “parece” não é “é”. Sem um alvo escrito antes, o loop gira agradando você em vez de acertar. As três siglas deste artigo — <strong>SDD, TDD, BDD</strong> — são três formas de fixar esse alvo <em>antes</em> de a IA digitar. Não competem: encadeiam.</p>
+<p>No artigo 15 você aprendeu a <em>operar</em> o agente. Agora vem a pergunta que decide se o código gerado presta: <strong>o que é “pronto”?</strong> A IA escreve Kotlin que compila e <em>parece</em> certo — mas “parece” não é “é”. Sem um alvo escrito antes, o loop gira agradando você em vez de acertar. As três siglas deste artigo — <strong>SDD, TDD, BDD</strong> — são três formas de fixar esse alvo <em>antes</em> de a IA digitar. Não competem: encadeiam.</p>
 
-<blockquote><p>🔗 <strong>Fio condutor:</strong> este é o par teórico do artigo 12. Lá, o squad de um dev só passava um bastão (<code>PLANO.md</code> → <code>SPEC.md</code> → código → <code>REVIEW.md</code>); esse bastão <em>é</em> SDD. Aqui a gente formaliza, soma TDD e BDD, e mostra por que teste é a melhor coleira de alucinação que existe.</p></blockquote>
+<blockquote><p>🔗 <strong>Fio condutor:</strong> este é o par teórico do artigo 15. Lá, o squad de um dev só passava um bastão (<code>PLANO.md</code> → <code>SPEC.md</code> → código → <code>REVIEW.md</code>); esse bastão <em>é</em> SDD. Aqui a gente formaliza, soma TDD e BDD, e mostra por que teste é a melhor coleira de alucinação que existe.</p></blockquote>
 
 <hr>
 
@@ -16,7 +16,7 @@
 
 <h2>Parte 1 · SDD — dirigir por especificação</h2>
 
-<p><strong>Spec-Driven Development</strong>: o humano escreve a <em>especificação</em>; a IA a executa. O código deixa de ser a fonte da verdade — a spec é. É exatamente o fluxo do artigo 12: o PO recorta o problema, o Tech trava o “como”, e só então o Dev implementa <em>obedecendo</em> ao documento.</p>
+<p><strong>Spec-Driven Development</strong>: o humano escreve a <em>especificação</em>; a IA a executa. O código deixa de ser a fonte da verdade — a spec é. É exatamente o fluxo do artigo 15: o PO recorta o problema, o Tech trava o “como”, e só então o Dev implementa <em>obedecendo</em> ao documento.</p>
 
 <p>Uma boa spec para a IA tem quatro coisas: <strong>escopo</strong> (e o fora de escopo, honesto), <strong>contrato</strong> (assinaturas, estados, erros), <strong>dados</strong> e <strong>critérios de pronto</strong>. Com ela no disco, o prompt fica curto e o agente não precisa adivinhar.</p>
 
@@ -65,7 +65,7 @@ class SolicitarResetTest {
 
 <p>Só então o prompt para a IA: <em>“faça <code>SolicitarResetTest</code> passar com o mínimo; não adicione comportamento fora do teste”</em>. O modelo implementa contra um alvo que ou está verde ou não está — sem espaço para plausibilidade.</p>
 
-<blockquote><p>🔗 <strong>Ligação:</strong> tudo do artigo 11 vale aqui — <code>runTest</code> + Turbine para o ViewModel, fakes em vez de mocks, domínio puro testado sem Android. TDD é só a <em>ordem</em> em que você escreve; a caixa de ferramentas é a mesma.</p></blockquote>
+<blockquote><p>🔗 <strong>Ligação:</strong> tudo do artigo 14 vale aqui — <code>runTest</code> + Turbine para o ViewModel, fakes em vez de mocks, domínio puro testado sem Android. TDD é só a <em>ordem</em> em que você escreve; a caixa de ferramentas é a mesma.</p></blockquote>
 
 <blockquote><p>⚠️ <strong>Pegadinha — deixar a IA escrever teste E código de uma vez:</strong> se o mesmo passo gera o teste e a implementação, o teste vira espelho do código (passa sempre, prova nada). Escreva/revise o teste <strong>você</strong>; deixe a implementação para a IA. O valor do TDD está no teste vir <em>antes</em> e de uma fonte independente.</p></blockquote>
 
@@ -77,7 +77,7 @@ class SolicitarResetTest {
 
 <p><img src="../assets/bdd-gherkin.svg" alt="Um cenário Given-When-Then à esquerda em linguagem de negócio e o teste Compose correspondente à direita, ligados passo a passo. À esquerda, Feature divisão de contas, total por pessoa: Given uma mesa com duas pessoas, And um item de quarenta reais dividido entre elas, When abro os totais, Then cada pessoa deve vinte reais. À direita, o teste em Kotlin e Compose onde cada passo mapeia num Robot: robot monta mesa com duas pessoas e adiciona item de quarenta, robot abre totais, robot verifica que Ana deve vinte. Setas ligam cada passo do cenário à sua chamada no teste. Rodapé: um artefato, três leitores, o PO aprova a frase, o dev implementa o Robot, a IA recebe um alvo sem ambiguidade."></p>
 
-<p>O Given-When-Then casa perfeitamente com o <strong>Robot Pattern + AAA</strong> do artigo 11: <em>Given/And</em> é o <code>arrange</code>, <em>When</em> é a <code>action</code>, <em>Then</em> é o <code>assert</code>. O cenário legível vira teste sem fricção.</p>
+<p>O Given-When-Then casa perfeitamente com o <strong>Robot Pattern + AAA</strong> do artigo 14: <em>Given/And</em> é o <code>arrange</code>, <em>When</em> é a <code>action</code>, <em>Then</em> é o <code>assert</code>. O cenário legível vira teste sem fricção.</p>
 
 <pre><code class="language-kotlin">@Test fun `total por pessoa divide o item entre participantes`() {
     RachaRobot(compose)
@@ -133,10 +133,10 @@ class SolicitarResetTest {
 <table>
   <thead><tr><th>Padrão</th><th>O que traz para o trabalho com IA</th></tr></thead>
   <tbody>
-    <tr><td><strong>DDD</strong> (Domain-Driven Design)</td><td>A <em>linguagem ubíqua</em> — os termos do negócio viram nomes no código e alimentam os cenários BDD. Liga direto ao domínio puro do artigo 09.</td></tr>
-    <tr><td><strong>Clean / Hexagonal</strong></td><td>Fronteiras claras (a Regra da Dependência do artigo 09) dão à IA um alvo pequeno e testável por vez, em vez do app inteiro.</td></tr>
+    <tr><td><strong>DDD</strong> (Domain-Driven Design)</td><td>A <em>linguagem ubíqua</em> — os termos do negócio viram nomes no código e alimentam os cenários BDD. Liga direto ao domínio puro do artigo 12.</td></tr>
+    <tr><td><strong>Clean / Hexagonal</strong></td><td>Fronteiras claras (a Regra da Dependência do artigo 12) dão à IA um alvo pequeno e testável por vez, em vez do app inteiro.</td></tr>
     <tr><td><strong>Contract testing</strong></td><td>Fixa o contrato da API (ex.: MockWebServer, Pact) para a IA não “inventar” campos de JSON que o backend não devolve.</td></tr>
-    <tr><td><strong>Conventional Commits + trunk-based</strong></td><td>Um commit por intenção, mensagem padronizada (liga ao artigo 06). Diffs pequenos = revisão possível do código gerado.</td></tr>
+    <tr><td><strong>Conventional Commits + trunk-based</strong></td><td>Um commit por intenção, mensagem padronizada (liga ao artigo 09). Diffs pequenos = revisão possível do código gerado.</td></tr>
     <tr><td><strong>Pair programming com IA</strong></td><td>Você é o navegador (decide o alvo, revisa), a IA é o motorista (digita). Nunca o contrário.</td></tr>
   </tbody>
 </table>

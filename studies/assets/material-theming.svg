@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="mt" markerWidth="11" markerHeight="11" refX="7" refY="3.2" orient="auto"><path d="M0 0 L7.5 3.2 L0 6.4 z" fill="#94A3B8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="800" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">MaterialTheme: os 3 pilares que todo componente lê</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">um <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">Button</tspan> n&#227;o tem cor pr&#243;pria &#8212; ele <tspan fill="#B7BFC7">pergunta ao tema</tspan>. Troque o tema, o app inteiro muda.</text>
+
+  <!-- Color -->
+  <rect x="30" y="82" width="234" height="212" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.4"/>
+  <text x="147" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#E8A15C">colorScheme</text>
+  <text x="147" y="125" text-anchor="middle" font-size="10" fill="#C9A97E">papéis, não cores fixas</text>
+  <g>
+    <rect x="46" y="138" width="94" height="26" rx="5" fill="#6750A4"/><text x="93" y="155" text-anchor="middle" font-size="9.5" fill="#fff">primary</text>
+    <rect x="146" y="138" width="102" height="26" rx="5" fill="#EADDFF"/><text x="197" y="155" text-anchor="middle" font-size="9.5" fill="#21005D">onPrimary/ct</text>
+    <rect x="46" y="168" width="94" height="26" rx="5" fill="#625B71"/><text x="93" y="185" text-anchor="middle" font-size="9.5" fill="#fff">secondary</text>
+    <rect x="146" y="168" width="102" height="26" rx="5" fill="#7D5260"/><text x="197" y="185" text-anchor="middle" font-size="9.5" fill="#fff">tertiary</text>
+    <rect x="46" y="198" width="202" height="26" rx="5" fill="#1C1B1F" stroke="#49454F"/><text x="147" y="215" text-anchor="middle" font-size="9.5" fill="#E6E1E5">surface / onSurface</text>
+    <rect x="46" y="228" width="202" height="26" rx="5" fill="#B3261E"/><text x="147" y="245" text-anchor="middle" font-size="9.5" fill="#fff">error / onError</text>
+  </g>
+  <text x="147" y="274" text-anchor="middle" font-size="9.5" fill="#C9A97E">Dynamic Color (Android 12+):</text>
+  <text x="147" y="288" text-anchor="middle" font-size="9.5" fill="#C9A97E">paleta gerada do papel de parede</text>
+
+  <!-- Typography -->
+  <rect x="283" y="82" width="234" height="212" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.4"/>
+  <text x="400" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">typography</text>
+  <text x="400" y="125" text-anchor="middle" font-size="10" fill="#9DBDB6">a escala tipogr&#225;fica (type scale)</text>
+  <text x="300" y="152" font-size="17" font-weight="700" fill="#DFE1E5">Display</text>
+  <text x="300" y="176" font-size="14" font-weight="700" fill="#DFE1E5">Headline</text>
+  <text x="300" y="198" font-size="12.5" font-weight="600" fill="#CDD3DA">Title</text>
+  <text x="300" y="218" font-size="11" fill="#AAB6C0">Body &#8212; o texto de leitura padr&#227;o do app</text>
+  <text x="300" y="236" font-size="9.5" font-weight="600" fill="#8A97A3">LABEL &#183; BOT&#213;ES E CHIPS</text>
+  <line x1="300" y1="248" x2="500" y2="248" stroke="#3B6B47"/>
+  <text x="400" y="268" text-anchor="middle" font-size="9.5" fill="#9DBDB6">cada papel tem tamanho, peso e</text>
+  <text x="400" y="282" text-anchor="middle" font-size="9.5" fill="#9DBDB6">espa&#231;amento definidos &#8212; consist&#234;ncia</text>
+
+  <!-- Shape -->
+  <rect x="536" y="82" width="234" height="212" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="653" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">shapes</text>
+  <text x="653" y="125" text-anchor="middle" font-size="10" fill="#AAB6C0">cantos por tamanho de componente</text>
+  <rect x="560" y="140" width="60" height="48" rx="4" fill="#22273F" stroke="#4650A0"/><text x="590" y="205" text-anchor="middle" font-size="9" fill="#AAB6C0">small 4dp</text>
+  <rect x="626" y="140" width="60" height="48" rx="12" fill="#22273F" stroke="#4650A0"/><text x="656" y="205" text-anchor="middle" font-size="9" fill="#AAB6C0">medium 12dp</text>
+  <rect x="692" y="140" width="60" height="48" rx="20" fill="#22273F" stroke="#4650A0"/><text x="722" y="205" text-anchor="middle" font-size="9" fill="#AAB6C0">large 20dp</text>
+  <text x="653" y="240" text-anchor="middle" font-size="9.5" fill="#AAB6C0">chips usam small; cards, medium;</text>
+  <text x="653" y="254" text-anchor="middle" font-size="9.5" fill="#AAB6C0">bottom sheets, large</text>
+  <text x="653" y="280" text-anchor="middle" font-size="9.5" fill="#8A97A3">+ elevação por tonal color</text>
+
+  <!-- consumo -->
+  <rect x="30" y="312" width="740" height="70" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="50" y="335" font-size="11.5" font-weight="700" fill="#DFE1E5">Como um componente consome:</text>
+  <text x="50" y="357" font-family="ui-monospace,monospace" font-size="10.5" fill="#A9B7C6">Text(<tspan fill="#6A8759">&quot;Ol&#225;&quot;</tspan>, color = MaterialTheme.colorScheme.<tspan fill="#E8A15C">primary</tspan>, style = MaterialTheme.typography.<tspan fill="#8ECB98">headlineMedium</tspan>)</text>
+  <text x="50" y="374" font-size="9.5" fill="#8A97A3">nunca <tspan font-family="ui-monospace,monospace" fill="#E0928A">Color(0xFF6750A4)</tspan> cravado no componente &#8212; isso quebra tema escuro, dynamic color e acessibilidade</text>
+</svg>
