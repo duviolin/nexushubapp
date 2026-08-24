@@ -118,31 +118,95 @@ const index = `<!doctype html>
 <link rel="stylesheet" href="pages/style.css">
 </head>
 <body class="home">
-<main class="home-main">
-  <header class="hero">
-    <span class="hero-badge">🎓 Trilha de estudos · projeto NexusHub</span>
-    <h1>Android <span>nativo</span>, do build à Play Store</h1>
-    <p>Os <strong>${articles.length} artigos</strong> que sustentam a construção do <strong>NexusHub</strong> — um app real de portfólio. Cada tema no nível que um <em>especialista</em> precisa saber, do motor de build à publicação. Leitura em sequência: comece pelo topo e siga a numeração.</p>
+<main class="home-main pf">
+
+  <header class="pf-hero">
+    <div>
+      <span class="pf-hero-badge">👨‍💻 Portfólio · Android Specialist em formação</span>
+      <h1>Eduardo <span>Lima</span></h1>
+      <p class="pf-role">Senior Android Developer</p>
+      <p>Engenheiro de computação com <strong>8+ anos</strong> de software, hoje construindo produtos financeiros de grande escala na <strong>Zup Innovation</strong> (projeto <strong>Banco Itaú</strong>). Aqui documento, em público, minha jornada rumo a <strong>especialista Android</strong> — estudando com IA e construindo um app de verdade do zero à Play Store.</p>
+      <div class="pf-cta">
+        <a class="pf-btn primary" href="#trilha">📚 Ver a trilha de estudos</a>
+        <a class="pf-btn ghost" href="https://www.linkedin.com/in/eduardolima384" target="_blank" rel="noopener">in · LinkedIn</a>
+        <a class="pf-btn ghost" href="https://github.com/duviolin" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <figure class="pf-portrait">
+      <img src="assets/fotos/terno.jpeg" alt="Retrato de Eduardo Lima Nascimento">
+      <figcaption><strong>Eduardo Lima Nascimento</strong> · Tucuruí, PA 🇧🇷</figcaption>
+    </figure>
   </header>
 
-  <section class="intro">
-    <div class="intro-head">
-      <h2>O projeto: <span>NexusHub</span></h2>
-      <p>Um <strong>leitor editorial de notícias técnicas com IA on-device</strong>: agrega Hacker News, NewsAPI, RSS e artigos salvos num feed calmo e legível, e usa <strong>Gemini Nano</strong> para resumir artigos <em>localmente</em>, sem enviar dados à nuvem. Premium, adaptativo (celular → tablet/foldable) e acessível. Esta trilha é o <strong>companheiro de estudo</strong> por trás dele.</p>
+  <div class="pf-journey">
+    <h3>A jornada: virar <span>especialista</span> estudando com IA 🤖</h3>
+    <p>Em vez de guardar o aprendizado na gaveta, escrevo tudo em público: <strong>${articles.length} artigos</strong> do nível iniciante ao especialista, com diagramas autorais, e um app real (o <strong>NexusHub</strong>) sendo construído fase a fase. Se você também quer subir de nível em Android — ou ver como a IA acelera engenharia de verdade — <strong>acompanhe a jornada</strong>.</p>
+    <div class="pf-cta" style="justify-content:center"><a class="pf-btn primary" href="#trilha">Começar pela trilha →</a></div>
+  </div>
+
+  <section class="pf-section" id="sobre">
+    <span class="pf-eyebrow">Sobre mim</span>
+    <h2 class="pf-h2">Quem está por <span>trás</span></h2>
+    <div class="pf-about">
+      <div>
+        <h3>No trabalho</h3>
+        <p>Senior Android Developer na <strong>Zup Innovation</strong>, desenvolvendo para o <strong>Banco Itaú</strong>. Construí do zero o módulo Android de <strong>Parcelamento Total de Faturas</strong> do app Itaú — da arquitetura à implementação, com autenticação, integrações, analytics, observabilidade e feature flags. Foco em <strong>Kotlin, Jetpack Compose, Clean Architecture/MVVM, acessibilidade</strong> e IA aplicada à engenharia. Também sou mentor do <strong>Campus Mobile</strong> (Claro + USP).</p>
+        <h3>Fora do teclado</h3>
+        <p>Amo <strong>tocar violino</strong>, e viver ao ar livre: <strong>natação, pedal, corrida</strong> e manobras radicais de <strong>BMX</strong>. Nas horas boas, uma <strong>cervejinha gelada</strong> e um <strong>bom churrasco</strong>. E o mais importante — tempo de qualidade com minha <strong>esposa e família</strong> (e o gato <strong>Will</strong> 🐱).</p>
+        <div class="pf-tags">
+          <span class="pf-tag">🎻 Violino</span><span class="pf-tag">🏊 Natação</span><span class="pf-tag">🚴 Pedal</span><span class="pf-tag">🏃 Corrida</span><span class="pf-tag">🚵 BMX</span><span class="pf-tag">🍺 Cerveja</span><span class="pf-tag">🔥 Churrasco</span><span class="pf-tag">🐱 Will</span>
+        </div>
+      </div>
+      <div class="pf-gallery">
+        <a class="pf-photo big" href="assets/fotos/violino.jpeg" target="_blank"><img src="assets/fotos/violino.jpeg" alt="Eduardo com o violino"><span>🎻 Violino</span></a>
+        <a class="pf-photo" href="assets/fotos/pedal.jpeg" target="_blank"><img src="assets/fotos/pedal.jpeg" alt="Eduardo pedalando"><span>🚴 Pedal</span></a>
+        <a class="pf-photo" href="assets/fotos/cerveja.jpeg" target="_blank"><img src="assets/fotos/cerveja.jpeg" alt="Eduardo com uma cerveja"><span>🍺 &amp; churrasco</span></a>
+        <a class="pf-photo" href="assets/fotos/terno.jpeg" target="_blank"><img src="assets/fotos/terno.jpeg" alt="Eduardo de terno"><span>✨ Momentos</span></a>
+        <a class="pf-photo" href="assets/fotos/street.jpeg" target="_blank"><img src="assets/fotos/street.jpeg" alt="Eduardo na rua"><span>🎨 Por aí</span></a>
+      </div>
     </div>
-    <div class="intro-grid">
-      <div class="intro-card"><h3>🎯 Objetivo</h3><p>Consolidar a maestria <strong>Senior Android Specialist</strong> na prática — escrever o código fase a fase, do zero à <strong>publicação na Play Store</strong>.</p></div>
-      <div class="intro-card"><h3>📱 O produto</h3><p>Telas núcleo (Feed, Reader, Filtros, Perfil, Login), estados de tela cheia, sumário por IA e layout <strong>adaptativo</strong> — em dark &amp; light.</p></div>
-      <div class="intro-card"><h3>🎨 Design é a fonte da verdade</h3><p>A identidade <strong>NexusUI</strong> (grafite quente, acento âmbar, manchetes serifadas, zero gradiente) vive em ~40 artboards de alta fidelidade que o Compose persegue pixel a pixel.</p></div>
-      <div class="intro-card"><h3>📚 Estes 17 artigos</h3><p>A teoria-base de cada fase — Gradle, IDE, Compose, arquitetura, testes, IA — do <strong>iniciante ao especialista</strong>, com diagramas autorais.</p></div>
-    </div>
-    <p class="intro-note"><strong>Stack:</strong> Kotlin 2 · Jetpack Compose · MVI + Clean Architecture · multi-módulo + Version Catalog · Gemini Nano · Room/WorkManager/Paging · Firebase · Baseline Profiles · &nbsp;·&nbsp; <a href="https://github.com/duviolin/nexushubapp" target="_blank" rel="noopener">Código no GitHub</a> · <a href="https://github.com/duviolin/nexushubapp/blob/main/NEXUS_HUB_ROADMAP.md" target="_blank" rel="noopener">Roadmap (11 fases)</a></p>
   </section>
 
-  <h2 class="grid-title">A trilha · <span>${articles.length} artigos</span></h2>
-  <section class="grid">
-${cards}
+  <section class="pf-section" id="projetos">
+    <span class="pf-eyebrow">Projetos</span>
+    <h2 class="pf-h2">O que estou <span>construindo</span></h2>
+
+    <div class="pf-project">
+      <div class="pf-project-head"><h3>🛡️ NexusHub</h3><span class="pf-chip">Android nativo · em construção</span></div>
+      <p>Um <strong>leitor editorial de notícias técnicas com IA on-device</strong>: agrega Hacker News, NewsAPI, RSS e artigos salvos num feed calmo e legível, e usa <strong>Gemini Nano</strong> para resumir artigos <em>localmente</em>, sem enviar dados à nuvem. Design-first (identidade <strong>NexusUI</strong>), adaptativo e acessível. As telas abaixo são o design de alta fidelidade que o Compose persegue pixel a pixel:</p>
+      <div class="pf-phones">
+        <div class="phone"><div class="phone-frame"><iframe src="design/Main.html" loading="lazy" title="Feed"></iframe></div><div class="phone-cap"><b>Feed</b>fontes + salvos</div></div>
+        <div class="phone"><div class="phone-frame"><iframe src="design/ReaderAI.html" loading="lazy" title="Reader IA"></iframe></div><div class="phone-cap"><b>Reader · IA</b>sumário on-device</div></div>
+        <div class="phone"><div class="phone-frame"><iframe src="design/Login.html" loading="lazy" title="Login"></iframe></div><div class="phone-cap"><b>Login</b>entrada</div></div>
+        <div class="phone"><div class="phone-frame"><iframe src="design/Profile.html" loading="lazy" title="Perfil"></iframe></div><div class="phone-cap"><b>Perfil</b>conta &amp; ajustes</div></div>
+      </div>
+      <p style="font-size:.92rem"><strong>Stack:</strong> Kotlin 2 · Jetpack Compose · MVI + Clean Architecture · multi-módulo + Version Catalog · Gemini Nano · Room/WorkManager/Paging · Firebase · Baseline Profiles.</p>
+      <div class="pf-project-links">
+        <a class="pf-btn primary" href="#trilha">📚 A trilha por trás →</a>
+        <a class="pf-btn ghost" href="https://github.com/duviolin/nexushubapp" target="_blank" rel="noopener">Código</a>
+        <a class="pf-btn ghost" href="https://github.com/duviolin/nexushubapp/blob/main/NEXUS_HUB_ROADMAP.md" target="_blank" rel="noopener">Roadmap (11 fases)</a>
+      </div>
+    </div>
+
+    <div class="pf-project">
+      <div class="pf-project-head"><h3>🎼 Clave</h3><span class="pf-chip">Plataforma · em produção</span></div>
+      <p><strong>Plataforma educacional</strong> completa — app <strong>Flutter</strong> + backend <strong>Node.js/Express</strong> com Prisma/PostgreSQL, dashboard e deploy contínuo. Um projeto de ponta a ponta (mobile + API + infra + CI/CD), mostrando que a régua de engenharia vale além do Android.</p>
+      <p style="font-size:.92rem"><strong>Stack:</strong> Flutter · Riverpod · Retrofit · Node 22 · Express · Prisma · PostgreSQL · GitHub Actions · Coolify/Railway.</p>
+      <div class="pf-project-links">
+        <a class="pf-btn primary" href="https://clavedesales.com.br" target="_blank" rel="noopener">Visitar clavedesales.com.br →</a>
+      </div>
+    </div>
   </section>
+
+  <section class="pf-section" id="trilha">
+    <span class="pf-eyebrow">Trilha de estudos</span>
+    <h2 class="pf-h2">Android nativo · <span>${articles.length} artigos</span></h2>
+    <p class="pf-sub">Do motor de build à publicação na loja — cada tema no nível que um especialista precisa saber, com diagramas autorais. Leitura em sequência: comece pelo topo e siga a numeração.</p>
+    <section class="grid">
+${cards}
+    </section>
+  </section>
+
   <footer class="site-disclaimer">${DISCLAIMER}</footer>
 </main>
 </body>

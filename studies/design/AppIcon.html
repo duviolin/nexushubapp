@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: #E8B86D; } a:hover { color: #f0c98a; }
+    .serif { font-family: "Newsreader", Georgia, serif; }
+    .sans { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+    .sect { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(232,184,109,0.7); margin-bottom: 16px; }
+    .cap { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; letter-spacing: 0.05em; opacity: 0.55; margin-top: 10px; text-align:center; }
+    .panel { background: #1C1B18; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; }
+  </style>
+</helmet>
+
+<div class="sans" style="width: 1500px; height: 1120px; background: #12110F; color: #EDE6D9; padding: 52px 56px; position: relative; overflow: hidden;">
+
+  <div style="display: flex; align-items: baseline; gap: 16px;">
+    <span class="serif" style="font-size: 42px; font-weight: 600;">Ícone adaptativo</span>
+    <span class="mono" style="font-size: 13px; color: #E8B86D; letter-spacing: 0.1em;">Android · fg + bg · 108dp</span>
+  </div>
+  <div class="serif" style="font-size: 19px; line-height: 1.5; color: rgba(237,230,217,0.72); margin-top: 14px; max-width: 1040px;">
+    Duas camadas de 108×108dp. O símbolo vive dentro do círculo de segurança de 66dp, então sobrevive a qualquer máscara do launcher. Sem texto no ícone — só o hub.
+  </div>
+
+  <!-- layers row -->
+  <div style="margin-top:36px;" class="sect">Camadas</div>
+  <div style="display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:20px;">
+    <!-- background -->
+    <div class="panel" style="padding:26px; display:flex; flex-direction:column; align-items:center;">
+      <div style="width:180px; height:180px; border-radius:14px; background:#12110F; border:1px solid rgba(255,255,255,0.08);"></div>
+      <div class="cap">bg · #12110F sólido</div>
+    </div>
+    <!-- foreground -->
+    <div class="panel" style="padding:26px; display:flex; flex-direction:column; align-items:center;">
+      <div style="width:180px; height:180px; border-radius:14px; border:1px dashed rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; position:relative;">
+        <svg width="96" height="96" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg>
+      </div>
+      <div class="cap">fg · símbolo transparente</div>
+    </div>
+    <!-- safe zone -->
+    <div class="panel" style="padding:26px; display:flex; flex-direction:column; align-items:center;">
+      <div style="width:180px; height:180px; border-radius:14px; background:#12110F; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+        <div style="position:absolute; width:110px; height:110px; border-radius:50%; border:1px dashed rgba(232,184,109,0.5);"></div>
+        <div style="position:absolute; inset:0; border:14px solid rgba(196,89,62,0.14);"></div>
+        <svg width="96" height="96" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg>
+      </div>
+      <div class="cap">safe-zone 66dp + bleed 18dp</div>
+    </div>
+    <!-- composed -->
+    <div class="panel" style="padding:26px; display:flex; flex-direction:column; align-items:center;">
+      <div style="width:180px; height:180px; border-radius:40px; background:#12110F; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 28px rgba(0,0,0,0.5);">
+        <svg width="98" height="98" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg>
+      </div>
+      <div class="cap">composto</div>
+    </div>
+  </div>
+
+  <!-- masks -->
+  <div style="margin-top:40px;" class="sect">Máscaras do launcher (mesmo par de camadas)</div>
+  <div style="display:flex; gap:34px; align-items:flex-start;">
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:128px; height:128px; border-radius:50%; background:#12110F; display:flex; align-items:center; justify-content:center;"><svg width="70" height="70" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg></div>
+      <div class="cap">círculo</div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:128px; height:128px; border-radius:42px; background:#12110F; display:flex; align-items:center; justify-content:center;"><svg width="70" height="70" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg></div>
+      <div class="cap">squircle</div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:128px; height:128px; border-radius:26px; background:#12110F; display:flex; align-items:center; justify-content:center;"><svg width="70" height="70" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg></div>
+      <div class="cap">rounded square</div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:128px; height:128px; border-radius:8px; background:#12110F; display:flex; align-items:center; justify-content:center;"><svg width="70" height="70" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg></div>
+      <div class="cap">square</div>
+    </div>
+
+    <!-- divider + play store 512 -->
+    <div style="width:1px; align-self:stretch; background:rgba(255,255,255,0.08); margin:0 6px;"></div>
+    <div style="display:flex; flex-direction:column; align-items:center;">
+      <div style="width:200px; height:200px; border-radius:44px; background:#12110F; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 34px rgba(0,0,0,0.55);"><svg width="112" height="112" viewBox="0 0 96 96" fill="none"><line x1="48" y1="48" x2="24" y2="26" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="24" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="24" y2="70" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><line x1="48" y1="48" x2="72" y2="72" stroke="#E8B86D" stroke-width="3" stroke-opacity="0.5"/><circle cx="24" cy="26" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="24" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="24" cy="70" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="72" cy="72" r="6.5" fill="#12110F" stroke="#E8B86D" stroke-width="3"/><circle cx="48" cy="48" r="12" fill="#E8B86D"/></svg></div>
+      <div class="cap" style="color:rgba(232,184,109,0.75);">Play Store · 512×512 hi-res</div>
+    </div>
+  </div>
+
+  <!-- export note -->
+  <div style="margin-top:36px; display:flex; gap:14px; align-items:flex-start;">
+    <div class="sect" style="margin:0; white-space:nowrap;">Export</div>
+    <div class="sans" style="font-size:13.5px; line-height:1.6; color:rgba(237,230,217,0.6); max-width:1100px;">
+      <span class="mono" style="color:#E8B86D;">ic_launcher_background</span> = retângulo sólido #12110F · <span class="mono" style="color:#E8B86D;">ic_launcher_foreground</span> = o símbolo centralizado, ~52dp, dentro do círculo de 66dp. Gerar mipmaps (mdpi→xxxhdpi) + <span class="mono" style="color:#E8B86D;">ic_launcher_monochrome</span> (o mesmo path em marfim, para os temas do Android 13+). PNG 512 para a ficha.
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

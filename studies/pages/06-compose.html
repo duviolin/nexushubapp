@@ -131,7 +131,7 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 
 <h3>Responsivo de verdade: BoxWithConstraints e intrinsics</h3>
 
-<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>07 · Material</strong> e às Window Size Classes do <strong>03</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
+<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>07 · Material</strong> e às Window Size Classes do <strong>04</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
 
 <pre><code class="language-kotlin">BoxWithConstraints {
     if (maxWidth &lt; 600.dp) ListaEmColuna()      // celular
