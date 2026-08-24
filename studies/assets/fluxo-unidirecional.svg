@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="arg" markerWidth="11" markerHeight="11" refX="7" refY="3.2" orient="auto"><path d="M0 0 L7.5 3.2 L0 6.4 z" fill="#8ECB98"/></marker>
+    <marker id="arb" markerWidth="11" markerHeight="11" refX="7" refY="3.2" orient="auto"><path d="M0 0 L7.5 3.2 L0 6.4 z" fill="#AEB7F2"/></marker>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="780" height="430" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Fluxo unidirecional: estado desce, evento sobe</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">um sentido só — por isso a tela vira <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">f(estado)</tspan>, previsível e testável</text>
+
+  <!-- ViewModel -->
+  <rect x="250" y="86" width="280" height="78" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="390" y="112" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">ViewModel</text>
+  <text x="390" y="132" text-anchor="middle" font-size="10.5" fill="#AAB6C0">expõe <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">StateFlow&lt;UiState&gt;</tspan></text>
+  <text x="390" y="149" text-anchor="middle" font-size="10.5" fill="#AAB6C0">reduce: evento → novo estado imutável</text>
+
+  <!-- Composable -->
+  <rect x="250" y="266" width="280" height="78" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="390" y="292" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">Composable (UI)</text>
+  <text x="390" y="312" text-anchor="middle" font-size="10.5" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace" fill="#B7BFC7">collectAsStateWithLifecycle()</tspan></text>
+  <text x="390" y="329" text-anchor="middle" font-size="10.5" fill="#9DBDB6">recompõe quando o estado muda</text>
+
+  <!-- state down (left) -->
+  <path d="M300 164 C 210 195, 210 235, 300 266" fill="none" stroke="#8ECB98" stroke-width="2.2" marker-end="url(#arg)"/>
+  <text x="150" y="212" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ECB98">estado desce ↓</text>
+  <text x="150" y="230" text-anchor="middle" font-size="10" fill="#9DBDB6">UiState (dados prontos</text>
+  <text x="150" y="244" text-anchor="middle" font-size="10" fill="#9DBDB6">para desenhar)</text>
+
+  <!-- event up (right) -->
+  <path d="M480 266 C 570 235, 570 195, 480 164" fill="none" stroke="#AEB7F2" stroke-width="2.2" marker-end="url(#arb)"/>
+  <text x="630" y="212" text-anchor="middle" font-size="11.5" font-weight="700" fill="#AEB7F2">evento sobe ↑</text>
+  <text x="630" y="230" text-anchor="middle" font-size="10" fill="#AAB6C0">onClick, onType…</text>
+  <text x="630" y="244" text-anchor="middle" font-size="10" fill="#AAB6C0">(uma lambda)</text>
+
+  <!-- state hoisting strip -->
+  <rect x="36" y="360" width="708" height="58" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="52" y="381" font-size="11.5" font-weight="700" fill="#DFE1E5">State hoisting — quem segura o estado:</text>
+  <rect x="52" y="388" width="330" height="22" rx="6" fill="#22273F" stroke="#4650A0"/>
+  <text x="62" y="403" font-size="10" fill="#AEB7F2"><tspan font-weight="700">Screen (rota)</tspan> conecta o ViewModel e coleta o estado</text>
+  <rect x="392" y="388" width="342" height="22" rx="6" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="402" y="403" font-size="10" fill="#8ECB98"><tspan font-weight="700">Content (stateless)</tspan> só recebe estado + lambdas → fácil de testar/preview</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="11" markerHeight="11" refX="7" refY="3.2" orient="auto"><path d="M0 0 L7.5 3.2 L0 6.4 z" fill="#7FC9BD"/></marker></defs>
+  <rect x="0" y="0" width="780" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O ciclo virtuoso: um habilita o outro</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">não são três projetos separados — são três lados do mesmo hábito</text>
+
+  <!-- three nodes in a triangle -->
+  <!-- node A: arquitetura (top) -->
+  <rect x="290" y="82" width="200" height="72" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="390" y="110" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">Arquitetura limpa</text>
+  <text x="390" y="129" text-anchor="middle" font-size="10.5" fill="#AAB6C0">camadas · injeção de dependência</text>
+  <text x="390" y="144" text-anchor="middle" font-size="10.5" fill="#AAB6C0">ViewModel isolado · Compose stateless</text>
+
+  <!-- node B: testes (bottom right) -->
+  <rect x="486" y="248" width="200" height="72" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="586" y="276" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">Testes rápidos</text>
+  <text x="586" y="295" text-anchor="middle" font-size="10.5" fill="#9DBDB6">isolados · na JVM · confiáveis</text>
+  <text x="586" y="310" text-anchor="middle" font-size="10.5" fill="#9DBDB6">a base larga da pirâmide</text>
+
+  <!-- node C: modularização (bottom left) -->
+  <rect x="94" y="248" width="200" height="72" rx="12" fill="#3C3420" stroke="#D97706" stroke-width="1.6"/>
+  <text x="194" y="276" text-anchor="middle" font-size="14" font-weight="700" fill="#E3AE72">Modularização</text>
+  <text x="194" y="295" text-anchor="middle" font-size="10.5" fill="#D9C4A0">:core · :data · :feature-x</text>
+  <text x="194" y="310" text-anchor="middle" font-size="10.5" fill="#D9C4A0">build incremental · paralelo</text>
+
+  <!-- arrows around the cycle -->
+  <!-- A -> B -->
+  <path d="M486 130 C 600 150, 640 200, 610 244" fill="none" stroke="#7FC9BD" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="612" y="182" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7FC9BD">camadas &amp; injeção</text>
+  <text x="612" y="197" text-anchor="middle" font-size="10.5" fill="#9DBDB6">tornam tudo testável</text>
+
+  <!-- B -> C -->
+  <path d="M484 288 H 296" fill="none" stroke="#7FC9BD" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="390" y="278" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7FC9BD">fronteiras testadas</text>
+  <text x="390" y="304" text-anchor="middle" font-size="10.5" fill="#9DBDB6">dão segurança pra separar em módulos</text>
+
+  <!-- C -> A -->
+  <path d="M170 244 C 140 200, 180 150, 294 130" fill="none" stroke="#7FC9BD" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="168" y="182" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7FC9BD">módulos forçam</text>
+  <text x="168" y="197" text-anchor="middle" font-size="10.5" fill="#9DBDB6">fronteiras limpas</text>
+
+  <!-- center label -->
+  <text x="390" y="212" text-anchor="middle" font-size="12" font-weight="700" fill="#DFE1E5">testabilidade</text>
+  <text x="390" y="228" text-anchor="middle" font-size="10.5" fill="#8A97A3">é consequência, não esforço à parte</text>
+</svg>

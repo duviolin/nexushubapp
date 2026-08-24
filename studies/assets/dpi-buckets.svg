@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 360" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="360" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Os “baldes” de densidade — o mesmo ícone de 24dp</text>
+  <text x="390" y="62" text-anchor="middle" font-size="14" fill="#8A97A3">Você desenha <tspan font-weight="700" fill="#6366F1">24dp uma vez</tspan>. O sistema multiplica os pixels reais conforme a densidade.</text>
+
+  <!-- baseline -->
+  <line x1="50" y1="250" x2="730" y2="250" stroke="#525659" stroke-width="1.5"/>
+
+  <!-- mdpi 24px -->
+  <rect x="106" y="226" width="24" height="24" rx="4" fill="#4A5490" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="118" y="278" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">mdpi</text>
+  <text x="118" y="296" text-anchor="middle" font-size="11" fill="#8A97A3">160 dpi</text>
+  <text x="118" y="316" text-anchor="middle" font-size="13" font-weight="700" fill="#6366F1">1×</text>
+  <text x="118" y="334" text-anchor="middle" font-size="11" fill="#94A3B8">= 24 px</text>
+
+  <!-- hdpi 36px -->
+  <rect x="224" y="214" width="36" height="36" rx="5" fill="#B4C0FD" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="242" y="278" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">hdpi</text>
+  <text x="242" y="296" text-anchor="middle" font-size="11" fill="#8A97A3">240 dpi</text>
+  <text x="242" y="316" text-anchor="middle" font-size="13" font-weight="700" fill="#6366F1">1.5×</text>
+  <text x="242" y="334" text-anchor="middle" font-size="11" fill="#94A3B8">= 36 px</text>
+
+  <!-- xhdpi 48px -->
+  <rect x="342" y="202" width="48" height="48" rx="6" fill="#9DABFB" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="366" y="278" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">xhdpi</text>
+  <text x="366" y="296" text-anchor="middle" font-size="11" fill="#8A97A3">320 dpi</text>
+  <text x="366" y="316" text-anchor="middle" font-size="13" font-weight="700" fill="#6366F1">2×</text>
+  <text x="366" y="334" text-anchor="middle" font-size="11" fill="#94A3B8">= 48 px</text>
+
+  <!-- xxhdpi 72px -->
+  <rect x="462" y="178" width="72" height="72" rx="8" fill="#8593F9" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="498" y="278" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">xxhdpi</text>
+  <text x="498" y="296" text-anchor="middle" font-size="11" fill="#8A97A3">480 dpi</text>
+  <text x="498" y="316" text-anchor="middle" font-size="13" font-weight="700" fill="#6366F1">3×</text>
+  <text x="498" y="334" text-anchor="middle" font-size="11" fill="#94A3B8">= 72 px</text>
+
+  <!-- xxxhdpi 96px -->
+  <rect x="602" y="154" width="96" height="96" rx="10" fill="#6366F1" stroke="#AEB7F2" stroke-width="1.5"/>
+  <text x="650" y="278" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">xxxhdpi</text>
+  <text x="650" y="296" text-anchor="middle" font-size="11" fill="#8A97A3">640 dpi</text>
+  <text x="650" y="316" text-anchor="middle" font-size="13" font-weight="700" fill="#6366F1">4×</text>
+  <text x="650" y="334" text-anchor="middle" font-size="11" fill="#94A3B8">= 96 px</text>
+
+  <text x="118" y="140" text-anchor="middle" font-size="12" fill="#94A3B8">base</text>
+  <text x="118" y="122" text-anchor="middle" font-size="20" fill="#525659">↓</text>
+</svg>

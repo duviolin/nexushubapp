@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="300" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O fluxo de montagem de um APK</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">O AGP invoca estas “máquinas” do <tspan font-family="'SF Mono',ui-monospace,monospace" font-size="12">build-tools/</tspan> por baixo</text>
+
+  <!-- inputs -->
+  <rect x="30" y="96" width="150" height="46" rx="10" fill="#3C3F41" stroke="#94A3B8" stroke-width="1.3"/>
+  <text x="105" y="115" text-anchor="middle" font-size="12.5" font-weight="700" fill="#B7BFC7">Kotlin / Java</text>
+  <text x="105" y="131" text-anchor="middle" font-size="11" fill="#8A97A3">.kt, .java</text>
+  <rect x="30" y="196" width="150" height="46" rx="10" fill="#3C3F41" stroke="#94A3B8" stroke-width="1.3"/>
+  <text x="105" y="215" text-anchor="middle" font-size="12.5" font-weight="700" fill="#B7BFC7">res/ · XML</text>
+  <text x="105" y="231" text-anchor="middle" font-size="11" fill="#8A97A3">imagens</text>
+
+  <!-- converters -->
+  <line x1="180" y1="119" x2="222" y2="119" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="201" y="112" text-anchor="middle" font-size="10.5" font-weight="600" fill="#6366F1">d8·r8</text>
+  <line x1="180" y1="219" x2="222" y2="219" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="201" y="212" text-anchor="middle" font-size="10.5" font-weight="600" fill="#6366F1">aapt2</text>
+
+  <rect x="225" y="96" width="140" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="295" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">DEX</text>
+  <text x="295" y="131" text-anchor="middle" font-size="11" fill="#AEB7F2">classes.dex</text>
+  <rect x="225" y="196" width="140" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="295" y="215" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">classe R</text>
+  <text x="295" y="231" text-anchor="middle" font-size="11" fill="#AEB7F2">+ resources</text>
+
+  <!-- merge to ZIP -->
+  <path d="M365 119 C 395 119, 400 156, 428 165" fill="none" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <path d="M365 219 C 395 219, 400 182, 428 173" fill="none" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="432" y="146" width="84" height="46" rx="10" fill="#3C3F41" stroke="#DFE1E5" stroke-width="1.4"/>
+  <text x="474" y="174" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">ZIP</text>
+
+  <line x1="516" y1="169" x2="556" y2="169" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="536" y="162" text-anchor="middle" font-size="10.5" font-weight="600" fill="#D97706">zipalign</text>
+  <rect x="560" y="146" width="84" height="46" rx="10" fill="#3C3F41" stroke="#DFE1E5" stroke-width="1.4"/>
+  <text x="602" y="174" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">APK</text>
+
+  <line x1="644" y1="169" x2="672" y2="169" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="658" y="140" text-anchor="middle" font-size="10.5" font-weight="600" fill="#D97706">apk</text>
+  <text x="658" y="152" text-anchor="middle" font-size="10.5" font-weight="600" fill="#D97706">signer</text>
+  <rect x="656" y="146" width="98" height="46" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.5"/>
+  <text x="705" y="167" text-anchor="middle" font-size="12" font-weight="700" fill="#8ECB98">✅ APK</text>
+  <text x="705" y="182" text-anchor="middle" font-size="11" fill="#8ECB98">instalável</text>
+</svg>

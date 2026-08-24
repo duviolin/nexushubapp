@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 424" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="424" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Given-When-Then: a mesma frase vira aceitação, teste e prompt</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">o comportamento em linguagem de negócio · e o teste de UI que ele descreve</text>
+
+  <!-- LEFT: scenario (business) -->
+  <rect x="32" y="82" width="340" height="290" rx="12" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.6"/>
+  <text x="202" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#7FC9BD">CENÁRIO · linguagem do negócio</text>
+  <text x="202" y="124" text-anchor="middle" font-size="10" fill="#6FA89C">Feature: divisão de contas — total por pessoa</text>
+
+  <rect x="52" y="140" width="300" height="80" rx="8" fill="#183028" stroke="#356158"/>
+  <text x="66" y="163" font-size="12" font-weight="700" fill="#7FC9BD" font-family="ui-monospace,monospace">Given</text>
+  <text x="120" y="163" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">uma mesa com 2 pessoas</text>
+  <text x="66" y="188" font-size="12" font-weight="700" fill="#7FC9BD" font-family="ui-monospace,monospace">And</text>
+  <text x="120" y="188" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">um item de R$ 40</text>
+  <text x="120" y="206" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">dividido entre elas</text>
+
+  <rect x="52" y="228" width="300" height="50" rx="8" fill="#183028" stroke="#356158"/>
+  <text x="66" y="251" font-size="12" font-weight="700" fill="#7FC9BD" font-family="ui-monospace,monospace">When</text>
+  <text x="120" y="251" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">abro os totais</text>
+  <text x="120" y="269" font-size="10" fill="#6FA89C" font-family="ui-monospace,monospace">a ação sob teste</text>
+
+  <rect x="52" y="286" width="300" height="66" rx="8" fill="#183028" stroke="#356158"/>
+  <text x="66" y="309" font-size="12" font-weight="700" fill="#7FC9BD" font-family="ui-monospace,monospace">Then</text>
+  <text x="120" y="309" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">cada pessoa deve R$ 20</text>
+  <text x="120" y="333" font-size="10" fill="#6FA89C" font-family="ui-monospace,monospace">o resultado observável</text>
+
+  <!-- RIGHT: the test (Compose) -->
+  <rect x="408" y="82" width="340" height="290" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="578" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">TESTE · Compose / Kotlin</text>
+  <text x="578" y="124" text-anchor="middle" font-size="10" fill="#8891C8">cada passo mapeia num Robot (artigo 10)</text>
+
+  <rect x="428" y="140" width="300" height="80" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="442" y="164" font-size="10.5" fill="#AAB6C0" font-family="ui-monospace,monospace">robot.montaMesa(pessoas = 2)</text>
+  <text x="442" y="188" font-size="10.5" fill="#AAB6C0" font-family="ui-monospace,monospace">robot.adicionaItem(</text>
+  <text x="456" y="206" font-size="10.5" fill="#AAB6C0" font-family="ui-monospace,monospace">preco = 40.0)</text>
+
+  <rect x="428" y="228" width="300" height="50" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="442" y="257" font-size="10.5" fill="#AAB6C0" font-family="ui-monospace,monospace">robot.abreTotais()</text>
+
+  <rect x="428" y="286" width="300" height="66" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="442" y="315" font-size="10.5" fill="#AAB6C0" font-family="ui-monospace,monospace">robot.assertTotal(</text>
+  <text x="456" y="333" font-size="10.5" fill="#AAB6C0" font-family="ui-monospace,monospace">pessoa = "Ana", valor = 20.0)</text>
+
+  <!-- mapping arrows -->
+  <line x1="352" y1="180" x2="426" y2="180" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <line x1="352" y1="252" x2="426" y2="252" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <line x1="352" y1="318" x2="426" y2="318" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <!-- bottom -->
+  <text x="390" y="398" text-anchor="middle" font-size="10.5" fill="#8A97A3">um artefato, três leitores: o PO aprova a frase · o dev implementa o Robot · a IA recebe um alvo sem ambiguidade</text>
+</svg>

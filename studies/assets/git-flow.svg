@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 420" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0 0 L6.5 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="420" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Git Flow: cinco tipos de branch</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">o tempo corre para a direita; cada linha é uma branch viva</text>
+
+  <!-- lane labels -->
+  <text x="16" y="104" font-size="12" font-weight="700" fill="#F0899A" font-family="ui-monospace,monospace">main</text>
+  <text x="16" y="164" font-size="12" font-weight="700" fill="#AEB7F2" font-family="ui-monospace,monospace">develop</text>
+  <text x="16" y="234" font-size="12" font-weight="700" fill="#8ECB98" font-family="ui-monospace,monospace">feature/*</text>
+  <text x="16" y="304" font-size="12" font-weight="700" fill="#E3AE72" font-family="ui-monospace,monospace">release/*</text>
+  <text x="16" y="364" font-size="12" font-weight="700" fill="#EC8FBB" font-family="ui-monospace,monospace">hotfix/*</text>
+
+  <!-- lanes -->
+  <line x1="96" y1="100" x2="756" y2="100" stroke="#F0899A" stroke-width="2.2"/>
+  <line x1="96" y1="160" x2="756" y2="160" stroke="#6366F1" stroke-width="2.2"/>
+
+  <!-- main commits -->
+  <circle cx="120" cy="100" r="5" fill="#F0899A"/>
+  <circle cx="470" cy="100" r="5" fill="#F0899A"/><text x="470" y="86" text-anchor="middle" font-size="10" fill="#F0899A" font-family="ui-monospace,monospace">v1.0.0</text>
+  <circle cx="690" cy="100" r="5" fill="#F0899A"/><text x="690" y="86" text-anchor="middle" font-size="10" fill="#F0899A" font-family="ui-monospace,monospace">v1.0.1</text>
+
+  <!-- develop commits -->
+  <circle cx="120" cy="160" r="5" fill="#AEB7F2"/>
+  <circle cx="300" cy="160" r="5" fill="#AEB7F2"/>
+  <circle cx="520" cy="160" r="5" fill="#AEB7F2"/>
+  <circle cx="620" cy="160" r="5" fill="#AEB7F2"/>
+
+  <!-- main -> develop init -->
+  <path d="M120 105 V 155" fill="none" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <!-- feature branch off develop and back -->
+  <path d="M120 160 C 150 230, 180 230, 200 230" fill="none" stroke="#8ECB98" stroke-width="1.8"/>
+  <line x1="200" y1="230" x2="300" y2="230" stroke="#8ECB98" stroke-width="2.2"/>
+  <circle cx="200" cy="230" r="5" fill="#8ECB98"/><circle cx="260" cy="230" r="5" fill="#8ECB98"/>
+  <path d="M300 230 C 320 230, 300 165, 300 160" fill="none" stroke="#8ECB98" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="250" y="252" text-anchor="middle" font-size="10" fill="#8ECB98">nova tela · abre e volta via Pull Request</text>
+
+  <!-- release branch off develop, to main + back to develop -->
+  <path d="M300 160 C 330 300, 360 300, 380 300" fill="none" stroke="#E3AE72" stroke-width="1.8"/>
+  <line x1="380" y1="300" x2="470" y2="300" stroke="#E3AE72" stroke-width="2.2"/>
+  <circle cx="380" cy="300" r="5" fill="#E3AE72"/>
+  <text x="415" y="322" text-anchor="middle" font-size="10" fill="#E3AE72">estabiliza (bump de versão, ajustes finais)</text>
+  <path d="M470 300 C 470 200, 470 130, 470 105" fill="none" stroke="#E3AE72" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M470 300 C 500 300, 520 200, 520 165" fill="none" stroke="#E3AE72" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+
+  <!-- hotfix off main, back to main + develop -->
+  <path d="M470 100 C 500 360, 540 360, 560 360" fill="none" stroke="#EC8FBB" stroke-width="1.8"/>
+  <line x1="560" y1="360" x2="620" y2="360" stroke="#EC8FBB" stroke-width="2.2"/>
+  <circle cx="560" cy="360" r="5" fill="#EC8FBB"/>
+  <text x="590" y="382" text-anchor="middle" font-size="10" fill="#EC8FBB">correção urgente em produção</text>
+  <path d="M620 360 C 660 360, 690 150, 690 105" fill="none" stroke="#EC8FBB" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M620 360 C 640 360, 620 200, 620 165" fill="none" stroke="#EC8FBB" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+
+  <text x="390" y="408" text-anchor="middle" font-size="10.5" fill="#8A97A3">linha cheia = merge para a branch de destino · tracejado = re-merge de volta para <tspan font-family="ui-monospace,monospace">develop</tspan></text>
+</svg>

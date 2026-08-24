@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Window Size Classes — três faixas de largura</text>
+  <text x="390" y="59" text-anchor="middle" font-size="13.5" fill="#8A97A3">Você reage a <tspan font-weight="700" fill="#6366F1">3 faixas</tspan>, não a cada pixel. O corte de <tspan font-weight="700">600dp</tspan> é o mesmo sw600dp do mandato.</text>
+
+  <!-- axis segments -->
+  <rect x="60" y="86" width="280" height="36" rx="6" fill="#22344F"/>
+  <rect x="340" y="86" width="160" height="36" rx="0" fill="#4A5490"/>
+  <rect x="500" y="86" width="220" height="36" rx="6" fill="#3C3556"/>
+  <text x="200" y="109" text-anchor="middle" font-size="13" font-weight="700" fill="#9DB8E8">COMPACT</text>
+  <text x="420" y="109" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">MEDIUM</text>
+  <text x="610" y="109" text-anchor="middle" font-size="13" font-weight="700" fill="#B79BEA">EXPANDED</text>
+
+  <!-- breakpoint markers -->
+  <g stroke="#DFE1E5" stroke-width="1.2" stroke-dasharray="3 3">
+    <line x1="340" y1="80" x2="340" y2="150"/>
+    <line x1="500" y1="80" x2="500" y2="150"/>
+  </g>
+  <text x="60" y="146" font-size="11" font-family="'SF Mono',ui-monospace,monospace" fill="#94A3B8">0</text>
+  <text x="340" y="146" text-anchor="middle" font-size="11.5" font-weight="700" font-family="'SF Mono',ui-monospace,monospace" fill="#DFE1E5">600dp</text>
+  <text x="500" y="146" text-anchor="middle" font-size="11.5" font-weight="700" font-family="'SF Mono',ui-monospace,monospace" fill="#DFE1E5">840dp</text>
+  <text x="720" y="146" text-anchor="end" font-size="11" font-family="'SF Mono',ui-monospace,monospace" fill="#94A3B8">largura →</text>
+
+  <!-- COMPACT mockup: single column + bottom nav -->
+  <rect x="150" y="176" width="100" height="150" rx="10" fill="#3C3F41" stroke="#9DB8E8" stroke-width="1.6"/>
+  <rect x="160" y="186" width="80" height="12" rx="3" fill="#22344F"/>
+  <rect x="160" y="204" width="80" height="18" rx="3" fill="#26344C" stroke="#3A5170"/>
+  <rect x="160" y="228" width="80" height="18" rx="3" fill="#26344C" stroke="#3A5170"/>
+  <rect x="160" y="252" width="80" height="18" rx="3" fill="#26344C" stroke="#3A5170"/>
+  <rect x="150" y="300" width="100" height="26" rx="0" fill="#22344F"/>
+  <circle cx="178" cy="313" r="3" fill="#9DB8E8"/><circle cx="200" cy="313" r="3" fill="#60A5FA"/><circle cx="222" cy="313" r="3" fill="#60A5FA"/>
+  <text x="200" y="352" text-anchor="middle" font-size="12" font-weight="700" fill="#DFE1E5">📱 Telefone retrato</text>
+  <text x="200" y="370" text-anchor="middle" font-size="11.5" fill="#8A97A3">coluna única + nav inferior</text>
+
+  <!-- MEDIUM mockup: rail + list -->
+  <rect x="330" y="182" width="160" height="138" rx="10" fill="#3C3F41" stroke="#AEB7F2" stroke-width="1.6"/>
+  <rect x="330" y="182" width="30" height="138" rx="0" fill="#2E3350"/>
+  <circle cx="345" cy="200" r="4" fill="#AEB7F2"/><circle cx="345" cy="222" r="4" fill="#A5B4FC"/><circle cx="345" cy="244" r="4" fill="#A5B4FC"/>
+  <rect x="372" y="196" width="106" height="20" rx="3" fill="#2E3350" stroke="#4A5490"/>
+  <rect x="372" y="222" width="106" height="20" rx="3" fill="#2E3350" stroke="#4A5490"/>
+  <rect x="372" y="248" width="106" height="20" rx="3" fill="#2E3350" stroke="#4A5490"/>
+  <text x="410" y="352" text-anchor="middle" font-size="12" font-weight="700" fill="#DFE1E5">Tablet peq. / paisagem</text>
+  <text x="410" y="370" text-anchor="middle" font-size="11.5" fill="#8A97A3">navigation rail</text>
+
+  <!-- EXPANDED mockup: rail + list + detail -->
+  <rect x="512" y="182" width="208" height="138" rx="10" fill="#3C3F41" stroke="#B79BEA" stroke-width="1.6"/>
+  <rect x="512" y="182" width="26" height="138" rx="0" fill="#2E2A3A"/>
+  <circle cx="525" cy="200" r="4" fill="#B79BEA"/><circle cx="525" cy="222" r="4" fill="#7160A2"/><circle cx="525" cy="244" r="4" fill="#7160A2"/>
+  <rect x="548" y="194" width="70" height="18" rx="3" fill="#2E2A3A" stroke="#3C3556"/>
+  <rect x="548" y="218" width="70" height="18" rx="3" fill="#2E2A3A" stroke="#3C3556"/>
+  <rect x="548" y="242" width="70" height="18" rx="3" fill="#2E2A3A" stroke="#3C3556"/>
+  <rect x="628" y="194" width="82" height="112" rx="4" fill="#2E2A3A" stroke="#7160A2"/>
+  <text x="669" y="254" text-anchor="middle" font-size="10" fill="#B79BEA">detalhe</text>
+  <text x="616" y="352" text-anchor="middle" font-size="12" font-weight="700" fill="#DFE1E5">Tablet grande / desktop</text>
+  <text x="616" y="370" text-anchor="middle" font-size="11.5" fill="#8A97A3">lista + detalhe lado a lado</text>
+</svg>

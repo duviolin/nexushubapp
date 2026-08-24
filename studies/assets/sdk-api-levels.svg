@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 320" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="320" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">minSdk ≤ targetSdk ≤ compileSdk</text>
+  <text x="390" y="61" text-anchor="middle" font-size="13.5" fill="#8A97A3"><tspan font-weight="700" fill="#D97706">compile</tspan> = o que eu vejo · <tspan font-weight="700" fill="#84C48D">min</tspan> = onde eu rodo · <tspan font-weight="700" fill="#6366F1">target</tspan> = o que eu prometo</text>
+
+  <!-- green band: app roda de 24 pra cima -->
+  <rect x="204" y="172" width="512" height="16" rx="8" fill="#25392A"/>
+  <text x="470" y="184" text-anchor="middle" font-size="11" fill="#84C48D" font-weight="600">seu app roda deste ponto pra cima (API 24+)</text>
+
+  <!-- axis -->
+  <line x1="80" y1="180" x2="716" y2="180" stroke="#94A3B8" stroke-width="1.5"/>
+  <path d="M716 180 l-10 -5 v10 z" fill="#94A3B8"/>
+  <text x="726" y="184" font-size="11" fill="#94A3B8">API →</text>
+  <g font-size="11" fill="#94A3B8" font-family="'SF Mono',ui-monospace,monospace" text-anchor="middle">
+    <line x1="204" y1="176" x2="204" y2="188" stroke="#525659"/><text x="204" y="205">24</text>
+    <line x1="328" y1="176" x2="328" y2="188" stroke="#525659"/><text x="328" y="205">27</text>
+    <line x1="452" y1="176" x2="452" y2="188" stroke="#525659"/><text x="452" y="205">30</text>
+    <line x1="576" y1="176" x2="576" y2="188" stroke="#525659"/><text x="576" y="205">33</text>
+    <line x1="659" y1="176" x2="659" y2="188" stroke="#525659"/><text x="659" y="205">35</text>
+  </g>
+
+  <!-- compileSdk marker (top) -->
+  <line x1="659" y1="110" x2="659" y2="176" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="659" cy="180" r="6" fill="#D97706" stroke="#fff" stroke-width="1.5"/>
+  <rect x="556" y="88" width="150" height="40" rx="10" fill="#3C3420" stroke="#D97706" stroke-width="1.2"/>
+  <text x="631" y="105" text-anchor="middle" font-size="12.5" font-weight="700" fill="#E3AE72">compileSdk = 35</text>
+  <text x="631" y="121" text-anchor="middle" font-size="11" fill="#E3AE72">a régua — o que eu vejo</text>
+
+  <!-- targetSdk marker (bottom right) -->
+  <line x1="659" y1="184" x2="659" y2="238" stroke="#6366F1" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="659" cy="180" r="6" fill="#6366F1" stroke="#fff" stroke-width="1.5"/>
+  <rect x="556" y="240" width="150" height="40" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.2"/>
+  <text x="631" y="257" text-anchor="middle" font-size="12.5" font-weight="700" fill="#AEB7F2">targetSdk = 35</text>
+  <text x="631" y="273" text-anchor="middle" font-size="11" fill="#AEB7F2">o que eu prometo</text>
+
+  <!-- minSdk marker (bottom left) -->
+  <line x1="204" y1="184" x2="204" y2="238" stroke="#84C48D" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="204" cy="180" r="6" fill="#84C48D" stroke="#fff" stroke-width="1.5"/>
+  <rect x="128" y="240" width="152" height="40" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.2"/>
+  <text x="204" y="257" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8ECB98">minSdk = 24</text>
+  <text x="204" y="273" text-anchor="middle" font-size="11" fill="#8ECB98">o piso — onde eu rodo</text>
+
+  <text x="390" y="305" text-anchor="middle" font-size="12" fill="#94A3B8">Comum: target = compile (ambos no 35). O min é menor, para alcançar aparelhos mais antigos.</text>
+</svg>

@@ -1,0 +1,377 @@
+<h1>🔁 Git &amp; a Esteira de Entrega: do commit à loja, sem tocar em nada (2026)</h1>
+
+<p>Você já sabe <strong>compilar</strong> o app (Gradle), <strong>onde</strong> ele compila (SDK) e <strong>como publicá-lo à mão</strong> na Play. Falta a peça que costura tudo: como o código sai da sua cabeça, vira histórico versionado, passa por um <strong>controle de qualidade automático</strong> e chega à loja <strong>sem ninguém apertar botão</strong>. Essa peça tem dois nomes: <strong>Git</strong> (o versionamento) e a <strong>esteira</strong> de CI/CD (a linha de montagem automática).</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> no artigo 01 a fábrica era o <em>Gradle</em> montando o app na sua máquina. Aqui a mesma fábrica ganha uma <strong>esteira robótica</strong> na nuvem: ela pega cada <code>git push</code>, roda os mesmos comandos <code>./gradlew</code> que você já viu, e entrega o <code>.aab</code> do artigo 05 direto na faixa da Play — só que sozinha, toda vez.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Git no dia a dia (a linha de comando)</h2>
+
+<p>Git é uma <strong>máquina do tempo</strong> para o seu código. Cada <strong>commit</strong> é uma foto do projeto inteiro, com data, autor e um bilhete dizendo o que mudou. Você pode voltar, comparar duas fotos, ou trabalhar numa linha do tempo paralela sem estragar a principal.</p>
+
+<blockquote><p>🧠 <strong>Termo — commit:</strong> um ponto salvo no histórico. Não é “salvar o arquivo” (isso o editor já faz) — é gravar no histórico do Git uma versão fechada, com mensagem, para poder voltar a ela depois.</p></blockquote>
+
+<h3>As três áreas (o modelo mental que resolve 90% da confusão)</h3>
+
+<p>O Git não tem “dois lugares” (meu PC / o servidor). Tem <strong>quatro</strong>. O mesmo arquivo caminha por eles, e cada comando do dia a dia é só “mover de uma caixa para a próxima”.</p>
+
+<p><img src="../assets/git-tres-arvores.svg" alt="As quatro áreas do Git: Área de trabalho (arquivos editados) → Palco/staging (o que vai no próximo commit) → Repositório local .git (o histórico) → Remoto origin (GitHub). add move para o palco, commit grava no histórico, push envia ao remoto; pull e checkout trazem de volta."></p>
+
+<table>
+<thead><tr><th align="left">Área</th><th align="left">O que é</th><th align="left">Comando que leva pra cá</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Área de trabalho</strong> <em>(working directory)</em></td><td align="left">Os arquivos como estão no disco, do jeito que você editou.</td><td align="left">seu editor</td></tr>
+<tr><td align="left"><strong>Palco</strong> <em>(staging / index)</em></td><td align="left">A “bandeja” do que vai entrar no <strong>próximo</strong> commit. Deixa você commitar só parte do que mexeu.</td><td align="left"><code>git add</code></td></tr>
+<tr><td align="left"><strong>Repositório local</strong> <em>(.git)</em></td><td align="left">O histórico de commits que mora no <strong>seu</strong> PC. Funciona 100% offline.</td><td align="left"><code>git commit</code></td></tr>
+<tr><td align="left"><strong>Remoto</strong> <em>(origin)</em></td><td align="left">A cópia compartilhada no GitHub/GitLab, onde o time se encontra.</td><td align="left"><code>git push</code></td></tr>
+</tbody>
+</table>
+
+<h3>Começando um repositório</h3>
+
+<pre><code class="language-bash">git init                       # cria um repositório novo na pasta atual
+git clone git@github.com:org/nexushub.git   # baixa um repositório que já existe
+
+git config --global user.name  "Seu Nome"   # quem assina os commits (uma vez por máquina)
+git config --global user.email "voce@email.com"
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> o e-mail do <code>git config</code> precisa ser o mesmo cadastrado no GitHub — senão seus commits aparecem “de um estranho” e não contam no seu perfil.</p></blockquote>
+
+<h3>O ciclo do dia (é isto 20× por dia)</h3>
+
+<pre><code class="language-bash">git status                     # o que mudou? o que está no palco? em que branch estou?
+git diff                       # mostra, linha a linha, o que eu mudei (ainda fora do palco)
+
+git add app/src/.../Tela.kt    # põe UM arquivo no palco
+git add -p                     # revisa pedaço por pedaço e escolhe o que entra (recomendado)
+git add .                      # põe TUDO que mudou no palco (cuidado com lixo)
+
+git commit -m "feat: tela de login com validação"   # grava a foto no histórico local
+git log --oneline --graph      # vê o histórico compacto, com o desenho das branches
+
+git pull --rebase              # baixa o que o time enviou e recoloca seus commits por cima
+git push                       # envia seus commits para o remoto
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — branch:</strong> uma linha do tempo paralela. Você cria uma para cada tarefa, trabalha isolado, e depois “junta” (merge) na principal. A branch principal geralmente se chama <code>main</code>.</p></blockquote>
+
+<h3>Branches: trabalhar sem quebrar a dos outros</h3>
+
+<pre><code class="language-bash">git switch -c feat/carrinho    # cria e entra numa branch nova (git checkout -b faz o mesmo)
+git switch main                # volta para a principal
+git branch                     # lista as branches locais
+
+git merge feat/carrinho        # traz os commits da feature para a branch atual
+git branch -d feat/carrinho    # apaga a branch já mesclada
+</code></pre>
+
+<h3>Desfazer (o kit de primeiros socorros)</h3>
+
+<table>
+<thead><tr><th align="left">Situação</th><th align="left">Comando</th><th align="left">O que faz</th></tr></thead>
+<tbody>
+<tr><td align="left">Mexi no arquivo e quero descartar</td><td align="left"><code>git restore Tela.kt</code></td><td align="left">volta o arquivo ao último commit</td></tr>
+<tr><td align="left">Pus no palco por engano</td><td align="left"><code>git restore --staged Tela.kt</code></td><td align="left">tira do palco (mantém a edição)</td></tr>
+<tr><td align="left">Errei a mensagem do último commit</td><td align="left"><code>git commit --amend</code></td><td align="left">reescreve o commit de cima</td></tr>
+<tr><td align="left">Quero desfazer um commit já feito</td><td align="left"><code>git revert &lt;hash&gt;</code></td><td align="left">cria um commit que anula o outro (seguro, mantém histórico)</td></tr>
+<tr><td align="left">Preciso guardar tudo e trocar de tarefa</td><td align="left"><code>git stash</code></td><td align="left">engaveta as mudanças; <code>git stash pop</code> traz de volta</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> em código já enviado ao remoto e compartilhado, use <code>git revert</code>, nunca <code>git reset --hard</code> seguido de <code>push --force</code>. O <code>revert</code> anula sem apagar história; o <code>reset --force</code> reescreve o passado e <strong>quebra o repositório de todo mundo</strong> que já baixou aqueles commits.</p></blockquote>
+
+<h3>O <code>.gitignore</code>: o que NÃO versionar</h3>
+
+<p>Nem tudo entra no Git. Coisa gerada (o <code>build/</code>), segredo (o <code>keystore</code> e senhas do artigo 05) e configuração de máquina ficam de fora, listados no <code>.gitignore</code>:</p>
+
+<pre><code class="language-bash"># .gitignore de um projeto Android
+.gradle/
+build/
+local.properties          # caminho do SDK (é da SUA máquina — artigo 02)
+*.jks
+*.keystore                # o cofre da chave NUNCA vai pro Git (artigo 05)
+keystore.properties       # senhas do keystore
+.idea/
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>.gitignore</code> só ignora arquivos que o Git <strong>ainda não rastreia</strong>. Se você já commitou o <code>build/</code> antes, precisa removê-lo do índice com <code>git rm -r --cached build/</code> — só adicioná-lo ao <code>.gitignore</code> não basta.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · Convenção de commits e Git Flow</h2>
+
+<h3>Mensagens de commit que o robô entende</h3>
+
+<p>Uma mensagem boa não é só educação com o colega — a esteira pode <strong>lê-la</strong> para decidir o número da versão. O padrão mais usado é o <strong>Conventional Commits</strong>: <code>tipo: descrição</code>.</p>
+
+<table>
+<thead><tr><th align="left">Prefixo</th><th align="left">Quando usar</th><th align="left">Efeito na versão (SemVer)</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>feat:</code></td><td align="left">recurso novo</td><td align="left">sobe o <strong>minor</strong> (1.<strong>2</strong>.0)</td></tr>
+<tr><td align="left"><code>fix:</code></td><td align="left">correção de bug</td><td align="left">sobe o <strong>patch</strong> (1.2.<strong>3</strong>)</td></tr>
+<tr><td align="left"><code>docs:</code> / <code>style:</code> / <code>refactor:</code> / <code>test:</code> / <code>chore:</code></td><td align="left">documentação, formatação, reorganização, testes, tarefa de manutenção</td><td align="left">não muda versão pública</td></tr>
+<tr><td align="left"><code>feat!:</code> ou rodapé <code>BREAKING CHANGE:</code></td><td align="left">quebra compatibilidade</td><td align="left">sobe o <strong>major</strong> (<strong>2</strong>.0.0)</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — SemVer (Versionamento Semântico):</strong> o <code>MAJOR.MINOR.PATCH</code> do <code>versionName</code> (artigo 05). <em>Major</em> = quebrou algo; <em>minor</em> = recurso novo compatível; <em>patch</em> = só conserto. O robô consegue calcular isso lendo os commits.</p></blockquote>
+
+<h3>Git Flow: um lugar para cada branch</h3>
+
+<p>Conforme o time cresce, “todo mundo commita na <code>main</code>” vira caos. O <strong>Git Flow</strong> é um combinado de nomes de branch, cada uma com um papel:</p>
+
+<p><img src="../assets/git-flow.svg" alt="Diagrama de Git Flow com cinco raias no tempo: main (só versões de produção, com tags v1.0.0), develop (integração diária), feature/* (sai de develop e volta via pull request), release/* (estabiliza e faz merge em main e de volta em develop) e hotfix/* (sai de main para corrigir produção e volta para main e develop)."></p>
+
+<table>
+<thead><tr><th align="left">Branch</th><th align="left">Papel</th><th align="left">Nasce de / volta para</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>main</code></td><td align="left">Só o que está <strong>em produção</strong>. Cada commit aqui é uma versão publicada (leva uma <em>tag</em>).</td><td align="left">—</td></tr>
+<tr><td align="left"><code>develop</code></td><td align="left">A integração do dia a dia. Tudo que já está pronto mas ainda não foi lançado.</td><td align="left">nasce de <code>main</code></td></tr>
+<tr><td align="left"><code>feature/*</code></td><td align="left">Uma tarefa/recurso. Vive isolada até ficar pronta.</td><td align="left">sai de <code>develop</code>, volta via <strong>PR</strong></td></tr>
+<tr><td align="left"><code>release/*</code></td><td align="left">Congela o escopo para estabilizar (bump de versão, ajustes finais).</td><td align="left">sai de <code>develop</code> → <code>main</code> + <code>develop</code></td></tr>
+<tr><td align="left"><code>hotfix/*</code></td><td align="left">Correção <strong>urgente</strong> em produção, sem esperar o ciclo normal.</td><td align="left">sai de <code>main</code> → <code>main</code> + <code>develop</code></td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — Pull Request (PR) / Merge Request:</strong> um pedido formal de “juntem a minha branch na de vocês”. É onde o colega <strong>revisa</strong> o código e onde a <strong>esteira roda os testes</strong> antes de deixar mesclar. É o portão de entrada da qualidade.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> Git Flow é ótimo para apps com <strong>versões planejadas</strong> (o caso do app de loja, que passa por review da Google). Times que entregam várias vezes ao dia preferem o <strong>GitHub Flow / Trunk-Based</strong>: só <code>main</code> + branches curtas de feature que voltam em horas. Para o NexusHub, comece simples (<code>main</code> + <code>feature/*</code> + PR) e adote <code>develop</code>/<code>release</code> só quando o ciclo de release justificar.</p></blockquote>
+
+<h3>A tag: o que dispara o lançamento</h3>
+
+<pre><code class="language-bash">git tag -a v1.2.0 -m "Release 1.2.0"   # marca este commit como a versão 1.2.0
+git push origin v1.2.0                 # envia a tag — é ISSO que a esteira de CD escuta
+</code></pre>
+
+<hr>
+
+<h2>Parte 3 · A esteira: CI/CD explicado</h2>
+
+<p>Toda vez que alguém dá <code>push</code>, seria bom rodar o lint, os testes e um build “de verdade” — mas ninguém faz isso à mão toda vez. A <strong>esteira</strong> faz: um servidor na nuvem que, a cada <code>push</code>, executa uma receita de passos e só deixa o código avançar se <strong>todos</strong> passarem.</p>
+
+<blockquote><p>🧠 <strong>Termo — CI e CD:</strong> <strong>CI (Integração Contínua)</strong> = a cada push, junte o código e prove que ele compila e passa nos testes. <strong>CD (Entrega Contínua)</strong> = quando o CI passa numa versão, empacote e <strong>entregue</strong> (na faixa interna da Play, ou direto em produção). CI cuida da <em>qualidade</em>; CD cuida da <em>entrega</em>.</p></blockquote>
+
+<p><img src="../assets/esteira-ci.svg" alt="Esteira de CI/CD em duas faixas. Gatilho: push ou pull request. Faixa CI (roda em todo PR): checkout + setup JDK + cache Gradle → lint + detekt + ktlint → testes com cobertura → Sonar Quality Gate → build de verificação (assembleDebug). Portão: tudo verde? Só então a faixa CD (só em tag/release): bundleRelease gera o .aab, assinar com keystore dos secrets, guardar o artefato, e deploy na Play via fastlane/GPP da faixa interna à produção."></p>
+
+<h3>Os estágios, um por um</h3>
+
+<table>
+<thead><tr><th align="left">Estágio</th><th align="left">Comando típico</th><th align="left">Por que existe</th></tr></thead>
+<tbody>
+<tr><td align="left">1. <strong>Checkout &amp; setup</strong></td><td align="left">baixar o código, instalar o JDK, restaurar o cache do Gradle</td><td align="left">preparar a máquina limpa da nuvem (ela não tem seu ambiente do artigo 02)</td></tr>
+<tr><td align="left">2. <strong>Lint</strong></td><td align="left"><code>./gradlew lintDebug</code></td><td align="left">Android Lint: acha bugs de API, layout, permissões, acessibilidade</td></tr>
+<tr><td align="left">3. <strong>Detekt / ktlint</strong></td><td align="left"><code>./gradlew detekt</code></td><td align="left">análise estática de Kotlin: complexidade, code smell, formatação</td></tr>
+<tr><td align="left">4. <strong>Testes</strong></td><td align="left"><code>./gradlew testDebugUnitTest</code></td><td align="left">prova que a lógica funciona; gera o relatório de cobertura</td></tr>
+<tr><td align="left">5. <strong>Sonar</strong></td><td align="left"><code>./gradlew sonar</code></td><td align="left">consolida tudo e aplica o <strong>Quality Gate</strong> (Parte 4)</td></tr>
+<tr><td align="left">6. <strong>Build</strong></td><td align="left"><code>./gradlew assembleDebug</code></td><td align="left">prova que o app <strong>compila de ponta a ponta</strong>, não só os testes</td></tr>
+<tr><td align="left">7. <strong>Empacotar</strong> (CD)</td><td align="left"><code>./gradlew bundleRelease</code></td><td align="left">gera o <code>.aab</code> assinado (artigo 05)</td></tr>
+<tr><td align="left">8. <strong>Deploy</strong> (CD)</td><td align="left">fastlane / Gradle Play Publisher</td><td align="left">envia para a faixa da Play sem ninguém abrir a Console</td></tr>
+</tbody>
+</table>
+
+<h3>Na prática: um workflow do GitHub Actions</h3>
+
+<p>A receita mora num arquivo YAML dentro do repositório, em <code>.github/workflows/ci.yml</code>. Este roda a faixa de <strong>CI</strong> em todo push e PR:</p>
+
+<pre><code class="language-yaml">name: CI
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+
+jobs:
+  verificacao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle          # reaproveita o cache do Gradle entre execuções
+
+      - name: Lint
+        run: ./gradlew lintDebug
+
+      - name: Detekt
+        run: ./gradlew detekt
+
+      - name: Testes + cobertura
+        run: ./gradlew testDebugUnitTest koverXmlReport
+
+      - name: Análise Sonar (aplica o Quality Gate)
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar
+
+      - name: Build de verificação
+        run: ./gradlew assembleDebug
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — runner:</strong> a máquina virtual descartável (aqui <code>ubuntu-latest</code>) que executa os passos. Ela nasce limpa a cada execução — por isso o passo de <em>setup</em> reinstala o JDK e o cache. É a mesma ideia do <code>./gradlew</code> (Wrapper, artigo 01): a receita precisa funcionar numa máquina que nunca viu seu projeto.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <code>${{ secrets.SONAR_TOKEN }}</code> vem do cofre de <strong>Secrets</strong> do repositório, nunca escrito no YAML. Segredo em texto no arquivo = qualquer um que clonar o repo rouba seu token. Vale para o Sonar, para a senha do keystore e para a chave da Play.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Qualidade: Lint, Detekt e Sonar</h2>
+
+<p>Os três olham seu código sem rodá-lo (<strong>análise estática</strong>), mas em camadas diferentes. Não competem — se somam.</p>
+
+<table>
+<thead><tr><th align="left">Ferramenta</th><th align="left">Foco</th><th align="left">Exemplo do que pega</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Android Lint</strong> (vem no AGP)</td><td align="left">regras <strong>específicas de Android</strong></td><td align="left">API nova usada sem checar versão, <code>contentDescription</code> faltando, permissão inútil, vazamento de contexto</td></tr>
+<tr><td align="left"><strong>ktlint</strong></td><td align="left"><strong>formatação</strong> de Kotlin</td><td align="left">indentação, import fora de ordem, espaçamento — o “corretor ortográfico”</td></tr>
+<tr><td align="left"><strong>Detekt</strong></td><td align="left"><strong>code smell</strong> de Kotlin</td><td align="left">função gigante, complexidade alta, aninhamento profundo, <code>!!</code> perigoso</td></tr>
+<tr><td align="left"><strong>Sonar</strong> (SonarQube / SonarCloud)</td><td align="left"><strong>painel + portão</strong> do time inteiro</td><td align="left">consolida bugs, vulnerabilidades, cobertura, duplicação e <strong>bloqueia o PR</strong> se piorar</td></tr>
+</tbody>
+</table>
+
+<h3>O que é o Sonar, afinal</h3>
+
+<p>Lint e Detekt rodam e cospem uma lista no terminal — que ninguém lê depois de um tempo. O <strong>Sonar</strong> é o nível acima: um <strong>servidor</strong> que recebe os resultados de cada análise, guarda o histórico, mostra num painel (“a dívida técnica subiu ou caiu esta semana?”) e — o mais importante — aplica um <strong>Quality Gate</strong>: um conjunto de regras que, se não forem cumpridas, <strong>reprova o Pull Request</strong>.</p>
+
+<blockquote><p>🧠 <strong>Termo — SonarQube vs SonarCloud:</strong> a mesma ferramenta em duas formas. <strong>SonarQube</strong> = você hospeda o servidor (controle total, bom para código privado/empresa). <strong>SonarCloud</strong> = a versão hospedada pelo Sonar (grátis para projetos open source, zero infraestrutura).</p></blockquote>
+
+<p><img src="../assets/quality-gate.svg" alt="O Quality Gate do Sonar como um portão em losango que recebe quatro métricas do código novo do PR: cobertura ≥ 80%, duplicação ≤ 3%, zero bug e zero vulnerabilidade nova, e security hotspots revisados. Saída Passed libera o merge e a esteira segue para o build; saída Failed bloqueia o PR até corrigir e dar push de novo. Rodapé explica que medir só o código novo evita travar o time com o legado."></p>
+
+<h3>O truque do “código novo”</h3>
+
+<p>O Quality Gate mede, por padrão, só o <strong>código que o PR adicionou ou mudou</strong> — não o legado inteiro. Isso é o que torna a ferramenta usável num projeto real: você não precisa parar tudo para consertar 5 anos de dívida técnica; só precisa garantir que <strong>cada PR não piore</strong>. A qualidade sobe de forma incremental, sem travar o time.</p>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> cobertura de teste é um <strong>piso, não um troféu</strong>. 80% de cobertura com testes que não verificam nada é pior que 60% com testes de verdade, porque dá falsa segurança. Use o Quality Gate para impedir <em>regressão</em> (o número cair), não para caçar 100% — os últimos 20% costumam ser getters e código de UI que o teste unitário não alcança bem.</p></blockquote>
+
+<h3>Ligando no Gradle</h3>
+
+<pre><code class="language-kotlin">// build.gradle.kts (raiz) — plugins de qualidade
+plugins {
+    id("io.gitlab.arturbosch.detekt") version "1.23.7"
+    id("org.sonarqube") version "5.1.0.4882"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"   // cobertura
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "org_nexushub")
+        property("sonar.organization", "org")
+        property("sonar.host.url", "https://sonarcloud.io")
+        // o token vem do ambiente (secret), nunca daqui
+    }
+}
+</code></pre>
+
+<hr>
+
+<h2>Parte 5 · CD: publicar na Play sozinho</h2>
+
+<p>A faixa de <strong>CD</strong> só roda quando você empurra uma <strong>tag de versão</strong> (Parte 2). Ela repete os passos manuais do artigo 05 — mas o robô é quem assina o <code>.aab</code> e o envia para a Play. Dois problemas precisam ser resolvidos: <strong>a assinatura</strong> e <strong>a credencial da Play</strong>.</p>
+
+<h3>1) Assinar sem colocar o keystore no Git</h3>
+
+<p>O keystore (o cofre da chave, artigo 05) <strong>não vai para o repositório</strong>. O truque: converter o arquivo para texto (<strong>base64</strong>), guardar esse texto num <strong>Secret</strong>, e a esteira reconstrói o arquivo em memória na hora do build.</p>
+
+<pre><code class="language-bash"># na sua máquina, uma vez: transforma o cofre em texto para colar no Secret
+base64 -i release.jks | pbcopy      # macOS (no Linux: base64 release.jks)
+# cole em: repositório → Settings → Secrets → KEYSTORE_BASE64
+</code></pre>
+
+<h3>2) A credencial da Play: a conta de serviço</h3>
+
+<blockquote><p>🧠 <strong>Termo — Service Account (conta de serviço):</strong> um “usuário robô” do Google Cloud, com um arquivo <strong>JSON</strong> de credencial. Você o cria uma vez, dá a ele permissão na Play Console para publicar, e a esteira usa esse JSON para se autenticar — sem senha humana, sem 2FA. É o que substitui “você logando na Console”.</p></blockquote>
+
+<p>A ferramenta que usa esse JSON pode ser o <strong>fastlane</strong> (Ruby, muito usado) ou o plugin <strong>Gradle Play Publisher</strong> (GPP). Com o GPP, publicar vira uma <em>task</em> do Gradle:</p>
+
+<pre><code class="language-bash">./gradlew publishReleaseBundle       # envia o .aab para a faixa configurada da Play
+</code></pre>
+
+<h3>O workflow de release completo</h3>
+
+<pre><code class="language-yaml">name: Release
+on:
+  push:
+    tags: [ 'v*' ]          # dispara SÓ quando uma tag v1.2.0 é enviada
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17', cache: gradle }
+
+      - name: Reconstruir o keystore a partir do Secret
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode &gt; release.jks
+
+      - name: Gerar o .aab assinado
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS:         ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD:      ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew bundleRelease
+
+      - name: Publicar na faixa interna da Play
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: ./gradlew publishReleaseBundle
+
+      - name: Guardar o .aab e o mapping como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-aab
+          path: |
+            app/build/outputs/bundle/release/*.aab
+            app/build/outputs/mapping/release/mapping.txt
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — artefato (artifact):</strong> um arquivo que a esteira <strong>gera e guarda</strong> ao final (o <code>.aab</code>, um APK de teste, o relatório de cobertura, o <code>mapping.txt</code>). Fica anexado àquela execução, para download ou para o próximo passo usar.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> guarde <strong>sempre</strong> o <code>mapping.txt</code> de cada release. É o “dicionário” que desembaralha os nomes que o R8 encolheu (artigo 05). Sem ele, o relatório de crash da Play vira sopa de letras e você não descobre onde o app quebrou em produção.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> publique da esteira para a <strong>faixa interna</strong> automaticamente, mas deixe a <strong>promoção para produção</strong> como um passo <em>manual</em> (um clique de aprovação na Console, ou um <em>environment</em> protegido no GitHub). CD 100% automático até a loja é para times com testes de UI robustos e rollout gradual bem monitorado — comece com o robô parando na porta da produção.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>.gitignore</strong></td><td align="left">Ignorar <code>build/</code>, <code>local.properties</code>, <code>*.jks</code> e senhas <strong>antes</strong> do primeiro commit</td></tr>
+<tr><td align="left"><strong>Branch protegida</strong></td><td align="left">Proibir push direto na <code>main</code>; exigir PR + CI verde para mesclar</td></tr>
+<tr><td align="left"><strong>Commits</strong></td><td align="left">Adotar Conventional Commits (<code>feat:</code>, <code>fix:</code>…) desde já</td></tr>
+<tr><td align="left"><strong>CI</strong></td><td align="left"><code>ci.yml</code> rodando lint + detekt + testes + build em todo PR</td></tr>
+<tr><td align="left"><strong>Quality Gate</strong></td><td align="left">Sonar configurado para bloquear PR que piore o código novo</td></tr>
+<tr><td align="left"><strong>Segredos</strong></td><td align="left">Keystore (base64), senhas e JSON da conta de serviço só nos <strong>Secrets</strong></td></tr>
+<tr><td align="left"><strong>CD</strong></td><td align="left"><code>release.yml</code> em tag <code>v*</code>: assina, publica na faixa <strong>interna</strong>, guarda <code>.aab</code> + <code>mapping.txt</code></td></tr>
+<tr><td align="left"><strong>Produção</strong></td><td align="left">Promoção para produção como passo <strong>manual</strong> aprovado por alguém</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>commit</strong></td><td align="left">Uma foto do projeto no histórico, com autor e mensagem.</td></tr>
+<tr><td align="left"><strong>staging / palco</strong></td><td align="left">A bandeja do que vai entrar no próximo commit (<code>git add</code>).</td></tr>
+<tr><td align="left"><strong>branch</strong></td><td align="left">Uma linha do tempo paralela para uma tarefa.</td></tr>
+<tr><td align="left"><strong>remote / origin</strong></td><td align="left">A cópia compartilhada no GitHub/GitLab.</td></tr>
+<tr><td align="left"><strong>Pull Request</strong></td><td align="left">Pedido de merge onde o código é revisado e a esteira roda.</td></tr>
+<tr><td align="left"><strong>Git Flow</strong></td><td align="left">Combinado de branches (main/develop/feature/release/hotfix).</td></tr>
+<tr><td align="left"><strong>tag</strong></td><td align="left">Marca de versão (<code>v1.2.0</code>) que dispara o release.</td></tr>
+<tr><td align="left"><strong>CI</strong></td><td align="left">A cada push, provar que compila e passa nos testes.</td></tr>
+<tr><td align="left"><strong>CD</strong></td><td align="left">Empacotar e entregar automaticamente quando o CI passa.</td></tr>
+<tr><td align="left"><strong>runner</strong></td><td align="left">A máquina virtual descartável que roda a esteira.</td></tr>
+<tr><td align="left"><strong>Lint / Detekt</strong></td><td align="left">Análise estática: bugs de Android / code smell de Kotlin.</td></tr>
+<tr><td align="left"><strong>Sonar</strong></td><td align="left">Painel + Quality Gate que bloqueia PR que piora o código.</td></tr>
+<tr><td align="left"><strong>Quality Gate</strong></td><td align="left">As regras que o código novo precisa cumprir para mesclar.</td></tr>
+<tr><td align="left"><strong>Secret</strong></td><td align="left">Cofre do repositório para senhas e chaves (fora do código).</td></tr>
+<tr><td align="left"><strong>Service Account</strong></td><td align="left">Usuário-robô com JSON que autentica a esteira na Play.</td></tr>
+<tr><td align="left"><strong>artefato</strong></td><td align="left">Arquivo que a esteira gera e guarda (<code>.aab</code>, <code>mapping.txt</code>).</td></tr>
+</tbody>
+</table>

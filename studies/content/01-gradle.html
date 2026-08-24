@@ -1,0 +1,605 @@
+<h1>🐘 Gradle por Dentro: O Guia do Android Specialist (2026)</h1>
+<blockquote>
+<p>📚 <strong>Trilogia do build Android</strong> — leia nesta ordem:</p>
+<ol>
+<li>🐘 <strong>Gradle (este artigo)</strong> — a <em>fábrica</em> que monta o app.</li>
+<li>🤖 <strong>AGP</strong> — o <em>especialista</em> que ensina a fábrica a falar Android (tem uma seção aqui).</li>
+<li>🧰 <strong><a href="02-sdk.html">Android SDK &amp; Setup</a></strong> — o <em>almoxarifado</em> de ferramentas (<code>aapt2</code>, <code>adb</code>, emuladores, <code>compileSdk</code>…).</li>
+</ol>
+</blockquote>
+<p>Entender o Gradle é a diferença entre &quot;tentar a sorte&quot; e &quot;ter o controle&quot;. Aqui abrimos o capô da <strong>fábrica automatizada</strong> que transforma seu código em um app instalável — e explicamos cada engrenagem sem pular termo.</p>
+<hr>
+<h2>Os 3 atores (quem faz o quê)</h2>
+<p>Antes de tudo, tire da cabeça a ideia de que &quot;Gradle = Android&quot;. São <strong>três</strong> coisas separadas colaborando:</p>
+<pre><code>   VOCÊ  ──►  ./gradlew assembleDebug
+                     │
+        ┌────────────┴───────────────────────────────┐
+        ▼                                             │
+  ┌───────────┐   contrata    ┌───────────┐   usa    ▼
+  │  GRADLE   │──────────────►│    AGP    │──────►┌────────┐
+  │ (a fábrica)│   via plugin  │(especialista│      │  SDK   │
+  │  genérica │               │  Android)  │       │(ferramentas│
+  └───────────┘               └───────────┘       │ + moldes)│
+   agenda tarefas,             sabe o que é         └────────┘
+   baixa peças,                APK, res/, minSdk,    aapt2, d8, r8,
+   cacheia trabalho            variants, R8          adb, platforms
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Ator</th>
+<th align="left">O que é</th>
+<th align="left">Papel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Gradle</strong></td>
+<td align="left">Uma ferramenta de <em>build</em> genérica (serve p/ Java, Kotlin, C++, até documentação)</td>
+<td align="left">O <strong>motor + gerente</strong> da fábrica: agenda, baixa dependências, cacheia</td>
+</tr>
+<tr>
+<td align="left"><strong>AGP</strong> (<em>Android Gradle Plugin</em>)</td>
+<td align="left">Um plugin oficial do Google para o Gradle</td>
+<td align="left">O <strong>especialista</strong> que ensina a fábrica a produzir Android</td>
+</tr>
+<tr>
+<td align="left"><strong>SDK</strong> (<em>Software Development Kit</em>)</td>
+<td align="left">Um conjunto de ferramentas instalado na sua máquina</td>
+<td align="left">O <strong>almoxarifado</strong>: as máquinas físicas (<code>aapt2</code>, <code>d8</code>) e os moldes (<code>android.jar</code>)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termo — build:</strong> é todo o processo de pegar código-fonte + recursos e produzir um artefato final (o app). &quot;Buildar&quot; = rodar esse processo.</p>
+</blockquote>
+<p>O SDK tem artigo próprio (<a href="02-sdk.html">Android SDK &amp; Setup</a>). Aqui o foco é a <strong>fábrica (Gradle)</strong> e o <strong>especialista (AGP)</strong>.</p>
+<hr>
+<h2>A Planta Baixa: o que cada arquivo faz</h2>
+<p>Cada arquivo do projeto tem <strong>um</strong> emprego. Confundir dois é o clássico <em>&quot;editei o <code>build.gradle</code> errado&quot;</em>. Este é o mapa:</p>
+<pre><code>nexushubapp/
+├── gradlew, gradlew.bat ........ o &quot;gerente&quot;: sobe sempre a MESMA versão do Gradle
+├── gradle/
+│   ├── wrapper/
+│   │   └── gradle-wrapper.properties  ... qual versão do Gradle baixar (o &quot;contrato&quot;)
+│   └── libs.versions.toml ...... o ESTOQUE: todas as versões de libs num lugar só
+├── settings.gradle.kts ......... o MAPA: quais módulos existem + de onde baixar
+├── build.gradle.kts ............ a PORTARIA (raiz): registra os plugins oficiais
+├── gradle.properties ........... o PAINEL: RAM, paralelismo, caches, flags
+├── app/
+│   └── build.gradle.kts ........ a LINHA DO PRODUTO: gera o APK/AAB
+├── core/
+│   ├── common/build.gradle.kts . uma LINHA DE PEÇA: gera um AAR interno
+│   ├── network/build.gradle.kts
+│   └── ...
+└── build-logic/ ................ a COZINHA DE RECEITAS (convention plugins)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Arquivo</th>
+<th align="left">Papel na fábrica</th>
+<th align="left">O que faz</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>gradlew</code> / <code>gradlew.bat</code></td>
+<td align="left">Motor + gerente</td>
+<td align="left">Sobe <strong>sempre</strong> o mesmo Gradle. Você não instala Gradle na máquina — o <em>wrapper</em> baixa a versão do contrato.</td>
+</tr>
+<tr>
+<td align="left"><code>gradle/wrapper/gradle-wrapper.properties</code></td>
+<td align="left">Contrato do motor</td>
+<td align="left">Qual ZIP do Gradle usar + o selo de autenticidade (<code>distributionSha256Sum</code>).</td>
+</tr>
+<tr>
+<td align="left"><code>settings.gradle.kts</code></td>
+<td align="left">Mapa do terreno</td>
+<td align="left">Quais módulos existem (<code>include</code>) e de onde vêm as libs. <strong>É o 1º arquivo lido.</strong></td>
+</tr>
+<tr>
+<td align="left"><code>build.gradle.kts</code> (raiz)</td>
+<td align="left">Portaria de ferramentas</td>
+<td align="left">Registra os plugins com <code>apply false</code>. <strong>Não gera APK.</strong></td>
+</tr>
+<tr>
+<td align="left"><code>gradle/libs.versions.toml</code></td>
+<td align="left">Estoque central</td>
+<td align="left">Versões, bibliotecas, combos e plugins — tudo num lugar.</td>
+</tr>
+<tr>
+<td align="left"><code>gradle.properties</code></td>
+<td align="left">Painel de regulagem</td>
+<td align="left">RAM do Daemon, paralelismo, caches, AndroidX.</td>
+</tr>
+<tr>
+<td align="left"><code>app/build.gradle.kts</code></td>
+<td align="left">Linha do produto</td>
+<td align="left">O único <code>com.android.application</code>. Gera o <strong>APK/AAB</strong>.</td>
+</tr>
+<tr>
+<td align="left"><code>core/*/build.gradle.kts</code></td>
+<td align="left">Linhas de peças</td>
+<td align="left"><code>com.android.library</code>. Geram <strong>AAR</strong> interno que o <code>:app</code> consome.</td>
+</tr>
+<tr>
+<td align="left"><code>build-logic/</code></td>
+<td align="left">Cozinha de receitas</td>
+<td align="left"><em>Convention plugins</em>: uma receita mestra de SDK/Java/Compose. Não gera APK.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termos — APK, AAB, AAR:</strong></p>
+<ul>
+<li><strong>APK</strong> (<em>Android Package</em>): o app empacotado, pronto para instalar num aparelho.</li>
+<li><strong>AAB</strong> (<em>Android App Bundle</em>): o formato que você <strong>envia para a Play Store</strong>; ela gera APKs otimizados por aparelho a partir dele.</li>
+<li><strong>AAR</strong> (<em>Android Archive</em>): uma &quot;biblioteca Android&quot; empacotada — o produto de cada módulo <code>:core:*</code>, consumido internamente pelo <code>:app</code>.</li>
+</ul>
+</blockquote>
+<p><strong>Regra de ouro:</strong> <em>versão</em> mora no TOML · <em>módulo</em> mora no <code>settings</code> · <em>regulagem</em> mora no <code>properties</code> · <em>receita repetida</em> mora no <code>build-logic</code>. O <code>build.gradle.kts</code> de cada módulo só <strong>puxa a receita e lista as peças</strong>.</p>
+<hr>
+<h2>O Ciclo de Vida: como a fábrica &quot;pensa&quot;</h2>
+<p>Todo comando <code>./gradlew &lt;tarefa&gt;</code> passa por <strong>três fases, sempre nesta ordem</strong>. Entender isso faz o resto do artigo clicar:</p>
+<p><img src="../assets/gradle-lifecycle.svg" alt="As três fases do Gradle em sequência: Initialization (lê settings, descobre módulos), Configuration (lê os build.gradle.kts e monta o DAG) e Execution (roda só as tarefas pedidas, incremental), terminando no APK pronto"></p>
+<blockquote>
+<p>🧠 <strong>Termo — DAG</strong> (<em>Directed Acyclic Graph</em> / grafo dirigido acíclico): é o &quot;mapa de setas&quot; das tarefas. Ex.: <code>compilar</code> aponta para <code>empacotar</code>, que aponta para <code>assinar</code>. &quot;Acíclico&quot; = as setas nunca formam um ciclo (senão a fábrica travaria esperando a si mesma). O Gradle monta esse mapa na fase 2 e o executa na fase 3.</p>
+</blockquote>
+<p><strong>Por que isso importa:</strong> um <code>Thread.sleep</code>, um download ou I/O pesado na fase de <strong>Configuration</strong> infla <em>todo</em> comando — até um simples <code>./gradlew tasks</code>. É a causa nº 1 de &quot;meu Gradle é lento&quot;.</p>
+<hr>
+<h2>1. O Gerente: <code>gradlew</code> (o Wrapper)</h2>
+<p>O <code>gradlew</code> (<em>Gradle Wrapper</em>) garante que <strong>todo mundo</strong> — você, o colega, o servidor de CI — rode <strong>exatamente a mesma versão</strong> do Gradle. Por isso o comando é sempre <code>./gradlew …</code>, e <strong>nunca</strong> <code>gradle …</code> (esse último usa o que estiver instalado na máquina — uma roleta de versões).</p>
+<p>O &quot;contrato&quot; está em <code>gradle/wrapper/gradle-wrapper.properties</code>:</p>
+<ul>
+<li><strong><code>distributionUrl</code></strong> — qual ZIP do Gradle baixar (ex.: <code>gradle-9.3.1-bin.zip</code>).</li>
+<li><strong><code>distributionSha256Sum</code></strong> — o <strong>selo de autenticidade</strong>: uma &quot;impressão digital&quot; do ZIP. Se alguém trocar o arquivo no caminho, a impressão não bate e o Gradle recusa rodar.</li>
+</ul>
+<blockquote>
+<p>🧠 <strong>Termo — Daemon:</strong> o Gradle roda num processo que <strong>fica vivo em segundo plano</strong> entre builds (o <em>Daemon</em>). Ele mantém a JVM &quot;quente&quot; na memória, então o 2º build é bem mais rápido que o 1º. Se algo travar, <code>./gradlew --stop</code> mata o Daemon e o próximo comando sobe um limpo.</p>
+</blockquote>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> em empresa, o <code>distributionSha256Sum</code> impede rodar um motor de build adulterado. Segurança começa antes da primeira linha compilar.</p>
+</blockquote>
+<hr>
+<h2>2. O Mapa: <code>settings.gradle.kts</code></h2>
+<p>É o <strong>primeiro arquivo lido</strong> (fase de Initialization). Define <strong>quem existe</strong>, não <em>como</em> cada módulo é compilado.</p>
+<ul>
+<li><strong><code>pluginManagement { repositories { … } }</code></strong> — de onde baixar os <strong>plugins</strong> (AGP, Kotlin, Hilt).</li>
+<li><strong><code>dependencyResolutionManagement { repositories { … } }</code></strong> — de onde baixar as <strong>bibliotecas</strong>. Usamos <code>FAIL_ON_PROJECT_REPOS</code> para travar: nenhum módulo pode abrir um repositório escondido por conta própria. Um portão só, controlado.</li>
+<li><strong><code>include(&quot;:app&quot;)</code>, <code>include(&quot;:core:common&quot;)</code></strong> — registra cada módulo. <strong>Pasta sem <code>include</code> não é módulo</strong> — o Gradle finge que não existe.</li>
+<li><strong><code>includeBuild(&quot;build-logic&quot;)</code></strong> — ativa o <em>composite build</em> (a cozinha de receitas). Detalhe na seção 9.</li>
+</ul>
+<blockquote>
+<p>🧠 <strong>Termo — repositório:</strong> um servidor de onde o Gradle baixa dependências prontas (ex.: <code>google()</code>, <code>mavenCentral()</code>). É a &quot;loja de peças&quot; da fábrica.</p>
+</blockquote>
+<blockquote>
+<p>🧠 <strong>Termo — módulo:</strong> uma parte independente do projeto que compila separado (<code>:app</code>, <code>:core:network</code>). Modularizar = builds mais rápidos e fronteiras claras entre partes do código.</p>
+</blockquote>
+<hr>
+<h2>3. A Portaria: <code>build.gradle.kts</code> da raiz</h2>
+<p>Não é linha de montagem — é o <strong>registro de ferramentas oficiais</strong>. Aqui os plugins entram com <strong><code>apply false</code></strong>:</p>
+<pre><code class="language-kotlin">plugins {
+    alias(libs.plugins.android.application) apply false   // registra, NÃO usa aqui
+    alias(libs.plugins.android.library)     apply false
+    alias(libs.plugins.kotlin.android)      apply false
+}
+</code></pre>
+<p><code>apply false</code> = &quot;a fábrica <strong>conhece</strong> essa ferramenta, nesta versão, mas <strong>não a usa</strong> neste arquivo&quot;. Cada módulo depois chama o mesmo plugin <strong>sem</strong> <code>apply false</code>, e aí sim ele entra em ação naquela linha específica (detalhe do porquê na seção do AGP, abaixo).</p>
+<blockquote>
+<p>⚠️ <strong>Erro comum:</strong> colocar <code>compileSdk</code>, <code>implementation(...)</code> ou config de Room aqui. Isso é misturar a portaria com o chão de fábrica. Dependência mora no módulo; regra de SDK repetida mora no <code>build-logic</code>.</p>
+</blockquote>
+<hr>
+<h2>🤖 O Especialista: AGP (Android Gradle Plugin)</h2>
+<p>O Gradle sozinho <strong>não faz ideia</strong> do que é um <code>AndroidManifest.xml</code>, um APK ou o que significa <code>minSdk</code>. Quem traz esse conhecimento é o <strong>AGP</strong>.</p>
+<h3>O que o AGP adiciona à fábrica</h3>
+<p>Aplicar <code>com.android.application</code> (ou <code>com.android.library</code>) liga capacidades que o Gradle puro não tem:</p>
+<ul>
+<li>O bloco <strong><code>android { … }</code></strong> — ele só existe porque o AGP o registrou. Sem AGP, <code>compileSdk</code> é erro de compilação.</li>
+<li>As <strong>tarefas de montagem Android</strong>: mesclar manifests, rodar <code>aapt2</code>, <code>d8</code>/<code>r8</code>, empacotar e assinar o APK/AAB.</li>
+<li><strong>Build Variants</strong> (seção 7), geração de <strong><code>BuildConfig</code></strong>, e a integração do <strong>Lint</strong>.</li>
+</ul>
+<blockquote>
+<p>🧠 <strong>Termos rápidos:</strong> <code>aapt2</code> compila os recursos (imagens, XML) e gera a classe <code>R</code>; <code>d8</code> converte bytecode em DEX (o formato que o Android executa); <code>r8</code> faz o mesmo + encolhe/ofusca o código. <strong>Essas máquinas moram no <a href="02-sdk.html#5-o-que-tem-dentro-do-build-tools-as-m%C3%A1quinas-da-montagem">SDK</a></strong> — o AGP só as comanda. O AGP é o <strong>maestro</strong>; o SDK é a <strong>orquestra</strong>.</p>
+</blockquote>
+<h3>O triângulo de compatibilidade (a causa nº 1 de build quebrado)</h3>
+<p>Três (na prática, quatro) versões precisam <strong>casar</strong>. Se uma sai da tabela, a linha inteira para:</p>
+<p><img src="../assets/gradle-compat-triangle.svg" alt="Triângulo de compatibilidade: o Android Studio aceita um AGP; o AGP exige um Gradle mínimo e um Kotlin compatível; se uma versão sai da tabela, o build inteiro para"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Peça</th>
+<th align="left">Papel</th>
+<th align="left">Onde a versão mora</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Gradle</strong></td>
+<td align="left">O motor genérico</td>
+<td align="left"><code>gradle/wrapper/gradle-wrapper.properties</code></td>
+</tr>
+<tr>
+<td align="left"><strong>AGP</strong></td>
+<td align="left">O especialista Android</td>
+<td align="left"><code>libs.versions.toml</code> → <code>agp = &quot;8.7.3&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Kotlin</strong></td>
+<td align="left">O compilador da linguagem</td>
+<td align="left"><code>libs.versions.toml</code> → <code>kotlin = &quot;2.0.21&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Android Studio</strong></td>
+<td align="left">A IDE</td>
+<td align="left">O app instalado na máquina</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>AGP ⇄ Gradle:</strong> cada AGP exige um Gradle <strong>mínimo</strong>. AGP novo + Gradle velho = <code>&quot;plugin requires Gradle X.Y&quot;</code>.</li>
+<li><strong>AGP ⇄ Android Studio:</strong> Studio velho não abre projeto com AGP novo (daí o aviso <em>&quot;Android Gradle Plugin update recommended&quot;</em>).</li>
+<li><strong>Kotlin ⇄ Compose:</strong> desde o Kotlin 2.0, o Compose Compiler é atrelado à versão do Kotlin, via o plugin <code>kotlin-compose</code>.</li>
+</ul>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> antes de subir qualquer uma dessas versões, consulte a <em>tabela de compatibilidade AGP/Gradle</em> oficial. O <code>agp</code> mora no TOML <strong>justamente</strong> para essa troca ser em um único lugar.</p>
+</blockquote>
+<h3>Por que <code>apply false</code> na raiz + <code>alias</code> no módulo?</h3>
+<pre><code>build.gradle.kts (raiz)          app/build.gradle.kts
+┌───────────────────────┐        ┌───────────────────────┐
+│ alias(...application)  │        │ alias(...application)  │
+│        apply false     │  ───►  │   (SEM apply false)    │
+│  &quot;conheço, não uso&quot;    │        │   &quot;agora, use aqui!&quot;   │
+└───────────────────────┘        └───────────────────────┘
+     versão definida 1x               ativado por módulo
+</code></pre>
+<p>Isso garante <strong>uma versão única</strong> de AGP no projeto todo, mesmo com 50 módulos. (Quando o <code>build-logic</code> entra — seção 9 — nem o <code>alias</code> aparece no módulo: o convention plugin aplica o AGP por baixo.)</p>
+<hr>
+<h2>4. O Estoque: <code>libs.versions.toml</code> (Version Catalog)</h2>
+<p>Um número de versão vive <strong>uma vez</strong>. Nenhum <code>build.gradle.kts</code> escreve <code>&quot;2.6.1&quot;</code> na mão. Isso dá <strong>type-safety</strong> (o Android Studio autocompleta e avisa erro de digitação) e uma fonte única de verdade.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Seção</th>
+<th align="left">O que guarda</th>
+<th align="left">No código vira</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>[versions]</code></strong></td>
+<td align="left">Os números (<code>agp = &quot;8.7.3&quot;</code>)</td>
+<td align="left"><code>version.ref = &quot;room&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>[libraries]</code></strong></td>
+<td align="left">As bibliotecas (<code>group</code> + <code>name</code> + versão)</td>
+<td align="left"><code>libs.room.runtime</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>[bundles]</code></strong></td>
+<td align="left">&quot;Combos&quot; de libs que andam juntas</td>
+<td align="left"><code>libs.bundles.compose</code> (5 libs, 1 linha)</td>
+</tr>
+<tr>
+<td align="left"><strong><code>[plugins]</code></strong></td>
+<td align="left">Os plugins (<code>id</code> + versão)</td>
+<td align="left"><code>alias(libs.plugins.android.application)</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termo — type-safe:</strong> o compilador verifica em tempo de build. Se você digitar <code>libs.room.runtim</code> errado, ele acusa <strong>antes</strong> de rodar — não vira um erro misterioso no meio do build.</p>
+</blockquote>
+<hr>
+<h2>5. O Painel: <code>gradle.properties</code> (e os caches)</h2>
+<p>Aqui não se cadastra módulo nem lib — aqui se <strong>regula a fábrica</strong>:</p>
+<ul>
+<li><strong><code>org.gradle.jvmargs=-Xmx2048m</code></strong> — RAM do Daemon. Motor sem memória = <em>garbage collection</em> eterno.</li>
+<li><strong><code>org.gradle.parallel=true</code></strong> — compila módulos independentes em paralelo.</li>
+<li><strong><code>org.gradle.caching=true</code></strong> — liga o <strong>Build Cache</strong>.</li>
+<li><strong><code>org.gradle.configuration-cache=true</code></strong> — liga o <strong>Configuration Cache</strong>.</li>
+<li><strong><code>android.useAndroidX=true</code></strong> — usa as bibliotecas modernas (AndroidX), não as antigas (Support Library).</li>
+<li><strong><code>android.nonTransitiveRClass=true</code></strong> — cada módulo enxerga só o próprio <code>R</code>: build mais rápido e fronteiras limpas.</li>
+</ul>
+<h3>Os três níveis de cache (por que o 2º build voa)</h3>
+<pre><code>Mudou 1 arquivo? ──► Incremental Build ──► recompila SÓ ele (sempre ligado)
+Input idêntico ao de antes? ──► Build Cache ──► reusa o resultado pronto
+Nenhum build.gradle mudou? ──► Configuration Cache ──► pula a fase 2 inteira
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Cache</th>
+<th align="left">Evita repetir</th>
+<th align="left">Ligado por</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Incremental</strong></td>
+<td align="left">Recompilar arquivo intacto</td>
+<td align="left">Padrão</td>
+</tr>
+<tr>
+<td align="left"><strong>Build Cache</strong></td>
+<td align="left">Refazer tarefa com input idêntico</td>
+<td align="left"><code>org.gradle.caching</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Configuration Cache</strong></td>
+<td align="left">Remontar o DAG (a fase 2)</td>
+<td align="left"><code>org.gradle.configuration-cache</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> build lento quase sempre é fase de Configuration inchada ou grafo de módulos emaranhado — não &quot;o Kotlin é lento&quot;. Lógica pesada na Configuration <strong>quebra</strong> o Configuration Cache.</p>
+</blockquote>
+<hr>
+<h2>6. A Linha de Produção: <code>build.gradle.kts</code> de cada módulo</h2>
+<p>Existem <strong>dois tipos de linha</strong>, definidos pelo plugin:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Plugin aplicado</th>
+<th align="left">Quem usa</th>
+<th align="left">Produto</th>
+<th align="left">Identidade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>com.android.application</code></td>
+<td align="left">só o <code>:app</code></td>
+<td align="left"><strong>APK/AAB</strong></td>
+<td align="left">tem <code>applicationId</code></td>
+</tr>
+<tr>
+<td align="left"><code>com.android.library</code></td>
+<td align="left">cada <code>:core:*</code></td>
+<td align="left"><strong>AAR</strong></td>
+<td align="left">tem <code>namespace</code>, <strong>não</strong> tem <code>applicationId</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong><code>namespace</code></strong> — a identidade do código gerado (<code>R</code>, <code>BuildConfig</code>), ex.: <code>com.eduardo.nexushub.core.network</code>.</li>
+<li><strong><code>applicationId</code></strong> — a identidade do app <strong>na loja e no aparelho</strong>. <strong>Só o <code>:app</code> tem.</strong> Confundir os dois é o clássico <code>com.example.myapplication</code> esquecido do template.</li>
+</ul>
+<h3>Como os módulos enxergam uns aos outros</h3>
+<p>O tipo de declaração de dependência muda <strong>quem herda o quê</strong>:</p>
+<pre><code>        ┌─────────┐
+        │  :app   │  amarra o produto final
+        └────┬────┘
+   implementation(project(...))
+        ┌────┴────────────┬─────────────┐
+        ▼                 ▼              ▼
+  ┌──────────┐     ┌──────────┐   ┌──────────┐
+  │:core:ui  │     │:core:net │   │:core:db  │
+  └────┬─────┘     └────┬─────┘   └────┬─────┘
+       └────────────────┴──────────────┘
+                        ▼
+                  ┌──────────┐
+                  │:core:    │   a base comum
+                  │ common   │
+                  └──────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Declaração</th>
+<th align="left">Significado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>implementation(project(&quot;:core:network&quot;))</code></td>
+<td align="left">Uso a peça, mas <strong>ninguém acima herda</strong> essa dependência. Grafo estreito = build rápido.</td>
+</tr>
+<tr>
+<td align="left"><code>implementation(lib)</code></td>
+<td align="left">A lib é <strong>privada</strong> deste módulo.</td>
+</tr>
+<tr>
+<td align="left"><code>api(lib)</code></td>
+<td align="left">A lib <strong>vaza</strong> para quem depender deste módulo (efeito cascata — recompila o mundo). Use quase nunca.</td>
+</tr>
+<tr>
+<td align="left"><code>debugImplementation(lib)</code></td>
+<td align="left">Só na variante debug (ferramentas de dev).</td>
+</tr>
+<tr>
+<td align="left"><code>testImplementation(lib)</code></td>
+<td align="left">Só na bancada de testes.</td>
+</tr>
+<tr>
+<td align="left"><code>ksp(lib)</code></td>
+<td align="left">Roda um <strong>processador de anotações</strong> (Room, Hilt) — ver termo abaixo.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termo — KSP vs Kapt:</strong> bibliotecas como Room geram código a partir de anotações (<code>@Entity</code>). O <strong>Kapt</strong> faz isso fingindo que Kotlin é Java (lento). O <strong>KSP</strong> (<em>Kotlin Symbol Processing</em>) lê Kotlin de verdade (rápido). Regra 2026: prefira KSP; use Kapt só quando a lib ainda não suportar KSP.</p>
+</blockquote>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> feature <strong>não</strong> depende de feature. Só de <code>:core</code>. Quem costura tudo é o <code>:app</code>.</p>
+</blockquote>
+<hr>
+<h2>7. As Variantes: uma fábrica, vários produtos</h2>
+<p>Uma <strong>Build Variant</strong> é a multiplicação <code>Product Flavor × Build Type</code>. O Gradle não faz um <code>if</code> em runtime — ele <strong>monta um produto diferente</strong> para cada célula da matriz:</p>
+<pre><code>                 BUILD TYPES  (COMO é construído)
+                 ┌──────────┬──────────┐
+                 │  debug   │ release  │
+   P  ┌──────────┼──────────┼──────────┤
+   F  │  demo    │demoDebug │demoRelease│
+   L  ├──────────┼──────────┼──────────┤
+   A  │  prod    │prodDebug │prodRelease│ ◄── o que vai pra Play
+   V  └──────────┴──────────┴──────────┘
+   O   (O QUE o app contém)
+   R
+</code></pre>
+<h3>Build Types — <em>como</em> o app é construído</h3>
+<ul>
+<li><strong><code>debug</code></strong> — o protótipo: logs abertos, não otimizado. Aceita <code>debugImplementation</code> (ferramentas que <strong>nunca</strong> vão pro release).</li>
+<li><strong><code>release</code></strong> — o produto final. <strong>Você liga</strong> <code>isMinifyEnabled = true</code> para acionar o <strong>R8</strong> (encolhe + ofusca + remove código morto). O nome &quot;release&quot; <strong>não</strong> liga o R8 sozinho.</li>
+</ul>
+<h3>Product Flavors — <em>o que</em> o app contém</h3>
+<p>Sabores de mercado: <code>demo</code> vs <code>prod</code>, ou <code>free</code> vs <code>premium</code>. Podem se cruzar em <strong>dimensões</strong> e a matriz gera as combinações automaticamente.</p>
+<h3>Source Sets — o segredo, sem <code>if</code></h3>
+<p>O AGP <strong>mescla pastas</strong>, do genérico para o específico. O mais específico ganha:</p>
+<pre><code>src/main/  (base)  ◄─ sobrescrito por ─  src/demo/  ◄─  src/demoDebug/
+</code></pre>
+<p>Assim uma classe <code>AppConfig.kt</code> pode ser diferente em <code>demo</code> e em <code>prod</code> <strong>sem um único <code>if</code></strong> — o Gradle escolhe o arquivo certo na montagem.</p>
+<blockquote>
+<p>🧠 <strong>Termo — R8 / ofuscação:</strong> &quot;ofuscar&quot; é renomear classes e métodos para nomes sem sentido (<code>a</code>, <code>b</code>, <code>c</code>), dificultando engenharia reversa e encolhendo o app. Sem <code>isMinifyEnabled = true</code>, seu &quot;release&quot; é só um debug gordo.</p>
+</blockquote>
+<hr>
+<h2>8. O Arsenal do Terminal</h2>
+<p>Sempre <code>./gradlew</code>, a partir da raiz. O CI não clica no ▶ do Studio — ele manda estas ordens:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Comando</th>
+<th align="left">O que faz</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>./gradlew assembleDebug</code></td>
+<td align="left">Monta o APK debug.</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew :app:assembleProdRelease</code></td>
+<td align="left">Monta a célula <code>prod × release</code> da matriz.</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew bundleProdRelease</code></td>
+<td align="left">Gera o <strong>AAB</strong> da Play (não APK).</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew installDebug</code></td>
+<td align="left">Monta <strong>e</strong> instala no device/emulador (usa o <code>adb</code> por baixo).</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew lint</code></td>
+<td align="left">Inspeção estática do AGP (bugs, APIs, performance).</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew test</code></td>
+<td align="left">Testes JVM de todos os módulos.</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew :app:dependencies</code></td>
+<td align="left">Radiografia: quais libs entraram e de onde.</td>
+</tr>
+<tr>
+<td align="left"><code>./gradlew --stop</code></td>
+<td align="left">Desliga o Daemon.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termo — CI/CD:</strong> <em>Continuous Integration/Delivery</em> — servidores que buildam e testam seu código automaticamente a cada push. Eles usam exatamente esses comandos de terminal.</p>
+</blockquote>
+<hr>
+<h2>9. A Cozinha de Receitas: <code>build-logic</code> (Convention Plugins)</h2>
+<p><strong>O problema que ele resolve:</strong> sem ele, cada <code>build.gradle.kts</code> copia <code>compileSdk</code>, <code>minSdk</code>, Java, Compose… Com 50 módulos, a cópia <strong>diverge</strong> — um fica em SDK 34, outro em 35 — e ninguém percebe.</p>
+<p><strong>A solução:</strong> escrever a receita <strong>uma vez</strong> como um plugin, e cada módulo só aplica.</p>
+<pre><code>   ANTES (cada módulo repete tudo)      DEPOIS (uma receita, todos aplicam)
+
+  app/build.gradle.kts  ┐               build-logic/  ◄── a receita mestra
+  core/ui/...           │ 40 linhas          │
+  core/net/...          │ IGUAIS,       ┌────┴─────┬──────────┐
+  core/db/...           │ copiadas      ▼          ▼          ▼
+  core/common/...       ┘            app/       core/ui/   core/net/
+                                     id(...)    id(...)    id(...)  ← 1 linha
+</code></pre>
+<p>O <code>build-logic</code> <strong>não é um módulo Android</strong>: não tem <code>compileSdk</code>, não gera APK, não entra no grafo <code>:app → :core</code>. É uma <strong>fábrica irmã</strong> (<em>composite build</em>) cujo produto são <strong>plugins</strong>.</p>
+<h3>Como a cozinha se conecta</h3>
+<pre><code class="language-kotlin">// settings.gradle.kts (raiz)
+pluginManagement {
+    includeBuild(&quot;build-logic&quot;)   // &quot;existe outra fábrica ali; compile-a primeiro&quot;
+}
+</code></pre>
+<blockquote>
+<p>🧠 <strong><code>includeBuild</code> ≠ <code>include</code>:</strong> <code>include(&quot;:core:ui&quot;)</code> registra um módulo do <em>mesmo</em> projeto. <code>includeBuild(&quot;build-logic&quot;)</code> diz: &quot;existe <strong>outro</strong> projeto Gradle completo ali — compile-o antes e me dê os plugins que ele produzir&quot;. É o tubo entre a cozinha e o chão de fábrica.</p>
+</blockquote>
+<h3>Anatomia da pasta</h3>
+<pre><code>build-logic/
+├── settings.gradle.kts          ← o mapa da cozinha (não o do app)
+└── convention/
+    ├── build.gradle.kts         ← usa `kotlin-dsl`; depende do AGP como ferramenta
+    └── src/main/kotlin/
+        ├── AndroidApplicationConventionPlugin.kt
+        ├── AndroidLibraryConventionPlugin.kt
+        └── AndroidLibraryComposeConventionPlugin.kt
+</code></pre>
+<p>Cada classe implementa <code>Plugin&lt;Project&gt;</code> e, no método <code>apply</code>, faz o trabalho repetitivo: aplica o AGP + Kotlin, configura <code>compileSdk</code>/<code>minSdk</code>/Java, liga o Compose etc. Ganha um <strong>id</strong> (ex.: <code>nexushub.android.library</code>).</p>
+<h3>O que sobra no módulo</h3>
+<pre><code class="language-kotlin">plugins {
+    id(&quot;nexushub.android.library&quot;)   // toda a receita, 1 linha
+}
+dependencies {
+    implementation(libs.androidx.core.ktx)   // só o que é ÚNICO deste módulo
+}
+</code></pre>
+<p>Mudou o <code>minSdk</code> da empresa? <strong>Um</strong> arquivo, e o projeto inteiro herda.</p>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> se o <code>build.gradle.kts</code> de uma feature ainda declara <code>compileSdk</code>, a cozinha não está no comando — a linha está improvisando. Este é o <strong>Dia 3</strong> do roadmap deste projeto.</p>
+</blockquote>
+<hr>
+<h2>10. 🔒 Bônus Enterprise: Repositórios Internos</h2>
+<p>Em grandes empresas a fábrica não acessa a internet aberta: um <strong>proxy de repositórios</strong> (Artifactory/Nexus) atua como firewall, escaneando cada biblioteca em busca de <strong>CVEs</strong> antes de liberar.</p>
+<blockquote>
+<p>🧠 <strong>Termo — CVE</strong> (<em>Common Vulnerabilities and Exposures</em>): um identificador público de falha de segurança conhecida (ex.: <code>CVE-2021-44228</code>, o Log4Shell). O proxy bloqueia libs com CVE aberto.</p>
+</blockquote>
+<p>No nosso <code>settings</code>, o mesmo espírito já existe: <code>google()</code> + <code>mavenCentral()</code> + <code>FAIL_ON_PROJECT_REPOS</code> = um portão único e controlado. Trocar por Artifactory depois é mudar o endereço, não a arquitetura.</p>
+<hr>
+<h2>📖 Glossário-relâmpago</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Termo</th>
+<th align="left">Em uma linha</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Gradle</strong></td>
+<td align="left">A ferramenta de build genérica (o motor da fábrica).</td>
+</tr>
+<tr>
+<td align="left"><strong>AGP</strong></td>
+<td align="left">O plugin que ensina o Gradle a fazer Android.</td>
+</tr>
+<tr>
+<td align="left"><strong>Daemon</strong></td>
+<td align="left">O processo do Gradle que fica vivo para o 2º build ser rápido.</td>
+</tr>
+<tr>
+<td align="left"><strong>DAG</strong></td>
+<td align="left">O mapa de dependências entre tarefas (montado na fase Configuration).</td>
+</tr>
+<tr>
+<td align="left"><strong>Wrapper</strong> (<code>gradlew</code>)</td>
+<td align="left">Trava a mesma versão do Gradle para todos.</td>
+</tr>
+<tr>
+<td align="left"><strong>Version Catalog</strong></td>
+<td align="left">O <code>libs.versions.toml</code>: versões num lugar só.</td>
+</tr>
+<tr>
+<td align="left"><strong>APK / AAB / AAR</strong></td>
+<td align="left">App instalável / bundle da Play / biblioteca interna.</td>
+</tr>
+<tr>
+<td align="left"><strong>bytecode / DEX</strong></td>
+<td align="left">Código intermediário / o formato que o Android executa.</td>
+</tr>
+<tr>
+<td align="left"><strong>R8</strong></td>
+<td align="left">Encolhe + ofusca o código no release (<code>isMinifyEnabled</code>).</td>
+</tr>
+<tr>
+<td align="left"><strong>KSP / Kapt</strong></td>
+<td align="left">Geradores de código por anotação (KSP é o moderno e rápido).</td>
+</tr>
+<tr>
+<td align="left"><strong>Build Variant</strong></td>
+<td align="left"><code>Flavor × BuildType</code> — um produto por célula da matriz.</td>
+</tr>
+<tr>
+<td align="left"><strong>Composite build</strong></td>
+<td align="left">Um projeto Gradle incluído dentro de outro (<code>build-logic</code>).</td>
+</tr>
+<tr>
+<td align="left"><strong>CVE</strong></td>
+<td align="left">Identificador público de vulnerabilidade de segurança.</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Bússola técnica do Gradle no NexusHub. Próximo da trilogia: o <a href="02-sdk.html">Android SDK &amp; Setup</a>.</em></p>

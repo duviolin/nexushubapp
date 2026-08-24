@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O squad de um dev só: quatro jalecos, quatro sessões</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">uma pessoa, quatro papéis · o bastão é um arquivo no disco, não o chat colado</text>
+
+  <!-- PO -->
+  <rect x="26" y="98" width="165" height="150" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="108" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">PO</text>
+  <text x="108" y="146" text-anchor="middle" font-size="10" fill="#8A97A3">recorta o problema</text>
+  <text x="42" y="176" font-size="10.5" fill="#AAB6C0">lê README + CLAUDE.md</text>
+  <text x="42" y="200" font-size="10.5" font-weight="700" fill="#AEB7F2">gera PLANO.md</text>
+  <text x="42" y="224" font-size="9.5" fill="#8891C8">não escreve código</text>
+
+  <!-- Tech -->
+  <rect x="214" y="98" width="165" height="150" rx="11" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.6"/>
+  <text x="296" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#7FC9BD">Tech Lead</text>
+  <text x="296" y="146" text-anchor="middle" font-size="10" fill="#8A97A3">trava o "como"</text>
+  <text x="230" y="176" font-size="10.5" fill="#9DBDB6">lê PLANO.md</text>
+  <text x="230" y="200" font-size="10.5" font-weight="700" fill="#7FC9BD">gera SPEC.md</text>
+  <text x="230" y="224" font-size="9.5" fill="#6FA89C">stack, dados, critérios</text>
+
+  <!-- Dev -->
+  <rect x="402" y="98" width="165" height="150" rx="11" fill="#3C3420" stroke="#D97706" stroke-width="1.6"/>
+  <text x="484" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#E3AE72">UX / Dev</text>
+  <text x="484" y="146" text-anchor="middle" font-size="10" fill="#8A97A3">obedece a spec</text>
+  <text x="418" y="176" font-size="10.5" fill="#D9B38A">lê SPEC.md + CHECKLIST</text>
+  <text x="418" y="200" font-size="10.5" font-weight="700" fill="#E3AE72">gera o código</text>
+  <text x="418" y="224" font-size="9.5" fill="#B58A5E">Kotlin · Compose · testes</text>
+
+  <!-- QA -->
+  <rect x="590" y="98" width="165" height="150" rx="11" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="672" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">QA</text>
+  <text x="672" y="146" text-anchor="middle" font-size="10" fill="#8A97A3">confronta o combinado</text>
+  <text x="606" y="176" font-size="10.5" fill="#9DBDB6">lê SPEC + código</text>
+  <text x="606" y="200" font-size="10.5" font-weight="700" fill="#8ECB98">gera REVIEW.md</text>
+  <text x="606" y="224" font-size="9.5" fill="#6FA87E">não edita nesta sessão</text>
+
+  <!-- batons (arrows carrying a file) -->
+  <line x1="191" y1="173" x2="212" y2="173" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="379" y1="173" x2="400" y2="173" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="567" y1="173" x2="588" y2="173" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- feedback arc QA -> Dev -->
+  <path d="M 654 248 C 640 316, 520 316, 500 250" fill="none" stroke="#F0899A" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+  <text x="574" y="330" text-anchor="middle" font-size="10" fill="#D89BA2">review com falha → Dev volta, lê REVIEW.md, corrige só o que falhou</text>
+
+  <!-- rule strip -->
+  <rect x="26" y="348" width="729" height="34" rx="9" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="42" y="370" font-size="11" fill="#B7BFC7"><tspan font-weight="700" fill="#DFE1E5">Regra:</tspan> uma intenção por sessão · nunca troque de jaleco no meio da janela gorda — o papel novo herda o lixo do velho.</text>
+</svg>

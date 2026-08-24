@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 440" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="440" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Edge-to-edge: o conteúdo vai até as bordas</text>
+  <text x="390" y="59" text-anchor="middle" font-size="13.5" fill="#8A97A3">As barras do sistema ficam <tspan font-weight="700" fill="#6366F1">transparentes</tspan> — você “afasta” o que não pode ficar atrás delas</text>
+
+  <!-- ============ ANTES ============ -->
+  <g>
+    <rect x="70" y="92" width="190" height="300" rx="20" fill="#3C3F41" stroke="#DFE1E5" stroke-width="2"/>
+    <!-- status bar (opaca) -->
+    <rect x="72" y="94" width="186" height="30" rx="18" fill="#B7BFC7"/>
+    <rect x="72" y="110" width="186" height="14" fill="#B7BFC7"/>
+    <text x="165" y="114" text-anchor="middle" font-size="10" fill="#525659">barra de status</text>
+    <!-- conteúdo -->
+    <rect x="72" y="124" width="186" height="214" fill="#313335"/>
+    <text x="165" y="235" text-anchor="middle" font-size="12" fill="#94A3B8">seu conteúdo</text>
+    <!-- nav bar (opaca) -->
+    <rect x="72" y="338" width="186" height="30" fill="#B7BFC7"/>
+    <rect x="72" y="352" width="186" height="38" rx="18" fill="#B7BFC7"/>
+    <text x="165" y="357" text-anchor="middle" font-size="10" fill="#525659">barra de navegação</text>
+    <text x="165" y="414" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">ANTES</text>
+    <text x="165" y="431" text-anchor="middle" font-size="11.5" fill="#8A97A3">o sistema reserva as faixas</text>
+  </g>
+
+  <text x="360" y="245" text-anchor="middle" font-size="26" fill="#525659">→</text>
+
+  <!-- ============ DEPOIS ============ -->
+  <g>
+    <rect x="440" y="92" width="190" height="300" rx="20" fill="#2E3350" stroke="#DFE1E5" stroke-width="2"/>
+    <clipPath id="clipD"><rect x="442" y="94" width="186" height="296" rx="18"/></clipPath>
+    <g clip-path="url(#clipD)">
+      <!-- conteúdo edge-to-edge (vai atrás das barras) -->
+      <rect x="442" y="94" width="186" height="296" fill="#2E3350"/>
+      <!-- status bar transparente (só ícones) -->
+      <text x="458" y="116" font-size="11" font-weight="600" fill="#D2D8DE">09:41</text>
+      <text x="612" y="116" text-anchor="end" font-size="11" fill="#D2D8DE">🔋 100%</text>
+      <!-- nav bar transparente (gestos) -->
+      <text x="535" y="378" text-anchor="middle" font-size="14" fill="#B7BFC7" letter-spacing="10">◄ ● ▬</text>
+      <!-- área segura (safe drawing) -->
+      <rect x="454" y="150" width="162" height="188" rx="10" fill="#3C3F41" stroke="#6366F1" stroke-width="1.4" stroke-dasharray="5 4"/>
+      <text x="535" y="248" text-anchor="middle" font-size="11" fill="#6366F1" font-weight="600">área segura</text>
+      <text x="535" y="264" text-anchor="middle" font-size="10" fill="#818CF8">(conteúdo tocável)</text>
+    </g>
+
+    <!-- top inset dim -->
+    <g stroke="#0EA5A4" stroke-width="1.5">
+      <line x1="424" y1="94" x2="424" y2="150"/>
+      <line x1="418" y1="94" x2="430" y2="94"/><line x1="418" y1="150" x2="430" y2="150"/>
+    </g>
+    <!-- bottom inset dim -->
+    <g stroke="#D97706" stroke-width="1.5">
+      <line x1="424" y1="338" x2="424" y2="390"/>
+      <line x1="418" y1="338" x2="430" y2="338"/><line x1="418" y1="390" x2="430" y2="390"/>
+    </g>
+
+    <text x="535" y="414" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">DEPOIS (o padrão)</text>
+    <text x="535" y="431" text-anchor="middle" font-size="11.5" fill="#8A97A3">você desenha tudo, edge-to-edge</text>
+  </g>
+
+  <!-- legend chips (right) -->
+  <rect x="646" y="120" width="120" height="52" rx="10" fill="#1F332F" stroke="#0EA5A4" stroke-width="1.2"/>
+  <text x="706" y="142" text-anchor="middle" font-size="11.5" font-weight="700" fill="#7FC9BD">inset do topo</text>
+  <text x="706" y="159" text-anchor="middle" font-size="10.5" fill="#7FC9BD">= barra de status</text>
+
+  <rect x="646" y="316" width="120" height="52" rx="10" fill="#3C3420" stroke="#D97706" stroke-width="1.2"/>
+  <text x="706" y="338" text-anchor="middle" font-size="11.5" font-weight="700" fill="#E3AE72">inset da base</text>
+  <text x="706" y="355" text-anchor="middle" font-size="10.5" fill="#E3AE72">= barra de gestos</text>
+
+  <text x="706" y="245" text-anchor="middle" font-size="11" fill="#94A3B8">safeDrawing</text>
+  <text x="706" y="261" text-anchor="middle" font-size="11" fill="#94A3B8">= topo + base</text>
+</svg>

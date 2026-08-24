@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 408" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="408" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Três siglas, uma pergunta: o que é “pronto”?</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">todas definem o alvo <tspan font-style="italic">antes</tspan> de a IA gerar código — em níveis diferentes</text>
+
+  <!-- SDD -->
+  <rect x="26" y="82" width="230" height="252" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="141" y="112" text-anchor="middle" font-size="17" font-weight="700" fill="#AEB7F2">SDD</text>
+  <text x="141" y="132" text-anchor="middle" font-size="10.5" fill="#8891C8">Spec-Driven Development</text>
+  <line x1="46" y1="146" x2="236" y2="146" stroke="#4650A0"/>
+  <text x="46" y="170" font-size="11" fill="#AAB6C0">responde:</text>
+  <text x="46" y="188" font-size="12" font-weight="700" fill="#AEB7F2">o QUÊ e o ESCOPO</text>
+  <text x="46" y="216" font-size="11" fill="#AAB6C0">artefato:</text>
+  <text x="46" y="234" font-size="11.5" font-weight="700" fill="#DFE1E5" font-family="ui-monospace,monospace">PLANO.md · SPEC.md</text>
+  <text x="46" y="262" font-size="11" fill="#AAB6C0">nível:</text>
+  <text x="46" y="280" font-size="11.5" fill="#DFE1E5">produto e arquitetura</text>
+  <text x="46" y="312" font-size="10" fill="#8891C8">humano escreve a spec,</text>
+  <text x="46" y="326" font-size="10" fill="#8891C8">a IA executa dentro dela</text>
+
+  <!-- TDD -->
+  <rect x="275" y="82" width="230" height="252" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="390" y="112" text-anchor="middle" font-size="17" font-weight="700" fill="#8ECB98">TDD</text>
+  <text x="390" y="132" text-anchor="middle" font-size="10.5" fill="#6FA87E">Test-Driven Development</text>
+  <line x1="295" y1="146" x2="485" y2="146" stroke="#3B6B47"/>
+  <text x="295" y="170" font-size="11" fill="#9DBDB6">responde:</text>
+  <text x="295" y="188" font-size="12" font-weight="700" fill="#8ECB98">está CORRETO?</text>
+  <text x="295" y="216" font-size="11" fill="#9DBDB6">artefato:</text>
+  <text x="295" y="234" font-size="11.5" font-weight="700" fill="#DFE1E5" font-family="ui-monospace,monospace">teste que falha</text>
+  <text x="295" y="262" font-size="11" fill="#9DBDB6">nível:</text>
+  <text x="295" y="280" font-size="11.5" fill="#DFE1E5">unidade e função</text>
+  <text x="295" y="312" font-size="10" fill="#6FA87E">o teste vem primeiro e</text>
+  <text x="295" y="326" font-size="10" fill="#6FA87E">amarra a IA à realidade</text>
+
+  <!-- BDD -->
+  <rect x="524" y="82" width="230" height="252" rx="12" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.6"/>
+  <text x="639" y="112" text-anchor="middle" font-size="17" font-weight="700" fill="#7FC9BD">BDD</text>
+  <text x="639" y="132" text-anchor="middle" font-size="10.5" fill="#6FA89C">Behavior-Driven Development</text>
+  <line x1="544" y1="146" x2="734" y2="146" stroke="#356158"/>
+  <text x="544" y="170" font-size="11" fill="#9DBDB6">responde:</text>
+  <text x="544" y="188" font-size="12" font-weight="700" fill="#7FC9BD">qual COMPORTAMENTO?</text>
+  <text x="544" y="216" font-size="11" fill="#9DBDB6">artefato:</text>
+  <text x="544" y="234" font-size="11.5" font-weight="700" fill="#DFE1E5" font-family="ui-monospace,monospace">Given-When-Then</text>
+  <text x="544" y="262" font-size="11" fill="#9DBDB6">nível:</text>
+  <text x="544" y="280" font-size="11.5" fill="#DFE1E5">feature e linguagem</text>
+  <text x="544" y="312" font-size="10" fill="#6FA89C">a linguagem única entre</text>
+  <text x="544" y="326" font-size="10" fill="#6FA89C">produto, dev e IA</text>
+
+  <!-- bottom strip -->
+  <rect x="26" y="350" width="728" height="42" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="390" y="368" text-anchor="middle" font-size="11.5" font-weight="700" fill="#DFE1E5">Não competem — encadeiam.</text>
+  <text x="390" y="384" text-anchor="middle" font-size="10.5" fill="#B7BFC7">SDD recorta o escopo  →  BDD descreve a aceitação  →  TDD implementa cada peça</text>
+</svg>

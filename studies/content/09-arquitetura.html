@@ -1,0 +1,228 @@
+<h1>🏛️ Arquitetura &amp; código limpo no Android: camadas que aguentam crescer (2026)</h1>
+
+<p>Existe uma pergunta que revela a saúde de um app: <strong>“consigo mudar isto sem medo?”</strong>. Se trocar a fonte de dados obriga a mexer na tela, se testar uma regra exige subir a UI inteira, se dois devs não conseguem tocar features diferentes sem colidir — o problema não é o código, é a <strong>arquitetura</strong>. Este artigo constrói, do básico ao avançado, a arquitetura que o próprio Google recomenda para Android — e o <em>porquê</em> de cada peça.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> este artigo desenha a estrutura; o <strong>próximo (10 · Testes)</strong> mostra como cada camada aqui vira teste barato. Não é coincidência — arquitetura boa é a que se testa fácil.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Por que separar em camadas</h2>
+
+<p>Um app tem três responsabilidades que mudam por motivos <strong>diferentes</strong>: <strong>mostrar</strong> coisas na tela, <strong>decidir</strong> regras de negócio, e <strong>buscar/guardar</strong> dados. Misturá-las num <code>Activity</code>/<code>Composable</code> gigante (o famoso “Deus-objeto”) faz cada mudança arriscar quebrar as outras duas. Separar em camadas isola o motivo da mudança.</p>
+
+<p><img src="../assets/arquitetura-camadas.svg" alt="Arquitetura em camadas recomendada para Android. Camada de UI (apresentação): Composable stateless que recebe UiState e emite eventos, e ViewModel que expõe UiState imutável (MVI), a única fonte da verdade. Camada de domínio em Kotlin puro sem Android: UseCase (uma regra de negócio), Entidades (modelos do negócio) e Repository como interface (a porta que o data implementa). Camada de dados: Repository impl que orquestra as fontes, Room e Retrofit (local e remoto), DataStore e Mapper/DTO. Uma trilha lateral de DI com Hilt monta o grafo de objetos e injeta a interface, não a implementação — é o que troca o real pelo fake no teste. As setas de dependência da UI e do data apontam para o domínio, que não conhece ninguém."></p>
+
+<table>
+<thead><tr><th align="left">Camada</th><th align="left">Responde por</th><th align="left">Peças típicas (Android 2026)</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>UI</strong> (apresentação)</td><td align="left">desenhar o estado e captar eventos</td><td align="left">Compose, ViewModel, <code>UiState</code>, Navigation</td></tr>
+<tr><td align="left"><strong>Domínio</strong></td><td align="left">as regras do negócio, puras</td><td align="left">UseCase, Entidades, interfaces de Repository</td></tr>
+<tr><td align="left"><strong>Dados</strong></td><td align="left">de onde vêm e para onde vão os dados</td><td align="left">Repository (impl), Room, Retrofit, DataStore</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — camada:</strong> um agrupamento de código com <strong>uma</strong> responsabilidade e uma fronteira clara. A regra é que uma camada só conversa com a vizinha por um <strong>contrato</strong> (interface), nunca fuçando o interior dela.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · A Regra da Dependência (o coração)</h2>
+
+<p>O desenho acima tem uma sutileza que é o <em>tudo</em>: as setas apontam para <strong>dentro</strong>. A UI depende do domínio; a camada de dados depende do domínio; o <strong>domínio não depende de ninguém</strong>. Ele não sabe que existe Android, Room ou Retrofit.</p>
+
+<blockquote><p>🧠 <strong>Termo — Regra da Dependência (Clean Architecture):</strong> o código de fora (frágil, muda toda hora: UI, banco, rede) pode depender do de dentro (estável: regras de negócio) — <strong>nunca o contrário</strong>. O estável não pode ser refém do volátil.</p></blockquote>
+
+<p>Como a camada de dados fica “embaixo” mas o domínio não pode depender dela? Com <strong>inversão de dependência</strong>: o domínio <strong>define a interface</strong> (<code>AuthRepository</code>) e a camada de dados a <strong>implementa</strong> (<code>AuthRepositoryImpl</code>). A seta de código aponta do data para o domínio, mesmo o dado “rodando por baixo”.</p>
+
+<pre><code class="language-kotlin">// domínio (Kotlin puro) — a PORTA
+interface AuthRepository {
+    suspend fun login(email: String, senha: String): Result&lt;Usuario&gt;
+}
+
+// domínio — a REGRA, que só conhece a porta
+class FazerLogin(private val repo: AuthRepository) {
+    suspend operator fun invoke(email: String, senha: String) =
+        repo.login(email, senha)
+}
+
+// data — a IMPLEMENTAÇÃO da porta (conhece Retrofit; o domínio não)
+class AuthRepositoryImpl(private val api: AuthApi) : AuthRepository {
+    override suspend fun login(email: String, senha: String) = runCatching {
+        api.login(LoginDto(email, senha)).toUsuario()   // mapper DTO → entidade
+    }
+}
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> ponha o domínio num <strong>módulo Gradle Kotlin puro</strong> (<code>java-library</code>, sem o plugin Android). Aí a Regra da Dependência deixa de ser disciplina e vira <strong>lei física</strong>: se alguém tentar importar <code>android.content.Context</code> no domínio, o projeto <strong>não compila</strong>. A ferramenta passa a guardar a arquitetura por você.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · A camada de UI: MVVM, MVI e fluxo unidirecional</h2>
+
+<p>Na tela, o padrão moderno é o <strong>MVVM</strong> evoluído para <strong>MVI</strong>: a tela é uma <strong>função do estado</strong>. O ViewModel expõe um <code>UiState</code> imutável; o Composable o desenha; toda interação vira um <strong>evento</strong> que sobe. Um sentido só.</p>
+
+<p><img src="../assets/fluxo-unidirecional.svg" alt="Fluxo unidirecional de dados. O ViewModel expõe um StateFlow de UiState e faz reduce (evento vira novo estado imutável). O estado desce para o Composable (UI), que coleta com collectAsStateWithLifecycle e recompõe quando o estado muda; os eventos (onClick, onType) sobem de volta como lambdas para o ViewModel. Embaixo, o state hoisting: a Screen da rota conecta o ViewModel e coleta o estado, enquanto o Content stateless só recebe estado e lambdas, ficando fácil de testar e de fazer preview."></p>
+
+<blockquote><p>🧠 <strong>Termo — UDF (Fluxo Unidirecional de Dados):</strong> o estado <strong>desce</strong> (do ViewModel para a UI) e os eventos <strong>sobem</strong> (da UI para o ViewModel). Nunca os dois sentidos no mesmo canal. Isso elimina a classe de bugs “quem alterou esse valor?”.</p></blockquote>
+
+<pre><code class="language-kotlin">// UiState imutável descreve a tela INTEIRA num só objeto
+data class LoginUiState(
+    val email: String = "",
+    val carregando: Boolean = false,
+    val erro: String? = null,
+)
+
+class LoginViewModel(private val fazerLogin: FazerLogin) : ViewModel() {
+    private val _state = MutableStateFlow(LoginUiState())
+    val state: StateFlow&lt;LoginUiState&gt; = _state.asStateFlow()   // única fonte da verdade
+
+    fun aoEntrar(email: String, senha: String) = viewModelScope.launch {
+        _state.update { it.copy(carregando = true, erro = null) }
+        fazerLogin(email, senha)
+            .onSuccess { _state.update { it.copy(carregando = false) } }
+            .onFailure { e -> _state.update { it.copy(carregando = false, erro = e.message) } }
+    }
+}
+</code></pre>
+
+<h3>State hoisting: a UI stateless</h3>
+
+<p>Separe a <strong>rota</strong> (que conhece o ViewModel) do <strong>conteúdo</strong> (que só recebe estado e lambdas). O conteúdo stateless é o que fica trivial de testar e de pré-visualizar (<code>@Preview</code>).</p>
+
+<pre><code class="language-kotlin">// rota: conecta o ViewModel (stateful)
+@Composable
+fun LoginRoute(vm: LoginViewModel = hiltViewModel()) {
+    val state by vm.state.collectAsStateWithLifecycle()
+    LoginContent(state = state, onEntrar = vm::aoEntrar)
+}
+
+// conteúdo: sem ViewModel, só estado + eventos (stateless → testável/preview)
+@Composable
+fun LoginContent(state: LoginUiState, onEntrar: (String, String) -> Unit) { /* … */ }
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> use <code>collectAsStateWithLifecycle()</code>, não <code>collectAsState()</code>. O primeiro para de coletar quando a tela vai para segundo plano — o segundo continua gastando recursos com a tela invisível.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Domínio e dados: os padrões de apoio</h2>
+
+<table>
+<thead><tr><th align="left">Padrão</th><th align="left">O que é</th><th align="left">Por que existe</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>UseCase</strong> (Interactor)</td><td align="left">uma classe = uma ação de negócio (<code>AplicarCupom</code>)</td><td align="left">tira regra de dentro do ViewModel; reutilizável e testável isolada</td></tr>
+<tr><td align="left"><strong>Repository</strong></td><td align="left">a fachada única para um tipo de dado</td><td align="left">a UI não sabe se veio da rede ou do cache — só pede</td></tr>
+<tr><td align="left"><strong>Data source</strong></td><td align="left">uma fonte concreta (Room, Retrofit, DataStore)</td><td align="left">o Repository escolhe/combina as fontes</td></tr>
+<tr><td align="left"><strong>Mapper / DTO</strong></td><td align="left">converte o formato externo (JSON) na entidade do domínio</td><td align="left">o domínio nunca vê o formato da API — desacopla</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — DTO vs Entidade:</strong> <strong>DTO</strong> (Data Transfer Object) é o formato cru da API/banco (o JSON). <strong>Entidade</strong> é o modelo limpo do seu domínio. O <strong>mapper</strong> traduz um no outro — assim, se a API mudar um campo, só o mapper muda, e o resto do app nem percebe.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o UseCase é opcional em telas triviais (o ViewModel pode chamar o Repository direto). Adote-o quando a regra <strong>se repete</strong> entre telas ou fica <strong>complexa</strong> demais para o ViewModel. Não crie um UseCase que só repassa a chamada — isso é cerimônia sem valor. Arquitetura é sobre <em>onde a complexidade mora</em>, não sobre encher o app de camadas.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · Injeção de dependência (Hilt)</h2>
+
+<p>Tudo acima depende de uma coisa: as classes <strong>recebem</strong> suas dependências por interface, em vez de <strong>criá-las</strong> por dentro. Quem monta esse quebra-cabeça é o container de <strong>DI</strong>. No Android moderno, é o <strong>Hilt</strong>.</p>
+
+<pre><code class="language-kotlin">@Module
+@InstallIn(SingletonComponent::class)
+abstract class DataModule {
+    // quando alguém pedir a INTERFACE, o Hilt entrega esta IMPLEMENTAÇÃO
+    @Binds
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+}
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val fazerLogin: FazerLogin       // injetado — o VM não constrói nada
+) : ViewModel()
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o valor da DI aparece no teste (artigo 10): como o ViewModel recebe a <strong>interface</strong>, no teste você entrega um <code>FakeAuthRepository</code> em vez do real — sem rede, sem Hilt, em milissegundos. Um ViewModel que faz <code>Retrofit.create()</code> por dentro é <strong>intestável</strong>. Teste difícil é sempre um sintoma de dependência mal invertida.</p></blockquote>
+
+<hr>
+
+<h2>Parte 6 · Código limpo: o nível do dia a dia</h2>
+
+<p>Arquitetura organiza os grandes blocos; <strong>código limpo</strong> organiza cada função. Os dois se sustentam.</p>
+
+<table>
+<thead><tr><th align="left">Princípio</th><th align="left">Na prática Android</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Nomes que revelam intenção</strong></td><td align="left"><code>aplicarCupom()</code>, não <code>proc()</code>; <code>carregando</code>, não <code>flag</code></td></tr>
+<tr><td align="left"><strong>Funções pequenas, uma coisa só</strong></td><td align="left">um <code>Composable</code> que faz layout + rede + parsing precisa ser quebrado</td></tr>
+<tr><td align="left"><strong>SOLID</strong></td><td align="left">o “S” (uma responsabilidade) e o “D” (inversão) são os que mais importam aqui</td></tr>
+<tr><td align="left"><strong>Imutabilidade</strong></td><td align="left"><code>val</code> e <code>data class</code> por padrão; estado que só muda por <code>copy()</code></td></tr>
+<tr><td align="left"><strong>Sem estado escondido</strong></td><td align="left">nada de variável global mutável; o estado mora no ViewModel</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> “código limpo” não é encher de abstração. Uma interface com <strong>uma</strong> implementação que nunca terá outra, um UseCase que só repassa, cinco módulos para um app de duas telas — isso é <em>over-engineering</em>. Limpo é o <strong>mínimo</strong> que deixa mudar sem medo, não o máximo de camadas.</p></blockquote>
+
+<hr>
+
+<h2>Parte 7 · Modularização: onde tudo se paga</h2>
+
+<p>Quando as camadas já são limpas, separá-las em <strong>módulos Gradle</strong> deixa de ser risco e vira ganho: build incremental (só o módulo que mudou recompila — artigo 01), fronteiras que o compilador <strong>obriga</strong> a respeitar, e times em paralelo.</p>
+
+<pre><code class="language-text">nexushub/
+├── app/                     # amarra tudo (o grafo do Hilt, a navegação)
+├── core/
+│   ├── :core-ui             # tema, componentes de design compartilhados
+│   └── :core-testing        # fakes e utilitários de teste reusáveis
+├── :domain                  # KOTLIN PURO — sem Android (a lei da dependência)
+├── :data                    # Room, Retrofit, implementações de Repository
+└── feature/
+    ├── :feature-login
+    └── :feature-carrinho    # cada feature isolada, testável, dona do seu ViewModel
+</code></pre>
+
+<p><img src="../assets/ciclo-virtuoso.svg" alt="Ciclo virtuoso em triângulo. Arquitetura limpa (camadas, injeção de dependência, ViewModel isolado, Compose stateless) torna tudo testável; Testes rápidos (isolados, na JVM, confiáveis, a base larga da pirâmide) dão segurança para separar em módulos; Modularização (core, data, feature-x, build incremental e paralelo) força fronteiras limpas de volta para a arquitetura. No centro: testabilidade é consequência, não esforço à parte."></p>
+
+<ul>
+<li><strong>Arquitetura → testes:</strong> camadas e injeção <strong>permitem</strong> testar cada peça isolada (artigo 10).</li>
+<li><strong>Testes → modularização:</strong> fronteiras cobertas <strong>dão segurança</strong> para partir o app sem medo.</li>
+<li><strong>Modularização → arquitetura:</strong> o módulo <code>:domain</code> puro <strong>força</strong> a Regra da Dependência a valer de verdade.</li>
+</ul>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> comece o NexusHub com <strong>um módulo por feature</strong> + <code>:core</code> + <code>:domain</code> puro. Módulos por <strong>feature</strong> (não por camada técnica) escalam melhor: cada time é dono de uma feature de ponta a ponta. Adote a modularização quando o build começar a doer ou o time crescer — cedo demais, é burocracia; tarde demais, é um novelo para desembaraçar.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Três camadas</strong></td><td align="left">UI / domínio / dados com fronteiras por interface</td></tr>
+<tr><td align="left"><strong>Regra da Dependência</strong></td><td align="left">Domínio em módulo Kotlin puro — o Gradle garante a direção</td></tr>
+<tr><td align="left"><strong>MVI / UDF</strong></td><td align="left"><code>UiState</code> imutável; estado desce, evento sobe; <code>StateFlow</code></td></tr>
+<tr><td align="left"><strong>State hoisting</strong></td><td align="left">Rota conecta o ViewModel; conteúdo stateless recebe estado + lambdas</td></tr>
+<tr><td align="left"><strong>Repository + Mapper</strong></td><td align="left">Fachada única por dado; DTO nunca vaza para o domínio</td></tr>
+<tr><td align="left"><strong>Hilt</strong></td><td align="left">Injetar interfaces por construtor; nada de <code>new</code>/<code>create()</code> interno</td></tr>
+<tr><td align="left"><strong>Sem over-engineering</strong></td><td align="left">UseCase só quando agrega; a mínima camada que deixa mudar sem medo</td></tr>
+<tr><td align="left"><strong>Modularização</strong></td><td align="left">Por feature + core + domínio; adotar quando o build/time pedir</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>camada</strong></td><td align="left">Bloco com uma responsabilidade e fronteira por contrato.</td></tr>
+<tr><td align="left"><strong>Clean Architecture</strong></td><td align="left">UI/domínio/dados com dependência apontando para dentro.</td></tr>
+<tr><td align="left"><strong>Regra da Dependência</strong></td><td align="left">O de fora depende do de dentro, nunca o contrário.</td></tr>
+<tr><td align="left"><strong>inversão de dependência</strong></td><td align="left">O domínio define a interface; o dado a implementa.</td></tr>
+<tr><td align="left"><strong>MVVM / MVI</strong></td><td align="left">Tela = f(estado); ViewModel expõe <code>UiState</code> imutável.</td></tr>
+<tr><td align="left"><strong>UDF</strong></td><td align="left">Estado desce, evento sobe — um sentido só.</td></tr>
+<tr><td align="left"><strong>state hoisting</strong></td><td align="left">Tirar o estado do Composable e injetá-lo de fora.</td></tr>
+<tr><td align="left"><strong>UseCase</strong></td><td align="left">Uma classe = uma ação de negócio, testável isolada.</td></tr>
+<tr><td align="left"><strong>Repository</strong></td><td align="left">Fachada única para um tipo de dado.</td></tr>
+<tr><td align="left"><strong>DTO / Mapper</strong></td><td align="left">Formato cru da API ↔ entidade limpa do domínio.</td></tr>
+<tr><td align="left"><strong>DI / Hilt</strong></td><td align="left">Container que injeta as interfaces por construtor.</td></tr>
+<tr><td align="left"><strong>modularização</strong></td><td align="left">Partir o app em módulos Gradle com fronteiras reais.</td></tr>
+</tbody>
+</table>

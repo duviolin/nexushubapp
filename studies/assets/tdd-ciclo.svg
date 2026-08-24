@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 404" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="404" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">TDD com IA: o teste é a coleira da alucinação</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">vermelho → verde → refatorar · o ciclo em que a IA prova o próprio código a cada passo</text>
+
+  <!-- RED -->
+  <rect x="70" y="96" width="250" height="104" rx="12" fill="#3C2428" stroke="#F0899A" stroke-width="1.7"/>
+  <text x="195" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#F0899A">1 · RED</text>
+  <text x="195" y="147" text-anchor="middle" font-size="11" fill="#E5A9B1">escreva o teste que falha</text>
+  <text x="195" y="167" text-anchor="middle" font-size="10" fill="#D89BA2">define o comportamento esperado</text>
+  <text x="195" y="185" text-anchor="middle" font-size="9.5" fill="#C98A93" font-style="italic">você guia o teste; a IA rascunha os casos</text>
+
+  <!-- GREEN -->
+  <rect x="460" y="96" width="250" height="104" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.7"/>
+  <text x="585" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#8ECB98">2 · GREEN</text>
+  <text x="585" y="147" text-anchor="middle" font-size="11" fill="#9ECBA6">o código mínimo que faz passar</text>
+  <text x="585" y="167" text-anchor="middle" font-size="10" fill="#9DBDB6">nada além do que o teste pede</text>
+  <text x="585" y="185" text-anchor="middle" font-size="9.5" fill="#7FB389" font-style="italic">a IA implementa contra um alvo real</text>
+
+  <!-- REFACTOR -->
+  <rect x="265" y="270" width="250" height="104" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.7"/>
+  <text x="390" y="298" text-anchor="middle" font-size="15" font-weight="700" fill="#AEB7F2">3 · REFACTOR</text>
+  <text x="390" y="321" text-anchor="middle" font-size="11" fill="#AAB6C0">limpe o código, testes seguem verdes</text>
+  <text x="390" y="341" text-anchor="middle" font-size="10" fill="#9099C4">extraia, renomeie, simplifique</text>
+  <text x="390" y="359" text-anchor="middle" font-size="9.5" fill="#8891C8" font-style="italic">a rede de segurança deixa a IA ousar</text>
+
+  <!-- cycle arrows -->
+  <line x1="320" y1="148" x2="458" y2="148" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="560" y1="200" x2="470" y2="288" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="310" y1="288" x2="220" y2="200" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <text x="390" y="235" text-anchor="middle" font-size="10.5" fill="#8A97A3">repita por comportamento — passos pequenos, cada um verde antes do próximo</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 450" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="780" height="450" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">A pirâmide de testes, em versão Android</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">muitos testes baratos embaixo; poucos, caros e realistas em cima</text>
+
+  <!-- pyramid bands -->
+  <polygon points="390,84 470,184 310,184" fill="#3C2428" stroke="#F0899A" stroke-width="1.5"/>
+  <polygon points="310,186 470,186 552,286 228,286" fill="#3C3420" stroke="#D97706" stroke-width="1.5"/>
+  <polygon points="228,288 552,288 632,386 148,386" fill="#25392A" stroke="#84C48D" stroke-width="1.5"/>
+
+  <!-- top: E2E / UI instrumentada -->
+  <text x="390" y="132" text-anchor="middle" font-size="12.5" font-weight="700" fill="#F0899A">UI / E2E instrumentada</text>
+  <text x="390" y="150" text-anchor="middle" font-size="10" fill="#D79AA3">Espresso · Compose UI test</text>
+  <text x="390" y="164" text-anchor="middle" font-size="10" fill="#D79AA3">no emulador/aparelho · androidTest</text>
+  <text x="390" y="178" text-anchor="middle" font-size="9.5" font-style="italic" fill="#F0899A">poucos: o fluxo crítico (login→compra)</text>
+
+  <!-- mid: integração / componente -->
+  <text x="390" y="222" text-anchor="middle" font-size="12.5" font-weight="700" fill="#E3AE72">Integração / componente</text>
+  <text x="390" y="240" text-anchor="middle" font-size="10" fill="#D9C4A0">Robolectric · Compose test na JVM · Room in-memory</text>
+  <text x="390" y="254" text-anchor="middle" font-size="10" fill="#D9C4A0">testa a tela + ViewModel juntos, sem emulador</text>
+  <text x="390" y="270" text-anchor="middle" font-size="9.5" font-style="italic" fill="#E3AE72">alguns: cada tela e sua lógica de estado</text>
+
+  <!-- bottom: unidade -->
+  <text x="390" y="320" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8ECB98">Unidade (JVM pura)</text>
+  <text x="390" y="338" text-anchor="middle" font-size="10" fill="#9DBDB6">JUnit5 · MockK/fakes · Turbine · runTest</text>
+  <text x="390" y="352" text-anchor="middle" font-size="10" fill="#9DBDB6">ViewModel · UseCase · mappers · validação</text>
+  <text x="390" y="368" text-anchor="middle" font-size="9.5" font-style="italic" fill="#8ECB98">muitos: rodam em milissegundos, sem Android</text>
+
+  <!-- left axis: speed/cost -->
+  <line x1="86" y1="98" x2="86" y2="384" stroke="#94A3B8" stroke-width="1.5" marker-start="url(#ar)"/>
+  <text x="70" y="232" font-size="10.5" fill="#F0899A" transform="rotate(-90 70 232)" text-anchor="start">mais lento · caro · frágil</text>
+  <text x="70" y="384" font-size="10.5" fill="#8ECB98" transform="rotate(-90 70 384)" text-anchor="start">mais rápido · barato · estável</text>
+
+  <!-- right axis: quantity -->
+  <line x1="694" y1="384" x2="694" y2="98" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="712" y="110" font-size="10.5" fill="#B7BFC7" transform="rotate(90 712 110)" text-anchor="start">poucos</text>
+  <text x="712" y="384" font-size="10.5" fill="#B7BFC7" transform="rotate(90 712 384)" text-anchor="end">muitos</text>
+
+  <!-- footer thesis -->
+  <rect x="120" y="404" width="540" height="32" rx="9" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="390" y="424" text-anchor="middle" font-size="11" fill="#B7BFC7">Anti-padrão: a <tspan font-weight="700" fill="#F0899A">pirâmide invertida</tspan> (tudo em teste de UI lento) — build de horas, testes que piscam.</text>
+</svg>

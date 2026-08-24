@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="470" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">A esteira: do <tspan font-family="ui-monospace,monospace">git push</tspan> à Play Store</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">cada estágio precisa passar para o próximo rodar — o primeiro que falha para a esteira</text>
+
+  <!-- trigger -->
+  <rect x="40" y="86" width="220" height="46" rx="10" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.5"/>
+  <text x="150" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#7FC9BD">Gatilho</text>
+  <text x="150" y="122" text-anchor="middle" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">push / pull request</text>
+  <line x1="150" y1="132" x2="150" y2="150" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- CI lane (quality) -->
+  <rect x="24" y="150" width="732" height="120" rx="12" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="40" y="170" font-size="12" font-weight="700" fill="#AEB7F2">CI · Integração contínua (portão de qualidade — roda em todo PR)</text>
+
+  <g>
+    <rect x="40"  y="182" width="120" height="72" rx="9" fill="#2E3350" stroke="#6366F1"/>
+    <text x="100" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">checkout</text>
+    <text x="100" y="223" text-anchor="middle" font-size="10" fill="#AAB6C0">+ setup JDK</text>
+    <text x="100" y="238" text-anchor="middle" font-size="10" fill="#AAB6C0">+ cache Gradle</text>
+
+    <rect x="172" y="182" width="120" height="72" rx="9" fill="#2E3350" stroke="#6366F1"/>
+    <text x="232" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">lint + detekt</text>
+    <text x="232" y="223" text-anchor="middle" font-size="10" fill="#AAB6C0">estilo · code smell</text>
+    <text x="232" y="238" text-anchor="middle" font-size="10" fill="#AAB6C0">ktlint (formato)</text>
+
+    <rect x="304" y="182" width="120" height="72" rx="9" fill="#2E3350" stroke="#6366F1"/>
+    <text x="364" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">testes</text>
+    <text x="364" y="223" text-anchor="middle" font-size="10" fill="#AAB6C0">unit + cobertura</text>
+    <text x="364" y="238" text-anchor="middle" font-size="10" fill="#AAB6C0">Kover / Jacoco</text>
+
+    <rect x="436" y="182" width="128" height="72" rx="9" fill="#3C3420" stroke="#D97706"/>
+    <text x="500" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#E3AE72">Sonar</text>
+    <text x="500" y="223" text-anchor="middle" font-size="10" fill="#D9C4A0">Quality Gate</text>
+    <text x="500" y="238" text-anchor="middle" font-size="10" fill="#D9C4A0">passou? / bloqueia</text>
+
+    <rect x="576" y="182" width="164" height="72" rx="9" fill="#2E3350" stroke="#6366F1"/>
+    <text x="658" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">build de verificação</text>
+    <text x="658" y="223" text-anchor="middle" font-size="10" fill="#AAB6C0">assembleDebug</text>
+    <text x="658" y="238" text-anchor="middle" font-size="10" fill="#AAB6C0">compila mesmo?</text>
+
+    <line x1="160" y1="218" x2="171" y2="218" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="292" y1="218" x2="303" y2="218" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="424" y1="218" x2="435" y2="218" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="564" y1="218" x2="575" y2="218" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  </g>
+
+  <!-- gate to CD -->
+  <line x1="390" y1="270" x2="390" y2="292" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <polygon points="390,292 448,320 390,348 332,320" fill="#25392A" stroke="#84C48D" stroke-width="1.5"/>
+  <text x="390" y="316" text-anchor="middle" font-size="11" font-weight="700" fill="#8ECB98">tudo</text>
+  <text x="390" y="330" text-anchor="middle" font-size="11" font-weight="700" fill="#8ECB98">verde?</text>
+  <text x="470" y="308" font-size="10.5" fill="#8A97A3">só continua se sim</text>
+
+  <!-- CD lane (delivery, only on tag/main) -->
+  <rect x="24" y="360" width="732" height="96" rx="12" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="40" y="380" font-size="12" font-weight="700" fill="#8ECB98">CD · Entrega contínua (só na tag de versão / branch de release)</text>
+
+  <rect x="40"  y="392" width="150" height="52" rx="9" fill="#3C3F41" stroke="#DFE1E5"/>
+  <text x="115" y="414" text-anchor="middle" font-size="12" font-weight="700" fill="#DFE1E5" font-family="ui-monospace,monospace">bundleRelease</text>
+  <text x="115" y="430" text-anchor="middle" font-size="10" fill="#AAB6C0">gera o .aab (R8)</text>
+
+  <rect x="202" y="392" width="140" height="52" rx="9" fill="#3C3F41" stroke="#DFE1E5"/>
+  <text x="272" y="414" text-anchor="middle" font-size="12" font-weight="700" fill="#DFE1E5">assinar</text>
+  <text x="272" y="430" text-anchor="middle" font-size="10" fill="#AAB6C0">keystore dos secrets</text>
+
+  <rect x="354" y="392" width="150" height="52" rx="9" fill="#2E3350" stroke="#6366F1"/>
+  <text x="429" y="414" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">artefato</text>
+  <text x="429" y="430" text-anchor="middle" font-size="10" fill="#AAB6C0">guarda o .aab + mapping</text>
+
+  <rect x="516" y="392" width="224" height="52" rx="9" fill="#25392A" stroke="#84C48D" stroke-width="1.5"/>
+  <text x="628" y="414" text-anchor="middle" font-size="12" font-weight="700" fill="#8ECB98">deploy Play (fastlane / GPP)</text>
+  <text x="628" y="430" text-anchor="middle" font-size="10" fill="#9DBDB6">faixa interna &#8594; produção</text>
+
+  <line x1="190" y1="418" x2="201" y2="418" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="342" y1="418" x2="353" y2="418" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="504" y1="418" x2="515" y2="418" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+</svg>

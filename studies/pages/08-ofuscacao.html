@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encolher & Ofuscar (R8) · Estudos Android</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir menu">☰</button>
+<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
+  <nav class="side">
+    <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
+    <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
+    <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
+    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
+    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
+    <a href="05-play-store.html"><span class="n">05</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
+    <a href="06-git-ci.html"><span class="n">06</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
+    <a href="07-qualidade.html"><span class="n">07</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
+    <a href="08-ofuscacao.html" class="active"><span class="n">08</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
+    <a href="09-arquitetura.html"><span class="n">09</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
+    <a href="10-testes.html"><span class="n">10</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="11-ia-claude-code.html"><span class="n">11</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="12-sdd-tdd-bdd.html"><span class="n">12</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
+    <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
+  </nav>
+<main>
+  <p class="crumb">Artigo <strong>8</strong> de 12 · trilha de estudos</p>
+  <article class="content">
+<h1>🕶️ Encolher e ofuscar: R8, keep rules &amp; ler crash em produção (2026)</h1>
+
+<p>No artigo 05 você marcou <code>isMinifyEnabled = true</code> e guardou o <code>mapping.txt</code> — sem entender direito o que aquilo fazia. Este artigo abre a caixa: o que o <strong>R8</strong> faz com o seu código no build de release, por que ele às vezes <strong>quebra o app</strong> (e só no release), como consertar com <strong>keep rules</strong>, e como transformar um crash ofuscado da Play em uma linha que você consegue ler.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o 05 tratou a ofuscação como um interruptor a ligar antes de publicar. Aqui vemos <em>o que</em> ele liga — e por que “funciona no debug, quebra no release” é, quase sempre, uma keep rule faltando.</p></blockquote>
+
+<hr>
+
+<h2>O que é o R8</h2>
+
+<p>Quando você compila em <strong>release</strong>, o R8 entra entre o seu código e o <code>.aab</code> e faz <strong>quatro trabalhos</strong> numa passada só. O antecessor dele, o ProGuard, fazia parecido; hoje o R8 é o padrão do Android e usa a <strong>mesma sintaxe</strong> de regras.</p>
+
+<p><img src="../assets/r8-pipeline.svg" alt="Pipeline do R8 com quatro estágios a partir da entrada (seu código + todas as libs, ~40k métodos): 1 Shrink remove código que ninguém chama (tree shaking), 2 Optimize faz inline e junta classes (mais rápido), 3 Obfuscate renomeia tudo (LoginVM vira a.b), 4 Shrink de recursos apaga drawables e strings sem uso. Saídas: um .aab menor e difícil de copiar (~40k métodos para ~12k) e o mapping.txt (o dicionário — guarde-o). Nota: só no release; o build de debug não ofusca, por isso 'funciona no debug e quebra no release' é sempre uma keep rule faltando."></p>
+
+<table>
+<thead><tr><th align="left">Estágio</th><th align="left">O que faz</th><th align="left">Ganho</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Shrink</strong> (encolher)</td><td align="left">remove classes e métodos que <strong>ninguém chama</strong> (“tree shaking”)</td><td align="left">app menor — some o código morto das libs também</td></tr>
+<tr><td align="left"><strong>Optimize</strong> (otimizar)</td><td align="left">faz inline, funde classes, simplifica desvios</td><td align="left">app um pouco mais rápido</td></tr>
+<tr><td align="left"><strong>Obfuscate</strong> (ofuscar)</td><td align="left">renomeia classes/métodos para <code>a</code>, <code>b</code>, <code>c</code></td><td align="left">menor ainda + mais chato de decompilar</td></tr>
+<tr><td align="left"><strong>Shrink de recursos</strong></td><td align="left">apaga drawables, strings e layouts sem uso</td><td align="left">menos peso de <code>res/</code></td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">// build.gradle.kts (módulo :app)
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true       // liga shrink + optimize + obfuscate
+            isShrinkResources = true     // liga o shrink de recursos (precisa do de cima)
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"     // SUAS keep rules
+            )
+        }
+    }
+}
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> só escrever <code>release</code> no nome do build <strong>não liga nada</strong>. Sem <code>isMinifyEnabled = true</code>, seu app de loja vai grande, lento e sem ofuscação. E <code>isShrinkResources</code> exige o <code>isMinifyEnabled</code> ligado — senão o build falha.</p></blockquote>
+
+<hr>
+
+<h2>Por que o app quebra (só no release)</h2>
+
+<p>O estágio de <strong>ofuscação</strong> renomeia tudo por baixo dos panos. Isso é invisível para código que chama método <strong>diretamente</strong> — o compilador atualiza a chamada junto. Mas quebra código que encontra classes <strong>por nome em texto</strong>, em tempo de execução: a <strong>reflexão</strong>.</p>
+
+<blockquote><p>🧠 <strong>Termo — reflexão:</strong> quando o programa procura uma classe/campo pelo <strong>nome</strong> em tempo de execução, em vez de chamar direto. Bibliotecas de JSON e banco fazem isso: leem <code>"email"</code> do JSON e procuram um campo chamado <code>email</code> na sua classe. Se o R8 renomeou <code>email</code> para <code>b</code>, a busca falha.</p></blockquote>
+
+<p><img src="../assets/retrace.svg" alt="Duas partes. A: um crash ofuscado que a Play mostra (NullPointerException at a.b.c) passa pelo retrace com o mapping.txt e vira legível (at LoginViewModel.onClick em LoginVM.kt:42). B: por que reflexão quebra sem keep rule — o R8 renomeia a classe User para 'a' e o campo para 'b', mas o JSON da API ainda diz 'name'/'email'; o Gson procura o campo 'name' na classe, não acha e o campo fica nulo ou dá crash. Afeta Gson, Retrofit, Room, kotlinx.serialization e enums. A correção: uma keep rule (-keep class com.nexus.model.** ou @Keep) diz para não renomear a classe; melhor ainda, usar kotlinx.serialization que não usa reflexão, e manter o keep estreito."></p>
+
+<p>Como o <strong>debug não ofusca</strong>, o bug some no seu emulador e só aparece no <code>.aab</code> de produção — o pior lugar para descobri-lo. Os suspeitos de sempre:</p>
+
+<table>
+<thead><tr><th align="left">Biblioteca / recurso</th><th align="left">Por que quebra</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Gson</strong></td><td align="left">casa campos do JSON pelo nome via reflexão</td></tr>
+<tr><td align="left"><strong>Retrofit</strong></td><td align="left">lê anotações e tipos de retorno por reflexão</td></tr>
+<tr><td align="left"><strong>Room</strong></td><td align="left">as entidades precisam manter nomes de campo</td></tr>
+<tr><td align="left"><strong>Enums / classes de modelo</strong></td><td align="left">serializados por nome; <code>valueOf()</code> usa o nome literal</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>Keep rules: a exceção controlada</h2>
+
+<p>Uma <strong>keep rule</strong> é uma linha no <code>proguard-rules.pro</code> que diz ao R8: <em>“esta classe, não mexa”</em>. É como você protege o que a reflexão precisa encontrar pelo nome original.</p>
+
+<pre><code class="language-bash"># proguard-rules.pro
+
+# 1) Manter suas classes de modelo (as que viram JSON) intactas
+-keep class com.nexus.data.model.** { *; }
+
+# 2) Manter enums (o valueOf/name depende do nome literal)
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# 3) Manter nomes de arquivo/linha no stacktrace (para o retrace funcionar)
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+</code></pre>
+
+<p>No dia a dia é ainda mais simples: anote a classe com <code>@Keep</code> e pronto — sem tocar no <code>.pro</code>:</p>
+
+<pre><code class="language-kotlin">import androidx.annotation.Keep
+
+@Keep                      // R8 não renomeia nem remove esta classe
+data class Usuario(val name: String, val email: String)
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> keep rule é <strong>bisturi, não machado</strong>. <code>-keep class ** { *; }</code> “resolve” tudo — e joga fora todo o ganho do R8, mantendo o app inteiro. Mantenha cada regra <strong>estreita</strong> (só o pacote de modelos, não o app todo). Melhor ainda: prefira o <strong>kotlinx.serialization</strong> ao Gson — ele gera o código de serialização em tempo de compilação e <strong>não usa reflexão</strong>, então dispensa quase todas as keep rules. Boas libs (Retrofit, Room, Moshi) já <strong>trazem as próprias regras</strong> — você raramente precisa escrever para elas.</p></blockquote>
+
+<blockquote><p>🧠 <strong>Termo — consumer rules:</strong> quando <em>você</em> publica uma biblioteca, coloca as keep rules dela num <code>consumer-rules.pro</code>. Elas viajam junto com a lib e são aplicadas <strong>automaticamente</strong> no app que a usa — por isso você não precisa escrever regras para o Retrofit: ele já traz as dele.</p></blockquote>
+
+<hr>
+
+<h2>Ler o crash de produção: o retrace</h2>
+
+<p>Com o app ofuscado, o relatório de crash da Play chega assim: <code>at a.b.c(Unknown:0)</code>. Ilegível — de propósito. O <strong>mapping.txt</strong> daquele build é o dicionário que desfaz isso, e a ferramenta <strong>retrace</strong> aplica o dicionário no stacktrace:</p>
+
+<pre><code class="language-bash"># traduz o stacktrace ofuscado de volta para nomes reais
+retrace  mapping.txt  crash-ofuscado.txt
+# → at com.nexus.LoginViewModel.onClick(LoginViewModel.kt:42)
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> o <code>mapping.txt</code> é <strong>único por build</strong>. O da versão 1.2.0 não decodifica um crash da 1.3.0 — os nomes <code>a</code>, <code>b</code> são reatribuídos a cada compilação. Por isso a esteira do artigo 06 <strong>arquiva o mapping de toda release</strong>: sem o arquivo certo, o crash daquela versão é indecifrável para sempre.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> na prática você não roda <code>retrace</code> à mão. Suba o <code>mapping.txt</code> para a <strong>Play Console</strong> (ela desofusca os crashes sozinha) ou para o seu monitor de erros (Crashlytics, Sentry) — a esteira faz esse upload no mesmo passo em que publica o <code>.aab</code>. O <code>retrace</code> manual fica para quando você tem só um log solto na mão.</p></blockquote>
+
+<hr>
+
+<h2>Até onde a ofuscação protege</h2>
+
+<p>É tentador achar que ofuscar “esconde” o app. Protege <strong>um pouco</strong> — encarece a engenharia reversa —, mas não é segurança de verdade. Seja realista sobre o limite:</p>
+
+<table>
+<thead><tr><th align="left">A ofuscação…</th><th align="left">Realidade</th></tr></thead>
+<tbody>
+<tr><td align="left">esconde a lógica do app?</td><td align="left"><strong>Atrapalha</strong>, não impede. Renomear <code>login</code> para <code>a</code> não apaga o que o método faz — um decompilador ainda lê o fluxo.</td></tr>
+<tr><td align="left">esconde chaves de API / segredos no código?</td><td align="left"><strong>Não.</strong> String hard-coded continua legível no APK. Segredo não vai no cliente — fica no servidor.</td></tr>
+<tr><td align="left">protege contra pirataria / adulteração?</td><td align="left"><strong>Fracamente.</strong> Para isso existem verificação de integridade (Play Integrity API), não a ofuscação.</td></tr>
+<tr><td align="left">reduz o tamanho do app?</td><td align="left"><strong>Sim</strong> — e esse é o ganho mais concreto e garantido no dia a dia.</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> trate o R8 como uma ferramenta de <strong>tamanho e performance</strong> que <em>dá de brinde</em> um obstáculo à cópia — não como um cadeado. Nada sensível (chave, senha, regra de negócio crítica) deve depender de estar “escondido” no cliente. Se precisa mesmo blindar o binário (fintech, DRM), aí entra ferramenta paga dedicada (ex.: DexGuard), fora do escopo do R8.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Ligar no release</strong></td><td align="left"><code>isMinifyEnabled = true</code> + <code>isShrinkResources = true</code></td></tr>
+<tr><td align="left"><strong>Modelos</strong></td><td align="left"><code>@Keep</code> (ou keep estreito) nas classes que viram JSON / entram no Room</td></tr>
+<tr><td align="left"><strong>Enums serializados</strong></td><td align="left">Keep rule de <code>values()</code>/<code>valueOf()</code></td></tr>
+<tr><td align="left"><strong>Stacktrace legível</strong></td><td align="left"><code>-keepattributes SourceFile,LineNumberTable</code></td></tr>
+<tr><td align="left"><strong>Testar o release</strong></td><td align="left">Rodar o <code>.aab</code>/APK de release <strong>no aparelho</strong> antes de publicar — o debug não pega bug de R8</td></tr>
+<tr><td align="left"><strong>mapping.txt</strong></td><td align="left">Arquivado por release na esteira + enviado à Play/Crashlytics</td></tr>
+<tr><td align="left"><strong>Regras estreitas</strong></td><td align="left">Nada de <code>-keep class ** { *; }</code>; preferir libs sem reflexão</td></tr>
+<tr><td align="left"><strong>Segredos</strong></td><td align="left">Fora do cliente — ofuscação não é cofre</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>R8</strong></td><td align="left">O otimizador do Android: shrink + optimize + obfuscate numa passada.</td></tr>
+<tr><td align="left"><strong>ProGuard</strong></td><td align="left">O antecessor do R8; mesma sintaxe de regras.</td></tr>
+<tr><td align="left"><strong>shrink / tree shaking</strong></td><td align="left">Remover código que ninguém chama.</td></tr>
+<tr><td align="left"><strong>obfuscate</strong></td><td align="left">Renomear classes/métodos para <code>a</code>, <code>b</code>, <code>c</code>.</td></tr>
+<tr><td align="left"><strong>isMinifyEnabled</strong></td><td align="left">O interruptor que liga o R8 no build.</td></tr>
+<tr><td align="left"><strong>isShrinkResources</strong></td><td align="left">Apagar drawables/strings sem uso (exige o minify).</td></tr>
+<tr><td align="left"><strong>reflexão</strong></td><td align="left">Achar classe/campo pelo nome em runtime — quebra com ofuscação.</td></tr>
+<tr><td align="left"><strong>keep rule</strong></td><td align="left">Linha que diz ao R8 “não renomeie/remova esta classe”.</td></tr>
+<tr><td align="left"><strong>@Keep</strong></td><td align="left">A anotação que faz o mesmo, direto no código.</td></tr>
+<tr><td align="left"><strong>consumer rules</strong></td><td align="left">Keep rules que uma lib traz e aplica sozinha no app.</td></tr>
+<tr><td align="left"><strong>mapping.txt</strong></td><td align="left">Dicionário nome-original ↔ ofuscado, único por build.</td></tr>
+<tr><td align="left"><strong>retrace</strong></td><td align="left">Ferramenta que usa o mapping para tornar o crash legível.</td></tr>
+</tbody>
+</table>
+  </article>
+    <nav class="pager">
+      <a class="pg prev" href="07-qualidade.html"><span>← Anterior</span><strong>🔬 Qualidade sob Medida</strong></a>
+      <a class="pg next" href="09-arquitetura.html"><span>Próximo →</span><strong>🏛️ Arquitetura & Código Limpo</strong></a>
+    </nav>
+</main>
+</body>
+</html>

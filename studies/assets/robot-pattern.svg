@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="430" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Robot Pattern + AAA: separar o “o quê” do “como”</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">o teste se lê como caso de uso; o Robot esconde as chamadas do framework</text>
+
+  <!-- LEFT: the test (what) -->
+  <rect x="32" y="82" width="330" height="264" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="197" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#8ECB98">O QUÊ · classe de Teste</text>
+  <text x="197" y="124" text-anchor="middle" font-size="10" fill="#9DBDB6">descreve o cenário — legível para qualquer um</text>
+
+  <rect x="52" y="138" width="290" height="56" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="66" y="160" font-size="12" font-weight="700" fill="#8ECB98" font-family="ui-monospace,monospace">arrange {</text>
+  <text x="80" y="178" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">setScreen()</text>
+  <text x="300" y="178" font-size="11" fill="#8ECB98" font-family="ui-monospace,monospace">}</text>
+
+  <rect x="52" y="202" width="290" height="56" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="66" y="224" font-size="12" font-weight="700" fill="#8ECB98" font-family="ui-monospace,monospace">action {</text>
+  <text x="80" y="242" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">clickButton()</text>
+  <text x="300" y="242" font-size="11" fill="#8ECB98" font-family="ui-monospace,monospace">}</text>
+
+  <rect x="52" y="266" width="290" height="60" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="66" y="288" font-size="12" font-weight="700" fill="#8ECB98" font-family="ui-monospace,monospace">assert {</text>
+  <text x="80" y="306" font-size="11" fill="#9DBDB6" font-family="ui-monospace,monospace">assertTextCorrectly()</text>
+  <text x="300" y="306" font-size="11" fill="#8ECB98" font-family="ui-monospace,monospace">}</text>
+
+  <!-- RIGHT: the robot (how) -->
+  <rect x="418" y="82" width="330" height="264" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="583" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">COMO · classe Robot</text>
+  <text x="583" y="124" text-anchor="middle" font-size="10" fill="#AAB6C0">encapsula a interação com o Compose Test</text>
+
+  <rect x="438" y="138" width="290" height="56" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="452" y="159" font-size="11" font-weight="700" fill="#AEB7F2" font-family="ui-monospace,monospace">setScreen()</text>
+  <text x="452" y="179" font-size="10" fill="#AAB6C0" font-family="ui-monospace,monospace">composeTestRule.setContent { … }</text>
+
+  <rect x="438" y="202" width="290" height="56" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="452" y="223" font-size="11" font-weight="700" fill="#AEB7F2" font-family="ui-monospace,monospace">clickButton()</text>
+  <text x="452" y="243" font-size="10" fill="#AAB6C0" font-family="ui-monospace,monospace">onNodeWithText(…).performClick()</text>
+
+  <rect x="438" y="266" width="290" height="60" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="452" y="288" font-size="11" font-weight="700" fill="#AEB7F2" font-family="ui-monospace,monospace">assertTextCorrectly()</text>
+  <text x="452" y="308" font-size="10" fill="#AAB6C0" font-family="ui-monospace,monospace">onNodeWithText(…).assertExists()</text>
+
+  <!-- delegation arrows -->
+  <line x1="342" y1="166" x2="436" y2="166" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="342" y1="230" x2="436" y2="230" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="342" y1="294" x2="436" y2="294" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="389" y="160" text-anchor="middle" font-size="9" fill="#8A97A3">delega</text>
+
+  <!-- benefits -->
+  <rect x="32" y="360" width="716" height="56" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="48" y="381" font-size="11" font-weight="700" fill="#DFE1E5">Ganhos:</text>
+  <text x="110" y="381" font-size="10.5" fill="#B7BFC7">✔ teste legível como caso de uso   ✔ Robots reutilizáveis entre cenários   ✔ mudou a UI? ajuste só o Robot</text>
+  <text x="48" y="402" font-size="10" fill="#8A97A3">Robot Pattern: Jake Wharton · AAA: Arrange–Act–Assert · a fusão dos dois padroniza o time automaticamente</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 330" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="330" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Alvo de toque mínimo: 48 × 48dp</text>
+  <text x="390" y="61" text-anchor="middle" font-size="13.5" fill="#8A97A3">O desenho pode ser 24dp — a <tspan font-weight="700" fill="#6366F1">área tocável</tspan> ao redor deve chegar a 48dp</text>
+
+  <!-- touch circle -->
+  <circle cx="250" cy="192" r="72" fill="#6366F1" opacity="0.09"/>
+  <!-- 48dp box (dashed) -->
+  <rect x="178" y="120" width="144" height="144" rx="10" fill="none" stroke="#6366F1" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <!-- 24dp visible icon box -->
+  <rect x="214" y="156" width="72" height="72" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.2"/>
+  <!-- plus icon (the visible 24dp drawing) -->
+  <rect x="230" y="188" width="40" height="8" rx="4" fill="#AEB7F2"/>
+  <rect x="246" y="172" width="8" height="40" rx="4" fill="#AEB7F2"/>
+
+  <!-- 48dp dim -->
+  <g stroke="#6366F1" stroke-width="1.4">
+    <line x1="178" y1="108" x2="322" y2="108"/>
+    <line x1="178" y1="102" x2="178" y2="114"/><line x1="322" y1="102" x2="322" y2="114"/>
+  </g>
+  <rect x="216" y="86" width="68" height="22" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1"/>
+  <text x="250" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">48dp</text>
+
+  <!-- 24dp dim -->
+  <g stroke="#94A3B8" stroke-width="1.2">
+    <line x1="214" y1="242" x2="286" y2="242"/>
+    <line x1="214" y1="237" x2="214" y2="247"/><line x1="286" y1="237" x2="286" y2="247"/>
+  </g>
+  <text x="250" y="262" text-anchor="middle" font-size="12" font-weight="600" fill="#8A97A3">24dp (visível)</text>
+
+  <!-- captions -->
+  <text x="250" y="296" text-anchor="middle" font-size="12" fill="#94A3B8">o padding invisível ao redor garante o toque confortável</text>
+
+  <!-- specialist note -->
+  <rect x="430" y="120" width="300" height="150" rx="12" fill="#3A3320" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="452" y="150" font-size="14" font-weight="700" fill="#E3AE72">🔒 Visão Specialist</text>
+  <text x="452" y="178" font-size="13" fill="#E3AE72"><tspan font-weight="700">IconButton</tspan> e <tspan font-weight="700">Checkbox</tspan> já</text>
+  <text x="452" y="198" font-size="13" fill="#E3AE72">garantem 48dp por baixo,</text>
+  <text x="452" y="218" font-size="13" fill="#E3AE72">mesmo com ícone de 24dp.</text>
+  <text x="452" y="244" font-size="13" fill="#E3AE72">Clicável “na mão” (<tspan font-family="'SF Mono',ui-monospace,monospace" font-size="12">Modifier</tspan></text>
+  <text x="452" y="262" font-size="13" fill="#E3AE72"><tspan font-family="'SF Mono',ui-monospace,monospace" font-size="12">.clickable</tspan>) → o mínimo é com você.</text>
+</svg>

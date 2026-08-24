@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 240" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="240" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">As quatro filas de teste</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">O arquivo sobe por trilhas até a loja — em todas ele precisa estar <tspan font-weight="700" fill="#6366F1">assinado</tspan></text>
+
+  <rect x="26" y="92" width="160" height="110" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="106" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">🧪 Interna</text>
+  <text x="106" y="150" text-anchor="middle" font-size="11.5" fill="#AAB6C0">time (~100 pessoas)</text>
+  <text x="106" y="170" text-anchor="middle" font-size="11.5" fill="#AAB6C0">e-mails que</text>
+  <text x="106" y="185" text-anchor="middle" font-size="11.5" fill="#AAB6C0">você cadastra</text>
+
+  <line x1="190" y1="147" x2="214" y2="147" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="218" y="92" width="160" height="110" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="298" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">🔒 Fechada</text>
+  <text x="298" y="150" text-anchor="middle" font-size="11.5" fill="#AAB6C0">grupo de testers</text>
+  <text x="298" y="170" text-anchor="middle" font-size="11.5" fill="#AAB6C0">por lista</text>
+  <text x="298" y="185" text-anchor="middle" font-size="11.5" fill="#AAB6C0">ou inscrição</text>
+
+  <line x1="382" y1="147" x2="406" y2="147" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="410" y="92" width="160" height="110" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="490" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">🌐 Aberta</text>
+  <text x="490" y="150" text-anchor="middle" font-size="11.5" fill="#AAB6C0">qualquer um entra</text>
+  <text x="490" y="170" text-anchor="middle" font-size="11.5" fill="#AAB6C0">(beta público)</text>
+
+  <line x1="574" y1="147" x2="598" y2="147" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="602" y="92" width="160" height="110" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="682" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">🚀 Produção</text>
+  <text x="682" y="152" text-anchor="middle" font-size="11.5" fill="#8ECB98">a loja</text>
+  <text x="682" y="170" text-anchor="middle" font-size="11.5" fill="#8ECB98">de verdade</text>
+</svg>

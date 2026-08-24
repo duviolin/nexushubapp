@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="430" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Quatro peneiras, cada uma pega uma coisa</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">o mesmo código passa pelas quatro — a ordem vai do formato ao portão do time</text>
+
+  <!-- code source -->
+  <rect x="30" y="150" width="96" height="70" rx="10" fill="#3C3F41" stroke="#DFE1E5" stroke-width="1.3"/>
+  <text x="78" y="182" text-anchor="middle" font-size="12.5" font-weight="700" fill="#DFE1E5">seu</text>
+  <text x="78" y="200" text-anchor="middle" font-size="12.5" font-weight="700" fill="#DFE1E5">código</text>
+  <line x1="126" y1="185" x2="150" y2="185" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- 4 sieves -->
+  <g>
+    <rect x="152" y="96" width="140" height="200" rx="10" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.4"/>
+    <text x="222" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#7FC9BD">ktlint / Spotless</text>
+    <text x="222" y="138" text-anchor="middle" font-size="10.5" fill="#9DBDB6">formatação</text>
+    <line x1="164" y1="150" x2="280" y2="150" stroke="#3B5B54" stroke-width="1"/>
+    <text x="222" y="170" text-anchor="middle" font-size="10.5" fill="#B7BFC7">indentação</text>
+    <text x="222" y="188" text-anchor="middle" font-size="10.5" fill="#B7BFC7">imports fora de ordem</text>
+    <text x="222" y="206" text-anchor="middle" font-size="10.5" fill="#B7BFC7">espaçamento</text>
+    <text x="222" y="236" text-anchor="middle" font-size="10.5" font-style="italic" fill="#7FC9BD">conserta sozinho</text>
+    <text x="222" y="254" text-anchor="middle" font-size="10.5" font-style="italic" fill="#9DBDB6">(--format)</text>
+  </g>
+
+  <line x1="292" y1="185" x2="308" y2="185" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="310" y="96" width="140" height="200" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="380" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">Detekt</text>
+  <text x="380" y="138" text-anchor="middle" font-size="10.5" fill="#AAB6C0">code smell (Kotlin)</text>
+  <line x1="322" y1="150" x2="438" y2="150" stroke="#3D4370" stroke-width="1"/>
+  <text x="380" y="170" text-anchor="middle" font-size="10.5" fill="#B7BFC7">função gigante</text>
+  <text x="380" y="188" text-anchor="middle" font-size="10.5" fill="#B7BFC7">complexidade alta</text>
+  <text x="380" y="206" text-anchor="middle" font-size="10.5" fill="#B7BFC7">aninhamento profundo</text>
+  <text x="380" y="224" text-anchor="middle" font-size="10.5" fill="#B7BFC7">!! perigoso</text>
+  <text x="380" y="254" text-anchor="middle" font-size="10.5" font-style="italic" fill="#AEB7F2">regras custom</text>
+
+  <line x1="450" y1="185" x2="466" y2="185" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="468" y="96" width="140" height="200" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="538" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">Android Lint</text>
+  <text x="538" y="138" text-anchor="middle" font-size="10.5" fill="#AAB6C0">regras de Android</text>
+  <line x1="480" y1="150" x2="596" y2="150" stroke="#3D4370" stroke-width="1"/>
+  <text x="538" y="170" text-anchor="middle" font-size="10.5" fill="#B7BFC7">API nova sem checar</text>
+  <text x="538" y="188" text-anchor="middle" font-size="10.5" fill="#B7BFC7">acessibilidade</text>
+  <text x="538" y="206" text-anchor="middle" font-size="10.5" fill="#B7BFC7">permissão inútil</text>
+  <text x="538" y="224" text-anchor="middle" font-size="10.5" fill="#B7BFC7">recurso não usado</text>
+  <text x="538" y="254" text-anchor="middle" font-size="10.5" font-style="italic" fill="#AEB7F2">lint.xml</text>
+
+  <line x1="608" y1="185" x2="624" y2="185" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="626" y="96" width="128" height="200" rx="10" fill="#3C3420" stroke="#D97706" stroke-width="1.4"/>
+  <text x="690" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#E3AE72">Sonar</text>
+  <text x="690" y="138" text-anchor="middle" font-size="10.5" fill="#D9C4A0">portão do time</text>
+  <line x1="638" y1="150" x2="742" y2="150" stroke="#5C5230" stroke-width="1"/>
+  <text x="690" y="170" text-anchor="middle" font-size="10.5" fill="#D9C4A0">junta tudo</text>
+  <text x="690" y="188" text-anchor="middle" font-size="10.5" fill="#D9C4A0">histórico + painel</text>
+  <text x="690" y="206" text-anchor="middle" font-size="10.5" fill="#D9C4A0">cobertura</text>
+  <text x="690" y="224" text-anchor="middle" font-size="10.5" fill="#D9C4A0">duplicação</text>
+  <text x="690" y="254" text-anchor="middle" font-size="10.5" font-style="italic" fill="#E3AE72">Quality Gate</text>
+
+  <!-- severity legend -->
+  <rect x="30" y="322" width="724" height="82" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="46" y="344" font-size="12" font-weight="700" fill="#DFE1E5">A severidade decide o que a esteira faz com cada aviso:</text>
+  <circle cx="58" cy="366" r="5" fill="#84C48D"/><text x="70" y="370" font-size="11" fill="#B7BFC7"><tspan font-weight="700" fill="#8ECB98" font-family="ui-monospace,monospace">info</tspan> / <tspan font-weight="700" fill="#E3AE72" font-family="ui-monospace,monospace">warning</tspan> — aparece no relatório, mas o build continua</text>
+  <circle cx="58" cy="390" r="5" fill="#F0899A"/><text x="70" y="394" font-size="11" fill="#B7BFC7"><tspan font-weight="700" fill="#F0899A" font-family="ui-monospace,monospace">error</tspan> — <tspan font-weight="700">para a esteira</tspan> (com <tspan font-family="ui-monospace,monospace">warningsAsErrors</tspan>, todo aviso vira erro: rígido de propósito)</text>
+</svg>

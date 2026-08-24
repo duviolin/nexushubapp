@@ -1,0 +1,223 @@
+<h1>🧪 Testes no Android: da pirâmide ao Robot Pattern (2026)</h1>
+
+<p>No artigo 09 você montou uma arquitetura em camadas. Agora vem a recompensa: cada camada daquele desenho vira um <strong>tipo de teste</strong> — e os mais valiosos rodam na JVM em milissegundos, sem emulador. Este artigo percorre <strong>como testar cada peça</strong> (domínio, dados, ViewModel, Compose) e fecha com um padrão que deixa os testes de UI limpos e escaláveis: o <strong>Robot Pattern + AAA</strong>.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> a testabilidade não é um esforço à parte — é a <em>consequência</em> da arquitetura do 09. Injeção de dependência vira fake; UI stateless vira teste de Compose; domínio puro vira JUnit sem Android. Aqui colhemos tudo isso.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · A pirâmide de testes</h2>
+
+<p>Nem todo teste custa igual. Você quer <strong>muitos</strong> testes baratos e rápidos, e <strong>pouquíssimos</strong> caros e lentos. Essa proporção é a pirâmide.</p>
+
+<p><img src="../assets/piramide-testes.svg" alt="Pirâmide de testes mapeada no Android. Base larga verde: testes de unidade na JVM pura (JUnit5, MockK/fakes, Turbine, runTest) cobrindo ViewModel, UseCase, mappers e validação — muitos, rodam em milissegundos sem Android. Meio âmbar: integração/componente (Robolectric, Compose test na JVM, Room in-memory) testando tela mais ViewModel juntos sem emulador — alguns. Topo estreito vermelho: UI/E2E instrumentada (Espresso, Compose UI test no emulador ou aparelho, androidTest) para o fluxo crítico login para compra — poucos, lentos, caros e frágeis. Eixos: quanto mais alto, mais lento, caro e frágil; quanto mais baixo, mais rápido, barato e estável. Rodapé alerta contra a pirâmide invertida."></p>
+
+<blockquote><p>⚠️ <strong>Pegadinha — a pirâmide invertida:</strong> testar “tudo pela tela” gera uma suíte de horas que <strong>pisca</strong> (passa e falha sem o código mudar — os <em>flaky tests</em>). Teste de UI é caro; use-o só onde nada mais alcança.</p></blockquote>
+
+<h3>O básico de configuração (JUnit5 + amigos)</h3>
+
+<pre><code class="language-kotlin">dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.11.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("io.mockk:mockk:1.13.13")                       // dublês
+    testImplementation("app.cash.turbine:turbine:1.2.0")              // testar Flow
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+
+    // Compose / UI
+    testImplementation("org.robolectric:robolectric:4.14")           // Android na JVM
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+tasks.withType&lt;Test&gt; { useJUnitPlatform() }
+</code></pre>
+
+<hr>
+
+<h2>Parte 2 · Testar cada camada</h2>
+
+<p>Cada camada do artigo 09 pede um estilo de teste. Do mais barato para o mais caro:</p>
+
+<p><img src="../assets/camadas-teste.svg" alt="As três camadas e o teste de cada uma. UI (Compose, ViewModel, estado MVI, navegação) depende do Android e testa com Compose UI test na JVM, Robolectric e ViewModel via JUnit puro. Domínio no centro, destacado (UseCases, entidades, regras de negócio) é Kotlin puro com zero Android, testado só com JUnit5 sem emulador, o mais rápido. Data (repositórios, Room, Retrofit, DataStore) fala com o mundo externo e testa com Room in-memory, MockWebServer e fakes de repositório. As setas de dependência apontam para dentro; por isso o domínio roda na JVM em milissegundos e a base da pirâmide vem de graça."></p>
+
+<h3>Domínio — o teste mais fácil que existe</h3>
+
+<p>Kotlin puro, sem Android. Um UseCase é uma função: entra dado, sai resultado.</p>
+
+<pre><code class="language-kotlin">class AplicarCupomTest {
+    @Test fun `cupom de 10 por cento abate do total`() {
+        val resultado = AplicarCupom()(total = 100.0, cupom = Cupom("OFF10", 0.10))
+        assertEquals(90.0, resultado)
+    }
+}
+</code></pre>
+
+<h3>Dados — fakes, Room in-memory e MockWebServer</h3>
+
+<p>Aqui você prova que o Repository combina as fontes certo — sem tocar na rede real nem num banco de verdade.</p>
+
+<pre><code class="language-kotlin">// Room de verdade, mas em memória (some ao fim do teste)
+val db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+    .allowMainThreadQueries().build()
+
+// API falsa que responde JSON controlado
+val server = MockWebServer().apply {
+    enqueue(MockResponse().setBody("""{"id":1,"name":"Ana"}"""))
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — fake, mock, stub:</strong> substitutos da dependência real. <strong>Fake</strong> = implementação leve de verdade (um repositório que guarda numa lista). <strong>Stub</strong> = devolve respostas fixas. <strong>Mock</strong> = além disso, verifica <em>como</em> foi chamado. Regra: <strong>prefira fakes</strong> — eles não amarram o teste aos detalhes internos.</p></blockquote>
+
+<h3>ViewModel — estado, corrotinas e Turbine</h3>
+
+<p>O teste mais valioso do app (a lógica de tela). Troque o repositório real por um fake e observe o <code>StateFlow</code> emissão a emissão com o <strong>Turbine</strong>.</p>
+
+<pre><code class="language-kotlin">class LoginViewModelTest {
+    private val repo = FakeAuthRepository()
+    private val vm = LoginViewModel(FazerLogin(repo))
+
+    @Test fun `login com sucesso vai de Loading a Sucesso`() = runTest {
+        vm.state.test {                              // Turbine
+            assertEquals(false, awaitItem().carregando)   // estado inicial
+            vm.aoEntrar("ana@x.com", "1234")
+            assertEquals(true, awaitItem().carregando)    // durante
+            assertEquals(false, awaitItem().carregando)   // fim
+        }
+    }
+}
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> injete o <code>CoroutineDispatcher</code> no ViewModel em vez de usar <code>Dispatchers.Main</code> direto. No teste você passa um <code>StandardTestDispatcher</code> e o <code>runTest</code> controla o tempo virtual — <strong>sem isso, testes de corrotina piscam</strong>. Esse é o detalhe que separa uma suíte confiável de uma que “às vezes passa”.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · Testar componentes Compose</h2>
+
+<p>A UI do Compose é testada por <strong>semântica</strong> — a mesma árvore que dá acessibilidade. O ritmo é sempre <strong>encontrar um nó → agir → verificar</strong>.</p>
+
+<table>
+<thead><tr><th align="left">Passo</th><th align="left">API</th><th align="left">Exemplo</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Encontrar</strong></td><td align="left"><code>onNodeWithText</code>, <code>onNodeWithContentDescription</code>, <code>onNodeWithTag</code></td><td align="left"><code>onNodeWithTag("botao-entrar")</code></td></tr>
+<tr><td align="left"><strong>Agir</strong></td><td align="left"><code>performClick</code>, <code>performTextInput</code>, <code>performScrollTo</code></td><td align="left"><code>.performClick()</code></td></tr>
+<tr><td align="left"><strong>Verificar</strong></td><td align="left"><code>assertIsDisplayed</code>, <code>assertIsEnabled</code>, <code>assertTextEquals</code></td><td align="left"><code>.assertIsEnabled()</code></td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">class LoginContentTest {
+    @get:Rule val compose = createComposeRule()
+
+    @Test fun `botao entrar habilita apos preencher campos`() {
+        compose.setContent { LoginContent(state = LoginUiState(), onEntrar = { _, _ -&gt; }) }
+
+        compose.onNodeWithText("Entrar").assertIsNotEnabled()
+        compose.onNodeWithContentDescription("E-mail").performTextInput("ana@x.com")
+        compose.onNodeWithContentDescription("Senha").performTextInput("1234")
+        compose.onNodeWithText("Entrar").assertIsEnabled()
+    }
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — testTag:</strong> uma etiqueta invisível (<code>Modifier.testTag("...")</code>) para o teste encontrar um nó sem depender do texto exato (que muda com tradução). Use tag quando o texto for volátil; use texto/descrição quando quiser testar o que o usuário realmente vê.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist — as duas estradas do Compose:</strong> o <strong>mesmo</strong> teste roda em duas velocidades. Com <strong>Robolectric</strong> (pasta <code>src/test/</code>) ele roda na JVM em segundos e entra em todo PR. <strong>Instrumentado</strong> (<code>src/androidTest/</code>) roda no emulador, pega renderização real e gestos, mas é lento — reserve para o fluxo crítico. Escrever a UI <strong>stateless</strong> (artigo 09) é o que permite testar sem subir rede.</p></blockquote>
+
+<h3>Screenshot testing (o estado da arte)</h3>
+
+<p>Para pegar <strong>regressão visual</strong> (um padding que quebrou, o dark theme torto), há o <strong>teste de captura</strong>: a ferramenta renderiza o Composable, salva um PNG de referência e, no próximo PR, compara pixel a pixel.</p>
+
+<blockquote><p>🧠 <strong>Termo — Paparazzi / Roborazzi:</strong> bibliotecas de screenshot test que renderizam Compose <strong>na JVM</strong> (sem emulador). Geram a imagem “dourada” (referência) e falham o build se a tela mudar sem querer. É a rede de segurança do design system.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Robot Pattern + AAA: testes de UI limpos</h2>
+
+<p>Um teste de UI cru mistura <strong>o que</strong> se testa com <strong>como</strong> se clica — e vira ilegível. Ao ler um teste, você quer entender o <strong>cenário</strong>, não os detalhes de <code>onNodeWithText(...).performClick()</code>. O <strong>Robot Pattern</strong> (de Jake Wharton) separa os dois papéis.</p>
+
+<blockquote><p>🧠 <strong>Termo — Robot Pattern:</strong> <strong>“O quê”</strong> (a classe de <em>Teste</em>) descreve o cenário de forma limpa; <strong>“Como”</strong> (a classe <em>Robot</em>) encapsula a conversa com o framework. Muda a UI? você ajusta só o Robot — os testes que o usam continuam iguais.</p></blockquote>
+
+<p>Casado com o <strong>AAA</strong> (Arrange–Act–Assert), o resultado é um teste que se lê como um caso de uso e um time <strong>padronizado sem esforço</strong>:</p>
+
+<p><img src="../assets/robot-pattern.svg" alt="Robot Pattern combinado com AAA. À esquerda, a classe de Teste (o quê) descreve o cenário legível em três blocos: arrange chama setScreen, action chama clickButton, assert chama assertTextCorrectly. À direita, a classe Robot (como) encapsula a interação com o Compose Test: setScreen faz composeTestRule.setContent, clickButton faz onNodeWithText performClick, assertTextCorrectly faz onNodeWithText assertExists. Cada bloco do teste delega ao método correspondente do Robot. Ganhos: teste legível como caso de uso, Robots reutilizáveis entre cenários, e se a UI muda ajusta-se só o Robot. Robot Pattern de Jake Wharton, AAA de Arrange-Act-Assert; a fusão padroniza o time automaticamente."></p>
+
+<pre><code class="language-kotlin">// Base que "induz" o time ao AAA (arrange/action/assert encadeados)
+abstract class BaseRobot&lt;T&gt; {
+    inline fun arrange(block: T.() -&gt; Unit): T { block(this as T); return this }
+    inline fun action(block: T.() -&gt; Unit): T { block(this as T); return this }
+    inline fun assert(block: T.() -&gt; Unit) { block(this as T) }
+}
+
+// O "COMO": esconde o Compose Test dentro de métodos com nome de negócio
+class MyScreenRobot(private val rule: ComposeContentTestRule) : BaseRobot&lt;MyScreenRobot&gt;() {
+    fun setScreen()          = rule.setContent { MyScreen() }
+    fun clickButton()        = rule.onNodeWithText("Clique para mudar o texto").performClick()
+    fun assertTextCorrectly() = rule.onNodeWithText("Texto Modificado").assertExists()
+}
+
+// O "O QUÊ": o teste vira um caso de uso legível
+class MyScreenTest {
+    @get:Rule val rule = createComposeRule()
+
+    @Test fun `texto muda apos clique`() {
+        MyScreenRobot(rule)
+            .arrange { setScreen() }
+            .action  { clickButton() }
+            .assert  { assertTextCorrectly() }
+    }
+}
+</code></pre>
+
+<blockquote><p>🔗 <strong>Ligação:</strong> este padrão (e o exemplo acima) vêm do artigo <a href="https://medium.com/@eduardolima384/-932669459d2e">“Robot Pattern, AAA e Compose Testing”</a>, do Eduardo Lima. Vale a leitura para a motivação completa.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> um Robot por tela, métodos com <strong>nome de negócio</strong> (<code>fazerLogin()</code>, não <code>digitarNosDoisCampos()</code>). Quando o design mudar o botão de lugar, você conserta <strong>um</strong> método e toda a suíte volta a passar. É o mesmo princípio da arquitetura: esconder o <em>como</em> volátil atrás de um <em>o quê</em> estável.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · Fechando com a esteira</h2>
+
+<p>Testes só valem se rodarem <strong>sozinhos</strong>, em todo PR. Os artigos anteriores já montaram esse encaixe:</p>
+
+<ul>
+<li><strong>Artigo 06:</strong> a esteira roda <code>testDebugUnitTest</code> em cada push e barra o merge se algo falhar.</li>
+<li><strong>Artigo 07:</strong> o <strong>Kover</strong> mede a cobertura e o <strong>Quality Gate</strong> do Sonar impede o PR de <em>piorar</em> — foque a régua no domínio e nos ViewModels, onde o teste é barato e o valor é alto.</li>
+</ul>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> cobertura é <strong>piso, não troféu</strong>. 60% com testes que verificam comportamento vale mais que 90% de testes que só executam linhas sem asserção. Meça cobertura onde ela sinaliza risco real (domínio, lógica de estado), não perseguindo 100% em getters e código de UI.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Proporção</strong></td><td align="left">Muita unidade, alguma integração, pouquíssimo E2E</td></tr>
+<tr><td align="left"><strong>Domínio</strong></td><td align="left">JUnit5 puro, sem Android — o alvo de maior cobertura</td></tr>
+<tr><td align="left"><strong>Dados</strong></td><td align="left">Room in-memory + MockWebServer + fakes de repositório</td></tr>
+<tr><td align="left"><strong>ViewModel</strong></td><td align="left"><code>runTest</code> + Turbine + <code>Dispatcher</code> injetado</td></tr>
+<tr><td align="left"><strong>Compose</strong></td><td align="left">Encontrar→agir→verificar; Robolectric no PR, instrumentado só no crítico</td></tr>
+<tr><td align="left"><strong>Robot Pattern</strong></td><td align="left">Um Robot por tela + AAA; teste lê como caso de uso</td></tr>
+<tr><td align="left"><strong>Screenshot</strong></td><td align="left">Paparazzi/Roborazzi para regressão visual do design system</td></tr>
+<tr><td align="left"><strong>Esteira</strong></td><td align="left">Testes + cobertura no CI (artigos 06–07); Quality Gate no código novo</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>pirâmide de testes</strong></td><td align="left">Muitos testes baratos embaixo, poucos caros em cima.</td></tr>
+<tr><td align="left"><strong>JUnit5</strong></td><td align="left">O motor de testes moderno da JVM (Jupiter).</td></tr>
+<tr><td align="left"><strong>MockK</strong></td><td align="left">Biblioteca de dublês idiomática para Kotlin.</td></tr>
+<tr><td align="left"><strong>Turbine</strong></td><td align="left">Testar <code>Flow</code>/<code>StateFlow</code> emissão a emissão.</td></tr>
+<tr><td align="left"><strong>runTest</strong></td><td align="left">Roda corrotinas com tempo virtual, sem flakiness.</td></tr>
+<tr><td align="left"><strong>fake / mock / stub</strong></td><td align="left">Substitutos da dependência real; prefira fakes.</td></tr>
+<tr><td align="left"><strong>Robolectric</strong></td><td align="left">Android simulado na JVM — teste de tela sem emulador.</td></tr>
+<tr><td align="left"><strong>instrumentado</strong></td><td align="left">Teste que roda em emulador/aparelho (<code>androidTest</code>).</td></tr>
+<tr><td align="left"><strong>semântica (Compose)</strong></td><td align="left">A árvore que o teste (e a acessibilidade) usa para achar nós.</td></tr>
+<tr><td align="left"><strong>testTag</strong></td><td align="left">Etiqueta invisível para encontrar um nó de forma estável.</td></tr>
+<tr><td align="left"><strong>Paparazzi / Roborazzi</strong></td><td align="left">Screenshot test de Compose na JVM (regressão visual).</td></tr>
+<tr><td align="left"><strong>Robot Pattern</strong></td><td align="left">Separa o “o quê” (Teste) do “como” (Robot).</td></tr>
+<tr><td align="left"><strong>AAA</strong></td><td align="left">Arrange–Act–Assert: as três etapas de um teste.</td></tr>
+</tbody>
+</table>

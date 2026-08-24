@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 340" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="340" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">A grade de 8dp — todo espaçamento encaixa nos mesmos trilhos</text>
+  <text x="390" y="62" text-anchor="middle" font-size="14" fill="#8A97A3">Múltiplos de <tspan font-weight="700" fill="#6366F1">8</tspan> (8·16·24·32…), com <tspan font-weight="700" fill="#D97706">4</tspan> para ajustes finos</text>
+
+  <!-- reference ruler -->
+  <g font-size="11" fill="#94A3B8" font-family="'SF Mono','Roboto Mono',ui-monospace,monospace">
+    <line x1="120" y1="92" x2="660" y2="92" stroke="#4E5254"/>
+    <g stroke="#525659">
+      <line x1="120" y1="88" x2="120" y2="98"/><line x1="188" y1="88" x2="188" y2="98"/><line x1="256" y1="88" x2="256" y2="98"/><line x1="324" y1="88" x2="324" y2="98"/><line x1="392" y1="88" x2="392" y2="98"/><line x1="460" y1="88" x2="460" y2="98"/><line x1="528" y1="88" x2="528" y2="98"/>
+    </g>
+    <text x="120" y="82" text-anchor="middle">0</text><text x="188" y="82" text-anchor="middle">8</text><text x="256" y="82" text-anchor="middle">16</text><text x="324" y="82" text-anchor="middle">24</text><text x="392" y="82" text-anchor="middle">32</text><text x="460" y="82" text-anchor="middle">40</text><text x="528" y="82" text-anchor="middle">48 dp</text>
+  </g>
+
+  <!-- bars: scale 1dp = 8.5px, start x=120 -->
+  <!-- 4dp -->
+  <rect x="120" y="120" width="34" height="26" rx="4" fill="#3C3420" stroke="#D97706" stroke-width="1.5"/>
+  <text x="137" y="138" text-anchor="middle" font-size="11" font-weight="700" fill="#E3AE72">4</text>
+  <text x="176" y="138" font-size="14" fill="#B7BFC7"><tspan font-weight="700">4dp</tspan> — ajuste fino (label ↔ ícone, texto denso)</text>
+
+  <!-- 8dp -->
+  <rect x="120" y="160" width="68" height="26" rx="4" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="154" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#AEB7F2">8</text>
+  <text x="210" y="178" font-size="14" fill="#B7BFC7"><tspan font-weight="700">8dp</tspan> — entre itens relacionados</text>
+
+  <!-- 16dp -->
+  <rect x="120" y="200" width="136" height="26" rx="4" fill="#4A5490" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="188" y="218" text-anchor="middle" font-size="11" font-weight="700" fill="#AEB7F2">16</text>
+  <text x="278" y="218" font-size="14" fill="#B7BFC7"><tspan font-weight="700">16dp</tspan> — margem padrão da tela (Compact)</text>
+
+  <!-- 24dp -->
+  <rect x="120" y="240" width="204" height="26" rx="4" fill="#818CF8" stroke="#AEB7F2" stroke-width="1.5"/>
+  <text x="222" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#3C3F41">24</text>
+  <text x="346" y="258" font-size="14" fill="#B7BFC7"><tspan font-weight="700">24dp</tspan> — entre seções</text>
+
+  <!-- pixel note -->
+  <rect x="120" y="288" width="540" height="34" rx="8" fill="#3C3F41"/>
+  <text x="138" y="310" font-size="12.5" fill="#AAB6C0">Por que 8? <tspan font-weight="700" fill="#DFE1E5">8dp = 12px (hdpi) · 16px (xhdpi) · 24px (xxhdpi)</tspan> → sempre pixel inteiro, sem borda borrada.</text>
+</svg>

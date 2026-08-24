@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Densidade & Tamanhos de Tela · Estudos Android</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir menu">☰</button>
+<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
+  <nav class="side">
+    <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
+    <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
+    <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
+    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
+    <a href="04-densidade.html" class="active"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
+    <a href="05-play-store.html"><span class="n">05</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
+    <a href="06-git-ci.html"><span class="n">06</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
+    <a href="07-qualidade.html"><span class="n">07</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
+    <a href="08-ofuscacao.html"><span class="n">08</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
+    <a href="09-arquitetura.html"><span class="n">09</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
+    <a href="10-testes.html"><span class="n">10</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="11-ia-claude-code.html"><span class="n">11</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="12-sdd-tdd-bdd.html"><span class="n">12</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
+    <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
+  </nav>
+<main>
+  <p class="crumb">Artigo <strong>4</strong> de 12 · trilha de estudos</p>
+  <article class="content">
+<h1>📏 Densidade, <code>dp</code> e Tamanhos de Tela: O Guia Adaptável (2026)</h1>
+<p>O <a href="03-edge-to-edge.html">artigo anterior</a> mostrou o <strong>mandato</strong>: a Google te obriga a ser adaptável — não pode travar orientação em tela grande, e o conteúdo desenha edge-to-edge. Este artigo é o <strong>&quot;como&quot;</strong>: entender densidade de pixel, <code>dp</code>, <code>sw600dp</code> e as <em>size classes</em>, e saber <strong>quando e como</strong> criar layouts variantes que ficam bons do celular ao tablet.</p>
+<blockquote>
+<p>🔗 <strong>Fio condutor:</strong> o número mágico <strong>600dp</strong> que apareceu como fronteira do mandato (&quot;telas ≥ 600dp giram obrigatoriamente&quot;) é o mesmo que você vai usar aqui para <strong>decidir o layout</strong>. Entender de onde ele vem é o objetivo.</p>
+</blockquote>
+<hr>
+<h2>Por que <code>dp</code> existe: o problema que ele resolve</h2>
+<p>Duas telas podem ter o <strong>mesmo tamanho físico</strong> (em cm) mas números de <strong>pixels</strong> muito diferentes. Se você medisse tudo em pixels, um botão de &quot;100px&quot; seria enorme numa tela antiga e minúsculo num celular moderno.</p>
+<p><img src="../assets/density-comparison.svg" alt="Duas telas do mesmo tamanho físico: na de 160 dpi um botão de 100px ocupa grande parte da tela; na de 480 dpi o mesmo botão de 100px fica minúsculo"></p>
+<p>A solução do Android é uma unidade <strong>abstrata</strong> que sempre resulta no mesmo tamanho físico: o <strong><code>dp</code></strong>.</p>
+<blockquote>
+<p>🧠 <strong>Termo — <code>dp</code></strong> (<em>density-independent pixel</em>): a unidade de layout do Android. <strong>1 <code>dp</code> = 1 pixel numa tela de 160 dpi</strong> (a densidade &quot;base&quot;). Em telas mais densas, o sistema multiplica os pixels sozinho para manter o tamanho físico. Você projeta em <code>dp</code> e esquece os pixels reais.</p>
+</blockquote>
+<blockquote>
+<p>🧠 <strong>Termo — <code>sp</code></strong> (<em>scale-independent pixel</em>): igual ao <code>dp</code>, <strong>mas para textos</strong>. A diferença: o <code>sp</code> também <strong>respeita o ajuste de fonte</strong> que o usuário escolheu nas configurações de acessibilidade. <strong>Regra: fonte em <code>sp</code>, todo o resto em <code>dp</code>.</strong></p>
+</blockquote>
+<blockquote>
+<p>🧠 <strong>Termo — <code>px</code> (pixel):</strong> o ponto físico da tela. Você quase <strong>nunca</strong> usa <code>px</code> diretamente — só em casos raríssimos (ex.: desenhar 1 linha de exatamente 1 pixel).</p>
+</blockquote>
+<hr>
+<h2>A matemática da densidade (dpi)</h2>
+<p><strong>dpi</strong> (<em>dots per inch</em> / pontos por polegada) mede quantos pixels cabem em uma polegada da tela. O Android agrupa os aparelhos em &quot;baldes&quot; de densidade:</p>
+<p><img src="../assets/dpi-buckets.svg" alt="Os cinco baldes de densidade — mdpi 160dpi 1x, hdpi 240dpi 1.5x, xhdpi 320dpi 2x, xxhdpi 480dpi 3x, xxxhdpi 640dpi 4x — mostrando o mesmo ícone de 24dp virando 24, 36, 48, 72 e 96 pixels reais"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Balde</th>
+<th align="left">Densidade</th>
+<th align="left">Fator</th>
+<th align="left">1 <code>dp</code> vale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>mdpi</code></td>
+<td align="left">~160 dpi</td>
+<td align="left"><strong>1×</strong> (base)</td>
+<td align="left">1 px</td>
+</tr>
+<tr>
+<td align="left"><code>hdpi</code></td>
+<td align="left">~240 dpi</td>
+<td align="left">1.5×</td>
+<td align="left">1.5 px</td>
+</tr>
+<tr>
+<td align="left"><code>xhdpi</code></td>
+<td align="left">~320 dpi</td>
+<td align="left">2×</td>
+<td align="left">2 px</td>
+</tr>
+<tr>
+<td align="left"><code>xxhdpi</code></td>
+<td align="left">~480 dpi</td>
+<td align="left">3×</td>
+<td align="left">3 px</td>
+</tr>
+<tr>
+<td align="left"><code>xxxhdpi</code></td>
+<td align="left">~640 dpi</td>
+<td align="left">4×</td>
+<td align="left">4 px</td>
+</tr>
+</tbody></table>
+<p><strong>A fórmula (guarde):</strong></p>
+<p><img src="../assets/dp-formula.svg" alt="Fórmula px igual a dp vezes dpi dividido por 160, com o exemplo: 24dp numa tela de 480 dpi vira 24 × (480/160) = fator 3 = 72 px"></p>
+<p>Exemplo: um ícone de <code>24dp</code> numa tela <code>xxhdpi</code> (480 dpi) ocupa <code>24 × (480/160) = 24 × 3 = 72 px</code> reais. Você escreveu <code>24dp</code> uma vez; o sistema resolveu o resto.</p>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> por isso <strong>imagens vetoriais (<code>VectorDrawable</code>) vencem bitmaps</strong>. Um vetor é redesenhado nitidamente em qualquer densidade a partir de um arquivo só. Um PNG precisaria de 5 cópias (<code>drawable-mdpi/</code>, <code>-hdpi/</code>, …) e ainda pode sair borrado. Use vetor sempre que possível; guarde PNG só para fotos.</p>
+</blockquote>
+<hr>
+<h2>Espaçamento, margens e padding: o sistema de 8dp</h2>
+<p>Densidade garante que <code>16dp</code> tem o mesmo tamanho físico em qualquer tela. Mas <strong>quais</strong> números usar? A resposta profissional não é &quot;chutar&quot; — é seguir uma <strong>grade</strong> (<em>grid</em>). O padrão do Material Design é a <strong>grade de 8dp</strong>: todo espaçamento é múltiplo de <strong>8</strong> (<code>8, 16, 24, 32, 48…</code>), com <strong>4dp</strong> para ajustes finos (ícones, textos densos).</p>
+<p><img src="../assets/grid-8dp.svg" alt="Régua da grade de 8dp com barras comparando 4dp (ajuste fino), 8dp (itens relacionados), 16dp (margem padrão) e 24dp (entre seções), e a nota de que 8dp cai sempre em pixel inteiro nas várias densidades"></p>
+<blockquote>
+<p>🧠 <strong>Por que 8?</strong> Como as densidades são múltiplos limpos de 160dpi (1×, 1.5×, 2×, 3×, 4×), múltiplos de 8dp caem em números <strong>inteiros de pixel</strong> em quase todos os baldes (8dp = 12px no hdpi, 16px no xhdpi, 24px no xxhdpi…). Isso evita bordas &quot;meio pixel&quot; borradas. A grade não é estética — é técnica.</p>
+</blockquote>
+<h3>Margem × Padding × Gap (a confusão clássica)</h3>
+<p>São três coisas diferentes. Errar isso é a origem de metade dos layouts &quot;espremidos&quot;:</p>
+<p><img src="../assets/margin-padding-gap.svg" alt="Card anotado mostrando 16dp de margem (fora, até o vizinho), 12dp de padding (dentro, até o conteúdo) e 8dp de gap (entre os itens A e B), com o mapeamento para Compose"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Conceito</th>
+<th align="left">O que é</th>
+<th align="left">Em Compose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Margem</strong></td>
+<td align="left">Espaço <strong>por fora</strong> da caixa (afasta dos vizinhos)</td>
+<td align="left"><code>Modifier.padding(...)</code> aplicado <strong>antes</strong> do fundo</td>
+</tr>
+<tr>
+<td align="left"><strong>Padding</strong></td>
+<td align="left">Espaço <strong>por dentro</strong> (afasta o conteúdo da borda)</td>
+<td align="left"><code>Modifier.padding(...)</code> aplicado <strong>depois</strong> do fundo</td>
+</tr>
+<tr>
+<td align="left"><strong>Gap / spacing</strong></td>
+<td align="left">Espaço <strong>entre filhos</strong> de uma lista/linha</td>
+<td align="left"><code>Arrangement.spacedBy(8.dp)</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong>Pegadinha do Compose:</strong> não existe &quot;margin&quot; separado de &quot;padding&quot; — os dois são <code>Modifier.padding</code>. <strong>A ordem importa:</strong> <code>padding</code> <strong>antes</strong> de <code>.background()</code> vira margem (fundo não pinta ali); <code>padding</code> <strong>depois</strong> vira padding interno (fundo pinta atrás do respiro).</p>
+<pre><code class="language-kotlin">Modifier
+  .padding(16.dp)          // ← MARGEM: fica fora do fundo
+  .background(Blue)
+  .padding(12.dp)          // ← PADDING: fica dentro do fundo
+</code></pre>
+</blockquote>
+<h3>Alvo de toque: o mínimo de 48dp</h3>
+<p>Espaçamento não é só estética — é <strong>acessibilidade</strong>. Todo elemento tocável (botão, ícone clicável) deve ter no mínimo <strong>48×48dp</strong> de área de toque, mesmo que o desenho seja menor.</p>
+<p><img src="../assets/touch-target-48dp.svg" alt="Ícone visível de 24dp centrado numa área de toque de 48×48dp, com o padding invisível ao redor, e a nota de que IconButton e Checkbox já garantem os 48dp"></p>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> <code>IconButton</code> e <code>Checkbox</code> do Material já garantem 48dp por baixo, mesmo com ícone de 24dp. Se você fizer um clicável &quot;na mão&quot; (<code>Modifier.clickable</code>), <strong>você</strong> é responsável por dar o tamanho mínimo — senão o Lint acusa e o app fica difícil de tocar.</p>
+</blockquote>
+<h3>Espaçamento que escala com a tela</h3>
+<p>Aqui a densidade encontra o tamanho de tela: a margem da tela <strong>cresce</strong> em telas maiores (mais respiro), e isso liga direto com as <em>size classes</em> e o edge-to-edge:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Size class</th>
+<th align="left">Margem lateral típica</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Compact</strong> (telefone)</td>
+<td align="left">16dp</td>
+</tr>
+<tr>
+<td align="left"><strong>Medium / Expanded</strong> (tablet)</td>
+<td align="left">24dp+</td>
+</tr>
+</tbody></table>
+<p>No mundo de recursos, isso é um <code>values-sw600dp/dimens.xml</code> (visto adiante). Em Compose, é um valor escolhido pela size class. E há um caso especial ligado ao <a href="03-edge-to-edge.html">edge-to-edge</a>: em listas roláveis, você quer o <strong>fundo</strong> indo até a borda, mas os <strong>itens</strong> afastados das barras — isso é <code>contentPadding</code>, não <code>padding</code>:</p>
+<pre><code class="language-kotlin">LazyColumn(
+    contentPadding = WindowInsets.safeDrawing.asPaddingValues(),  // itens afastados
+    verticalArrangement = Arrangement.spacedBy(8.dp)              // gap entre itens
+) { /* ... */ }
+// o fundo da lista continua indo edge-to-edge; só o conteúdo respeita os insets
+</code></pre>
+<blockquote>
+<p>🧠 <strong>Termo — tokens de espaçamento:</strong> em vez de espalhar <code>16.dp</code> pelo código, times sérios definem uma <strong>escala nomeada</strong> (<code>Spacing.small = 8.dp</code>, <code>Spacing.medium = 16.dp</code>, <code>Spacing.large = 24.dp</code>) num arquivo só. Mudou o respiro do app? Um lugar. Nunca use &quot;número mágico&quot; solto — use o token.</p>
+</blockquote>
+<hr>
+<h2>Tamanho de tela: <code>sw</code>, <code>w</code> e <code>h</code></h2>
+<p>Densidade é sobre <strong>nitidez</strong>. Tamanho é sobre <strong>espaço</strong> — e o espaço também se mede em <code>dp</code> (não em pixels). Há três medidas, e confundi-las é erro clássico:</p>
+<p><img src="../assets/sw-w-h.svg" alt="O mesmo aparelho em retrato (largura 400dp, altura 800dp) e em paisagem (largura 800dp, altura 400dp): a largura disponível muda ao girar, mas o smallest width permanece 400dp"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Medida</th>
+<th align="left">Qualificador</th>
+<th align="left">Muda ao girar?</th>
+<th align="left">Para quê serve</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Smallest width</strong></td>
+<td align="left"><code>sw&lt;N&gt;dp</code></td>
+<td align="left">❌ <strong>Não</strong> — é fixa do aparelho</td>
+<td align="left">Classificar o <strong>tipo</strong> de aparelho (é tablet?)</td>
+</tr>
+<tr>
+<td align="left"><strong>Available width</strong></td>
+<td align="left"><code>w&lt;N&gt;dp</code></td>
+<td align="left">✅ Sim</td>
+<td align="left">Decidir layout <strong>na orientação atual</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>Available height</strong></td>
+<td align="left"><code>h&lt;N&gt;dp</code></td>
+<td align="left">✅ Sim</td>
+<td align="left">Layouts sensíveis à altura (raro)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termo — smallest width (<code>sw</code>):</strong> a <strong>menor</strong> das duas dimensões da tela, em <code>dp</code>, <strong>sempre a mesma</strong> independente de girar. É a &quot;carteira de identidade&quot; do aparelho: um telefone típico tem <code>sw</code> ~360dp; um tablet de 7&quot;, ~600dp; um de 10&quot;, ~800dp. Por isso <strong><code>sw600dp</code> = &quot;isto é uma tela grande&quot;</strong> — e é exatamente o corte do mandato de orientação.</p>
+</blockquote>
+<hr>
+<h2>Os breakpoints oficiais: Window Size Classes</h2>
+<p>Você não precisa decorar dezenas de tamanhos. A Google padronizou <strong>faixas</strong> (<em>breakpoints</em>) baseadas na <strong>largura disponível</strong> — as <strong>Window Size Classes</strong>:</p>
+<p><img src="../assets/size-classes.svg" alt="As três Window Size Classes na régua de largura: Compact abaixo de 600dp (telefone, coluna única + nav inferior), Medium de 600 a 840dp (tablet pequeno, navigation rail) e Expanded acima de 840dp (tablet grande, lista + detalhe lado a lado)"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Size Class (largura)</th>
+<th align="left">Faixa</th>
+<th align="left">Aparelho típico</th>
+<th align="left">Layout sugerido</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Compact</strong></td>
+<td align="left">&lt; 600dp</td>
+<td align="left">Telefone em retrato</td>
+<td align="left">Coluna única, navegação inferior</td>
+</tr>
+<tr>
+<td align="left"><strong>Medium</strong></td>
+<td align="left">600–839dp</td>
+<td align="left">Telefone em paisagem, tablet pequeno, dobrável</td>
+<td align="left"><em>Navigation rail</em>, talvez 2 colunas</td>
+</tr>
+<tr>
+<td align="left"><strong>Expanded</strong></td>
+<td align="left">≥ 840dp</td>
+<td align="left">Tablet grande, dobrável aberto, desktop</td>
+<td align="left">Lista + detalhe lado a lado, rail/drawer</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🧠 <strong>Termo — breakpoint:</strong> um ponto de largura onde o layout <strong>muda de forma</strong>. Em vez de reagir a cada pixel, você reage a três faixas. Simples e cobre o mundo real. <em>(O Material 3 recente ainda acrescenta <code>Large</code> ≥1200dp e <code>Extra-Large</code> ≥1600dp para desktop, mas Compact/Medium/Expanded resolvem a maioria dos apps.)</em></p>
+</blockquote>
+<blockquote>
+<p>🔗 <strong>Ligação com o mandato:</strong> o corte de <strong>600dp</strong> (Compact→Medium) é o mesmo <code>sw600dp</code> do artigo anterior. Ou seja: a fronteira em que a Google te <strong>obriga</strong> a girar é a fronteira em que você <strong>quer</strong> trocar o layout. Os dois assuntos são o mesmo assunto.</p>
+</blockquote>
+<hr>
+<h2>Como criar layouts variantes: os dois mundos</h2>
+<p>Existem <strong>duas formas</strong> de variar o layout, e elas convivem. Saber qual usar é metade da batalha.</p>
+<h3>Mundo 1 — Resource Qualifiers (recursos / XML)</h3>
+<p>O Android escolhe automaticamente a pasta certa conforme o aparelho. Você cria pastas com <strong>sufixos</strong> (qualificadores) e o sistema resolve em runtime:</p>
+<pre><code>res/
+├── drawable/            ← vetores (servem para TODAS as densidades)
+├── drawable-xxhdpi/     ← PNGs específicos de densidade (se precisar)
+├── values/
+│   └── dimens.xml       ← &lt;dimen name=&quot;margin&quot;&gt;16dp&lt;/dimen&gt;   (padrão)
+├── values-sw600dp/
+│   └── dimens.xml       ← &lt;dimen name=&quot;margin&quot;&gt;24dp&lt;/dimen&gt;   (tablet: mais respiro)
+├── layout/
+│   └── activity_main.xml       ← layout do telefone
+└── layout-w840dp/
+    └── activity_main.xml       ← layout de duas colunas (tela larga)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Qualificador</th>
+<th align="left">Quando o sistema usa</th>
+<th align="left">Uso típico</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-mdpi</code>, <code>-hdpi</code>, <code>-xhdpi</code>…</td>
+<td align="left">Pela densidade da tela</td>
+<td align="left">Bitmaps (PNG) por densidade</td>
+</tr>
+<tr>
+<td align="left"><code>-sw600dp</code></td>
+<td align="left"><code>sw</code> do aparelho ≥ 600dp</td>
+<td align="left"><strong><code>dimens</code>/valores</strong> para tablet (fixo, não muda ao girar)</td>
+</tr>
+<tr>
+<td align="left"><code>-w840dp</code></td>
+<td align="left">Largura <strong>atual</strong> ≥ 840dp</td>
+<td align="left"><strong>Layouts</strong> diferentes por espaço disponível</td>
+</tr>
+<tr>
+<td align="left"><code>-land</code> / <code>-port</code></td>
+<td align="left">Orientação atual</td>
+<td align="left">Ajustes de paisagem/retrato</td>
+</tr>
+<tr>
+<td align="left"><code>-night</code></td>
+<td align="left">Modo escuro ligado</td>
+<td align="left">Cores do tema escuro</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong>Cuidado com <code>-land</code>/<code>-port</code> para layout inteiro:</strong> dobrar o número de XMLs por orientação é uma armadilha de manutenção. Prefira variar por <strong>largura</strong> (<code>-w&lt;N&gt;dp</code>), que descreve o que realmente importa (espaço), não a orientação.</p>
+</blockquote>
+<blockquote>
+<p>🧠 <strong>Como o sistema &quot;decide&quot;:</strong> ele pega a configuração atual do aparelho (densidade, <code>sw</code>, largura, orientação, tema) e escolhe a pasta <strong>mais específica que combina</strong>. Se nenhuma variante combinar, cai na pasta base (<code>values/</code>, <code>layout/</code>).</p>
+</blockquote>
+<h3>Mundo 2 — Jetpack Compose (o jeito moderno, o do NexusHub)</h3>
+<p>Em Compose você <strong>não</strong> cria pastas <code>layout-w840dp/</code>. A decisão é <strong>código, em runtime</strong>, com as <em>size classes</em>:</p>
+<pre><code class="language-kotlin">val sizeClass = calculateWindowSizeClass(activity)
+
+when (sizeClass.widthSizeClass) {
+    WindowWidthSizeClass.Compact -&gt; {
+        FeedList()                       // 📱 telefone: só a lista
+    }
+    WindowWidthSizeClass.Medium,
+    WindowWidthSizeClass.Expanded -&gt; {
+        Row {
+            FeedList(Modifier.weight(1f))    // 💻 tablet: lista +
+            ArticleDetail(Modifier.weight(2f))//    detalhe lado a lado
+        }
+    }
+}
+</code></pre>
+<p>Para reagir ao espaço de <strong>um componente</strong> específico (não da janela toda), use <code>BoxWithConstraints</code>:</p>
+<pre><code class="language-kotlin">BoxWithConstraints {
+    if (maxWidth &lt; 600.dp) CompactCard() else WideCard()
+}
+</code></pre>
+<p>E o Material 3 já traz <strong>scaffolds adaptáveis prontos</strong>, que fazem a troca sozinhos:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Componente</th>
+<th align="left">O que faz sozinho</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>NavigationSuiteScaffold</code></td>
+<td align="left">Troca <strong>barra inferior</strong> (Compact) ↔ <strong>navigation rail</strong> (Medium/Expanded)</td>
+</tr>
+<tr>
+<td align="left"><code>ListDetailPaneScaffold</code></td>
+<td align="left">Lista em tela cheia (Compact) ↔ <strong>lista + detalhe</strong> (Expanded)</td>
+</tr>
+<tr>
+<td align="left"><code>SupportingPaneScaffold</code></td>
+<td align="left">Conteúdo principal + painel de apoio quando há espaço</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🔒 <strong>Visão Specialist — qual mundo usar:</strong> em Compose, use <strong>size classes/<code>BoxWithConstraints</code></strong> para <em>layout</em>, e ainda use <strong>resource qualifiers</strong> para <em>recursos</em> que não são código: <code>values-sw600dp/dimens.xml</code> (espaçamentos), <code>drawable/</code> vetorial, <code>values-night/</code> (tema). Layout = código; valores e assets = recursos.</p>
+</blockquote>
+<hr>
+<h2>Quando (não) criar uma variante</h2>
+<p>O erro do iniciante é criar variante demais. A régua:</p>
+<pre><code>   O conteúdo cabe e fica bom só esticando?  ──► NÃO crie variante.
+                    │ não                          (deixe o Compose refluir)
+                    ▼
+   Sobra espaço para mostrar MAIS de uma vez? ──► SIM: lista + detalhe,
+                    │ não                          duas colunas, rail lateral.
+                    ▼
+   O toque/leitura fica ruim numa faixa?      ──► Ajuste dimens via
+                                                  values-sw600dp (respiro).
+</code></pre>
+<ul>
+<li><strong>Compact → Medium/Expanded:</strong> o salto que quase todo app precisa é <strong>um só</strong>: de &quot;uma coluna&quot; para &quot;lista + detalhe&quot;. Esse é o <code>ListDetailPaneScaffold</code>.</li>
+<li><strong>Não</strong> faça layout para &quot;telefone virado&quot;, &quot;tablet 7&quot;, &quot;tablet 10&quot; separados. Pense em <strong>faixas de largura</strong>, não em modelos.</li>
+</ul>
+<blockquote>
+<p>🔒 <strong>Visão Specialist:</strong> o layout responsivo bem-feito tem <strong>poucos</strong> pontos de quebra e <strong>muito</strong> conteúdo que simplesmente reflui. Se você tem 6 XMLs para a mesma tela, o problema é design, não Android.</p>
+</blockquote>
+<hr>
+<h2>✅ Checklist para o NexusHub</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Item</th>
+<th align="left">Ação</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Toda medida de layout em <code>dp</code>, fonte em <code>sp</code></td>
+<td align="left">Padrão desde a 1ª tela</td>
+</tr>
+<tr>
+<td align="left">Espaçamentos na <strong>grade de 8dp</strong> (tokens nomeados)</td>
+<td align="left">Nada de número mágico solto</td>
+</tr>
+<tr>
+<td align="left">Clicáveis com <strong>≥ 48dp</strong> de área de toque</td>
+<td align="left">Usar <code>IconButton</code>; conferir os &quot;na mão&quot;</td>
+</tr>
+<tr>
+<td align="left">Ícones como <code>VectorDrawable</code>, não PNG multi-densidade</td>
+<td align="left">Evita <code>drawable-xxhdpi/</code> etc.</td>
+</tr>
+<tr>
+<td align="left"><code>values-sw600dp/dimens.xml</code> para respiro em tablet</td>
+<td align="left">Margens/paddings maiores</td>
+</tr>
+<tr>
+<td align="left">Feed: <code>Compact</code> = lista; <code>Expanded</code> = lista + detalhe</td>
+<td align="left">Usar <code>ListDetailPaneScaffold</code></td>
+</tr>
+<tr>
+<td align="left">Navegação: <code>NavigationSuiteScaffold</code></td>
+<td align="left">Barra inferior ↔ rail automático</td>
+</tr>
+<tr>
+<td align="left">Testar num AVD tablet (<code>sw ≥ 600dp</code>) além do Pixel_9a</td>
+<td align="left">Ver o layout expandido de verdade</td>
+</tr>
+<tr>
+<td align="left"><strong>Não</strong> travar orientação (mandato)</td>
+<td align="left">Deixar refluir — ver <a href="03-edge-to-edge.html">artigo anterior</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>📖 Glossário-relâmpago</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Termo</th>
+<th align="left">Em uma linha</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>dp</code></strong></td>
+<td align="left">Unidade de layout independente da densidade (1dp = 1px em 160dpi).</td>
+</tr>
+<tr>
+<td align="left"><strong><code>sp</code></strong></td>
+<td align="left">Como o <code>dp</code>, mas para fontes — respeita o ajuste do usuário.</td>
+</tr>
+<tr>
+<td align="left"><strong><code>px</code></strong></td>
+<td align="left">Pixel físico — quase nunca usado direto.</td>
+</tr>
+<tr>
+<td align="left"><strong>Grade de 8dp</strong></td>
+<td align="left">Espaçamentos em múltiplos de 8 (4 p/ ajuste fino).</td>
+</tr>
+<tr>
+<td align="left"><strong>Margem / Padding / Gap</strong></td>
+<td align="left">Fora da caixa / dentro da caixa / entre filhos.</td>
+</tr>
+<tr>
+<td align="left"><strong>Alvo de toque</strong></td>
+<td align="left">Área clicável mínima de 48×48dp (acessibilidade).</td>
+</tr>
+<tr>
+<td align="left"><strong><code>contentPadding</code></strong></td>
+<td align="left">Padding dos itens de uma lista sem cortar o fundo (edge-to-edge).</td>
+</tr>
+<tr>
+<td align="left"><strong>Token de espaçamento</strong></td>
+<td align="left">Valor nomeado (<code>Spacing.medium</code>) em vez de número mágico.</td>
+</tr>
+<tr>
+<td align="left"><strong>dpi</strong></td>
+<td align="left">Pixels por polegada; define o &quot;balde&quot; de densidade.</td>
+</tr>
+<tr>
+<td align="left"><strong>Balde de densidade</strong></td>
+<td align="left">mdpi/hdpi/xhdpi/xxhdpi/xxxhdpi (1×…4×).</td>
+</tr>
+<tr>
+<td align="left"><strong>smallest width (<code>sw</code>)</strong></td>
+<td align="left">Menor dimensão da tela em dp; <strong>não muda</strong> ao girar.</td>
+</tr>
+<tr>
+<td align="left"><strong>available width (<code>w</code>)</strong></td>
+<td align="left">Largura atual em dp; <strong>muda</strong> ao girar.</td>
+</tr>
+<tr>
+<td align="left"><strong>Resource qualifier</strong></td>
+<td align="left">Sufixo de pasta (<code>-sw600dp</code>, <code>-night</code>) que o sistema escolhe sozinho.</td>
+</tr>
+<tr>
+<td align="left"><strong>Window Size Class</strong></td>
+<td align="left">Compact/Medium/Expanded — as faixas de largura oficiais.</td>
+</tr>
+<tr>
+<td align="left"><strong>Breakpoint</strong></td>
+<td align="left">Ponto de largura (600/840dp) onde o layout muda de forma.</td>
+</tr>
+<tr>
+<td align="left"><strong>VectorDrawable</strong></td>
+<td align="left">Imagem vetorial que serve a todas as densidades num arquivo.</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Trilogia + adaptável do NexusHub: <a href="01-gradle.html">Gradle</a> · <a href="02-sdk.html">Android SDK</a> · <a href="03-edge-to-edge.html">Edge-to-Edge &amp; Telas Grandes</a> · <strong>este artigo</strong>.</em></p>
+  </article>
+    <nav class="pager">
+      <a class="pg prev" href="03-edge-to-edge.html"><span>← Anterior</span><strong>📐 Edge-to-Edge & Telas Grandes</strong></a>
+      <a class="pg next" href="05-play-store.html"><span>Próximo →</span><strong>🚀 Publicar na Google Play</strong></a>
+    </nav>
+</main>
+</body>
+</html>

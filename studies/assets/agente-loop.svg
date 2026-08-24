@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 380" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="380" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O loop do agente: você paga cada volta, não só o que digitou</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">chatbot responde texto · agente lê, roda ferramenta, olha a saída e decide de novo</text>
+
+  <!-- feedback arc N4 -> N2 -->
+  <path d="M 672 118 C 672 78, 296 78, 300 118" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+  <text x="486" y="86" text-anchor="middle" font-size="10.5" fill="#8A97A3">outra volta — relê a janela inteira</text>
+
+  <!-- 4 nodes -->
+  <rect x="26" y="122" width="165" height="92" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="108" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">① A ordem</text>
+  <text x="108" y="172" text-anchor="middle" font-size="10.5" fill="#AAB6C0">você descreve uma</text>
+  <text x="108" y="187" text-anchor="middle" font-size="10.5" fill="#AAB6C0">intenção e um limite</text>
+
+  <rect x="214" y="122" width="165" height="92" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1.6"/>
+  <text x="296" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#AEB7F2">② Decidir</text>
+  <text x="296" y="172" text-anchor="middle" font-size="10.5" fill="#AAB6C0">precisa de uma</text>
+  <text x="296" y="187" text-anchor="middle" font-size="10.5" fill="#AAB6C0">ferramenta?</text>
+
+  <rect x="402" y="122" width="165" height="92" rx="11" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.6"/>
+  <text x="484" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#7FC9BD">③ Ferramenta</text>
+  <text x="484" y="172" text-anchor="middle" font-size="10.5" fill="#9DBDB6" font-family="ui-monospace,monospace">gradle · edit · grep</text>
+  <text x="484" y="187" text-anchor="middle" font-size="10.5" fill="#9DBDB6">devolve a saída</text>
+
+  <rect x="590" y="122" width="165" height="92" rx="11" fill="#3C3420" stroke="#D97706" stroke-width="1.6"/>
+  <text x="672" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#E3AE72">④ Avaliar</text>
+  <text x="672" y="172" text-anchor="middle" font-size="10.5" fill="#D9B38A">olha o resultado:</text>
+  <text x="672" y="187" text-anchor="middle" font-size="10.5" fill="#D9B38A">girar de novo ou parar?</text>
+
+  <!-- forward arrows -->
+  <line x1="191" y1="168" x2="212" y2="168" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="379" y1="168" x2="400" y2="168" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="567" y1="168" x2="588" y2="168" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- exit to done -->
+  <line x1="672" y1="214" x2="672" y2="266" stroke="#84C48D" stroke-width="1.8" marker-end="url(#ar)"/>
+  <rect x="512" y="268" width="243" height="52" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="633" y="290" text-anchor="middle" font-size="12" font-weight="700" fill="#8ECB98">Parar — entrega o diff / responde</text>
+  <text x="633" y="307" text-anchor="middle" font-size="10" fill="#9DBDB6">ordem cumprida = pare; faltou detalhe = peça o detalhe</text>
+
+  <!-- cost note -->
+  <rect x="26" y="268" width="456" height="52" rx="10" fill="#3C2428" stroke="#D96A78"/>
+  <text x="44" y="290" font-size="11" font-weight="700" fill="#F0899A">Sem critério de parada, o motor gira no vazio.</text>
+  <text x="44" y="307" font-size="10" fill="#D89BA2">2 tentativas no mesmo erro ainda é ofício · 5 é hora de abrir sessão nova.</text>
+</svg>

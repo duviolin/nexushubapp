@@ -1,0 +1,219 @@
+<h1>🔬 Afinando o controle de qualidade: Lint, Detekt &amp; Sonar sob medida (2026)</h1>
+
+<p>No artigo 06 você <strong>ligou</strong> as ferramentas de qualidade na esteira e viu o Quality Gate barrar um PR. Mas nas configurações-padrão elas ou reclamam <strong>demais</strong> (afogam o time em avisos irrelevantes) ou <strong>de menos</strong> (deixam passar o que importa). Este artigo é sobre o meio-termo: <strong>configurar cada peneira</strong> para pegar o que o seu projeto considera erro — nem mais, nem menos.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o 06 respondeu “o que é cada ferramenta e como ligo na esteira”. Aqui respondemos “como faço ela concordar com as regras do <em>meu</em> time” — e como adotá-la num projeto legado <strong>sem</strong> parar tudo para consertar 5 anos de dívida.</p></blockquote>
+
+<hr>
+
+<h2>Quem pega o quê (divisão de trabalho)</h2>
+
+<p>As quatro ferramentas não competem — cada uma é uma <strong>peneira</strong> com uma malha diferente. Configurar bem começa por saber qual regra mora em qual peneira.</p>
+
+<p><img src="../assets/qualidade-camadas.svg" alt="Quatro peneiras em sequência pelas quais o código passa: ktlint/Spotless (formatação: indentação, imports, espaçamento — conserta sozinho com --format), Detekt (code smell de Kotlin: função gigante, complexidade, !! perigoso — aceita regras custom via detekt.yml), Android Lint (regras de Android: API sem checar versão, acessibilidade, permissão inútil — configurável via lint.xml) e Sonar (o portão do time: junta tudo, histórico, cobertura, duplicação, Quality Gate). Rodapé: a severidade info/warning deixa o build passar; error para a esteira, e warningsAsErrors transforma todo aviso em erro."></p>
+
+<blockquote><p>🧠 <strong>Termo — severidade:</strong> o “peso” de cada aviso: <code>info</code>, <code>warning</code> ou <code>error</code>. Só <code>error</code> derruba o build. Configurar qualidade é, em boa parte, <strong>decidir a severidade de cada regra</strong> — promover a erro o que importa, rebaixar a aviso o que é gosto.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · ktlint / Spotless (formatação)</h2>
+
+<p>Formatação não é opinião a se discutir em PR — é para o robô resolver. O <strong>ktlint</strong> aplica o estilo oficial do Kotlin; o <strong>Spotless</strong> é um guarda-chuva que roda ktlint (e outros) e ainda <strong>conserta</strong> o arquivo.</p>
+
+<pre><code class="language-kotlin">// build.gradle.kts (raiz)
+plugins { id("com.diffplug.spotless") version "6.25.0" }
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        ktlint("1.3.1")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+</code></pre>
+
+<pre><code class="language-bash">./gradlew spotlessApply     # CONSERTA a formatação (rode antes de commitar)
+./gradlew spotlessCheck     # só VERIFICA (é o que roda na esteira; falha se estiver torto)
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> ligue o <code>spotlessApply</code> num <strong>hook de pré-commit</strong> (com o <a href="https://github.com/gradle/gradle">Gradle</a> + <code>pre-commit</code> ou um script em <code>.git/hooks</code>). Assim o código já sai formatado do seu PC e a esteira nunca reprova por vírgula fora do lugar — a checagem vira uma rede de segurança, não um obstáculo diário.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · Detekt (code smell de Kotlin)</h2>
+
+<p>O Detekt olha a <strong>estrutura</strong> do seu Kotlin: funções longas demais, complexidade alta, aninhamento profundo, <code>!!</code> arriscado. Tudo vive num arquivo <code>detekt.yml</code> — cada regra tem <code>active</code> e limiares.</p>
+
+<pre><code class="language-yaml"># config/detekt/detekt.yml — só o que você MUDA em relação ao padrão
+complexity:
+  LongMethod:
+    active: true
+    threshold: 60          # linhas; acima disso, reclama
+  CyclomaticComplexMethod:
+    threshold: 15
+
+style:
+  MagicNumber:
+    active: true
+    ignoreNumbers: ['-1', '0', '1', '2']   # esses são óbvios, não reclame
+  MaxLineLength:
+    maxLineLength: 120
+
+potential-bugs:
+  UnsafeCallOnNullableType:
+    active: true           # o !! perigoso — mantenha ligado
+
+build:
+  maxIssues: 0             # 0 = qualquer issue derruba o build
+</code></pre>
+
+<pre><code class="language-kotlin">// build.gradle.kts (módulo :app)
+plugins { id("io.gitlab.arturbosch.detekt") version "1.23.7" }
+
+detekt {
+    config.setFrom("$rootDir/config/detekt/detekt.yml")
+    buildUponDefaultConfig = true   // parte do padrão e só sobrescreve o que você declarou
+}
+</code></pre>
+
+<h3>Silenciar um caso pontual</h3>
+
+<p>Às vezes a regra está certa 99% das vezes, mas <em>naquele</em> ponto o código é assim de propósito. Suprima <strong>local e justificado</strong>, nunca a regra inteira:</p>
+
+<pre><code class="language-kotlin">@Suppress("MagicNumber")   // 3600 = segundos numa hora, valor de domínio
+fun horaEmSegundos() = 3600
+</code></pre>
+
+<h3>Escrever uma regra sua</h3>
+
+<p>Detekt permite regras <strong>custom</strong> — úteis para padrões do próprio time (“nenhum <code>import</code> de <code>android.util.Log</code>; use nosso <code>Logger</code>”). Você estende <code>Rule</code>, registra num <code>RuleSetProvider</code> e o Detekt passa a aplicá-la como qualquer outra. É o pulo do gato para transformar <strong>convenção verbal em regra automática</strong>.</p>
+
+<hr>
+
+<h2>Parte 3 · Android Lint (regras da plataforma)</h2>
+
+<p>O Lint já vem no AGP e conhece o <strong>Android</strong>: uso de API acima do <code>minSdk</code> sem checagem, <code>contentDescription</code> faltando (acessibilidade), permissão declarada e não usada, recurso órfão. Você o afina no bloco <code>lint {}</code> e num <code>lint.xml</code>.</p>
+
+<pre><code class="language-kotlin">// build.gradle.kts (módulo :app)
+android {
+    lint {
+        warningsAsErrors = true          // rígido: todo warning derruba o build
+        abortOnError = true
+        checkDependencies = true         // varre também os módulos de biblioteca
+        baseline = file("lint-baseline.xml")
+        disable += "TypographyFallbacks"  // regras que você decidiu não seguir
+        fatal   += "StopShip"             // TODO/FIXME de "não suba isso" viram fatais
+    }
+}
+</code></pre>
+
+<pre><code class="language-xml">&lt;!-- lint.xml — severidade por issue, com precisão cirúrgica --&gt;
+&lt;lint&gt;
+    &lt;issue id="HardcodedText" severity="error" /&gt;
+    &lt;issue id="ContentDescription" severity="error" /&gt;
+    &lt;issue id="IconDensities" severity="ignore" /&gt;
+&lt;/lint&gt;
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <code>warningsAsErrors = true</code> num projeto que <strong>já existe</strong> vai explodir com centenas de erros no primeiro build. Não desligue a regra — gere um <strong>baseline</strong> (Parte 5) e comece do zero a partir de hoje.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Sonar (o portão do time)</h2>
+
+<p>Lint e Detekt vivem em cada máquina. O <strong>Sonar</strong> é o servidor que junta tudo, guarda o histórico e aplica o <strong>Quality Gate</strong> que barra o PR (artigo 06). Configurar aqui é dizer <strong>o que o Sonar analisa</strong> e <strong>de onde ele lê a cobertura</strong>.</p>
+
+<pre><code class="language-kotlin">// build.gradle.kts (raiz)
+sonar {
+    properties {
+        property("sonar.projectKey", "org_nexushub")
+        property("sonar.organization", "org")
+        property("sonar.host.url", "https://sonarcloud.io")
+
+        // NÃO analise código gerado nem testes como se fosse produção
+        property("sonar.exclusions", "**/build/**,**/*_generated*,**/databinding/**")
+        property("sonar.coverage.exclusions", "**/di/**,**/*Application.kt,**/ui/theme/**")
+
+        // de onde vem a cobertura (o relatório que o Kover gerou)
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "$buildDir/reports/kover/report.xml"
+        )
+    }
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — cobertura de código:</strong> a fatia das linhas que os testes de fato executam. O <strong>Kover</strong> (ou Jacoco) mede e gera um XML; o Sonar lê esse XML e mostra no painel. Sem esse caminho configurado, o Sonar reporta <strong>0% de cobertura</strong> mesmo que você tenha testes — um susto comum.</p></blockquote>
+
+<h3>Desenhando o seu Quality Gate</h3>
+
+<p>Na interface do Sonar você define as regras do portão. Um gate sensato para começar:</p>
+
+<table>
+<thead><tr><th align="left">Condição (no código novo)</th><th align="left">Valor</th><th align="left">Por quê</th></tr></thead>
+<tbody>
+<tr><td align="left">Cobertura</td><td align="left">&#8805; 80%</td><td align="left">o que o PR adiciona precisa vir testado</td></tr>
+<tr><td align="left">Linhas duplicadas</td><td align="left">&#8804; 3%</td><td align="left">copiar-colar apodrece rápido</td></tr>
+<tr><td align="left">Bugs / Vulnerabilidades novas</td><td align="left">0</td><td align="left">não introduza problema conhecido</td></tr>
+<tr><td align="left">Security Hotspots</td><td align="left">100% revisados</td><td align="left">alguém olhou os pontos sensíveis</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> mire o Quality Gate <strong>“em código novo”</strong> (o gate <em>Clean as You Code</em>), não no projeto inteiro. Exigir 80% de cobertura sobre 5 anos de legado congela o time; exigir sobre o que <em>muda hoje</em> faz a qualidade subir a cada PR sem drama. É a mesma filosofia do baseline, a seguir.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · Baseline: adotar sem parar o mundo</h2>
+
+<p>O maior obstáculo de ligar essas ferramentas num projeto que já existe: o primeiro build cospe <strong>centenas</strong> de avisos reais. Consertar tudo antes de mesclar qualquer coisa é inviável. A saída é o <strong>baseline</strong>: uma foto dos problemas <em>atuais</em>, que a ferramenta passa a <strong>ignorar</strong> — cobrando só o que for <strong>novo</strong>.</p>
+
+<p><img src="../assets/baseline.svg" alt="Mecanismo do baseline: 247 avisos reais no código antigo entram no baseline.xml via detektBaseline e ficam silenciados. A partir daí cada build compara: se o aviso está no baseline, ignora e o build passa; se é um aviso novo, fora do baseline, o PR o introduziu e o build falha. Um PR de hoje com um LongMethod novo em Checkout.kt derruba o build. A regra de ouro: o número de avisos nunca sobe; ao consertar um legado, regenere o baseline e ele cai."></p>
+
+<pre><code class="language-bash"># Detekt: fotografa os problemas de hoje em um baseline
+./gradlew detektBaseline          # gera config/detekt/baseline.xml
+
+# Android Lint: o mesmo para as regras de Android
+./gradlew updateLintBaseline      # gera lint-baseline.xml
+</code></pre>
+
+<p>Você <strong>versiona</strong> esses arquivos. A partir daí, todo aviso já listado fica quieto; qualquer aviso <strong>novo</strong> derruba o build. A dívida antiga não some sozinha, mas também <strong>não cresce</strong> — e some aos poucos, à medida que você mexe nos arquivos e regenera o baseline.</p>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> baseline não é lixeira. Se você <strong>regenera</strong> o baseline toda vez que aparece um aviso novo (só para o build passar), a ferramenta vira enfeite. Regenere <strong>só</strong> quando você <em>consertou</em> algo e quer que o baseline encolha.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Formatação</strong></td><td align="left">Spotless/ktlint com <code>spotlessApply</code> em hook de pré-commit</td></tr>
+<tr><td align="left"><strong>detekt.yml</strong></td><td align="left">Um único arquivo na raiz, <code>buildUponDefaultConfig = true</code>, <code>maxIssues: 0</code></td></tr>
+<tr><td align="left"><strong>Supressão</strong></td><td align="left"><code>@Suppress</code> local <strong>com comentário</strong> justificando — nunca desligar a regra global</td></tr>
+<tr><td align="left"><strong>lint.xml</strong></td><td align="left">Severidade por issue; <code>warningsAsErrors</code> + baseline no legado</td></tr>
+<tr><td align="left"><strong>Cobertura</strong></td><td align="left">Kover gerando XML e o caminho apontado em <code>sonar.coverage.jacoco.xmlReportPaths</code></td></tr>
+<tr><td align="left"><strong>Exclusões Sonar</strong></td><td align="left">Tirar código gerado e DI da análise/cobertura</td></tr>
+<tr><td align="left"><strong>Quality Gate</strong></td><td align="left">“Clean as You Code” — regras sobre o código novo, não o legado</td></tr>
+<tr><td align="left"><strong>Baseline</strong></td><td align="left">Gerado e versionado; regenerado só ao <strong>consertar</strong>, nunca para calar</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>severidade</strong></td><td align="left">O peso do aviso: só <code>error</code> derruba o build.</td></tr>
+<tr><td align="left"><strong>ktlint / Spotless</strong></td><td align="left">Formatador de Kotlin que também conserta o arquivo.</td></tr>
+<tr><td align="left"><strong>detekt.yml</strong></td><td align="left">Onde você liga/desliga regras e ajusta limiares do Detekt.</td></tr>
+<tr><td align="left"><strong>buildUponDefaultConfig</strong></td><td align="left">Parte das regras padrão e só sobrescreve o que você declara.</td></tr>
+<tr><td align="left"><strong>regra custom</strong></td><td align="left">Regra sua (Detekt) que vira convenção do time em código.</td></tr>
+<tr><td align="left"><strong>lint.xml</strong></td><td align="left">Define a severidade de cada issue do Android Lint.</td></tr>
+<tr><td align="left"><strong>warningsAsErrors</strong></td><td align="left">Transforma todo aviso em erro (rígido de propósito).</td></tr>
+<tr><td align="left"><strong>cobertura</strong></td><td align="left">Fatia das linhas que os testes executam (Kover/Jacoco).</td></tr>
+<tr><td align="left"><strong>Quality Gate</strong></td><td align="left">As regras que o código novo cumpre para poder mesclar.</td></tr>
+<tr><td align="left"><strong>Clean as You Code</strong></td><td align="left">Cobrar qualidade só do que muda, não do legado.</td></tr>
+<tr><td align="left"><strong>baseline</strong></td><td align="left">Foto dos problemas atuais que a ferramenta passa a ignorar.</td></tr>
+</tbody>
+</table>

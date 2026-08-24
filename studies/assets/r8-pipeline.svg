@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 440" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="440" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">R8: quatro trabalhos numa passada só</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">liga com <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">isMinifyEnabled = true</tspan> no build de release</text>
+
+  <!-- input -->
+  <rect x="28" y="150" width="120" height="88" rx="10" fill="#3C3F41" stroke="#DFE1E5" stroke-width="1.3"/>
+  <text x="88" y="178" text-anchor="middle" font-size="12.5" font-weight="700" fill="#DFE1E5">entrada</text>
+  <text x="88" y="198" text-anchor="middle" font-size="10.5" fill="#AAB6C0">seu código +</text>
+  <text x="88" y="214" text-anchor="middle" font-size="10.5" fill="#AAB6C0">todas as libs</text>
+  <text x="88" y="230" text-anchor="middle" font-size="10.5" font-family="ui-monospace,monospace" fill="#8A97A3">~40k métodos</text>
+  <line x1="148" y1="194" x2="166" y2="194" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- 4 stages -->
+  <g font-size="10.5">
+    <rect x="168" y="150" width="130" height="88" rx="10" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.4"/>
+    <text x="233" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#7FC9BD">1 · Shrink</text>
+    <text x="233" y="196" text-anchor="middle" fill="#9DBDB6">remove código</text>
+    <text x="233" y="211" text-anchor="middle" fill="#9DBDB6">que ninguém chama</text>
+    <text x="233" y="228" text-anchor="middle" font-style="italic" fill="#7FC9BD">tree shaking</text>
+    <line x1="298" y1="194" x2="314" y2="194" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+
+    <rect x="316" y="150" width="130" height="88" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+    <text x="381" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#AEB7F2">2 · Optimize</text>
+    <text x="381" y="196" text-anchor="middle" fill="#AAB6C0">inline, junta</text>
+    <text x="381" y="211" text-anchor="middle" fill="#AAB6C0">classes, simplifica</text>
+    <text x="381" y="228" text-anchor="middle" font-style="italic" fill="#AEB7F2">mais rápido</text>
+    <line x1="446" y1="194" x2="462" y2="194" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+
+    <rect x="464" y="150" width="130" height="88" rx="10" fill="#3C3420" stroke="#D97706" stroke-width="1.4"/>
+    <text x="529" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#E3AE72">3 · Obfuscate</text>
+    <text x="529" y="196" text-anchor="middle" fill="#D9C4A0">renomeia tudo</text>
+    <text x="529" y="211" text-anchor="middle" font-family="ui-monospace,monospace" fill="#D9C4A0">LoginVM → a.b</text>
+    <text x="529" y="228" text-anchor="middle" font-style="italic" fill="#E3AE72">menor + confuso</text>
+    <line x1="594" y1="194" x2="610" y2="194" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#ar)"/>
+
+    <rect x="612" y="150" width="140" height="88" rx="10" fill="#352430" stroke="#EC8FBB" stroke-width="1.4"/>
+    <text x="682" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#EC8FBB">4 · Shrink recursos</text>
+    <text x="682" y="196" text-anchor="middle" fill="#D8A6C1">apaga drawables,</text>
+    <text x="682" y="211" text-anchor="middle" fill="#D8A6C1">strings sem uso</text>
+    <text x="682" y="228" text-anchor="middle" font-style="italic" fill="#EC8FBB">shrinkResources</text>
+  </g>
+
+  <!-- outputs -->
+  <line x1="233" y1="238" x2="233" y2="300" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <rect x="120" y="302" width="228" height="60" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.5"/>
+  <text x="234" y="326" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8ECB98">.aab menor e mais difícil de copiar</text>
+  <text x="234" y="345" text-anchor="middle" font-size="10.5" fill="#9DBDB6">~40k métodos → ~12k · download menor</text>
+
+  <line x1="529" y1="238" x2="529" y2="300" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <rect x="420" y="302" width="252" height="60" rx="10" fill="#3C3420" stroke="#D97706" stroke-width="1.5"/>
+  <text x="546" y="326" text-anchor="middle" font-size="12.5" font-weight="700" fill="#E3AE72">mapping.txt (o dicionário)</text>
+  <text x="546" y="345" text-anchor="middle" font-size="10.5" fill="#D9C4A0">guarde-o: sem ele, o crash vira sopa de letras</text>
+
+  <rect x="28" y="384" width="724" height="40" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="44" y="408" font-size="11" fill="#B7BFC7"><tspan font-weight="700" fill="#DFE1E5">Só no release:</tspan> o build de debug NÃO ofusca — por isso o app “funciona no debug e quebra no release” é sempre uma keep rule faltando.</text>
+</svg>

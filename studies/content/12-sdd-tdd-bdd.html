@@ -1,0 +1,178 @@
+<h1>📐 SDD, TDD e BDD: dirigir a IA por especificação (2026)</h1>
+
+<p>No artigo 11 você aprendeu a <em>operar</em> o agente. Agora vem a pergunta que decide se o código gerado presta: <strong>o que é “pronto”?</strong> A IA escreve Kotlin que compila e <em>parece</em> certo — mas “parece” não é “é”. Sem um alvo escrito antes, o loop gira agradando você em vez de acertar. As três siglas deste artigo — <strong>SDD, TDD, BDD</strong> — são três formas de fixar esse alvo <em>antes</em> de a IA digitar. Não competem: encadeiam.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> este é o par teórico do artigo 11. Lá, o squad de um dev só passava um bastão (<code>PLANO.md</code> → <code>SPEC.md</code> → código → <code>REVIEW.md</code>); esse bastão <em>é</em> SDD. Aqui a gente formaliza, soma TDD e BDD, e mostra por que teste é a melhor coleira de alucinação que existe.</p></blockquote>
+
+<hr>
+
+<h2>A pergunta que trava a IA</h2>
+
+<p>Peça “faça a tela de login” e você recebe <em>uma</em> das mil telas possíveis — a que o modelo achou mais provável, não a que o produto precisa. O antídoto é sempre o mesmo: escrever o critério de aceite antes. As três metodologias fazem isso em <strong>níveis diferentes</strong>.</p>
+
+<p><img src="../assets/sdd-tdd-bdd.svg" alt="Três siglas respondendo à mesma pergunta, o que é pronto, em níveis diferentes, cada uma definindo o alvo antes de a IA gerar código. SDD, Spec-Driven Development: responde o quê e o escopo, artefato é PLANO.md e SPEC.md, nível produto e arquitetura, o humano escreve a spec e a IA executa dentro dela. TDD, Test-Driven Development: responde está correto, artefato é um teste que falha, nível unidade e função, o teste vem primeiro e amarra a IA à realidade. BDD, Behavior-Driven Development: responde qual comportamento, artefato é Given-When-Then, nível feature e linguagem, é a linguagem única entre produto, dev e IA. Rodapé: não competem, encadeiam. SDD recorta o escopo, depois BDD descreve a aceitação, depois TDD implementa cada peça."></p>
+
+<hr>
+
+<h2>Parte 1 · SDD — dirigir por especificação</h2>
+
+<p><strong>Spec-Driven Development</strong>: o humano escreve a <em>especificação</em>; a IA a executa. O código deixa de ser a fonte da verdade — a spec é. É exatamente o fluxo do artigo 11: o PO recorta o problema, o Tech trava o “como”, e só então o Dev implementa <em>obedecendo</em> ao documento.</p>
+
+<p>Uma boa spec para a IA tem quatro coisas: <strong>escopo</strong> (e o fora de escopo, honesto), <strong>contrato</strong> (assinaturas, estados, erros), <strong>dados</strong> e <strong>critérios de pronto</strong>. Com ela no disco, o prompt fica curto e o agente não precisa adivinhar.</p>
+
+<pre><code class="language-markdown"># SPEC — Recuperar senha (MVP)
+
+## Escopo
+- Enviar link de reset por e-mail. FORA: SMS, perguntas de segurança.
+
+## Contrato (domínio, sem Android)
+interface AuthRepository { suspend fun enviarReset(email: String): Result&lt;Unit&gt; }
+class SolicitarReset(repo): suspend operator fun invoke(email): Result&lt;Unit&gt;
+
+## Estados da tela (MVI)
+data class ResetUiState(carregando, enviado, erro: String?)
+
+## Critérios de pronto
+- E-mail inválido → erro local, NÃO chama o repositório.
+- Sucesso → estado `enviado = true`.
+- Falha de rede → `erro` preenchido, botão volta a habilitar.
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a versão moderna do SDD tem ferramenta (o <em>plan mode</em> do próprio agente, kits como o Spec-Kit). Mas o princípio não depende de tooling: <strong>uma spec revisável no disco</strong> é o que separa “a IA fez algo” de “a IA fez o que combinamos”. Revisar a spec de 50 linhas é barato; revisar 500 linhas de Kotlin depois, não.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · TDD — o teste como coleira da alucinação</h2>
+
+<p><strong>Test-Driven Development</strong> inverte a ordem intuitiva: o <strong>teste vem primeiro</strong>. Você escreve um teste que falha (RED), faz o mínimo para passar (GREEN) e então limpa o código com a rede de segurança verde (REFACTOR). Com IA, esse ciclo ganha um superpoder: o teste é um <strong>alvo objetivo</strong> que o modelo não consegue “contornar com lábia”.</p>
+
+<p><img src="../assets/tdd-ciclo.svg" alt="O ciclo TDD com IA em três caixas ligadas num loop. Um RED, escreva o teste que falha, define o comportamento esperado, você guia o teste e a IA rascunha os casos. Dois GREEN, o código mínimo que faz passar, nada além do que o teste pede, a IA implementa contra um alvo real. Três REFACTOR, limpe o código com os testes seguindo verdes, extraia, renomeie e simplifique, a rede de segurança deixa a IA ousar. Setas ligam RED para GREEN, GREEN para REFACTOR e REFACTOR de volta para RED, repetindo por comportamento em passos pequenos, cada um verde antes do próximo. Título: o teste é a coleira da alucinação."></p>
+
+<p>Na prática, você conduz e a IA preenche. Primeiro o teste (o contrato do UseCase da spec):</p>
+
+<pre><code class="language-kotlin">// RED — escrevo o comportamento esperado; ainda não existe implementação
+class SolicitarResetTest {
+    private val repo = FakeAuthRepository()
+    private val solicitar = SolicitarReset(repo)
+
+    @Test fun `email invalido nao chama o repositorio`() = runTest {
+        val r = solicitar("email-sem-arroba")
+        assertTrue(r.isFailure)
+        assertEquals(0, repo.chamadas)          // nunca tocou a rede
+    }
+}
+</code></pre>
+
+<p>Só então o prompt para a IA: <em>“faça <code>SolicitarResetTest</code> passar com o mínimo; não adicione comportamento fora do teste”</em>. O modelo implementa contra um alvo que ou está verde ou não está — sem espaço para plausibilidade.</p>
+
+<blockquote><p>🔗 <strong>Ligação:</strong> tudo do artigo 10 vale aqui — <code>runTest</code> + Turbine para o ViewModel, fakes em vez de mocks, domínio puro testado sem Android. TDD é só a <em>ordem</em> em que você escreve; a caixa de ferramentas é a mesma.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha — deixar a IA escrever teste E código de uma vez:</strong> se o mesmo passo gera o teste e a implementação, o teste vira espelho do código (passa sempre, prova nada). Escreva/revise o teste <strong>você</strong>; deixe a implementação para a IA. O valor do TDD está no teste vir <em>antes</em> e de uma fonte independente.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · BDD — a linguagem única</h2>
+
+<p><strong>Behavior-Driven Development</strong> sobe um degrau: descreve <strong>comportamento</strong> na linguagem do negócio, no formato <strong>Given-When-Then</strong> (Dado-Quando-Então). A frase é a mesma para o PO que aprova, o dev que implementa e a IA que recebe o alvo — acaba a tradução perdida entre “o que o produto pediu” e “o que o código faz”.</p>
+
+<p><img src="../assets/bdd-gherkin.svg" alt="Um cenário Given-When-Then à esquerda em linguagem de negócio e o teste Compose correspondente à direita, ligados passo a passo. À esquerda, Feature divisão de contas, total por pessoa: Given uma mesa com duas pessoas, And um item de quarenta reais dividido entre elas, When abro os totais, Then cada pessoa deve vinte reais. À direita, o teste em Kotlin e Compose onde cada passo mapeia num Robot: robot monta mesa com duas pessoas e adiciona item de quarenta, robot abre totais, robot verifica que Ana deve vinte. Setas ligam cada passo do cenário à sua chamada no teste. Rodapé: um artefato, três leitores, o PO aprova a frase, o dev implementa o Robot, a IA recebe um alvo sem ambiguidade."></p>
+
+<p>O Given-When-Then casa perfeitamente com o <strong>Robot Pattern + AAA</strong> do artigo 10: <em>Given/And</em> é o <code>arrange</code>, <em>When</em> é a <code>action</code>, <em>Then</em> é o <code>assert</code>. O cenário legível vira teste sem fricção.</p>
+
+<pre><code class="language-kotlin">@Test fun `total por pessoa divide o item entre participantes`() {
+    RachaRobot(compose)
+        .arrange { montaMesa(pessoas = 2); adicionaItem(preco = 40.0) }  // Given / And
+        .action  { abreTotais() }                                         // When
+        .assert  { totalDe("Ana") shouldBe 20.0 }                         // Then
+}
+</code></pre>
+
+<p><strong>No Android, escolha a dose de BDD com cuidado.</strong> Você não precisa de Cucumber e arquivos <code>.feature</code> para colher o valor:</p>
+
+<table>
+  <thead><tr><th>Nível</th><th>Como</th><th>Custo/benefício</th></tr></thead>
+  <tbody>
+    <tr><td><strong>BDD “leve” (recomendado)</strong></td><td>Nomes de teste e Robots em Given-When-Then; a frase do cenário no <code>@Test</code>.</td><td>Todo o ganho de legibilidade, zero infra extra.</td></tr>
+    <tr><td><strong>BDD “formal”</strong></td><td>Cucumber-Android + <code>.feature</code> em Gherkin, step definitions ligadas a Espresso.</td><td>Só compensa quando gente não-técnica escreve/lê os cenários.</td></tr>
+  </tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — Gherkin & ATDD:</strong> <strong>Gherkin</strong> é a sintaxe <code>Feature/Scenario/Given/When/Then</code>. <strong>ATDD</strong> (Acceptance-Test-Driven) é o primo do BDD focado no critério de aceite: o teste de aceitação é acordado <em>antes</em> e guia a implementação — o mesmo espírito, ênfase no “aceito/não aceito”.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Como se encaixam (com IA no meio)</h2>
+
+<p>A confusão comum é achar que você escolhe <em>uma</em>. Na verdade cada uma responde a uma pergunta diferente, e num fluxo com IA elas se encadeiam:</p>
+
+<table>
+  <thead><tr><th>Sigla</th><th>Pergunta</th><th>Nível</th><th>Artefato que a IA recebe</th></tr></thead>
+  <tbody>
+    <tr><td><strong>SDD</strong></td><td>O quê e até onde?</td><td>Produto / arquitetura</td><td><code>SPEC.md</code> revisável</td></tr>
+    <tr><td><strong>BDD</strong></td><td>Qual comportamento?</td><td>Feature / linguagem</td><td>Cenário Given-When-Then</td></tr>
+    <tr><td><strong>TDD</strong></td><td>Está correto?</td><td>Unidade / função</td><td>Teste que falha</td></tr>
+  </tbody>
+</table>
+
+<p>O ciclo de trabalho do dev Android com IA fica assim:</p>
+
+<pre><code class="language-text">1. SDD  → jaleco de Tech: escreve/revisa SPEC.md (escopo + contrato + critérios)
+2. BDD  → traduz os critérios em cenários Given-When-Then (a aceitação)
+3. TDD  → para cada cenário, escreve o teste RED; a IA faz passar (GREEN)
+4. Refatora com a suíte verde; QA confronta o REVIEW contra a SPEC
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> você não faz o ritual completo para tudo. Bug isolado? Só TDD (teste que reproduz → correção). Feature nova de produto? SDD para recortar, BDD para os cenários-chave, TDD nas unidades. A régua é o <strong>risco</strong>: quanto mais caro o erro, mais cedo você escreve o alvo.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · Outros padrões que o especialista soma</h2>
+
+<p>SDD/TDD/BDD não vivem sozinhos. Estes padrões se conectam e valem a pena conhecer para conduzir a IA bem:</p>
+
+<table>
+  <thead><tr><th>Padrão</th><th>O que traz para o trabalho com IA</th></tr></thead>
+  <tbody>
+    <tr><td><strong>DDD</strong> (Domain-Driven Design)</td><td>A <em>linguagem ubíqua</em> — os termos do negócio viram nomes no código e alimentam os cenários BDD. Liga direto ao domínio puro do artigo 09.</td></tr>
+    <tr><td><strong>Clean / Hexagonal</strong></td><td>Fronteiras claras (a Regra da Dependência do artigo 09) dão à IA um alvo pequeno e testável por vez, em vez do app inteiro.</td></tr>
+    <tr><td><strong>Contract testing</strong></td><td>Fixa o contrato da API (ex.: MockWebServer, Pact) para a IA não “inventar” campos de JSON que o backend não devolve.</td></tr>
+    <tr><td><strong>Conventional Commits + trunk-based</strong></td><td>Um commit por intenção, mensagem padronizada (liga ao artigo 06). Diffs pequenos = revisão possível do código gerado.</td></tr>
+    <tr><td><strong>Pair programming com IA</strong></td><td>Você é o navegador (decide o alvo, revisa), a IA é o motorista (digita). Nunca o contrário.</td></tr>
+  </tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist — o fio que une tudo:</strong> toda essa lista existe para uma coisa só — <strong>reduzir a ambiguidade antes de gerar, e detectar o erro depois de gerar</strong>. A IA é rápida no meio (digitar). O valor do especialista está nas pontas: dizer com precisão o que fazer, e provar que o resultado está certo. Metodologia não é burocracia; é o que faz a velocidade da IA render em vez de acumular dívida.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+  <thead><tr><th>Item</th><th>Ação</th></tr></thead>
+  <tbody>
+    <tr><td><strong>SDD</strong></td><td>Feature nova nasce de uma <code>SPEC.md</code> revisada — não do primeiro prompt.</td></tr>
+    <tr><td><strong>BDD</strong></td><td>Critérios de aceite escritos em Given-When-Then antes de codar.</td></tr>
+    <tr><td><strong>TDD</strong></td><td>Teste RED escrito/revisado por você; a IA só faz passar (GREEN) e refatora.</td></tr>
+    <tr><td><strong>Independência</strong></td><td>Nunca deixe o mesmo passo gerar teste e implementação juntos.</td></tr>
+    <tr><td><strong>Dose por risco</strong></td><td>Bug → só TDD; feature → SDD + BDD + TDD. Quanto mais caro o erro, mais cedo o alvo.</td></tr>
+    <tr><td><strong>Correlatos</strong></td><td>Linguagem ubíqua (DDD) nos cenários; contrato de API fixado; commit por intenção.</td></tr>
+  </tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+  <thead><tr><th>Termo</th><th>Em uma linha</th></tr></thead>
+  <tbody>
+    <tr><td><strong>SDD</strong></td><td>Spec-Driven: o humano escreve a spec, a IA executa dentro dela.</td></tr>
+    <tr><td><strong>TDD</strong></td><td>Test-Driven: teste que falha → código mínimo → refatorar.</td></tr>
+    <tr><td><strong>BDD</strong></td><td>Behavior-Driven: comportamento em Given-When-Then, linguagem única.</td></tr>
+    <tr><td><strong>RED / GREEN / REFACTOR</strong></td><td>As três fases do ciclo TDD.</td></tr>
+    <tr><td><strong>Given-When-Then</strong></td><td>Contexto → ação → resultado observável (= Arrange-Act-Assert).</td></tr>
+    <tr><td><strong>Gherkin</strong></td><td>A sintaxe <code>Feature/Scenario/Given/When/Then</code> dos <code>.feature</code>.</td></tr>
+    <tr><td><strong>ATDD</strong></td><td>Acceptance-Test-Driven: o critério de aceite acordado guia a implementação.</td></tr>
+    <tr><td><strong>DDD</strong></td><td>Domain-Driven: modela o negócio e sua linguagem ubíqua.</td></tr>
+    <tr><td><strong>contract testing</strong></td><td>Fixa o contrato da API para o código não inventar campos.</td></tr>
+    <tr><td><strong>linguagem ubíqua</strong></td><td>Os mesmos termos no negócio, no código e nos testes.</td></tr>
+  </tbody>
+</table>

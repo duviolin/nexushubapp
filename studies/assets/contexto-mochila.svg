@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 416" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="416" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">A janela é uma mochila, não um HD</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">tudo compete pelo mesmo espaço · três gestos para não carregar peso morto</text>
+
+  <!-- LEFT: the backpack (context) -->
+  <rect x="26" y="82" width="322" height="306" rx="12" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="187" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5">O que ocupa a janela agora</text>
+  <text x="187" y="123" text-anchor="middle" font-size="10" fill="#8A97A3">veja com <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">/context</tspan></text>
+
+  <rect x="46" y="138" width="282" height="34" rx="7" fill="#1F332F" stroke="#7FC9BD"/>
+  <text x="60" y="160" font-size="11" fill="#9DBDB6">Prompt do sistema + ferramentas</text>
+  <rect x="46" y="178" width="282" height="34" rx="7" fill="#2E3350" stroke="#6366F1"/>
+  <text x="60" y="200" font-size="11" fill="#AEB7F2">CLAUDE.md (viaja em toda sessão)</text>
+  <rect x="46" y="218" width="282" height="34" rx="7" fill="#352430" stroke="#EC8FBB"/>
+  <text x="60" y="240" font-size="11" fill="#EC8FBB">Skills disparadas</text>
+  <rect x="46" y="258" width="282" height="34" rx="7" fill="#3C3420" stroke="#D97706"/>
+  <text x="60" y="280" font-size="11" fill="#E3AE72">Arquivos que o agente leu</text>
+  <rect x="46" y="298" width="282" height="46" rx="7" fill="#3C2428" stroke="#F0899A"/>
+  <text x="60" y="320" font-size="11" font-weight="700" fill="#F0899A">O papo acumulado</text>
+  <text x="60" y="336" font-size="9.5" fill="#D89BA2">cola de arquivo longo mora aqui até o fim</text>
+  <text x="187" y="368" text-anchor="middle" font-size="10.5" font-weight="700" fill="#F0899A">▲ mochila cheia = respostas piores e mais caras</text>
+
+  <!-- RIGHT: 3 gestures -->
+  <rect x="372" y="82" width="382" height="96" rx="11" fill="#3C3420" stroke="#D97706" stroke-width="1.4"/>
+  <text x="390" y="108" font-size="13" font-weight="700" fill="#E3AE72">Compactar <tspan font-family="ui-monospace,monospace" font-size="11">/compact</tspan></text>
+  <text x="390" y="130" font-size="11" fill="#D9B38A">Mesma ordem, agente no trilho, janela cheia.</text>
+  <text x="390" y="148" font-size="11" fill="#D9B38A">Resume o que já está lá — com foco.</text>
+  <text x="390" y="167" font-size="10" fill="#B58A5E">⚠ lixo vira resumo de lixo: só compacte a mesma tarefa.</text>
+
+  <rect x="372" y="188" width="382" height="96" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="390" y="214" font-size="13" font-weight="700" fill="#AEB7F2">Janela nova <tspan font-family="ui-monospace,monospace" font-size="11">/clear</tspan></text>
+  <text x="390" y="236" font-size="11" fill="#AAB6C0">Assunto mudou, papel mudou, agente preso,</text>
+  <text x="390" y="254" font-size="11" fill="#AAB6C0">ou você quer outro modelo.</text>
+  <text x="390" y="273" font-size="10" fill="#8891C8">joga o peso morto fora — recomeça leve.</text>
+
+  <rect x="372" y="294" width="382" height="94" rx="11" fill="#25392A" stroke="#84C48D" stroke-width="1.4"/>
+  <text x="390" y="320" font-size="13" font-weight="700" fill="#8ECB98">Compartilhar — gravar <tspan font-family="ui-monospace,monospace" font-size="11">.md</tspan></text>
+  <text x="390" y="342" font-size="11" fill="#9DBDB6">O próximo papel (ou você amanhã) precisa do</text>
+  <text x="390" y="360" font-size="11" fill="#9DBDB6">que foi decidido → grava no disco, não no papo.</text>
+  <text x="390" y="379" font-size="10" fill="#6FA87E">a sessão nova lê o arquivo; nunca cole 80 linhas de chat.</text>
+</svg>

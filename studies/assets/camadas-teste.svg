@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="430" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">As camadas &amp; o teste que cada uma pede</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">a dependência aponta para <tspan fill="#B7BFC7" font-weight="700">dentro</tspan>: o domínio não conhece nem Android nem banco</text>
+
+  <!-- UI layer -->
+  <rect x="40" y="92" width="220" height="230" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="150" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">UI</text>
+  <text x="150" y="138" text-anchor="middle" font-size="10.5" fill="#AAB6C0">Compose · ViewModel</text>
+  <text x="150" y="153" text-anchor="middle" font-size="10.5" fill="#AAB6C0">estado (MVI) · navegação</text>
+  <line x1="60" y1="168" x2="240" y2="168" stroke="#3D4370"/>
+  <text x="150" y="190" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E3AE72">Testa com:</text>
+  <text x="150" y="208" text-anchor="middle" font-size="10" fill="#D9C4A0">Compose UI test (JVM)</text>
+  <text x="150" y="223" text-anchor="middle" font-size="10" fill="#D9C4A0">Robolectric</text>
+  <text x="150" y="238" text-anchor="middle" font-size="10" fill="#D9C4A0">ViewModel: JUnit puro</text>
+  <text x="150" y="262" text-anchor="middle" font-size="9.5" font-style="italic" fill="#8A97A3">depende do Android</text>
+  <text x="150" y="298" text-anchor="middle" font-size="26">📱</text>
+
+  <!-- Domain layer (center, highlighted) -->
+  <rect x="280" y="92" width="220" height="230" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="2"/>
+  <text x="390" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">Domínio</text>
+  <text x="390" y="138" text-anchor="middle" font-size="10.5" fill="#9DBDB6">UseCases · entidades</text>
+  <text x="390" y="153" text-anchor="middle" font-size="10.5" fill="#9DBDB6">regras de negócio</text>
+  <line x1="300" y1="168" x2="480" y2="168" stroke="#3B5B54"/>
+  <text x="390" y="190" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8ECB98">Testa com:</text>
+  <text x="390" y="208" text-anchor="middle" font-size="10" fill="#9DBDB6">JUnit5 puro</text>
+  <text x="390" y="223" text-anchor="middle" font-size="10" fill="#9DBDB6">nada de emulador</text>
+  <text x="390" y="238" text-anchor="middle" font-size="10" fill="#9DBDB6">o mais rápido de todos</text>
+  <text x="390" y="262" text-anchor="middle" font-size="9.5" font-weight="700" font-style="italic" fill="#8ECB98">Kotlin puro · zero Android</text>
+  <text x="390" y="298" text-anchor="middle" font-size="26">🧠</text>
+
+  <!-- Data layer -->
+  <rect x="520" y="92" width="220" height="230" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="630" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">Data</text>
+  <text x="630" y="138" text-anchor="middle" font-size="10.5" fill="#AAB6C0">repositórios · Room</text>
+  <text x="630" y="153" text-anchor="middle" font-size="10.5" fill="#AAB6C0">Retrofit · DataStore</text>
+  <line x1="540" y1="168" x2="720" y2="168" stroke="#3D4370"/>
+  <text x="630" y="190" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E3AE72">Testa com:</text>
+  <text x="630" y="208" text-anchor="middle" font-size="10" fill="#D9C4A0">Room in-memory</text>
+  <text x="630" y="223" text-anchor="middle" font-size="10" fill="#D9C4A0">MockWebServer</text>
+  <text x="630" y="238" text-anchor="middle" font-size="10" fill="#D9C4A0">fakes de repositório</text>
+  <text x="630" y="262" text-anchor="middle" font-size="9.5" font-style="italic" fill="#8A97A3">fala com o mundo externo</text>
+  <text x="630" y="298" text-anchor="middle" font-size="26">🌐</text>
+
+  <!-- dependency arrows pointing inward -->
+  <line x1="278" y1="344" x2="262" y2="344" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="150" y="348" text-anchor="middle" font-size="10.5" fill="#B7BFC7">UI conhece o domínio</text>
+  <line x1="502" y1="344" x2="518" y2="344" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="630" y="348" text-anchor="middle" font-size="10.5" fill="#B7BFC7">Data implementa interfaces do domínio</text>
+  <text x="390" y="348" text-anchor="middle" font-size="10.5" font-weight="700" fill="#8ECB98">↙ o domínio não olha pra fora ↘</text>
+
+  <rect x="40" y="372" width="700" height="42" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="56" y="390" font-size="11" font-weight="700" fill="#DFE1E5">Por que isso importa para teste:</text>
+  <text x="56" y="407" font-size="10.5" fill="#B7BFC7">como o domínio não importa nada de Android, ele roda na JVM em milissegundos — a base larga da pirâmide vem de graça.</text>
+</svg>

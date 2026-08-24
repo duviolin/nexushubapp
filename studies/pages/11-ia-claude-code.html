@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desenvolver com IA · Estudos Android</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir menu">☰</button>
+<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
+  <nav class="side">
+    <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
+    <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
+    <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
+    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
+    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
+    <a href="05-play-store.html"><span class="n">05</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
+    <a href="06-git-ci.html"><span class="n">06</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
+    <a href="07-qualidade.html"><span class="n">07</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
+    <a href="08-ofuscacao.html"><span class="n">08</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
+    <a href="09-arquitetura.html"><span class="n">09</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
+    <a href="10-testes.html"><span class="n">10</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="11-ia-claude-code.html" class="active"><span class="n">11</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="12-sdd-tdd-bdd.html"><span class="n">12</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
+    <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
+  </nav>
+<main>
+  <p class="crumb">Artigo <strong>11</strong> de 12 · trilha de estudos</p>
+  <article class="content">
+<h1>🤖 Desenvolver Android com IA: o agente na sua bancada (2026)</h1>
+
+<p>Você já sabe montar a arquitetura (artigo 09) e testar cada camada (artigo 10) do NexusHub. Falta o operário que digita. Um <strong>agente de código</strong> — o Claude Code roda no terminal, dentro do seu repositório — lê seus arquivos, roda o <code>./gradlew</code>, edita Kotlin e olha o resultado. Este artigo é a <strong>oficina</strong>: como conduzir esse operário sem torrar cota nem deixá-lo reescrever o app inteiro por conta própria.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> aqui você aprende a <em>operar</em> a IA; no artigo 12 aprende a <em>dirigi-la por especificação</em> (SDD, TDD, BDD). Tudo que você montou até agora — Gradle, arquitetura em camadas, pirâmide de testes — vira o contrato que mantém o agente honesto.</p></blockquote>
+
+<hr>
+
+<h2>Chatbot responde. Agente age.</h2>
+
+<p>Um chatbot devolve texto. Um <strong>agente</strong> tem ferramentas: abre <code>build.gradle.kts</code>, roda <code>./gradlew testDebugUnitTest</code>, aplica um diff, lê o stacktrace e tenta de novo. A pasta do projeto é a sua <strong>bancada</strong>: cada arquivo que ele lê entra na conversa e ocupa espaço. Por isso o pedido bom tem sempre a mesma forma: <strong>uma intenção, um artefato, um limite</strong>.</p>
+
+<table>
+  <thead><tr><th>Pedido bom</th><th>Pedido caro</th></tr></thead>
+  <tbody>
+    <tr><td>“Extraia a validação de e-mail de <code>LoginViewModel</code> para um <code>UseCase</code>. Só isso.”</td><td>“Monta o app inteiro com login, Pix e tema, e me explica cada arquivo.”</td></tr>
+    <tr><td>Escopo fechado, um arquivo, dá para revisar o diff.</td><td>O agente lê o mundo, gera centenas de linhas e você não consegue auditar.</td></tr>
+  </tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — agente:</strong> um LLM num laço com ferramentas (ler, editar, rodar comando). Ele não “sabe” seu projeto — ele <em>descobre</em> lendo, e leitura custa contexto.</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · O loop e o custo do modelo</h2>
+
+<p>Você não paga só o que digitou. Paga <strong>cada volta</strong> do laço: ler, editar, olhar a saída, tentar de novo. Entender o loop é entender a conta.</p>
+
+<p><img src="../assets/agente-loop.svg" alt="O loop do agente em quatro nós num ciclo. 1 A ordem: você descreve uma intenção e um limite. 2 Decidir: o modelo avalia se precisa de uma ferramenta. 3 Ferramenta: gradle, edit ou grep roda e devolve a saída. 4 Avaliar: o modelo olha o resultado e decide girar de novo ou parar. Uma seta tracejada de retorno do nó 4 para o nó 2 indica outra volta, que relê a janela inteira. Do nó 4 sai também uma seta verde para uma caixa Parar, entrega o diff ou responde: ordem cumprida é pare, faltou detalhe é peça o detalhe. Um aviso vermelho lembra que sem critério de parada o motor gira no vazio: duas tentativas no mesmo erro ainda é ofício, cinco é hora de abrir sessão nova."></p>
+
+<p>O <strong>modelo</strong> é o ferro da peça, não o “melhor” da prateleira. Escolha pelo tamanho da ordem:</p>
+
+<table>
+  <thead><tr><th>Modelo</th><th>Quando usar no NexusHub</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Haiku</strong> (rápido/barato)</td><td>Tarefa mecânica: conferir um arquivo, renomear, rodar um checklist, resumir um log de build.</td></tr>
+    <tr><td><strong>Sonnet</strong> (o dia a dia)</td><td>O grosso do trabalho: implementar um Composable da spec, escrever testes de ViewModel, review simples.</td></tr>
+    <tr><td><strong>Opus</strong> (raro)</td><td>Recorte de arquitetura travado, um bug de corrotina que já quebrou duas vezes, refatoração de módulo inteiro.</td></tr>
+  </tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> não deixe Opus ligado por costume, e <strong>não troque de modelo no meio de uma janela gorda</strong> — o modelo novo herda todo o lixo do anterior. Grave o que vale num <code>.md</code>, abra sessão nova, escolha o modelo novo. Antes de um prompt largo, olhe o <code>/usage</code>: plano pago e API são torneiras diferentes.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha — o “continua” infinito:</strong> cada “continua, faz o resto” é uma volta com a janela inteira relida. Se a ordem foi cumprida, pare. Se faltou um detalhe, peça <em>o detalhe</em> — não “o resto”.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · Contexto: a janela é uma mochila</h2>
+
+<p>A <strong>janela de contexto</strong> é finita. Prompt do sistema, seu <code>CLAUDE.md</code>, skills disparadas, cada arquivo lido e todo o papo competem pelo mesmo espaço. Quando enche, as respostas pioram <em>e</em> ficam mais caras. Você tem três gestos para controlar o peso.</p>
+
+<p><img src="../assets/contexto-mochila.svg" alt="A janela de contexto desenhada como uma mochila que enche. À esquerda, uma pilha do que ocupa a janela, vista com barra /context: prompt do sistema e ferramentas, CLAUDE.md que viaja em toda sessão, skills disparadas, arquivos que o agente leu, e o papo acumulado onde cola de arquivo longo mora até o fim. Mochila cheia significa respostas piores e mais caras. À direita, três gestos. Compactar, comando compact: mesma ordem e janela cheia, resume o que já está lá com foco, mas lixo vira resumo de lixo então só compacte a mesma tarefa. Janela nova, comando clear: assunto ou papel mudou, agente preso ou outro modelo, joga o peso morto fora. Compartilhar, gravar ponto md: o próximo papel precisa do que foi decidido, então grava no disco e a sessão nova lê o arquivo, nunca colar oitenta linhas de chat."></p>
+
+<table>
+  <thead><tr><th>Gesto</th><th>Quando</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Compactar</strong> <code>/compact</code></td><td>Mesma ordem, agente no trilho, janela cheia. Compacte <em>com foco</em>: “fique só na tela de login, ignore o resto”.</td></tr>
+    <tr><td><strong>Janela nova</strong> <code>/clear</code></td><td>Assunto mudou, papel mudou, agente preso, ou você precisa de outro modelo.</td></tr>
+    <tr><td><strong>Compartilhar</strong> (gravar <code>.md</code>)</td><td>O próximo papel — ou você amanhã — precisa do que foi decidido. Grava um arquivo; a sessão seguinte <em>lê o arquivo</em>.</td></tr>
+  </tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist — compartilhar não é encaminhar o chat.</strong> Colar 80 linhas de conversa na próxima sessão enche a mochila de novo e a cópia não some quando o código muda. Deixe uma <strong>decisão gravada no disco</strong> (<code>docs/DECISOES.md</code>) e mande “leia o arquivo e continue”. O mesmo vale para código: nunca cole um Composable de 400 linhas — o agente <em>lê</em> o arquivo.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · Memória: o caderno na parede</h2>
+
+<p>Sessão nova, cabeça nova. O que precisa valer em <em>toda</em> sessão mora no <code>CLAUDE.md</code>, lido no arranque. Como ele viaja em cada conversa deste repo, cada linha custa — mantenha-o curto e permanente.</p>
+
+<pre><code class="language-markdown"># NexusHub — regras do projeto
+
+- App Android nativo: Kotlin + Jetpack Compose, minSdk 24, targetSdk 35.
+- Arquitetura em camadas (ver artigo 09): domínio puro, sem Android no core.
+- UI stateless + ViewModel com StateFlow (MVI). Sem lógica na @Composable.
+- Injeção com Hilt. Nada de singleton manual.
+- Textos de UI em português, via strings.xml (nunca hardcoded).
+- Teste novo acompanha código novo (ver artigo 10).
+- NÃO adicione dependência nova sem eu pedir.
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — duas memórias:</strong> o <code>CLAUDE.md</code> (você escreve, o time vê — regra de projeto) e a <em>auto-memória</em> (o agente anota a partir das suas correções; veja com <code>/memory</code>). A segunda é contexto, não lei.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha — o <code>CLAUDE.md</code>-romance:</strong> tutorial de Compose, histórico de decisões e a spec inteira <em>não</em> entram aqui — você pagaria por isso em cada sessão. Regra permanente fica no <code>CLAUDE.md</code>; detalhe sob demanda vira skill ou <code>.md</code> de apoio.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Skills, comandos e MCP</h2>
+
+<p>Repetir o mesmo briefing em todo prompt é o vazamento mais caro. A saída é o <strong>progressive disclosure</strong>: carregar o detalhe só quando o pedido casa.</p>
+
+<div style="overflow-x:auto">
+<table>
+  <thead><tr><th>Camada</th><th>O que é</th><th>Custo</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Sempre ligado</strong></td><td><code>CLAUDE.md</code> — regras curtas do projeto.</td><td>Viaja em toda sessão.</td></tr>
+    <tr><td><strong>Sob demanda</strong></td><td><strong>Skill</strong>: <code>.claude/skills/*/SKILL.md</code>. No arranque, só nome + descrição; o corpo entra quando a descrição casa com o pedido. Detalhe pesado em <code>references/</code>.</td><td>Zero até disparar.</td></tr>
+    <tr><td><strong>Peça cortada</strong></td><td><code>.md</code> de apoio: <code>docs/SPEC.md</code>, um checklist. “Leia X e continue.”</td><td>Só quando você manda ler.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Duas peças a mais que valem para o dev Android:</p>
+<ul>
+  <li><strong>Slash commands</strong> — atalhos de prompt reutilizáveis em <code>.claude/commands/</code>. Ex.: um <code>/revisar-pr</code> que sempre roda lint + Detekt + testes e resume. O time inteiro padroniza a revisão.</li>
+  <li><strong>MCP (Model Context Protocol)</strong> — servidores que dão ferramentas <em>novas</em> ao agente (abrir um board de tarefas, consultar o Sonar, ler o Crashlytics). É como o agente enxerga além do repositório, sem você colar dados na mão.</li>
+  <li><strong>Subagente</strong> — o modelo delega uma tarefa pontual (uma busca pesada, uma leitura ampla) a <em>outra</em> janela, e só o resultado volta. Serve para não sujar a janela principal — não para misturar papéis.</li>
+</ul>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> se você digita “o app é Compose, MVI, Hilt, textos em pt-BR…” pela quinta vez, isso virou <strong>skill</strong>. Se a skill não dispara quando deveria, o problema está na <em>description</em> (o que/quando), não no corpo. Conserte a description.</p></blockquote>
+
+<hr>
+
+<h2>Parte 5 · O squad de um dev só</h2>
+
+<p>PO, Tech Lead, UX/Dev e QA não são pessoas nem telas — são <strong>jeitos de usar o agente</strong>. Quando o <em>tipo</em> de trabalho muda, você troca de papel, de preferência em sessão nova, lendo o arquivo que o papel anterior deixou. Uma pessoa toca as quatro sessões; o <strong>bastão é um arquivo</strong>.</p>
+
+<p><img src="../assets/squad-sessoes.svg" alt="O squad de um dev só, com quatro jalecos em quatro sessões passando um arquivo como bastão. PO recorta o problema: lê README e CLAUDE.md, gera PLANO.md, não escreve código. Tech Lead trava o como: lê PLANO.md, gera SPEC.md com stack, dados e critérios. UX Dev obedece a spec: lê SPEC.md e o checklist, gera o código Kotlin, Compose e testes. QA confronta o combinado: lê a spec e o código, gera REVIEW.md e não edita nesta sessão. Setas passam o bastão de um para o outro. Uma seta tracejada de retorno do QA para o Dev indica review com falha: o Dev volta, lê REVIEW.md e corrige só o que falhou. Regra no rodapé: uma intenção por sessão, e nunca troque de jaleco no meio da janela gorda porque o papel novo herda o lixo do velho."></p>
+
+<p>Por que separar, se é a mesma pessoa? Porque cada papel tem um <strong>foco</strong> e uma <strong>recusa</strong>. O PO não escreve Kotlin; o Tech não redesenha o produto; o Dev não reabre escopo; o QA não edita. Misturar tudo num chat “seja os quatro” faz o modelo agradar todos e entregar um app sem critério — e você acaba compactando lixo.</p>
+
+<pre><code class="language-text">// Sessão do PO — jaleco de produto, não escreve código
+Jaleco de PO. Não escreva código.
+Leia README.md e CLAUDE.md.
+
+Contexto: usuários precisam recuperar a senha sem abrir chamado.
+Escreva docs/PLANO.md com: problema, quem usa, 3 histórias, fora de escopo.
+Sem stack, sem tela. Máximo 40 linhas.
+
+// ...sessão nova...
+
+// Sessão do Tech — lê o plano, trava o "como"
+Jaleco de Tech Lead. Não escreva UI.
+Leia docs/PLANO.md e CLAUDE.md. Não mude o escopo.
+Escreva docs/SPEC.md: contrato do UseCase, estados da tela (MVI),
+erros possíveis, critérios de pronto. Máximo 50 linhas.
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> quatro sessões curtas custam <strong>menos</strong> que um chat “seja os quatro” inchando a janela. E o artefato de cada papel (<code>PLANO.md</code> → <code>SPEC.md</code> → código → <code>REVIEW.md</code>) é justamente o encadeamento SDD do próximo artigo. O avançado — um arquivo em <code>.claude/agents/</code> por papel — só compensa quando o time repete o fluxo; o jaleco no prompt já resolve.</p></blockquote>
+
+<hr>
+
+<h2>Parte 6 · Guardrails para código Android gerado por IA</h2>
+
+<p>A IA gera Kotlin <em>plausível</em> — que compila e parece certo — e às vezes está errado. O especialista não confia: ele cerca. Estes são os guard-rails específicos de Android.</p>
+
+<table>
+  <thead><tr><th>Risco</th><th>Guarda</th></tr></thead>
+  <tbody>
+    <tr><td><strong>API alucinada</strong> — método de Compose que não existe, parâmetro inventado.</td><td>O build é o juiz: <code>./gradlew assembleDebug</code> reprova na hora. Peça para o agente compilar antes de dizer “pronto”.</td></tr>
+    <tr><td><strong>API depreciada</strong> — o treino tem código antigo (<code>onActivityResult</code>, <code>AsyncTask</code>).</td><td>Fixe a regra no <code>CLAUDE.md</code> (“use Activity Result API, corrotinas”) e confie no Lint/Detekt do artigo 07.</td></tr>
+    <tr><td><strong>Quebra da Regra da Dependência</strong> — IA importa Android no domínio.</td><td>A arquitetura do artigo 09 vira teste: um teste de arquitetura (Konsist/ArchUnit) barra o import proibido.</td></tr>
+    <tr><td><strong>Diff gigante</strong> — impossível de revisar.</td><td>Uma intenção por commit. <strong>Você</strong> lê o diff antes de aceitar; código que você não entende não entra.</td></tr>
+  </tbody>
+</table>
+
+<blockquote><p>🔗 <strong>Ligação:</strong> os guard-rails não são novos — são a esteira que você já montou. O CI do artigo 06 roda os testes em todo push; a qualidade do artigo 07 pega o cheiro; a arquitetura do 09 e os testes do 10 são a rede que segura a alucinação. <strong>A IA acelera quem já tem disciplina; ela amplifica a bagunça de quem não tem.</strong></p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> trate cada PR gerado por IA como PR de um júnior brilhante e apressado — revise o diff, exija o teste, questione a dependência nova. A responsabilidade pelo código que sobe é <strong>sua</strong>, não do modelo.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+  <thead><tr><th>Item</th><th>Ação</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Pedido</strong></td><td>Uma intenção, um artefato, um limite — não “monta o app”.</td></tr>
+    <tr><td><strong>Modelo</strong></td><td>Haiku no mecânico, Sonnet no dia, Opus no travado. <code>/usage</code> antes do prompt largo.</td></tr>
+    <tr><td><strong>Contexto</strong></td><td><code>/context</code> para ver o peso; compactar só a mesma tarefa; papel mudou → janela nova.</td></tr>
+    <tr><td><strong>Memória</strong></td><td><code>CLAUDE.md</code> curto e permanente; detalhe vai para skill ou <code>.md</code>.</td></tr>
+    <tr><td><strong>Squad</strong></td><td>PO → Tech → Dev → QA em sessões separadas; bastão = arquivo no disco.</td></tr>
+    <tr><td><strong>Guard-rails</strong></td><td>Build compila, testes passam, Lint/Detekt limpo, diff revisado por você.</td></tr>
+  </tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+  <thead><tr><th>Termo</th><th>Em uma linha</th></tr></thead>
+  <tbody>
+    <tr><td><strong>agente</strong></td><td>LLM num laço com ferramentas (ler, editar, rodar comando) dentro do repo.</td></tr>
+    <tr><td><strong>loop do agente</strong></td><td>Ordem → decidir ferramenta → rodar → avaliar → repetir ou parar.</td></tr>
+    <tr><td><strong>janela de contexto</strong></td><td>O espaço finito onde tudo (sistema, memória, arquivos, papo) compete.</td></tr>
+    <tr><td><strong>compact</strong></td><td>Resumir a janela cheia — só serve para a mesma tarefa.</td></tr>
+    <tr><td><strong>CLAUDE.md</strong></td><td>Regras permanentes do projeto, lidas em toda sessão.</td></tr>
+    <tr><td><strong>skill</strong></td><td>Instrução sob demanda; carrega o corpo só quando a description casa.</td></tr>
+    <tr><td><strong>slash command</strong></td><td>Atalho de prompt reutilizável em <code>.claude/commands/</code>.</td></tr>
+    <tr><td><strong>MCP</strong></td><td>Protocolo que dá ferramentas novas ao agente (boards, Sonar, Crashlytics).</td></tr>
+    <tr><td><strong>subagente</strong></td><td>Janela auxiliar para uma tarefa pontual; só o resultado volta.</td></tr>
+    <tr><td><strong>progressive disclosure</strong></td><td>Carregar o detalhe só quando o pedido precisa dele.</td></tr>
+    <tr><td><strong>guard-rail</strong></td><td>Build, teste, lint e review que cercam o erro da IA.</td></tr>
+  </tbody>
+</table>
+  </article>
+    <nav class="pager">
+      <a class="pg prev" href="10-testes.html"><span>← Anterior</span><strong>🧪 Testes no Android</strong></a>
+      <a class="pg next" href="12-sdd-tdd-bdd.html"><span>Próximo →</span><strong>📐 SDD · TDD · BDD</strong></a>
+    </nav>
+</main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="11" markerHeight="11" refX="7" refY="3.2" orient="auto"><path d="M0 0 L7.5 3.2 L0 6.4 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="470" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Arquitetura em camadas (recomendação Android)</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">as setas de dependência apontam para o <tspan fill="#8ECB98" font-weight="700">domínio</tspan> — o centro estável não conhece ninguém</text>
+
+  <!-- UI layer -->
+  <rect x="36" y="80" width="560" height="98" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="52" y="102" font-size="13" font-weight="700" fill="#AEB7F2">Camada de UI (apresentação)</text>
+  <rect x="52" y="112" width="250" height="52" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="177" y="132" text-anchor="middle" font-size="11.5" font-weight="700" fill="#AEB7F2">Composable (stateless)</text>
+  <text x="177" y="150" text-anchor="middle" font-size="10" fill="#AAB6C0">recebe UiState, emite eventos</text>
+  <rect x="316" y="112" width="264" height="52" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="448" y="132" text-anchor="middle" font-size="11.5" font-weight="700" fill="#AEB7F2">ViewModel + UiState (MVI)</text>
+  <text x="448" y="150" text-anchor="middle" font-size="10" fill="#AAB6C0">estado imutável · única fonte da verdade</text>
+
+  <!-- arrow UI -> Domain -->
+  <line x1="316" y1="192" x2="316" y2="210" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="332" y="204" font-size="9.5" fill="#8A97A3">chama</text>
+
+  <!-- Domain layer -->
+  <rect x="36" y="212" width="560" height="92" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="2"/>
+  <text x="52" y="234" font-size="13" font-weight="700" fill="#8ECB98">Camada de domínio · Kotlin puro (sem Android)</text>
+  <rect x="52" y="244" width="170" height="50" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="137" y="264" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ECB98">UseCase</text>
+  <text x="137" y="281" text-anchor="middle" font-size="10" fill="#9DBDB6">uma regra de negócio</text>
+  <rect x="230" y="244" width="150" height="50" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="305" y="264" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ECB98">Entidades</text>
+  <text x="305" y="281" text-anchor="middle" font-size="10" fill="#9DBDB6">modelos do negócio</text>
+  <rect x="388" y="244" width="192" height="50" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+  <text x="484" y="264" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8ECB98">Repository (interface)</text>
+  <text x="484" y="281" text-anchor="middle" font-size="10" fill="#9DBDB6">a porta que o data implementa</text>
+
+  <!-- arrow Data -> Domain (points up into domain) -->
+  <line x1="484" y1="338" x2="484" y2="306" stroke="#94A3B8" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="500" y="326" font-size="9.5" fill="#8A97A3">implementa</text>
+
+  <!-- Data layer -->
+  <rect x="36" y="340" width="560" height="98" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="52" y="362" font-size="13" font-weight="700" fill="#AEB7F2">Camada de dados</text>
+  <rect x="52" y="372" width="176" height="52" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="140" y="392" text-anchor="middle" font-size="11.5" font-weight="700" fill="#AEB7F2">Repository (impl)</text>
+  <text x="140" y="410" text-anchor="middle" font-size="10" fill="#AAB6C0">orquestra as fontes</text>
+  <rect x="240" y="372" width="150" height="52" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="315" y="392" text-anchor="middle" font-size="11" font-weight="700" fill="#AEB7F2">Room · Retrofit</text>
+  <text x="315" y="410" text-anchor="middle" font-size="10" fill="#AAB6C0">local · remoto</text>
+  <rect x="402" y="372" width="178" height="52" rx="8" fill="#22273F" stroke="#4650A0"/>
+  <text x="491" y="392" text-anchor="middle" font-size="11" font-weight="700" fill="#AEB7F2">DataStore · Mapper/DTO</text>
+  <text x="491" y="410" text-anchor="middle" font-size="10" fill="#AAB6C0">preferências · conversão</text>
+
+  <!-- DI rail -->
+  <rect x="612" y="80" width="132" height="358" rx="12" fill="#3C3420" stroke="#D97706" stroke-width="1.5"/>
+  <text x="678" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#E3AE72">DI · Hilt</text>
+  <text x="678" y="132" text-anchor="middle" font-size="10.5" fill="#D9C4A0">monta o grafo</text>
+  <text x="678" y="148" text-anchor="middle" font-size="10.5" fill="#D9C4A0">de objetos</text>
+  <text x="678" y="176" text-anchor="middle" font-size="10.5" fill="#D9C4A0">injeta a</text>
+  <text x="678" y="192" text-anchor="middle" font-size="10.5" fill="#D9C4A0"><tspan font-weight="700" fill="#E3AE72">interface</tspan>, não a</text>
+  <text x="678" y="208" text-anchor="middle" font-size="10.5" fill="#D9C4A0">implementação</text>
+  <text x="678" y="252" text-anchor="middle" font-size="26">🔌</text>
+  <text x="678" y="300" text-anchor="middle" font-size="10.5" fill="#D9C4A0">é o que troca o</text>
+  <text x="678" y="316" text-anchor="middle" font-size="10.5" fill="#D9C4A0">real pelo fake</text>
+  <text x="678" y="332" text-anchor="middle" font-size="10.5" fill="#D9C4A0">no teste</text>
+
+  <rect x="36" y="450" width="708" height="0.5" fill="none"/>
+</svg>

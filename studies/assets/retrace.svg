@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#F0899A"/></marker>
+  </defs>
+  <rect x="0" y="0" width="780" height="430" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Ler o crash de volta &amp; por que a keep rule existe</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">o mapping.txt desfaz a ofuscação; a keep rule impede que ela quebre a reflexão</text>
+
+  <!-- TOP: retrace flow -->
+  <text x="24" y="86" font-size="12.5" font-weight="700" fill="#E3AE72">A · Crash ofuscado → legível</text>
+
+  <rect x="24" y="96" width="250" height="86" rx="10" fill="#3C2428" stroke="#F0899A" stroke-width="1.3"/>
+  <text x="36" y="118" font-size="10.5" font-weight="700" fill="#F0899A">o que a Play te mostra</text>
+  <g font-family="ui-monospace,monospace" font-size="10.5" fill="#D79AA3">
+    <text x="36" y="138">NullPointerException</text>
+    <text x="36" y="154">at a.b.c(Unknown:0)</text>
+    <text x="36" y="170">at a.d.e(Unknown:0)</text>
+  </g>
+
+  <rect x="305" y="120" width="134" height="40" rx="8" fill="#3C3420" stroke="#D97706" stroke-width="1.3"/>
+  <text x="372" y="136" text-anchor="middle" font-size="11" font-weight="700" fill="#E3AE72">retrace</text>
+  <text x="372" y="151" text-anchor="middle" font-size="9.5" fill="#D9C4A0">+ mapping.txt</text>
+  <path d="M274 139 H 303" fill="none" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M439 139 H 468" fill="none" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="470" y="96" width="286" height="86" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.3"/>
+  <text x="482" y="118" font-size="10.5" font-weight="700" fill="#8ECB98">o que você lê</text>
+  <g font-family="ui-monospace,monospace" font-size="10.5" fill="#9DBDB6">
+    <text x="482" y="138">NullPointerException</text>
+    <text x="482" y="154">at LoginViewModel.onClick(LoginVM.kt:42)</text>
+    <text x="482" y="170">at LoginScreen.render(LoginScreen.kt:88)</text>
+  </g>
+
+  <line x1="390" y1="196" x2="390" y2="216" stroke="#4E5254" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- BOTTOM: keep rule -->
+  <text x="24" y="240" font-size="12.5" font-weight="700" fill="#AEB7F2">B · Por que reflexão quebra sem keep rule</text>
+
+  <!-- code by name -->
+  <rect x="24" y="252" width="340" height="150" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="40" y="274" font-size="11" font-weight="700" fill="#DFE1E5">O R8 renomeia <tspan font-family="ui-monospace,monospace" fill="#E3AE72">User</tspan> → <tspan font-family="ui-monospace,monospace" fill="#E3AE72">a</tspan>…</text>
+  <text x="40" y="296" font-size="10.5" fill="#B7BFC7">…mas o JSON da API ainda diz <tspan font-family="ui-monospace,monospace" fill="#7FC9BD">"name"</tspan>, <tspan font-family="ui-monospace,monospace" fill="#7FC9BD">"email"</tspan>.</text>
+
+  <rect x="40" y="308" width="308" height="46" rx="8" fill="#3C2428" stroke="#F0899A" stroke-width="1.3"/>
+  <text x="52" y="328" font-size="10.5" font-family="ui-monospace,monospace" fill="#D79AA3">Gson procura o campo "name" na classe a…</text>
+  <text x="52" y="344" font-size="10.5" font-family="ui-monospace,monospace" fill="#F0899A">…não acha (virou "b"). → campo nulo / crash</text>
+
+  <text x="40" y="378" font-size="10.5" fill="#8A97A3">Reflexão casa por <tspan font-weight="700" fill="#B7BFC7">nome</tspan>. Ofuscação muda o nome. Elas colidem.</text>
+  <text x="40" y="394" font-size="10.5" fill="#8A97A3">Afeta: Gson · Retrofit · Room · kotlinx.serialization · enums.</text>
+
+  <path d="M364 328 H 404" fill="none" stroke="#84C48D" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- keep rule fix -->
+  <rect x="408" y="252" width="348" height="150" rx="10" fill="#1F332F" stroke="#7FC9BD" stroke-width="1.4"/>
+  <text x="424" y="274" font-size="11" font-weight="700" fill="#7FC9BD">A keep rule diz: “não renomeie esta classe”</text>
+  <rect x="424" y="286" width="316" height="70" rx="8" fill="#22282A" stroke="#3B5B54"/>
+  <text x="436" y="306" font-size="10.5" font-family="ui-monospace,monospace" fill="#9DBDB6"># proguard-rules.pro</text>
+  <text x="436" y="324" font-size="10.5" font-family="ui-monospace,monospace" fill="#B7BFC7">-keep class com.nexus.model.** { *; }</text>
+  <text x="436" y="344" font-size="10.5" font-family="ui-monospace,monospace" fill="#7FC9BD"># ou @Keep na classe, direto no código</text>
+  <text x="424" y="378" font-size="10.5" fill="#9DBDB6">Melhor ainda: use <tspan font-weight="700" fill="#7FC9BD">kotlinx.serialization</tspan> (não usa reflexão)</text>
+  <text x="424" y="394" font-size="10.5" fill="#9DBDB6">e mantenha o keep <tspan font-weight="700">estreito</tspan> — só o que precisa.</text>
+</svg>

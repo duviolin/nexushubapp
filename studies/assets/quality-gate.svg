@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 360" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker>
+    <marker id="arg" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#84C48D"/></marker>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#F0899A"/></marker>
+  </defs>
+  <rect x="0" y="0" width="780" height="360" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Quality Gate: o portão do Sonar</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">mede o <tspan fill="#B7BFC7" font-weight="700">código novo</tspan> do PR; reprova = a esteira trava</text>
+
+  <!-- metrics -->
+  <g font-size="11.5">
+    <rect x="40" y="92" width="230" height="40" rx="8" fill="#2E3350" stroke="#6366F1"/>
+    <text x="56" y="117" fill="#AEB7F2" font-weight="700">Cobertura do código novo &#8805; 80%</text>
+
+    <rect x="40" y="140" width="230" height="40" rx="8" fill="#2E3350" stroke="#6366F1"/>
+    <text x="56" y="165" fill="#AEB7F2" font-weight="700">Duplicação &#8804; 3%</text>
+
+    <rect x="40" y="188" width="230" height="40" rx="8" fill="#2E3350" stroke="#6366F1"/>
+    <text x="56" y="213" fill="#AEB7F2" font-weight="700">0 bug · 0 vulnerabilidade nova</text>
+
+    <rect x="40" y="236" width="230" height="40" rx="8" fill="#2E3350" stroke="#6366F1"/>
+    <text x="56" y="261" fill="#AEB7F2" font-weight="700">Security Hotspots revisados</text>
+  </g>
+
+  <!-- arrows into gate -->
+  <path d="M270 112 C 330 112, 340 168, 372 176" fill="none" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M270 160 C 320 160, 340 172, 372 180" fill="none" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M270 208 C 320 208, 340 192, 372 188" fill="none" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M270 256 C 330 256, 340 200, 372 192" fill="none" stroke="#94A3B8" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <!-- gate diamond -->
+  <polygon points="440,120 528,184 440,248 352,184" fill="#3C3420" stroke="#D97706" stroke-width="1.6"/>
+  <text x="440" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="#E3AE72">Quality</text>
+  <text x="440" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#E3AE72">Gate</text>
+
+  <!-- passed -->
+  <path d="M528 168 H 596" fill="none" stroke="#84C48D" stroke-width="1.8" marker-end="url(#arg)"/>
+  <text x="562" y="160" text-anchor="middle" font-size="11" font-weight="700" fill="#84C48D">Passed</text>
+  <rect x="598" y="140" width="150" height="52" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="673" y="163" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8ECB98">merge liberado</text>
+  <text x="673" y="180" text-anchor="middle" font-size="10.5" fill="#9DBDB6">esteira segue p/ build</text>
+
+  <!-- failed -->
+  <path d="M528 208 H 596" fill="none" stroke="#F0899A" stroke-width="1.8" marker-end="url(#arr)"/>
+  <text x="562" y="200" text-anchor="middle" font-size="11" font-weight="700" fill="#F0899A">Failed</text>
+  <rect x="598" y="212" width="150" height="52" rx="10" fill="#3C2428" stroke="#F0899A" stroke-width="1.6"/>
+  <text x="673" y="235" text-anchor="middle" font-size="12.5" font-weight="700" fill="#F0899A">PR bloqueado</text>
+  <text x="673" y="252" text-anchor="middle" font-size="10.5" fill="#D79AA3">corrija e faça push de novo</text>
+
+  <rect x="40" y="300" width="708" height="44" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="56" y="320" font-size="11.5" font-weight="700" fill="#DFE1E5">Por que “código novo”?</text>
+  <text x="56" y="337" font-size="10.5" fill="#B7BFC7">não trava o time exigindo consertar todo o legado de uma vez — cada PR só precisa não piorar. A dívida some aos poucos.</text>
+</svg>

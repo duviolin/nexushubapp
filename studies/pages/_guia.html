@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de autoria · Estudos Android</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="home">
+<main class="home-main">
+  <p class="crumb" style="text-align:center"><a href="../index.html" style="color:var(--brand-ink);text-decoration:none">↩ Índice da trilha</a></p>
+  <header class="hero">
+    <span class="hero-badge">✍️ Documentação interna</span>
+    <h1>Guia de <span>autoria</span></h1>
+    <p>Como o diretório <code>studies/</code> funciona, o tom de escrita da trilha e o passo a passo para criar o próximo artigo.</p>
+  </header>
+
+  <article class="content">
+
+    <h2>1 · Como o diretório funciona</h2>
+    <p>A trilha é um <strong>site estático de várias páginas</strong> com um índice central. A fonte de cada artigo é um <strong>fragmento HTML</strong> (só o corpo); um script sem dependências monta as páginas finais com a barra lateral e a navegação. Não há mais arquivos <code>.md</code> — o HTML é a fonte da verdade.</p>
+
+    <pre><code>studies/
+├── index.html            ← HUB gerado (hero + cards na ordem da trilha)
+├── content/              ← FONTE: um fragmento HTML por artigo (você edita aqui)
+│   ├── 01-gradle.html    ← só o corpo do artigo (sem &lt;html&gt;/&lt;head&gt;)
+│   ├── 02-sdk.html
+│   ├── …
+│   └── _TEMPLATE.html    ← esqueleto para copiar ao criar um artigo novo
+├── pages/                ← GERADO: não edite à mão (o build sobrescreve)
+│   ├── 01-gradle.html    ← página final (sidebar + conteúdo + prev/próximo)
+│   ├── …
+│   ├── style.css         ← folha de estilo compartilhada (esta você edita)
+│   └── _guia.html        ← este guia
+├── assets/               ← imagens dos diagramas, só .svg
+│   └── *.svg
+└── _build/
+    └── build.js          ← montador (Node, sem dependências)</code></pre>
+
+    <blockquote><p>🔒 <strong>Regra de ouro:</strong> edite em <code>content/</code> e em <code>pages/style.css</code>. <strong>Nunca</strong> edite os arquivos dentro de <code>pages/</code> diretamente — eles são regenerados e sua alteração se perde.</p></blockquote>
+
+    <h2>2 · Regenerar o site</h2>
+    <p>Depois de qualquer mudança em <code>content/</code>, no manifesto ou no CSS, rode:</p>
+    <pre><code>node studies/_build/build.js</code></pre>
+    <p>Para ler o resultado, dê duplo-clique em <code>studies/index.html</code> (abre no navegador). Como o site é 100% estático, funciona offline e no GitHub Pages sem ajuste.</p>
+
+    <h2>3 · Criar o próximo artigo</h2>
+    <ol>
+      <li>Copie <code>content/_TEMPLATE.html</code> para <code>content/06-slug.html</code> (numere na ordem de estudo).</li>
+      <li>Escreva o corpo do artigo em HTML (veja os componentes na seção 5).</li>
+      <li>Abra <code>studies/_build/build.js</code> e some uma entrada no array <code>articles</code>, <strong>na posição da sequência</strong>:
+        <pre><code>{ frag: '06-slug.html', emoji: '🧩', nav: 'Título curto',
+  desc: 'Uma linha que aparece no card do índice.' },</code></pre>
+        A ordem do array define a numeração, a sidebar e o prev/próximo — não há mais nada a ligar à mão.</li>
+      <li>Rode <code>node studies/_build/build.js</code> e confira no navegador.</li>
+    </ol>
+
+    <h2>4 · Tom de escrita</h2>
+    <p>A trilha tem uma voz consistente. Mantenha-a:</p>
+    <table>
+      <thead><tr><th>Princípio</th><th>Como aplicar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Português, 2ª pessoa</strong></td><td>Fale com “você”. Direto, sem formalidade acadêmica.</td></tr>
+        <tr><td><strong>Uma analogia central</strong></td><td>Cada artigo tem uma metáfora-guia (a fábrica, o almoxarifado, o mandato). Ela dá nome ao subtítulo.</td></tr>
+        <tr><td><strong>Problema → conceito → prática</strong></td><td>Comece pelo problema real, defina o conceito, mostre a matemática/detalhe, e aterize em Compose/uso real.</td></tr>
+        <tr><td><strong>Fio condutor</strong></td><td>Ligue ao artigo anterior e ao próximo (o “600dp” que reaparece). Um callout 🔗 no começo ajuda.</td></tr>
+        <tr><td><strong>Fecho padrão</strong></td><td>Termine com um <strong>✅ Checklist</strong> prático do NexusHub e um <strong>📖 Glossário-relâmpago</strong> (termo → uma linha).</td></tr>
+        <tr><td><strong>Título</strong></td><td>Emoji + nome + subtítulo-analogia + <code>(ano)</code>. Ex.: “📏 Densidade… O Guia Adaptável (2026)”.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>5 · Componentes (copie e cole)</h2>
+
+    <h3>Callouts</h3>
+    <p>São <code>&lt;blockquote&gt;</code> iniciados por um emoji que sinaliza o tipo. Use estes quatro:</p>
+    <blockquote><p>🧠 <strong>Termo — nome:</strong> definição curta de um jargão, no primeiro lugar em que ele aparece.</p></blockquote>
+    <blockquote><p>🔒 <strong>Visão Specialist:</strong> a decisão de produção / o que um sênior faria diferente.</p></blockquote>
+    <blockquote><p>⚠️ <strong>Pegadinha:</strong> o erro clássico que o iniciante comete aqui.</p></blockquote>
+    <blockquote><p>🔗 <strong>Ligação:</strong> conexão explícita com outro artigo da trilha.</p></blockquote>
+    <pre><code>&lt;blockquote&gt;&lt;p&gt;🧠 &lt;strong&gt;Termo — dp:&lt;/strong&gt; unidade independente de densidade…&lt;/p&gt;&lt;/blockquote&gt;</code></pre>
+
+    <h3>Tabela comparativa</h3>
+    <pre><code>&lt;table&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Coluna&lt;/th&gt;&lt;th&gt;Coluna&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;…&lt;/td&gt;&lt;td&gt;…&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+
+    <h3>Bloco de código</h3>
+    <pre><code>&lt;pre&gt;&lt;code&gt;// Kotlin, XML ou estrutura de pastas
+Modifier.padding(16.dp)&lt;/code&gt;&lt;/pre&gt;</code></pre>
+
+    <h3>Diagrama (imagem SVG)</h3>
+    <p><strong>Todos os diagramas são SVG</strong> — fluxos, pipelines, linhas do tempo, mockups e réguas. Um único padrão visual, nítido em qualquer zoom, versionável e sem dependência de JavaScript.</p>
+    <pre><code>&lt;p&gt;&lt;img src="../assets/meu-diagrama.svg" alt="Descrição do que o diagrama mostra"&gt;&lt;/p&gt;</code></pre>
+
+    <blockquote><p>🔒 <strong>Diretriz — sempre SVG.</strong> Fluxo/processo/decisão vira um SVG com caixas e setas (marcador de seta em <code>&lt;defs&gt;</code>); conceito espacial ou com medidas vira um SVG com mockup e cotas. Prefira sempre um diagrama que <em>mostre o mecanismo</em> a um decorativo. Não usamos bibliotecas de diagrama (ex.: Mermaid) — mantém tudo estático e offline.</p></blockquote>
+
+    <h2>6 · Diagramas SVG: padrão visual (tema Darcula)</h2>
+    <p>Os diagramas são <strong>SVG feitos à mão</strong> (nítidos em qualquer zoom, leves, versionáveis) e seguem o <strong>tema do editor do Android Studio</strong> — fundo escuro, para o documento inteiro ficar uniforme e calmo. Para manter a família visual:</p>
+    <ul>
+      <li><strong>Moldura (cartão):</strong> fundo <code>#313335</code>, borda <code>#4E5254</code>, cantos arredondados — o mesmo tom dos cartões do site.</li>
+      <li><strong>viewBox</strong> em torno de <code>0 0 780 H</code>; título (21px, peso 700, <code>#DFE1E5</code>) + subtítulo (13–14px, <code>#8A97A3</code>) no topo. Texto padrão <code>#B7BFC7</code>; setas/eixos <code>#94A3B8</code>.</li>
+      <li><strong>Caixas de fluxo:</strong> fundo escuro tingido + borda/rótulo na cor de acento. Índigo (fundo <code>#2E3350</code>, texto <code>#AEB7F2</code>, borda <code>#6366F1</code>) é o destaque padrão.</li>
+      <li><strong>Paleta de acento (fundo escuro / texto claro):</strong> índigo <code>#2E3350</code>/<code>#AEB7F2</code> · verde <code>#25392A</code>/<code>#8ECB98</code> (ok) · âmbar <code>#3C3420</code>/<code>#E3AE72</code> (atenção) · vermelho <code>#3C2428</code>/<code>#F0899A</code> (ruim) · teal <code>#1F332F</code>/<code>#7FC9BD</code> · rosa <code>#352430</code>/<code>#EC8FBB</code>.</li>
+      <li><strong>Medidas anotadas:</strong> linhas de cota com “ticks” nas pontas e um rótulo em cápsula (fonte mono) — sempre escreva o valor (<code>16dp</code>, <code>48dp</code>, <code>72 px</code>).</li>
+      <li>Fontes com fallback de sistema e mono (<code>ui-monospace</code>) para números.</li>
+      <li>Salve em <code>assets/nome-descritivo.svg</code> e referencie com <code>../assets/…</code> a partir do fragmento.</li>
+    </ul>
+    <blockquote><p>🔒 <strong>Visão Specialist:</strong> um diagrama vale mais quando <em>mostra o mecanismo</em> (o mesmo elemento em dois estados, uma régua, uma cota) do que quando é só decorativo. Prefira “antes/depois” e medidas reais a ícones soltos.</p></blockquote>
+
+  </article>
+  <footer class="home-foot" style="margin-top:56px">Documentação da trilha · edite este guia em <code>studies/pages/_guia.html</code>.</footer>
+</main>
+</body>
+</html>

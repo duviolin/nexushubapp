@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 380" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="380" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O triângulo de compatibilidade</text>
+  <text x="390" y="59" text-anchor="middle" font-size="13.5" fill="#8A97A3">Quatro versões precisam <tspan font-weight="700" fill="#6366F1">casar</tspan> — a causa nº 1 de build quebrado</text>
+
+  <!-- edges (drawn first, under nodes) -->
+  <!-- AS -> AGP -->
+  <line x1="390" y1="122" x2="390" y2="150" stroke="#94A3B8" stroke-width="1.6"/>
+  <path d="M390 150 l-5 -9 h10 z" fill="#94A3B8"/>
+  <text x="404" y="140" font-size="11.5" fill="#8A97A3">aceita este AGP</text>
+  <!-- AGP -> Gradle -->
+  <line x1="345" y1="200" x2="250" y2="262" stroke="#6366F1" stroke-width="1.8"/>
+  <rect x="214" y="216" width="118" height="22" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1"/>
+  <text x="273" y="231" text-anchor="middle" font-size="11" font-weight="600" fill="#AEB7F2">exige Gradle mínimo</text>
+  <!-- AGP -> Kotlin -->
+  <line x1="435" y1="200" x2="530" y2="262" stroke="#6366F1" stroke-width="1.8"/>
+  <rect x="448" y="216" width="126" height="22" rx="11" fill="#2E3350" stroke="#6366F1" stroke-width="1"/>
+  <text x="511" y="231" text-anchor="middle" font-size="11" font-weight="600" fill="#AEB7F2">exige Kotlin compatível</text>
+  <!-- Gradle <-> Kotlin base -->
+  <line x1="255" y1="300" x2="525" y2="300" stroke="#525659" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="390" y="294" text-anchor="middle" font-size="11" fill="#94A3B8">indiretamente, também precisam casar</text>
+
+  <!-- Android Studio -->
+  <rect x="288" y="80" width="204" height="42" rx="10" fill="#3C3F41" stroke="#94A3B8" stroke-width="1.3"/>
+  <text x="390" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#B7BFC7">Android Studio</text>
+  <text x="390" y="115" text-anchor="middle" font-size="11" fill="#8A97A3">a IDE que abre tudo</text>
+
+  <!-- AGP (hub) -->
+  <rect x="316" y="150" width="148" height="52" rx="12" fill="#6366F1" stroke="#AEB7F2" stroke-width="1.5"/>
+  <text x="390" y="172" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">AGP</text>
+  <text x="390" y="190" text-anchor="middle" font-size="11" fill="#2E3350">Android Gradle Plugin</text>
+
+  <!-- Gradle -->
+  <rect x="140" y="262" width="150" height="52" rx="12" fill="#1F332F" stroke="#0EA5A4" stroke-width="1.5"/>
+  <text x="215" y="284" text-anchor="middle" font-size="15" font-weight="700" fill="#7FC9BD">Gradle</text>
+  <text x="215" y="302" text-anchor="middle" font-size="11" fill="#7FC9BD">o motor de build</text>
+
+  <!-- Kotlin -->
+  <rect x="490" y="262" width="150" height="52" rx="12" fill="#3C3420" stroke="#D97706" stroke-width="1.5"/>
+  <text x="565" y="284" text-anchor="middle" font-size="15" font-weight="700" fill="#E3AE72">Kotlin</text>
+  <text x="565" y="302" text-anchor="middle" font-size="11" fill="#E3AE72">linguagem + Compose</text>
+
+  <text x="390" y="352" text-anchor="middle" font-size="12.5" fill="#DFE1E5">Se <tspan font-weight="700">uma</tspan> versão sai da tabela de compatibilidade, a <tspan font-weight="700">linha inteira para</tspan>.</text>
+</svg>

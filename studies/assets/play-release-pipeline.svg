@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs><marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 z" fill="#94A3B8"/></marker></defs>
+  <rect x="0" y="0" width="780" height="560" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Ordem do dia: da conta à produção</text>
+  <text x="390" y="57" text-anchor="middle" font-size="13.5" fill="#8A97A3">O caminho completo — com o desvio das contas pessoais novas</text>
+
+  <!-- column -->
+  <rect x="240" y="76" width="300" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="390" y="95" text-anchor="middle" font-size="13.5" font-weight="700" fill="#AEB7F2">Conta</text>
+  <text x="390" y="112" text-anchor="middle" font-size="11.5" fill="#AAB6C0">2FA · documentos · US$ 25</text>
+  <line x1="390" y1="122" x2="390" y2="140" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="240" y="142" width="300" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="390" y="161" text-anchor="middle" font-size="13.5" font-weight="700" fill="#AEB7F2">App na Console</text>
+  <text x="390" y="178" text-anchor="middle" font-size="11.5" fill="#AAB6C0">ficha · privacidade · segurança dos dados</text>
+  <line x1="390" y1="188" x2="390" y2="206" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="240" y="208" width="300" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="390" y="227" text-anchor="middle" font-size="13.5" font-weight="700" fill="#AEB7F2">Chave de envio</text>
+  <text x="390" y="244" text-anchor="middle" font-size="11.5" fill="#AAB6C0">cofre local + Play App Signing</text>
+  <line x1="390" y1="254" x2="390" y2="272" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="240" y="274" width="300" height="40" rx="10" fill="#3C3F41" stroke="#DFE1E5" stroke-width="1.4"/>
+  <text x="390" y="299" text-anchor="middle" font-size="13" font-weight="700" fill="#DFE1E5" font-family="'SF Mono',ui-monospace,monospace">gerar .aab assinado</text>
+  <line x1="390" y1="314" x2="390" y2="332" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="240" y="334" width="300" height="46" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="390" y="353" text-anchor="middle" font-size="13.5" font-weight="700" fill="#AEB7F2">Fila interna</text>
+  <text x="390" y="370" text-anchor="middle" font-size="11.5" fill="#AAB6C0">teste de fumaça: abre ou não?</text>
+  <line x1="390" y1="380" x2="390" y2="398" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- decision diamond -->
+  <polygon points="390,400 462,444 390,488 318,444" fill="#3C3420" stroke="#D97706" stroke-width="1.5"/>
+  <text x="390" y="440" text-anchor="middle" font-size="12" font-weight="700" fill="#E3AE72">Conta pessoal</text>
+  <text x="390" y="456" text-anchor="middle" font-size="12" font-weight="700" fill="#E3AE72">nova?</text>
+
+  <!-- sim -> fechada (right) -->
+  <path d="M462 444 H 590" fill="none" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="520" y="436" text-anchor="middle" font-size="11" font-weight="700" fill="#84C48D">sim</text>
+  <rect x="592" y="416" width="170" height="56" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="677" y="438" text-anchor="middle" font-size="12.5" font-weight="700" fill="#AEB7F2">Fila fechada</text>
+  <text x="677" y="455" text-anchor="middle" font-size="11" fill="#AAB6C0">12 testers · 14 dias</text>
+  <text x="677" y="468" text-anchor="middle" font-size="10.5" fill="#8A97A3">pedir acesso à produção</text>
+
+  <!-- fechada -> produção (down then left) -->
+  <path d="M677 472 V 512 H 470" fill="none" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <!-- não -> produção (down) -->
+  <path d="M390 488 V 512 H 310" fill="none" stroke="#94A3B8" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="360" y="506" text-anchor="middle" font-size="11" font-weight="700" fill="#8A97A3">não</text>
+
+  <rect x="310" y="490" width="160" height="46" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="390" y="510" text-anchor="middle" font-size="13.5" font-weight="700" fill="#8ECB98">🚀 Produção</text>
+  <text x="390" y="527" text-anchor="middle" font-size="11.5" fill="#8ECB98">gradual 5% → 100%</text>
+</svg>

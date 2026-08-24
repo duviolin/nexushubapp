@@ -1,0 +1,172 @@
+/* ============================================================
+   Estudos Android · NexusHub — tema Android Studio (Darcula)
+   Mesmas cores, fonte e fundo do editor padrão, para leitura calma.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+:root {
+  --bg:        #2B2B2B;  /* fundo do editor */
+  --bg-soft:   #313335;  /* cartões / code */
+  --bg-sink:   #3C3F41;  /* tool window / cabeçalho de tabela */
+  --ink:       #A9B7C6;  /* texto padrão do Darcula */
+  --ink-strong:#DFE1E5;  /* títulos / negrito */
+  --ink-soft:  #8A97A3;
+  --ink-faint: #6B7480;
+  --line:      #4E5254;  /* bordas */
+  --line-soft: #383B3D;
+  --brand:     #CC7832;  /* laranja (keyword) — destaque */
+  --brand-ink: #E8A15C;
+  --link:      #6699CC;  /* azul de link do IDE */
+  --green:     #6A8759;  /* string */
+  --side-bg:   #3C3F41;  /* tool window */
+  --side-active:#2D5177; /* seleção azul do Darcula */
+  --radius: 12px;
+  --side-w: 290px;
+  --maxw: 820px;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, 'Roboto Mono', 'DejaVu Sans Mono', monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 15px; line-height: 1.75;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "liga" 0;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────── */
+.side {
+  position: fixed; top: 0; left: 0; bottom: 0; width: var(--side-w);
+  background: var(--side-bg); color: var(--ink);
+  display: flex; flex-direction: column; padding: 18px 12px; gap: 3px;
+  overflow-y: auto; z-index: 30; border-right: 1px solid var(--line-soft);
+}
+.side .brand {
+  display: flex; flex-direction: column; gap: 2px;
+  font-size: 16px; font-weight: 700; color: var(--ink-strong); text-decoration: none;
+  padding: 6px 12px 16px;
+}
+.side .brand small { font-size: 10px; font-weight: 500; color: var(--brand); letter-spacing: 2px; text-transform: uppercase; }
+.side a {
+  display: grid; grid-template-columns: 26px 20px 1fr; align-items: center; gap: 8px;
+  padding: 9px 12px; border-radius: 8px; text-decoration: none;
+  color: var(--ink); font-size: 13px; line-height: 1.35; transition: background .12s;
+}
+.side a .n { font-size: 12px; font-weight: 700; color: var(--ink-faint); }
+.side a:hover { background: rgba(255,255,255,.05); }
+.side a.active { background: var(--side-active); color: #E8EEF6; }
+.side a.active .n { color: #A9C7EA; }
+.side .guide { margin-top: auto; grid-template-columns: 1fr; font-size: 12px; color: var(--ink-faint); border-top: 1px solid var(--line-soft); border-radius: 0; padding-top: 14px; }
+
+/* ─── Main / content ──────────────────────────────────────── */
+main { margin-left: var(--side-w); padding: 40px clamp(20px, 5vw, 60px) 96px; }
+.crumb { max-width: var(--maxw); margin: 0 auto 8px; font-size: 12.5px; color: var(--ink-faint); }
+.content { max-width: var(--maxw); margin: 0 auto; }
+
+.content h1 { font-size: clamp(1.6rem, 3.2vw, 2.1rem); line-height: 1.25; margin: .2em 0 .7em; color: var(--ink-strong); font-weight: 700; }
+.content h2 { font-size: 1.4rem; margin: 2.1em 0 .7em; padding-bottom: .3em; border-bottom: 1px solid var(--line-soft); color: var(--ink-strong); }
+.content h3 { font-size: 1.14rem; margin: 1.7em 0 .5em; color: var(--brand-ink); }
+.content p, .content li { color: var(--ink); }
+.content a { color: var(--link); text-decoration: none; }
+.content a:hover { text-decoration: underline; }
+.content strong { color: var(--ink-strong); font-weight: 700; }
+.content em { color: var(--green); font-style: italic; }
+.content hr { border: none; border-top: 1px solid var(--line-soft); margin: 2.2em 0; }
+
+.content img {
+  display: block; max-width: 100%; height: auto; margin: 24px auto;
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+
+/* code */
+.content code {
+  font-family: var(--mono); font-size: .92em;
+  background: var(--bg-sink); color: #D8A36B; padding: .1em .4em; border-radius: 4px;
+}
+.content pre {
+  background: var(--bg-soft); border: 1px solid var(--line-soft);
+  padding: 15px 16px; border-radius: 10px; overflow-x: auto; margin: 18px 0;
+}
+.content pre code { background: none; padding: 0; color: var(--ink); font-size: .9em; }
+
+/* tables */
+.content table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: .92rem; display: block; overflow-x: auto; }
+.content th, .content td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+.content th { background: var(--bg-sink); color: var(--ink-strong); font-weight: 700; }
+.content tbody tr:nth-child(even) { background: var(--bg-soft); }
+
+/* blockquote callouts (🧠 termo, 🔒 specialist, ⚠️ pegadinha, 🔗 ligação) */
+.content blockquote {
+  margin: 20px 0; padding: 13px 16px;
+  background: var(--bg-soft); border-left: 3px solid var(--brand);
+  border-radius: 8px; color: var(--ink);
+}
+.content blockquote p { margin: .4em 0; }
+.content blockquote p:first-child { margin-top: 0; }
+.content blockquote p:last-child { margin-bottom: 0; }
+.content blockquote pre { background: #262626; }
+
+/* ─── Pager ───────────────────────────────────────────────── */
+.pager { max-width: var(--maxw); margin: 40px auto 0; display: flex; gap: 12px; }
+.pg {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+  padding: 15px 16px; border: 1px solid var(--line); border-radius: var(--radius);
+  text-decoration: none; background: var(--bg-soft); transition: border-color .12s, background .12s;
+}
+.pg:hover { border-color: var(--brand); background: var(--bg-sink); }
+.pg span { font-size: 12px; color: var(--ink-faint); }
+.pg strong { color: var(--ink-strong); font-size: 14px; }
+.pg.next { text-align: right; }
+
+/* ─── Botão de menu (mobile) ──────────────────────────────── */
+.menu-btn, .scrim { display: none; }
+.menu-btn {
+  position: fixed; top: 14px; left: 14px; z-index: 40;
+  width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--side-bg); color: var(--ink-strong); font-size: 20px; cursor: pointer;
+}
+
+/* ─── Home / index ────────────────────────────────────────── */
+.home { background: var(--bg); }
+.home-main { max-width: 1000px; margin: 0 auto; padding: clamp(40px, 8vw, 88px) 20px 80px; }
+.hero { text-align: center; margin-bottom: 48px; }
+.hero-badge {
+  display: inline-block; padding: 6px 14px; border-radius: 999px;
+  background: var(--bg-sink); color: var(--brand-ink); font-size: 12.5px; font-weight: 500;
+  border: 1px solid var(--line-soft);
+}
+.hero h1 { font-size: clamp(1.9rem, 5.5vw, 2.9rem); margin: 20px 0 12px; color: var(--ink-strong); font-weight: 700; }
+.hero h1 span { color: var(--brand); }
+.hero p { max-width: 620px; margin: 0 auto; color: var(--ink-soft); font-size: 1.02rem; line-height: 1.7; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.card {
+  display: flex; flex-direction: column; gap: 8px; padding: 20px;
+  background: var(--bg-soft); border: 1px solid var(--line-soft); border-radius: 14px;
+  text-decoration: none; color: var(--ink); transition: transform .14s, border-color .14s, background .14s;
+}
+.card:hover { transform: translateY(-3px); border-color: var(--brand); background: var(--bg-sink); }
+.card-top { display: flex; align-items: center; justify-content: space-between; }
+.card .num { font-size: 13px; font-weight: 700; color: var(--ink-faint); }
+.card .emoji { font-size: 28px; }
+.card h3 { margin: 4px 0 0; font-size: 1.16rem; color: var(--ink-strong); }
+.card p { margin: 0; color: var(--ink-soft); font-size: .92rem; line-height: 1.6; flex: 1; }
+.card .go { margin-top: 6px; font-size: 13px; font-weight: 500; color: var(--link); }
+.home-foot { margin-top: 44px; text-align: center; color: var(--ink-faint); font-size: 13px; }
+.home-foot code { background: var(--bg-sink); color: #D8A36B; padding: .1em .4em; border-radius: 4px; }
+.home-foot a { color: var(--link); }
+
+/* ─── Responsivo ──────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .side { transform: translateX(-100%); transition: transform .22s; box-shadow: 0 0 40px rgba(0,0,0,.5); }
+  body.nav-open .side { transform: none; }
+  body.nav-open .scrim { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 25; }
+  .menu-btn { display: block; }
+  main { margin-left: 0; padding-top: 72px; }
+  .pager { flex-direction: column; }
+}

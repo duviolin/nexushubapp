@@ -1,0 +1,297 @@
+<h1>Da conta à loja: publicar na Google Play</h1>
+<p>Passo a passo para quem <strong>nunca publicou</strong>. Sem jargão solto: quando aparecer um termo técnico, a frase seguinte diz o que isso é na prática.</p>
+<p>A Google muda regra. Na hora de pagar e de pedir para ir à loja de verdade, confira a <a href="https://support.google.com/googleplay/android-developer">Central de Ajuda</a>.</p>
+<hr>
+<h2>Antes: o que é cada coisa</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Termo</th>
+<th align="left">Em português</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Play Console</strong></td>
+<td align="left">O site do Google onde você cadastra a conta, manda o app e vê se foi aprovado. Não é a Play Store (essa é a loja que o usuário abre no celular).</td>
+</tr>
+<tr>
+<td align="left"><strong>Build</strong></td>
+<td align="left">O arquivo pronto do app, gerado no computador. Tipo “empacotar o produto”.</td>
+</tr>
+<tr>
+<td align="left"><strong>APK</strong></td>
+<td align="left">O arquivo que o celular <strong>instala</strong>. Extensão <code>.apk</code>. É o “executável” do Android.</td>
+</tr>
+<tr>
+<td align="left"><strong>AAB</strong> (Android App Bundle)</td>
+<td align="left">O arquivo que você <strong>manda para a Google</strong>. Extensão <code>.aab</code>. O celular <strong>não</strong> instala isso. A Google desmonta e manda um APK sob medida para cada aparelho.</td>
+</tr>
+<tr>
+<td align="left"><strong>Assinar / chave / keystore</strong></td>
+<td align="left">Um carimbo digital. Sem ele o Android não instala. O keystore (arquivo <code>.jks</code>) é o cofre com esse carimbo. Sem backup do cofre, você pode perder o direito de <strong>atualizar</strong> o app.</td>
+</tr>
+<tr>
+<td align="left"><strong>Trilha (track)</strong></td>
+<td align="left">Fila de distribuição: só testers, ou o mundo todo.</td>
+</tr>
+<tr>
+<td align="left"><strong>Produção</strong></td>
+<td align="left">A loja de verdade: qualquer um pesquisa e instala.</td>
+</tr>
+<tr>
+<td align="left"><strong>Review</strong></td>
+<td align="left">Um humano/sistema da Google lê o app e a ficha antes de publicar. Pode recusar.</td>
+</tr>
+<tr>
+<td align="left"><strong>versionCode</strong></td>
+<td align="left">Número interno que só sobe: 1, 2, 3… A Google usa isso para saber o que é “versão nova”.</td>
+</tr>
+<tr>
+<td align="left"><strong>versionName</strong></td>
+<td align="left">O texto que o usuário vê: <code>1.0.0</code>.</td>
+</tr>
+<tr>
+<td align="left"><strong>applicationId</strong></td>
+<td align="left">RG do app na loja (<code>com.suaempresa.app</code>). Mudou = a Google acha que é <strong>outro</strong> aplicativo.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Abrir a conta</h2>
+<p>Você precisa:</p>
+<ul>
+<li>ter <strong>18 anos ou mais</strong></li>
+<li>uma conta Google (Gmail) com <strong>verificação em duas etapas</strong> (senha + código no celular — o Google chama de 2FA)</li>
+<li>cartão de crédito ou débito <strong>internacional</strong> (Visa, Mastercard, Amex). Cartão pré-pago / PayPal <strong>não</strong> entram</li>
+<li>documento com foto no <strong>mesmo nome</strong> que está no cartão</li>
+</ul>
+<p>Dois tipos de conta. Você escolhe <strong>na hora do cadastro</strong>. País e tipo <strong>não mudam depois</strong> — teria que criar outra conta e pagar de novo.</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">Conta pessoal</th>
+<th align="left">Conta de organização (empresa)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Quem</td>
+<td align="left">Você, com CPF</td>
+<td align="left">Empresa, com CNPJ</td>
+</tr>
+<tr>
+<td align="left">Extra</td>
+<td align="left">—</td>
+<td align="left">Número <strong>D-U-N-S</strong>: um ID mundial da empresa (9 dígitos, cadastrado na Dun &amp; Bradstreet). Sem isso a conta PJ não fecha.</td>
+</tr>
+<tr>
+<td align="left">Ir para a loja de verdade</td>
+<td align="left">Se a conta foi criada <strong>depois de 13/11/2023</strong>: primeiro um teste fechado com <strong>12 pessoas por 14 dias seguidos</strong>, só então pede autorização</td>
+<td align="left">Em geral <strong>não</strong> tem essa trava</td>
+</tr>
+<tr>
+<td align="left">Celular</td>
+<td align="left">Instalar o app <strong>Play Console</strong> no Android para provar que você tem um aparelho</td>
+<td align="left">—</td>
+</tr>
+</tbody></table>
+<p>Empresa: use e-mail do domínio da empresa (<code>@suaempresa.com</code>), site e telefone comercial. Quem cria a conta tem que ser quem aparece como responsável no Cartão CNPJ / contrato social.</p>
+<hr>
+<h2>2. Documentos</h2>
+<p>O Google cruza seus papéis com o <strong>perfil de pagamentos</strong> (cadastro de cobrança da conta Google). Nome no RG diferente do nome no cartão = recusa. Os <strong>US$ 25 não voltam</strong>.</p>
+<p><strong>Pessoa física (Brasil)</strong></p>
+<ul>
+<li>RG, CNH (foto da frente e do verso, ainda válida) ou passaporte — colorido, nítido, <strong>foto do documento</strong>, não xerox</li>
+<li>Endereço igual ao do perfil de pagamentos</li>
+<li>Telefone e e-mail <strong>só para o Google te achar</strong> (eles mandam um código por SMS)</li>
+<li>Outro e-mail, <strong>público</strong>, que aparece na página do app para o usuário pedir suporte</li>
+</ul>
+<p><strong>Empresa</strong></p>
+<ul>
+<li>Cartão CNPJ atualizado em PDF (site da Receita)</li>
+<li>RG/CNH do <strong>sócio que está no CNPJ</strong>, mesmo nome</li>
+<li>D-U-N-S com o <strong>mesmo</strong> nome da empresa</li>
+<li>Telefone da empresa + telefone da pessoa</li>
+</ul>
+<hr>
+<h2>3. Quanto custa</h2>
+<table>
+<thead>
+<tr>
+<th align="left">O quê</th>
+<th align="left">Quanto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Abrir a conta na Play Console</td>
+<td align="left"><strong>US$ 25, uma vez.</strong> Não tem mensalidade. Não tem reembolso.</td>
+</tr>
+<tr>
+<td align="left">App da Apple (só para comparar)</td>
+<td align="left">US$ 99 <strong>todo ano</strong></td>
+</tr>
+<tr>
+<td align="left">App <strong>grátis</strong> na Play</td>
+<td align="left">Só esses US$ 25</td>
+</tr>
+<tr>
+<td align="left">App <strong>pago</strong>, compra dentro do app, ou assinatura</td>
+<td align="left">A Google fica com uma <strong>fatia</strong> de cada venda. Número clássico: <strong>15%</strong> até cerca de US$ 1 milhão por ano, <strong>30%</strong> acima disso. Em 2026 alguns países mudaram o cálculo — se for cobrar, olhe a tabela <strong>dentro da Console</strong> no seu país.</td>
+</tr>
+<tr>
+<td align="left">Imposto no Brasil</td>
+<td align="left">Problema <strong>seu</strong> (MEI, CNPJ, IOF no cartão dos US$ 25). A Play não declara imposto por você.</td>
+</tr>
+</tbody></table>
+<p>Os US$ 25 são só a <strong>taxa de cadastro</strong>. Não incluem a fatia das vendas.</p>
+<hr>
+<h2>4. Testes: as quatro filas</h2>
+<p>Antes de o mundo baixar, você manda o arquivo do app para uma <strong>trilha</strong> (fila). Em todas elas o arquivo tem que estar <strong>assinado</strong> (com o carimbo digital).</p>
+<p><img src="../assets/play-tracks.svg" alt="As quatro filas em sequência: Interna (time, e-mails cadastrados), Fechada (grupo de testers por lista/inscrição), Aberta (beta público) e Produção (a loja de verdade)"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Fila</th>
+<th align="left">Para quê</th>
+<th align="left">Quem consegue instalar</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Interna</strong></td>
+<td align="left">Teste rápido com o time (até ~100 pessoas)</td>
+<td align="left">Só e-mails que <strong>você</strong> cadastra</td>
+</tr>
+<tr>
+<td align="left"><strong>Fechada</strong></td>
+<td align="left">Teste controlado. Na conta pessoal <strong>nova</strong>, é ela que <strong>libera</strong> a loja de verdade</td>
+<td align="left">Pessoas que abriram o <strong>link oficial da Play</strong>, aceitaram e instalaram <strong>pela loja</strong>. Mandar o APK no WhatsApp <strong>não</strong> conta.</td>
+</tr>
+<tr>
+<td align="left"><strong>Aberta</strong></td>
+<td align="left">Beta público: quem quiser se inscreve</td>
+<td align="left">Qualquer um (às vezes com limite de vagas)</td>
+</tr>
+<tr>
+<td align="left"><strong>Produção</strong></td>
+<td align="left">Loja de verdade</td>
+<td align="left">Qualquer um que buscar na Play Store</td>
+</tr>
+</tbody></table>
+<p><strong>Se sua conta pessoal é nova:</strong> precisa de <strong>12 testadores inscritos</strong> (opt-in = clicaram no link e aceitaram) durante os <strong>últimos 14 dias sem faltar um</strong>. Se um sair e cair para 11, os 14 dias <strong>recomeçam</strong>. Convide 15 a 20. Depois aparece o botão para <strong>pedir acesso à produção</strong> (Apply for production): um formulário (como achou os testers, o que eles testaram, o que você corrigiu). A Google lê isso na mão.</p>
+<p>A fila interna <strong>não</strong> substitui a fechada nessa regra.</p>
+<hr>
+<h2>5. Página do app na loja (a “ficha”)</h2>
+<p>Sem isso a Google <strong>nem começa</strong> a analisar o app.</p>
+<ul>
+<li>Nome, texto curto, texto longo, ícone 512×512 pixels, imagem de destaque 1024×500, prints da tela (celular é obrigatório)</li>
+<li>Categoria, e-mail de contato</li>
+<li><strong>Política de privacidade</strong>: uma página na internet (link <code>https://…</code>) dizendo que dados você coleta. Obrigatória se o app pega dado do usuário</li>
+<li><strong>Classificação etária</strong> (Content rating): um questionário (IARC — o órgão que classifica, tipo “livre / 12 anos”). Não invente: o questionário gera a faixa</li>
+<li><strong>Segurança dos dados</strong> (Data safety): formulário “o app coleta o quê? compartilha? criptografa?”. Tem que ser <strong>verdade</strong>, igual ao que o código faz</li>
+<li><strong>API alvo</strong> (target API): a versão do Android que o app “promete” seguir. A partir de 31/08/2026, app novo ou atualização de celular precisa mirar a <strong>API 36</strong> (Android 16)</li>
+</ul>
+<p>Mentir no Data safety = recusa agora ou remoção depois. Não é texto de marketing.</p>
+<hr>
+<h2>6. Dois carimbos (não misture)</h2>
+<p>O celular só instala app <strong>carimbado</strong>. Desde agosto de 2021, app <strong>novo</strong> na Play usa o <strong>Play App Signing</strong>: a Google guarda o carimbo “oficial” do app.</p>
+<p>Imagine dois selos:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Selo</th>
+<th align="left">Quem guarda</th>
+<th align="left">Para quê</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Chave de envio</strong> (upload key)</td>
+<td align="left"><strong>Você</strong>, num arquivo keystore (<code>.jks</code>). Faça backup.</td>
+<td align="left">Carimba o <strong>AAB que você sobe</strong> no site. Perdeu? dá para pedir à Google uma chave de envio nova.</td>
+</tr>
+<tr>
+<td align="left"><strong>Chave do app</strong> (app signing key)</td>
+<td align="left"><strong>Google</strong> (o recomendado é deixar ela <strong>criar</strong>).</td>
+<td align="left">Carimba o <strong>APK que o usuário baixa</strong>. Perdeu a conta Google <strong>e</strong> não tem cópia dessa chave = <strong>não consegue mais atualizar</strong> o app. Usuário antigo fica preso na versão velha.</td>
+</tr>
+</tbody></table>
+<p>Você <strong>não</strong> envia o APK final da loja. Envia o AAB. A Google fatiar: um APK para celular com chip Snapdragon, outro tamanho de tela, outro idioma — cada um menor.</p>
+<p>O arquivo do cofre (keystore) <strong>não vai para o GitHub</strong>. Senha em arquivo local que o Git ignora, ou no computador/CI, nunca no código público.</p>
+<p>A chave de envio precisa valer <strong>depois de 22/10/2033</strong> (regra da Play).</p>
+<hr>
+<h2>7. APK vs AAB — o que você manda para quem</h2>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"><strong>APK</strong></th>
+<th align="left"><strong>AAB</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Analogia</td>
+<td align="left">O bolo já assado, pronto para comer</td>
+<td align="left">A receita + os ingredientes; a padaria (Google) assa o bolo do tamanho certo para cada cliente</td>
+</tr>
+<tr>
+<td align="left">O celular instala?</td>
+<td align="left"><strong>Sim</strong></td>
+<td align="left"><strong>Não</strong></td>
+</tr>
+<tr>
+<td align="left">Manda para a Play (app novo)?</td>
+<td align="left"><strong>Não</strong> (desde 2021)</td>
+<td align="left"><strong>Sim</strong> — é o único formato</td>
+</tr>
+<tr>
+<td align="left">Passar no cabo USB / WhatsApp para um amigo</td>
+<td align="left">Sim</td>
+<td align="left">Não. Precisa converter (ferramenta <code>bundletool</code>) se quiser um APK no PC</td>
+</tr>
+<tr>
+<td align="left">Tamanho do download</td>
+<td align="left">Costuma ser um arquivo grande (vale para todos os tipos de celular)</td>
+<td align="left">A Play manda <strong>só</strong> o que aquele aparelho precisa → download menor</td>
+</tr>
+</tbody></table>
+<p>No computador (na pasta do projeto):</p>
+<pre><code class="language-bash">./gradlew :app:bundleRelease     # gera o .aab da LOJA
+./gradlew :app:assembleRelease   # gera o .apk para instalar na mão — não é o arquivo da Play
+</code></pre>
+<p><code>./gradlew</code> é o comando que <strong>empacota</strong> o app (o “Gradle” é a ferramenta de build). Se o projeto tem “sabores” (ex.: versão <code>prod</code> + acabamento <code>release</code>), o nome do comando junta os dois: <code>./gradlew :app:bundleProdRelease</code>.</p>
+<hr>
+<h2>8. Como tem que estar o pacote da loja</h2>
+<p>A versão de loja se chama <strong>release</strong> (lançamento). A de desenvolvimento se chama <strong>debug</strong> (com logs, ferramentas de caça-bug). Não suba o debug.</p>
+<p>O que ligar na versão de loja:</p>
+<ul>
+<li><strong>Encolher o código</strong> (<code>isMinifyEnabled = true</code> + R8): apaga código morto e embaralha nomes. Sem isso o arquivo fica enorme e mais fácil de copiar. Só escrever <code>release</code> no nome <strong>não</strong> liga isso sozinho</li>
+<li><strong>Encolher imagens/recursos</strong> (<code>isShrinkResources = true</code>)</li>
+<li>Usar o carimbo da <strong>chave de envio</strong>, não a chave de debug que o Android Studio cria sozinho</li>
+<li>Tirar ferramentas de desenvolvedor (LeakCanary, Chucker — apps que espionam o próprio app no debug)</li>
+<li><strong>versionCode</strong> sempre <strong>maior</strong> que o último que a Google já recebeu (1 → 2 → 3)</li>
+<li><strong>versionName</strong> é o que aparece para o usuário (<code>1.0.0</code>)</li>
+<li><strong>applicationId</strong> igual para sempre. Mudou = a loja cria um app <strong>novo</strong>; quem já tinha o antigo não recebe update</li>
+</ul>
+<p>Antes de mandar: instale uma vez (pela fila interna da Play, ou gerando um APK de teste). Se abrir e crashar, a análise da Google é tempo jogado fora.</p>
+<hr>
+<h2>9. Enviar e esperar</h2>
+<ol>
+<li>Entre na <strong>Play Console</strong> → seu app → escolha a fila (interna, fechada ou produção)</li>
+<li>Envie o arquivo <code>.aab</code></li>
+<li>Escreva as <strong>notas da versão</strong> (o que mudou: “corrigimos o login”, etc.)</li>
+<li>Espere a <strong>análise</strong> (review): de algumas horas a <strong>vários dias</strong>. Primeira vez e conta nova = mais lento</li>
+<li>Na loja de verdade, publique aos poucos (<strong>rollout em estágios</strong>: 5% dos usuários, depois 20%, 50%, 100%). Se muitos aparelhos começarem a fechar o app, pause</li>
+</ol>
+<p>Se recusarem: leia o e-mail. Motivos comuns: ficha de dados mentindo, permissão no app que você não usa, política da loja, conta pessoal sem os 12 testers. Corrija, <strong>aumente o versionCode</strong>, envie de novo.</p>
+<hr>
+<h2>Ordem do dia (cole na parede)</h2>
+<p><img src="../assets/play-release-pipeline.svg" alt="Pipeline de release: Conta (2FA, docs, US$25) → App na Console → Chave de envio → gerar .aab assinado → Fila interna → decisão 'conta pessoal nova?': se sim, passa pela Fila fechada (12 testers, 14 dias) antes da Produção; se não, vai direto para Produção com lançamento gradual 5% a 100%"></p>
+<ol>
+<li>Ligar verificação em duas etapas + documentos + cartão com o <strong>mesmo nome</strong></li>
+<li>Pagar US$ 25</li>
+<li>Provar quem você é (e, se conta pessoal nova, que tem um Android)</li>
+<li>Criar o app na Console; preencher a página da loja, segurança dos dados e política de privacidade</li>
+<li>Criar o cofre da chave de envio; deixar a Google criar a chave oficial do app</li>
+<li>Gerar o <code>.aab</code> assinado e mandar na fila <strong>interna</strong> (teste de fumaça: abre ou não?)</li>
+<li>Conta pessoal nova: fila <strong>fechada</strong>, 12 pessoas inscritas, 14 dias, pedir acesso à produção</li>
+<li>Loja de verdade, aos poucos (5% → 100%)</li>
+</ol>
+<p><strong>AAB para a Google. APK para o cabo USB. Cofre da chave no HD de backup, nunca no GitHub.</strong></p>

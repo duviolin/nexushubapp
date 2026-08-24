@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 320" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="780" height="320" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="390" y="40" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">A fórmula que converte dp em pixels reais</text>
+
+  <!-- formula pill -->
+  <rect x="210" y="66" width="360" height="60" rx="30" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="390" y="105" text-anchor="middle" font-size="26" font-weight="700" fill="#AEB7F2" font-family="'SF Mono','Roboto Mono',ui-monospace,monospace">px = dp × (dpi / 160)</text>
+
+  <text x="390" y="160" text-anchor="middle" font-size="14" fill="#8A97A3">Exemplo: um ícone de 24dp numa tela xxhdpi (480 dpi)</text>
+
+  <!-- worked example flow -->
+  <!-- chip: 24dp -->
+  <rect x="70" y="188" width="120" height="72" rx="12" fill="#3C3F41" stroke="#DFE1E5" stroke-width="1.5"/>
+  <text x="130" y="222" text-anchor="middle" font-size="24" font-weight="700" fill="#DFE1E5">24</text>
+  <text x="130" y="244" text-anchor="middle" font-size="13" fill="#8A97A3">dp (você escreve)</text>
+
+  <text x="215" y="230" text-anchor="middle" font-size="24" fill="#525659">×</text>
+
+  <!-- chip: factor -->
+  <rect x="248" y="188" width="150" height="72" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="323" y="220" text-anchor="middle" font-size="20" font-weight="700" fill="#AEB7F2" font-family="'SF Mono','Roboto Mono',ui-monospace,monospace">480 / 160</text>
+  <text x="323" y="244" text-anchor="middle" font-size="13" fill="#6366F1">= fator 3×</text>
+
+  <text x="423" y="230" text-anchor="middle" font-size="24" fill="#525659">=</text>
+
+  <!-- chip: 72px -->
+  <rect x="456" y="188" width="120" height="72" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.5"/>
+  <text x="516" y="222" text-anchor="middle" font-size="24" font-weight="700" fill="#84C48D">72</text>
+  <text x="516" y="244" text-anchor="middle" font-size="13" fill="#8ECB98">px (o sistema pinta)</text>
+
+  <!-- specialist note -->
+  <rect x="606" y="182" width="120" height="84" rx="12" fill="#3A3320" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="666" y="208" text-anchor="middle" font-size="12" font-weight="700" fill="#E3AE72">Vetor vence</text>
+  <text x="666" y="228" text-anchor="middle" font-size="11" fill="#E3AE72">1 arquivo</text>
+  <text x="666" y="244" text-anchor="middle" font-size="11" fill="#E3AE72">serve todas</text>
+  <text x="666" y="260" text-anchor="middle" font-size="11" fill="#E3AE72">as densidades</text>
+
+  <text x="390" y="298" text-anchor="middle" font-size="13" fill="#94A3B8">Você declara o tamanho em dp uma única vez — a multiplicação por densidade é automática.</text>
+</svg>
