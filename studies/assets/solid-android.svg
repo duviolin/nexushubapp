@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="340" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">SOLID, traduzido para o Android</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">cinco princípios &#8212; e o gesto concreto de cada um no app do dia a dia</text>
+
+  <!-- S -->
+  <rect x="24" y="80" width="146" height="232" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.4"/>
+  <text x="97" y="128" text-anchor="middle" font-size="40" font-weight="800" fill="#E8A15C">S</text>
+  <text x="97" y="150" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Single</text>
+  <text x="97" y="164" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Responsibility</text>
+  <text x="97" y="192" text-anchor="middle" font-size="9.5" fill="#C9A97E">uma classe,</text>
+  <text x="97" y="206" text-anchor="middle" font-size="9.5" fill="#C9A97E">um motivo p/ mudar</text>
+  <line x1="40" y1="222" x2="154" y2="222" stroke="#5A4630"/>
+  <text x="97" y="244" text-anchor="middle" font-size="9" fill="#AAB6C0">ViewModel s&#243; orquestra</text>
+  <text x="97" y="257" text-anchor="middle" font-size="9" fill="#AAB6C0">estado; a regra vai</text>
+  <text x="97" y="270" text-anchor="middle" font-size="9" fill="#AAB6C0">para o UseCase</text>
+
+  <!-- O -->
+  <rect x="178" y="80" width="146" height="232" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.4"/>
+  <text x="251" y="128" text-anchor="middle" font-size="40" font-weight="800" fill="#E8A15C">O</text>
+  <text x="251" y="150" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Open /</text>
+  <text x="251" y="164" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Closed</text>
+  <text x="251" y="192" text-anchor="middle" font-size="9.5" fill="#C9A97E">aberto a estender,</text>
+  <text x="251" y="206" text-anchor="middle" font-size="9.5" fill="#C9A97E">fechado a alterar</text>
+  <line x1="194" y1="222" x2="308" y2="222" stroke="#5A4630"/>
+  <text x="251" y="244" text-anchor="middle" font-size="9" fill="#AAB6C0">novo caso = nova</text>
+  <text x="251" y="257" text-anchor="middle" font-size="9" fill="#AAB6C0">estrat&#233;gia/lambda,</text>
+  <text x="251" y="270" text-anchor="middle" font-size="9" fill="#AAB6C0">sem tocar no que existe</text>
+
+  <!-- L -->
+  <rect x="332" y="80" width="146" height="232" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.4"/>
+  <text x="405" y="128" text-anchor="middle" font-size="40" font-weight="800" fill="#E8A15C">L</text>
+  <text x="405" y="150" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Liskov</text>
+  <text x="405" y="164" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Substitution</text>
+  <text x="405" y="192" text-anchor="middle" font-size="9.5" fill="#C9A97E">o subtipo substitui</text>
+  <text x="405" y="206" text-anchor="middle" font-size="9.5" fill="#C9A97E">o tipo sem surpresa</text>
+  <line x1="348" y1="222" x2="462" y2="222" stroke="#5A4630"/>
+  <text x="405" y="244" text-anchor="middle" font-size="9" fill="#AAB6C0">o FakeRepository troca</text>
+  <text x="405" y="257" text-anchor="middle" font-size="9" fill="#AAB6C0">o real no teste e nada</text>
+  <text x="405" y="270" text-anchor="middle" font-size="9" fill="#AAB6C0">quebra</text>
+
+  <!-- I -->
+  <rect x="486" y="80" width="146" height="232" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.4"/>
+  <text x="559" y="128" text-anchor="middle" font-size="40" font-weight="800" fill="#E8A15C">I</text>
+  <text x="559" y="150" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Interface</text>
+  <text x="559" y="164" text-anchor="middle" font-size="10.5" font-weight="700" fill="#E8A15C">Segregation</text>
+  <text x="559" y="192" text-anchor="middle" font-size="9.5" fill="#C9A97E">interfaces pequenas,</text>
+  <text x="559" y="206" text-anchor="middle" font-size="9.5" fill="#C9A97E">n&#227;o uma gigante</text>
+  <line x1="502" y1="222" x2="616" y2="222" stroke="#5A4630"/>
+  <text x="559" y="244" text-anchor="middle" font-size="9" fill="#AAB6C0">um Repository focado</text>
+  <text x="559" y="257" text-anchor="middle" font-size="9" fill="#AAB6C0">por dado, n&#227;o um</text>
+  <text x="559" y="270" text-anchor="middle" font-size="9" fill="#AAB6C0">&#8220;God interface&#8221;</text>
+
+  <!-- D -->
+  <rect x="640" y="80" width="146" height="232" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.5"/>
+  <text x="713" y="128" text-anchor="middle" font-size="40" font-weight="800" fill="#AEB7F2">D</text>
+  <text x="713" y="150" text-anchor="middle" font-size="10.5" font-weight="700" fill="#AEB7F2">Dependency</text>
+  <text x="713" y="164" text-anchor="middle" font-size="10.5" font-weight="700" fill="#AEB7F2">Inversion</text>
+  <text x="713" y="192" text-anchor="middle" font-size="9.5" fill="#AAB6C0">depender da abstra&#231;&#227;o,</text>
+  <text x="713" y="206" text-anchor="middle" font-size="9.5" fill="#AAB6C0">nunca do concreto</text>
+  <line x1="656" y1="222" x2="770" y2="222" stroke="#4650A0"/>
+  <text x="713" y="244" text-anchor="middle" font-size="9" fill="#AAB6C0">ViewModel recebe a</text>
+  <text x="713" y="257" text-anchor="middle" font-size="9" fill="#AAB6C0">interface; o Hilt injeta</text>
+  <text x="713" y="270" text-anchor="middle" font-size="9" fill="#AAB6C0">a implementa&#231;&#227;o</text>
+
+  <text x="400" y="300" text-anchor="middle" font-size="10" fill="#8A97A3">o <tspan fill="#E8A15C" font-weight="700">S</tspan> e o <tspan fill="#AEB7F2" font-weight="700">D</tspan> pagam quase toda a conta no Android &#8212; os outros tr&#234;s caem de gra&#231;a quando esses dois est&#227;o certos</text>
+</svg>

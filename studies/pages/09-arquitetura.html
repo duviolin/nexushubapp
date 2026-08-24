@@ -179,20 +179,67 @@ class LoginViewModel @Inject constructor(
 
 <h2>Parte 6 · Código limpo: o nível do dia a dia</h2>
 
-<p>Arquitetura organiza os grandes blocos; <strong>código limpo</strong> organiza cada função. Os dois se sustentam.</p>
+<p>Arquitetura organiza os grandes blocos; <strong>código limpo</strong> organiza cada função. Os dois se sustentam — de nada adianta a camada certa se o método dentro dela é ilegível. Começa pelo básico, que decide 80% da legibilidade:</p>
 
 <table>
 <thead><tr><th align="left">Princípio</th><th align="left">Na prática Android</th></tr></thead>
 <tbody>
 <tr><td align="left"><strong>Nomes que revelam intenção</strong></td><td align="left"><code>aplicarCupom()</code>, não <code>proc()</code>; <code>carregando</code>, não <code>flag</code></td></tr>
 <tr><td align="left"><strong>Funções pequenas, uma coisa só</strong></td><td align="left">um <code>Composable</code> que faz layout + rede + parsing precisa ser quebrado</td></tr>
-<tr><td align="left"><strong>SOLID</strong></td><td align="left">o “S” (uma responsabilidade) e o “D” (inversão) são os que mais importam aqui</td></tr>
 <tr><td align="left"><strong>Imutabilidade</strong></td><td align="left"><code>val</code> e <code>data class</code> por padrão; estado que só muda por <code>copy()</code></td></tr>
 <tr><td align="left"><strong>Sem estado escondido</strong></td><td align="left">nada de variável global mutável; o estado mora no ViewModel</td></tr>
+<tr><td align="left"><strong>Comentário só quando o código não conta</strong></td><td align="left">explique o <em>porquê</em> (a regra de negócio), não o <em>o quê</em> — esse o código já diz</td></tr>
 </tbody>
 </table>
 
-<blockquote><p>⚠️ <strong>Pegadinha:</strong> “código limpo” não é encher de abstração. Uma interface com <strong>uma</strong> implementação que nunca terá outra, um UseCase que só repassa, cinco módulos para um app de duas telas — isso é <em>over-engineering</em>. Limpo é o <strong>mínimo</strong> que deixa mudar sem medo, não o máximo de camadas.</p></blockquote>
+<h3>SOLID, sem decoreba</h3>
+
+<p>SOLID são cinco princípios de orientação a objetos que, no Android, você já pratica sem saber os nomes — a arquitetura das Partes 1 a 5 <em>é</em> SOLID aplicado. Vale conhecer para nomear a dor quando algo cheira mal.</p>
+
+<p><img src="../assets/solid-android.svg" alt="Os cinco princípios SOLID traduzidos para o Android. S (Single Responsibility): uma classe, um motivo para mudar — o ViewModel só orquestra estado e a regra vai para o UseCase. O (Open/Closed): aberto a estender, fechado a alterar — um novo caso vira uma nova estratégia ou lambda sem tocar no código existente. L (Liskov Substitution): o subtipo substitui o tipo sem surpresa — o FakeRepository troca o real no teste e nada quebra. I (Interface Segregation): interfaces pequenas em vez de uma gigante — um Repository focado por dado, não uma God interface. D (Dependency Inversion): depender da abstração, nunca do concreto — o ViewModel recebe a interface e o Hilt injeta a implementação. Nota final: o S e o D pagam quase toda a conta no Android; os outros três caem de graça quando esses dois estão certos."></p>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> não persiga os cinco por checklist. No Android, <strong>S</strong> (uma responsabilidade) e <strong>D</strong> (inversão via interface + Hilt) resolvem quase tudo — quando esses dois estão certos, <strong>L</strong> (fakes substituíveis) e <strong>I</strong> (interfaces enxutas) vêm de brinde, e <strong>O</strong> aparece naturalmente com <code>sealed</code> + lambdas. Decorar as siglas não torna ninguém sênior; reconhecer <em>qual</em> foi violado quando o teste ficou difícil, sim.</p></blockquote>
+
+<h3>Code smells: os cheiros que denunciam o problema</h3>
+
+<p>Um <em>smell</em> não é um bug — é um sinal de que a estrutura vai doer. Reconhecê-los cedo é o que separa manutenção barata de dívida cara.</p>
+
+<table>
+<thead><tr><th align="left">Cheiro</th><th align="left">Como aparece no Android</th><th align="left">Refatoração</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>God object / Composable</strong></td><td align="left">um <code>Composable</code> ou ViewModel de 400 linhas que faz tudo</td><td align="left">extrair UseCases e componentes stateless menores</td></tr>
+<tr><td align="left"><strong>Long method</strong></td><td align="left">uma função com 5 níveis de <code>if</code> aninhado</td><td align="left"><em>early return</em>, extrair função, <code>when</code> sobre <code>sealed</code></td></tr>
+<tr><td align="left"><strong>Primitive obsession</strong></td><td align="left"><code>String</code> para e-mail, CPF, id — tudo texto solto</td><td align="left"><code>value class Email(val v: String)</code> — o tipo vira a validação</td></tr>
+<tr><td align="left"><strong>Feature envy</strong></td><td align="left">o ViewModel manipula os campos internos de outra classe</td><td align="left">mover o comportamento para <em>dentro</em> de quem tem os dados</td></tr>
+<tr><td align="left"><strong>Shotgun surgery</strong></td><td align="left">um campo novo na API obriga a mexer em 8 arquivos</td><td align="left">centralizar no mapper/Repository — mudança em um lugar só</td></tr>
+</tbody>
+</table>
+
+<h3>Funções e tratamento de erro</h3>
+
+<p>Função limpa faz <strong>uma</strong> coisa, num <strong>só nível de abstração</strong>, com poucos argumentos. E erro em Kotlin não precisa virar <code>try/catch</code> espalhado: modele a falha como <strong>valor</strong> (<code>Result</code> ou uma <code>sealed</code> de erros), e o compilador obriga quem chama a tratá-la.</p>
+
+<pre><code class="language-kotlin">// ❌ Long method: mistura níveis (rede, parsing, regra, UI) numa função só
+suspend fun entrar(email: String, senha: String) {
+    if (email.isNotBlank()) {
+        if (senha.length &gt;= 8) {
+            val r = api.login(LoginDto(email, senha))   // rede
+            if (r.isSuccessful) { /* parse + regra + estado, tudo aqui… */ }
+        }
+    }
+}
+
+// ✅ Um nível por função + erro como valor (sealed), sem try/catch solto
+sealed interface LoginErro { data object Credenciais : LoginErro; data object Rede : LoginErro }
+
+class FazerLogin(private val repo: AuthRepository) {
+    suspend operator fun invoke(cred: Credenciais): Result&lt;Usuario, LoginErro&gt; =
+        repo.login(cred)          // a regra é uma linha; validação e rede moram fora
+}
+// quem chama é OBRIGADO a tratar os dois lados — nada de exceção esquecida
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> “código limpo” não é encher de abstração. Uma interface com <strong>uma</strong> implementação que nunca terá outra, um UseCase que só repassa, cinco módulos para um app de duas telas — isso é <em>over-engineering</em>. Limpo é o <strong>mínimo</strong> que deixa mudar sem medo, não o máximo de camadas. Todo princípio desta parte serve a isso; nenhum é um fim em si.</p></blockquote>
 
 <hr>
 
@@ -235,6 +282,7 @@ class LoginViewModel @Inject constructor(
 <tr><td align="left"><strong>State hoisting</strong></td><td align="left">Rota conecta o ViewModel; conteúdo stateless recebe estado + lambdas</td></tr>
 <tr><td align="left"><strong>Repository + Mapper</strong></td><td align="left">Fachada única por dado; DTO nunca vaza para o domínio</td></tr>
 <tr><td align="left"><strong>Hilt</strong></td><td align="left">Injetar interfaces por construtor; nada de <code>new</code>/<code>create()</code> interno</td></tr>
+<tr><td align="left"><strong>Código limpo</strong></td><td align="left">nomes que revelam intenção; funções de um nível; erro como valor (<code>Result</code>/<code>sealed</code>)</td></tr>
 <tr><td align="left"><strong>Sem over-engineering</strong></td><td align="left">UseCase só quando agrega; a mínima camada que deixa mudar sem medo</td></tr>
 <tr><td align="left"><strong>Modularização</strong></td><td align="left">Por feature + core + domínio; adotar quando o build/time pedir</td></tr>
 </tbody>
@@ -247,6 +295,9 @@ class LoginViewModel @Inject constructor(
 <tbody>
 <tr><td align="left"><strong>camada</strong></td><td align="left">Bloco com uma responsabilidade e fronteira por contrato.</td></tr>
 <tr><td align="left"><strong>Clean Architecture</strong></td><td align="left">UI/domínio/dados com dependência apontando para dentro.</td></tr>
+<tr><td align="left"><strong>SOLID</strong></td><td align="left">5 princípios OO; no Android, S e D pagam a conta.</td></tr>
+<tr><td align="left"><strong>code smell</strong></td><td align="left">sinal de estrutura ruim (God object, long method…), não um bug.</td></tr>
+<tr><td align="left"><strong>value class</strong></td><td align="left">embrulho de tipo único que mata <em>primitive obsession</em> sem custo.</td></tr>
 <tr><td align="left"><strong>Regra da Dependência</strong></td><td align="left">O de fora depende do de dentro, nunca o contrário.</td></tr>
 <tr><td align="left"><strong>inversão de dependência</strong></td><td align="left">O domínio define a interface; o dado a implementa.</td></tr>
 <tr><td align="left"><strong>MVVM / MVI</strong></td><td align="left">Tela = f(estado); ViewModel expõe <code>UiState</code> imutável.</td></tr>
