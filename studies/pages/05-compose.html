@@ -107,7 +107,75 @@ fun ListaTarefas(tarefas: List&lt;Tarefa&gt;) {
 
 <hr>
 
-<h2>Parte 3 · Estado: o coração do Compose</h2>
+<h2>Parte 3 · Layout: como o Compose mede — e como fazer o complexo</h2>
+
+<p>Para ir além de empilhar coisas, você precisa entender <strong>como</strong> o Compose calcula tamanhos e posições. O modelo é enxuto e é o que torna o layout rápido: <strong>as restrições descem, os tamanhos sobem, e mede-se cada nó uma vez só</strong>.</p>
+
+<p><img src="../assets/compose-layout.svg" alt="Como o Compose faz layout, numa passada só. O pai (uma Column) decide as restrições do filho e as envia para baixo: Constraints com mínimo e máximo de largura e altura. O filho (um Text) mede-se dentro desse limite e envia o tamanho de volta para cima: o que realmente ocupou. Então o pai posiciona o filho com place em x e y. Regras: uma medição por frame — medir um filho duas vezes lança erro, eliminando o custo quadrático do LinearLayout aninhado com weight do XML; para espiar o tamanho ideal existem os intrinsics (minIntrinsic/maxIntrinsic). Quando Row, Column e Box não bastam: BoxWithConstraints para decidir o layout pela largura disponível; ConstraintLayout da biblioteca para muitas relações num nível plano; e Layout customizado para medir e posicionar do seu jeito. Sobre o ConstraintLayout: no XML ele servia para achatar a hierarquia por causa do custo de medir; no Compose isso não pesa, aninhar é barato, então use-o por clareza (barriers, guidelines, chains), não por medo."></p>
+
+<blockquote><p>🧠 <strong>Termo — Constraints:</strong> o “orçamento” de espaço que o pai dá ao filho: largura mínima/máxima e altura mínima/máxima. <code>fillMaxWidth()</code> diz “ocupe o máximo”; <code>wrapContentWidth()</code>, “o mínimo que couber”; <code>width(200.dp)</code> fixa os dois. O filho responde com um tamanho <em>dentro</em> desse limite.</p></blockquote>
+
+<h3>Distribuir espaço: arrangement, alignment e weight</h3>
+
+<p>Dentro de <code>Row</code>/<code>Column</code>, três eixos resolvem quase todo alinhamento — e o <code>weight</code> reparte o espaço que sobra, como o do XML, mas <strong>sem</strong> o custo de remedir.</p>
+
+<pre><code class="language-kotlin">Row(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),   // espaço ENTRE os filhos
+    verticalAlignment = Alignment.CenterVertically,       // alinhamento no eixo cruzado
+) {
+    Text("Título", Modifier.weight(1f))     // fica com todo o espaço sobrando…
+    Icon(Icons.Default.Star, null)          // …e o ícone só o que precisa
+}
+</code></pre>
+
+<h3>Responsivo de verdade: BoxWithConstraints e intrinsics</h3>
+
+<p>Quando o layout precisa <strong>decidir</strong> conforme o espaço, <code>BoxWithConstraints</code> te dá a largura disponível <em>durante</em> a composição — é a peça para telas adaptativas (liga ao <strong>06 · Material</strong> e às Window Size Classes do <strong>03</strong>). Já os <strong>intrinsics</strong> respondem “de que tamanho isto <em>gostaria</em> de ser?” sem medir de fato — úteis para, por exemplo, dar a dois textos a mesma altura.</p>
+
+<pre><code class="language-kotlin">BoxWithConstraints {
+    if (maxWidth &lt; 600.dp) ListaEmColuna()      // celular
+    else                    ListaEDetalheLado()  // tablet/desktop
+}
+
+// intrinsics: o divisor vertical ganha a altura do texto mais alto ao lado
+Row(Modifier.height(IntrinsicSize.Min)) {
+    Text(esquerda); VerticalDivider(); Text(direita)
+}
+</code></pre>
+
+<h3>Layouts complexos: ConstraintLayout &amp; custom Layout</h3>
+
+<p><strong>Sim, o ConstraintLayout existe no Compose</strong> (dependência <code>androidx.constraintlayout:constraintlayout-compose</code>), com <code>guidelines</code>, <code>barriers</code> e <code>chains</code> como no XML. Mas o motivo nº 1 de usá-lo lá — <strong>achatar a hierarquia</strong> para não pagar remedições caras — <strong>não existe aqui</strong>: aninhar <code>Row</code>/<code>Column</code>/<code>Box</code> no Compose é barato (passada única). Então a régua muda: use ConstraintLayout quando ele deixa o código <strong>mais legível</strong> (muitas relações entre irmãos, alinhar por uma linha-guia percentual, um <em>barrier</em> que segue o mais largo) — não por reflexo do XML.</p>
+
+<pre><code class="language-kotlin">ConstraintLayout(Modifier.fillMaxWidth()) {
+    val (avatar, nome, botao) = createRefs()
+    val guia = createGuidelineFromStart(0.5f)                 // linha-guia a 50%
+    Avatar(Modifier.constrainAs(avatar) { top.linkTo(parent.top); start.linkTo(parent.start) })
+    Text("Ana", Modifier.constrainAs(nome) { start.linkTo(avatar.end, 8.dp); top.linkTo(avatar.top) })
+    Button(::seguir, Modifier.constrainAs(botao) { end.linkTo(parent.end); centerVerticallyTo(avatar) })
+}
+</code></pre>
+
+<p>Quando <em>nenhum</em> contêiner pronto serve — um layout radial, um fluxo que quebra por conta, um posicionamento medido — desça para o <code>Layout { }</code> (ou <code>Modifier.layout { }</code> para ajustar um único filho). Você recebe os <code>measurables</code> e as <code>constraints</code>, mede cada filho e os posiciona à mão.</p>
+
+<pre><code class="language-kotlin">@Composable
+fun ColunaSimples(modifier: Modifier = Modifier, content: @Composable () -&gt; Unit) {
+    Layout(content, modifier) { measurables, constraints -&gt;
+        val filhos = measurables.map { it.measure(constraints) }   // mede cada um (1x!)
+        val altura = filhos.sumOf { it.height }
+        layout(constraints.maxWidth, altura) {                     // define o tamanho do pai
+            var y = 0
+            filhos.forEach { it.placeRelative(0, y); y += it.height }   // posiciona empilhando
+        }
+    }
+}
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a hierarquia de escolha para layout é: <strong>Row/Column/Box</strong> → <strong>BoxWithConstraints</strong> (responsivo) → <strong>ConstraintLayout</strong> (clareza em relações complexas) → <strong>Layout custom</strong> (o resto). Desça um degrau só quando o de cima ficar <em>ilegível</em>, nunca por hábito de XML. E lembre da regra de ouro do modelo: se você mede um filho, mede <strong>uma vez</strong> — guardar o <code>Placeable</code> e reusar, nunca <code>measure()</code> duas vezes.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Estado: o coração do Compose</h2>
 
 <p>Um composable que lê um <code>State</code> vira <strong>reativo</strong>: quando o valor muda, ele recompõe. A pergunta que define tudo é <em>onde esse estado mora</em> — e disso depende quais eventos ele sobrevive.</p>
 
@@ -139,7 +207,7 @@ fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifi
 
 <hr>
 
-<h2>Parte 4 · As três fases de um frame</h2>
+<h2>Parte 5 · As três fases de um frame</h2>
 
 <p>Para entender performance, você precisa saber o que o Compose faz a cada quadro. São <strong>três fases</strong>, e a chave é: cada uma pode ser <strong>pulada</strong> se a entrada dela não mudou.</p>
 
@@ -149,7 +217,7 @@ fun CampoBusca(texto: String, onTextoMuda: (String) -&gt; Unit, modifier: Modifi
 
 <hr>
 
-<h2>Parte 5 · Recomposição inteligente e estabilidade</h2>
+<h2>Parte 6 · Recomposição inteligente e estabilidade</h2>
 
 <p>Recompor é re-executar funções <code>@Composable</code>. O Compose faz isso de forma <strong>cirúrgica</strong>: só os escopos que <em>leram</em> o estado alterado são refeitos; os irmãos são <strong>pulados</strong> (skipped) — desde que seus parâmetros sejam <strong>estáveis</strong>.</p>
 
@@ -170,7 +238,7 @@ data class Item(val id: String, val titulo: String)
 
 <hr>
 
-<h2>Parte 6 · Side-effects: falar com o mundo de fora</h2>
+<h2>Parte 7 · Side-effects: falar com o mundo de fora</h2>
 
 <p>Uma função <code>@Composable</code> deve ser <strong>sem efeito colateral</strong>: ela pode rodar muitas vezes, em qualquer ordem, e ser cancelada. Então “rodar código de verdade” (chamar API, mostrar snackbar, iniciar animação) precisa de <strong>APIs de efeito</strong> que amarram o trabalho ao ciclo de vida da composição.</p>
 
@@ -203,7 +271,7 @@ fun TelaPerfil(id: String, vm: PerfilViewModel) {
 
 <hr>
 
-<h2>Parte 7 · Performance: as regras que evitam jank</h2>
+<h2>Parte 8 · Performance: as regras que evitam jank</h2>
 
 <table>
 <thead><tr><th align="left">Regra</th><th align="left">Por quê</th></tr></thead>
@@ -221,7 +289,7 @@ fun TelaPerfil(id: String, vm: PerfilViewModel) {
 
 <hr>
 
-<h2>Parte 8 · Animação: movimento sem recompor à toa</h2>
+<h2>Parte 9 · Animação: movimento sem recompor à toa</h2>
 
 <p>Animar no Compose é, na maioria das vezes, <strong>animar um estado</strong> — você troca o valor-alvo e o framework interpola. A dificuldade não é fazer mexer; é escolher a API certa e não pagar recomposição por frame. Comece sempre pela pergunta “<em>o que está animando?</em>”.</p>
 
@@ -252,18 +320,52 @@ Box(Modifier.graphicsLayer { translationX = deslize }) // lê o estado na fase t
 
 <hr>
 
-<h2>Parte 9 · Além do básico: as portas que você vai abrir</h2>
+<h2>Parte 10 · Efeitos visuais: sombra, gradiente, blur e Canvas</h2>
 
-<p>Panorama dos avançados que aparecem quando o app cresce — cada um merece um estudo próprio, mas é bom saber que existem e <em>quando</em> alcançá-los.</p>
+<p>“Deixar bonito” no Compose é quase sempre <strong>um <code>Modifier</code> na fase de desenho</strong> — e como essa fase é a última (Parte 5), mudar aparência é barato: não recompõe nem refaz layout. Há quatro caixas de ferramentas.</p>
+
+<p><img src="../assets/compose-efeitos.svg" alt="Efeitos visuais no Compose em quatro caixas de ferramentas, quase tudo um Modifier que age na fase de desenho, barato e sem recompor. 1 Transformar: Modifier.graphicsLayer com alpha, escala, rotação, translação, transformOrigin, sombra via shadowElevation e clip por shape — o canivete de animação barata. 2 Moldar e contornar: Modifier.clip(shape), shadow(elev, shape) e border(largura, cor, shape) — cantos, sombra e borda por shape. 3 Pintar com Brush: background com Brush.linear e afins, gradientes linear, radial e sweep, também em texto — um Brush no lugar de uma Color. 4 Desenhar e filtrar quando nada pronto serve: Modifier.drawBehind, drawWithContent ou Canvas dão acesso ao DrawScope com drawRect, drawPath, drawArc para um badge, um gráfico, um progresso; mais Modifier.blur, drawWithContent com BlendMode e RenderEffect para desfoque, máscaras e mistura de camadas. A regra de ouro: como agem na fase de desenho, mudar alpha ou escala em graphicsLayer não recompõe nem refaz layout, por isso animação visual é barata aqui."></p>
+
+<pre><code class="language-kotlin">// 1) graphicsLayer: transformar (o mais versátil) — ideal para animar
+Box(Modifier.graphicsLayer {
+    alpha = 0.9f; rotationZ = giro; scaleX = 1.1f
+    shadowElevation = 8.dp.toPx(); clip = true; shape = CircleShape
+})
+
+// 2) moldar/contornar por shape (atalhos comuns)
+Modifier.clip(RoundedCornerShape(12.dp))
+Modifier.shadow(4.dp, RoundedCornerShape(12.dp)).border(1.dp, Cinza, RoundedCornerShape(12.dp))
+
+// 3) pintar com Brush (gradiente) — funciona em background E em texto
+val brush = Brush.linearGradient(listOf(Roxo, Azul))
+Box(Modifier.background(brush))
+Text("Nexus", style = TextStyle(brush = brush))
+
+// 4) desenho custom quando nada pronto serve
+Modifier.drawBehind {                    // DrawScope: você pinta na mão
+    drawArc(Verde, -90f, progresso * 360f, useCenter = false, style = Stroke(6.dp.toPx()))
+}
+Modifier.blur(12.dp)                      // desfoque (fundo de diálogo, placeholder)
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — <code>graphicsLayer</code>:</strong> um modifier que aplica transformações (alpha, escala, rotação, translação, sombra, clip) desenhando o conteúdo numa <em>camada</em> separada. Como só afeta o <strong>desenho</strong>, animar por ele (versão lambda) não dispara recomposição — é o segredo de animação fluida. É também onde mora o <code>compositingStrategy</code> para efeitos que precisam da camada isolada (ex.: máscara com <code>BlendMode</code>).</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <code>Modifier.blur()</code> e alguns <code>RenderEffect</code> só têm aceleração de hardware no <strong>Android 12+</strong> — em versões antigas podem cair para um caminho lento ou não aplicar. E cuidado com sombra: <code>shadow()</code>/<code>shadowElevation</code> força uma camada de composição; espalhar sombra em centenas de itens de lista custa. Meça em <code>release</code> (Parte 8).</p></blockquote>
+
+<hr>
+
+<h2>Parte 11 · Além do básico: as portas que você vai abrir</h2>
+
+<p>Além do layout (Parte 3) e dos efeitos (Parte 10), estas portas aparecem quando o app cresce — cada uma merece um estudo próprio, mas é bom saber que existem e <em>quando</em> alcançá-las.</p>
 
 <table>
 <thead><tr><th align="left">Recurso</th><th align="left">Para quê</th><th align="left">Quando</th></tr></thead>
 <tbody>
 <tr><td align="left"><code>CompositionLocal</code></td><td align="left">passar valor implícito pela árvore (tema, densidade) sem prop-drilling</td><td align="left">dado ambiental que muitos leem; <strong>não</strong> para estado de tela</td></tr>
-<tr><td align="left"><code>Layout</code> / <code>SubcomposeLayout</code></td><td align="left">medir e posicionar do seu jeito quando <code>Row</code>/<code>Column</code> não dão</td><td align="left">um grid especial, um componente que depende do tamanho medido</td></tr>
+<tr><td align="left"><code>pointerInput</code> (gestos)</td><td align="left">gestos customizados: arrastar, pinçar, toque longo, transformar</td><td align="left"><code>detectDragGestures</code>/<code>detectTransformGestures</code> num componente próprio</td></tr>
+<tr><td align="left"><code>SubcomposeLayout</code></td><td align="left">compor um filho <em>depois</em> de medir outro (subcomposição tardia)</td><td align="left">um componente cujo conteúdo depende do tamanho já medido</td></tr>
 <tr><td align="left"><code>Modifier.Node</code></td><td align="left">modifier customizado de alta performance (sem alocar por recomposição)</td><td align="left">gesto/efeito reutilizável em muitos lugares</td></tr>
 <tr><td align="left">Nested scroll</td><td align="left">coordenar rolagem entre pai e filho (colapsar topo)</td><td align="left"><code>TopAppBar</code> que encolhe ao rolar a lista</td></tr>
-<tr><td align="left"><code>drawBehind</code>/<code>Canvas</code></td><td align="left">desenho custom (gráfico, badge, progress)</td><td align="left">visual que nenhum componente entrega</td></tr>
 </tbody>
 </table>
 
@@ -297,6 +399,8 @@ Box(Modifier.graphicsLayer { translationX = deslize }) // lê o estado na fase t
 <tr><td align="left">Efeitos</td><td align="left">trabalho só em <code>LaunchedEffect</code>/evento; cuidar da <code>key</code></td></tr>
 <tr><td align="left">Estabilidade</td><td align="left">modelos <code>@Immutable</code>, coleções imutáveis; rodar compiler metrics</td></tr>
 <tr><td align="left">Listas</td><td align="left"><code>LazyColumn</code> + <code>key</code>; nada de <code>Column</code> rolável para muitos itens</td></tr>
+<tr><td align="left">Layout</td><td align="left">Row/Column/Box → BoxWithConstraints → ConstraintLayout → <code>Layout</code>; descer só por legibilidade</td></tr>
+<tr><td align="left">Efeitos visuais</td><td align="left"><code>graphicsLayer</code> para transformar/animar; <code>Brush</code> p/ gradiente; <code>blur</code> só Android 12+</td></tr>
 <tr><td align="left">Performance</td><td align="left">medir em release + Baseline Profile; adiar leitura de estado</td></tr>
 </tbody>
 </table>
@@ -320,6 +424,12 @@ Box(Modifier.graphicsLayer { translationX = deslize }) // lê o estado na fase t
 <tr><td align="left"><strong>animate*AsState</strong></td><td align="left">anima um valor de estado declarativamente (o caso comum)</td></tr>
 <tr><td align="left"><strong>updateTransition</strong></td><td align="left">coordena vários valores animados a partir de um gatilho</td></tr>
 <tr><td align="left"><strong>CompositionLocal</strong></td><td align="left">valor implícito propagado pela árvore (tema, densidade)</td></tr>
+<tr><td align="left"><strong>Constraints</strong></td><td align="left">o orçamento de espaço (min/max largura e altura) que o pai dá ao filho</td></tr>
+<tr><td align="left"><strong>ConstraintLayout</strong></td><td align="left">contêiner de relações (guidelines/barriers/chains); no Compose, por clareza</td></tr>
+<tr><td align="left"><strong>BoxWithConstraints</strong></td><td align="left">expõe a largura disponível para decidir o layout (responsivo)</td></tr>
+<tr><td align="left"><strong>Layout { }</strong></td><td align="left">medir e posicionar filhos à mão quando nada pronto serve</td></tr>
+<tr><td align="left"><strong>graphicsLayer</strong></td><td align="left">transforma na fase de desenho (alpha, escala, sombra); anima sem recompor</td></tr>
+<tr><td align="left"><strong>Brush</strong></td><td align="left">preenchimento com gradiente (linear/radial/sweep), em fundo e texto</td></tr>
 </tbody>
 </table>
   </article>

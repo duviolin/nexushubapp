@@ -39,9 +39,9 @@
   <!-- direita: métodos -->
   <rect x="320" y="86" width="452" height="86" rx="10" fill="#2E2A22" stroke="#CC7832"/>
   <text x="336" y="108" font-size="12" font-weight="700" fill="#E8A15C">Quem depende do foco</text>
-  <text x="336" y="129" font-size="10" fill="#C9A97E">&#8226; <strong>teclado</strong> (Tab / Shift+Tab) &#8212; muita gente com mobilidade reduzida;</text>
-  <text x="336" y="145" font-size="10" fill="#C9A97E">&#8226; <strong>D-pad / controle</strong> em Android TV;</text>
-  <text x="336" y="161" font-size="10" fill="#C9A97E">&#8226; <strong>Switch Access</strong> &#8212; 1&#8211;2 bot&#245;es varrem a tela automaticamente.</text>
+  <text x="336" y="129" font-size="10" fill="#C9A97E">&#8226; <tspan font-weight="700">teclado</tspan> (Tab / Shift+Tab) &#8212; muita gente com mobilidade reduzida;</text>
+  <text x="336" y="145" font-size="10" fill="#C9A97E">&#8226; <tspan font-weight="700">D-pad / controle</tspan> em Android TV;</text>
+  <text x="336" y="161" font-size="10" fill="#C9A97E">&#8226; <tspan font-weight="700">Switch Access</tspan> &#8212; 1&#8211;2 bot&#245;es varrem a tela automaticamente.</text>
 
   <rect x="320" y="184" width="452" height="80" rx="10" fill="#25392A" stroke="#84C48D"/>
   <text x="336" y="206" font-size="12" font-weight="700" fill="#8ECB98">O que voc&#234; controla no Compose</text>

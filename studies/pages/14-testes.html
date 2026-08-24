@@ -99,7 +99,7 @@ val server = MockWebServer().apply {
 }
 </code></pre>
 
-<blockquote><p>🧠 <strong>Termo — fake, mock, stub:</strong> substitutos da dependência real. <strong>Fake</strong> = implementação leve de verdade (um repositório que guarda numa lista). <strong>Stub</strong> = devolve respostas fixas. <strong>Mock</strong> = além disso, verifica <em>como</em> foi chamado. Regra: <strong>prefira fakes</strong> — eles não amarram o teste aos detalhes internos.</p></blockquote>
+<blockquote><p>🧠 <strong>Termo — fake, mock, stub:</strong> substitutos da dependência real. <strong>Fake</strong> = implementação leve de verdade (um repositório que guarda numa lista). <strong>Stub</strong> = devolve respostas fixas. <strong>Mock</strong> = além disso, verifica <em>como</em> foi chamado. Regra: <strong>prefira fakes</strong> — eles não amarram o teste aos detalhes internos. A taxonomia completa e <em>onde</em> cada um entra na arquitetura estão na <strong>Parte 3</strong>, logo abaixo.</p></blockquote>
 
 <h3>ViewModel — estado, corrotinas e Turbine</h3>
 
@@ -124,7 +124,64 @@ val server = MockWebServer().apply {
 
 <hr>
 
-<h2>Parte 3 · Testar componentes Compose</h2>
+<h2>Parte 3 · Test doubles: dummy, stub, fake, spy, mock</h2>
+
+<p>“Trocar a dependência real por uma de mentira” tem nome e tem <strong>cinco tipos</strong> — a taxonomia de Gerard Meszaros que Martin Fowler popularizou. Saber <em>qual</em> usar e <em>onde</em> é o que separa uma suíte que protege de uma que só atrapalha. O termo guarda-chuva para todos é <strong>test double</strong> (dublê de teste, como o dublê de cinema).</p>
+
+<p><img src="../assets/test-doubles.svg" alt="Os cinco test doubles, num eixo do que verifica estado (o resultado) ao que verifica interação (as chamadas). Dummy: só preenche um parâmetro e nunca é usado, por exemplo um Logger que a função exige mas o teste ignora — passivo. Stub: devolve respostas fixas enlatadas para o cenário, como every api.x returns Erro 500 para forçar o caminho triste — responde. Fake, destacado como preferido: implementação leve de verdade com atalho na memória, como um FakeRepository que guarda numa lista real sem rede ou banco. Spy: um real ou stub que grava como foi chamado, respondendo quantas vezes chamou salvar, observa sem exigir — registra. Mock: pré-programa e exige as chamadas certas, falhando se não ocorrerem, com verify api.x, em que o teste conhece o como interno — verifica. Guia de onde cada um entra na arquitetura: Fake troca o Repository ao testar o ViewModel e troca uma fonte de dados ao testar o Repository, sendo a primeira escolha; Stub força um caminho específico como erro de rede ou lista vazia que o fake não produz naturalmente; Mock e Spy só quando o efeito é a interação em si, como disparar analytics ou gravar no logger, senão acopla o teste ao código. Regra do Google e do tio Bob: prefira fakes a mocks; teste comportamento, o estado que sai, não implementação, as chamadas que fez."></p>
+
+<table>
+<thead><tr><th align="left">Dublê</th><th align="left">O que faz</th><th align="left">Exemplo no Android</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Dummy</strong></td><td align="left">só preenche um parâmetro obrigatório; nunca é chamado</td><td align="left">um <code>Analytics</code> vazio que o construtor exige mas o teste ignora</td></tr>
+<tr><td align="left"><strong>Stub</strong></td><td align="left">devolve respostas <strong>enlatadas</strong> para o cenário</td><td align="left">API que responde <code>Erro(500)</code> para testar o caminho de falha</td></tr>
+<tr><td align="left"><strong>Fake</strong> ⭐</td><td align="left">implementação <strong>de verdade</strong>, leve, com atalho</td><td align="left"><code>FakeAuthRepository</code> que guarda numa <code>MutableList</code></td></tr>
+<tr><td align="left"><strong>Spy</strong></td><td align="left">real/stub que <strong>grava</strong> como foi chamado (sem exigir)</td><td align="left">contar quantas vezes o <code>Logger.log()</code> rodou</td></tr>
+<tr><td align="left"><strong>Mock</strong></td><td align="left">pré-programa e <strong>exige</strong> as chamadas certas</td><td align="left"><code>verify { analytics.enviar("compra") }</code> com MockK</td></tr>
+</tbody>
+</table>
+
+<h3>Onde cada um encaixa na arquitetura (art. 12)</h3>
+
+<p>A escolha não é gosto — é <strong>o que você está provando</strong> e <strong>em que camada</strong>. O eixo que decide: você verifica <strong>estado</strong> (o valor que saiu) ou <strong>interação</strong> (a chamada que foi feita)?</p>
+
+<table>
+<thead><tr><th align="left">Você testa…</th><th align="left">A dependência trocada</th><th align="left">Melhor dublê</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>ViewModel</strong> (camada UI)</td><td align="left">o <code>Repository</code> / <code>UseCase</code></td><td align="left"><strong>Fake</strong> do Repository (+ <strong>Stub</strong> pontual p/ erro)</td></tr>
+<tr><td align="left"><strong>UseCase</strong> (domínio)</td><td align="left">a interface de <code>Repository</code></td><td align="left"><strong>Fake</strong> ou <strong>Stub</strong> — é Kotlin puro, trivial</td></tr>
+<tr><td align="left"><strong>Repository</strong> (dados)</td><td align="left">as fontes (Room, API, DataStore)</td><td align="left"><strong>Fake</strong> de fonte, Room in-memory, MockWebServer</td></tr>
+<tr><td align="left">um <strong>efeito</strong> é a chamada em si</td><td align="left">analytics, logger, tracker</td><td align="left"><strong>Mock/Spy</strong> — aqui a interação <em>é</em> o comportamento</td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">// FAKE (1ª escolha): implementação real e leve — o teste não sabe o "como" interno
+class FakeAuthRepository : AuthRepository {
+    var proximoErro: Throwable? = null                 // botão para simular falha
+    private val salvos = mutableListOf&lt;Usuario&gt;()
+    override suspend fun login(email: String, senha: String): Result&lt;Usuario&gt; =
+        proximoErro?.let { Result.failure(it) }
+            ?: Result.success(Usuario(email).also { salvos += it })
+}
+
+// MOCK (exceção): use quando o EFEITO é a interação — "disparou o analytics?"
+@Test fun `compra confirmada dispara evento`() = runTest {
+    val analytics = mockk&lt;Analytics&gt;(relaxed = true)     // MockK
+    val vm = CheckoutViewModel(FakeCarrinho(), analytics)
+    vm.confirmar()
+    verify(exactly = 1) { analytics.enviar("compra_confirmada") }   // verifica a chamada
+}
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — verificação de estado × de interação:</strong> testar <strong>estado</strong> é olhar o <em>resultado</em> (“o <code>UiState</code> virou <code>Sucesso</code>?”) — robusto, sobrevive a refatoração. Testar <strong>interação</strong> é olhar as <em>chamadas</em> (“chamou <code>repo.login()</code> uma vez?”) — frágil, quebra quando você reorganiza o interior. Prefira estado; reserve interação para quando a chamada externa <em>é</em> o efeito observável.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o conselho do Google (e do tio Bob) é <strong>“fakes, não mocks”</strong>. Mock verifica <em>implementação</em> — todo teste vira refém do jeito interno, e refatorar (sem mudar o comportamento) quebra dezenas de testes vermelhos falsos. Fake verifica <em>comportamento</em> — você reescreve o miolo e os testes continuam verdes porque o resultado é o mesmo. Regra prática: <strong>o dono da interface escreve o Fake dela</strong> e o coloca num módulo <code>:core-testing</code> (art. 12), reusável por todo mundo. Você escreve o Fake <strong>uma vez</strong>; escreveria o mesmo <code>every/returns</code> em cada teste com mock.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <strong>não faça mock de tipos que você não possui</strong> — nem de classes do Android (<code>Context</code>, <code>SharedPreferences</code>), nem de tipos de biblioteca. Mock desses amarra seu teste ao contrato interno de um código alheio que pode mudar. Para dependências do Android, use um <strong>Fake</strong> (um <code>FakePreferences</code>) ou o <strong>Robolectric</strong> (Parte 1), que roda o Android de verdade na JVM. Mock é para <em>suas</em> interfaces, e mesmo assim com parcimônia.</p></blockquote>
+
+<hr>
+
+<h2>Parte 4 · Testar componentes Compose</h2>
 
 <p>A UI do Compose é testada por <strong>semântica</strong> — a mesma árvore que dá acessibilidade. O ritmo é sempre <strong>encontrar um nó → agir → verificar</strong>.</p>
 
@@ -163,7 +220,7 @@ val server = MockWebServer().apply {
 
 <hr>
 
-<h2>Parte 4 · Robot Pattern + AAA: testes de UI limpos</h2>
+<h2>Parte 5 · Robot Pattern + AAA: testes de UI limpos</h2>
 
 <p>Um teste de UI cru mistura <strong>o que</strong> se testa com <strong>como</strong> se clica — e vira ilegível. Ao ler um teste, você quer entender o <strong>cenário</strong>, não os detalhes de <code>onNodeWithText(...).performClick()</code>. O <strong>Robot Pattern</strong> (de Jake Wharton) separa os dois papéis.</p>
 
@@ -206,7 +263,7 @@ class MyScreenTest {
 
 <hr>
 
-<h2>Parte 5 · Fechando com a esteira</h2>
+<h2>Parte 6 · Fechando com a esteira</h2>
 
 <p>Testes só valem se rodarem <strong>sozinhos</strong>, em todo PR. Os artigos anteriores já montaram esse encaixe:</p>
 
@@ -245,7 +302,12 @@ class MyScreenTest {
 <tr><td align="left"><strong>MockK</strong></td><td align="left">Biblioteca de dublês idiomática para Kotlin.</td></tr>
 <tr><td align="left"><strong>Turbine</strong></td><td align="left">Testar <code>Flow</code>/<code>StateFlow</code> emissão a emissão.</td></tr>
 <tr><td align="left"><strong>runTest</strong></td><td align="left">Roda corrotinas com tempo virtual, sem flakiness.</td></tr>
-<tr><td align="left"><strong>fake / mock / stub</strong></td><td align="left">Substitutos da dependência real; prefira fakes.</td></tr>
+<tr><td align="left"><strong>test double</strong></td><td align="left">Termo guarda-chuva de todo substituto: dummy, stub, fake, spy, mock.</td></tr>
+<tr><td align="left"><strong>dummy</strong></td><td align="left">Preenche um parâmetro obrigatório; nunca é usado.</td></tr>
+<tr><td align="left"><strong>stub</strong></td><td align="left">Devolve respostas fixas para forçar um cenário.</td></tr>
+<tr><td align="left"><strong>fake</strong> ⭐</td><td align="left">Implementação real e leve (na memória); a 1ª escolha.</td></tr>
+<tr><td align="left"><strong>spy / mock</strong></td><td align="left">Gravam/exigem chamadas; só quando a interação é o efeito.</td></tr>
+<tr><td align="left"><strong>estado × interação</strong></td><td align="left">Verificar o resultado (robusto) vs. as chamadas feitas (frágil).</td></tr>
 <tr><td align="left"><strong>Robolectric</strong></td><td align="left">Android simulado na JVM — teste de tela sem emulador.</td></tr>
 <tr><td align="left"><strong>instrumentado</strong></td><td align="left">Teste que roda em emulador/aparelho (<code>androidTest</code>).</td></tr>
 <tr><td align="left"><strong>semântica (Compose)</strong></td><td align="left">A árvore que o teste (e a acessibilidade) usa para achar nós.</td></tr>

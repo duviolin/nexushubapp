@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="ld" markerWidth="12" markerHeight="12" refX="7" refY="3.4" orient="auto"><path d="M0 0 L8 3.4 L0 6.8 z" fill="#8ECB98"/></marker>
+    <marker id="lu" markerWidth="12" markerHeight="12" refX="7" refY="3.4" orient="auto"><path d="M0 0 L8 3.4 L0 6.8 z" fill="#AEB7F2"/></marker>
+    <marker id="lp" markerWidth="12" markerHeight="12" refX="7" refY="3.4" orient="auto"><path d="M0 0 L8 3.4 L0 6.8 z" fill="#E8A15C"/></marker>
+  </defs>
+  <rect x="0" y="0" width="800" height="400" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Como o Compose faz layout: uma passada só</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">restri&#231;&#245;es <tspan fill="#8ECB98">descem</tspan>, tamanhos <tspan fill="#AEB7F2">sobem</tspan>, o pai <tspan fill="#E8A15C">posiciona</tspan> &#8212; sem remedir (ao contr&#225;rio do XML)</text>
+
+  <!-- Pai -->
+  <rect x="90" y="92" width="200" height="70" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.6"/>
+  <text x="190" y="122" text-anchor="middle" font-size="14" font-weight="700" fill="#E8A15C">Pai (Column)</text>
+  <text x="190" y="142" text-anchor="middle" font-size="10" fill="#C9A97E">decide as restri&#231;&#245;es do filho</text>
+
+  <!-- Filho -->
+  <rect x="90" y="266" width="200" height="70" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.6"/>
+  <text x="190" y="296" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">Filho (Text)</text>
+  <text x="190" y="316" text-anchor="middle" font-size="10" fill="#9DBDB6">mede-se dentro do limite</text>
+
+  <!-- setas -->
+  <path d="M150 162 L150 264" fill="none" stroke="#8ECB98" stroke-width="2.4" marker-end="url(#ld)"/>
+  <text x="138" y="200" text-anchor="end" font-size="10" font-weight="700" fill="#8ECB98">1. Constraints &#8595;</text>
+  <text x="138" y="216" text-anchor="end" font-size="9" fill="#9DBDB6">min/max</text>
+  <text x="138" y="228" text-anchor="end" font-size="9" fill="#9DBDB6">largura &#215; altura</text>
+
+  <path d="M230 264 L230 162" fill="none" stroke="#AEB7F2" stroke-width="2.4" marker-end="url(#lu)"/>
+  <text x="242" y="205" font-size="10" font-weight="700" fill="#AEB7F2">2. tamanho &#8593;</text>
+  <text x="242" y="221" font-size="9" fill="#AAB6C0">o que ele</text>
+  <text x="242" y="233" font-size="9" fill="#AAB6C0">realmente ocupou</text>
+
+  <path d="M300 300 C 340 300, 340 130, 300 128" fill="none" stroke="#E8A15C" stroke-width="2" marker-end="url(#lp)"/>
+  <text x="352" y="214" font-size="10" font-weight="700" fill="#E8A15C">3. place (x, y)</text>
+
+  <!-- direita: regras -->
+  <rect x="420" y="92" width="352" height="80" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="438" y="114" font-size="11.5" font-weight="700" fill="#DFE1E5">Uma medição por frame</text>
+  <text x="438" y="134" font-size="10" fill="#AAB6C0">medir um filho <tspan font-weight="700">duas vezes</tspan> lan&#231;a erro. Nada do custo</text>
+  <text x="438" y="149" font-size="10" fill="#AAB6C0">quadr&#225;tico de <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">LinearLayout</tspan> aninhado com <tspan font-family="ui-monospace,monospace">weight</tspan> no XML.</text>
+  <text x="438" y="165" font-size="9" fill="#8A97A3">precisa &#8220;espiar&#8221; o tamanho ideal? use intrinsics (min/maxIntrinsic).</text>
+
+  <rect x="420" y="184" width="352" height="86" rx="10" fill="#2E3350" stroke="#6366F1"/>
+  <text x="438" y="206" font-size="11.5" font-weight="700" fill="#AEB7F2">Quando Row/Column/Box n&#227;o bastam</text>
+  <text x="438" y="226" font-size="10" fill="#AAB6C0">&#8226; <tspan fill="#B7BFC7">BoxWithConstraints</tspan> &#8212; decidir layout pela largura dispon&#237;vel;</text>
+  <text x="438" y="242" font-size="10" fill="#AAB6C0">&#8226; <tspan fill="#B7BFC7">ConstraintLayout</tspan> (lib) &#8212; muitas rela&#231;&#245;es num n&#237;vel plano;</text>
+  <text x="438" y="258" font-size="10" fill="#AAB6C0">&#8226; <tspan fill="#B7BFC7">Layout { }</tspan> custom &#8212; medir/posicionar do seu jeito.</text>
+
+  <rect x="420" y="282" width="352" height="90" rx="10" fill="#2E2A22" stroke="#CC7832"/>
+  <text x="438" y="304" font-size="11.5" font-weight="700" fill="#E8A15C">ConstraintLayout: existe, mas &#8230;</text>
+  <text x="438" y="324" font-size="10" fill="#C9A97E">no XML era p/ <tspan font-weight="700">achatar</tspan> a hierarquia (custo de medir). No</text>
+  <text x="438" y="340" font-size="10" fill="#C9A97E">Compose isso <tspan font-weight="700">n&#227;o pesa</tspan> &#8212; aninhar Row/Column &#233; barato.</text>
+  <text x="438" y="358" font-size="10" fill="#C9A97E">Use por <tspan font-style="italic">clareza</tspan> (barriers, guidelines, chains), n&#227;o por medo.</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="420" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">Os 5 dubl&#234;s de teste (test doubles)</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">todo substituto de uma depend&#234;ncia real &#8212; do mais bobo ao que <tspan font-style="italic">verifica</tspan> como foi usado</text>
+
+  <!-- eixo -->
+  <text x="60" y="86" font-size="10" fill="#8ECB98">verifica ESTADO (o resultado)</text>
+  <text x="740" y="86" text-anchor="end" font-size="10" fill="#AEB7F2">verifica INTERA&#199;&#195;O (as chamadas)</text>
+  <line x1="60" y1="94" x2="740" y2="94" stroke="#4E5254"/>
+  <path d="M60 94 L60 90" stroke="#8ECB98"/><path d="M740 94 L740 90" stroke="#AEB7F2"/>
+
+  <!-- Dummy -->
+  <rect x="24" y="108" width="145" height="150" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="96" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#B7BFC7">Dummy</text>
+  <text x="96" y="150" text-anchor="middle" font-size="9" fill="#8A97A3">s&#243; preenche um</text>
+  <text x="96" y="162" text-anchor="middle" font-size="9" fill="#8A97A3">par&#226;metro; nunca</text>
+  <text x="96" y="174" text-anchor="middle" font-size="9" fill="#8A97A3">&#233; usado</text>
+  <line x1="40" y1="186" x2="153" y2="186" stroke="#3A3D3F"/>
+  <text x="96" y="204" text-anchor="middle" font-size="8.5" fill="#AAB6C0">ex.: um <tspan font-family="ui-monospace,monospace">Logger</tspan></text>
+  <text x="96" y="216" text-anchor="middle" font-size="8.5" fill="#AAB6C0">que a fun&#231;&#227;o exige</text>
+  <text x="96" y="228" text-anchor="middle" font-size="8.5" fill="#AAB6C0">mas o teste ignora</text>
+  <text x="96" y="248" text-anchor="middle" font-size="8" fill="#6B7480">passivo</text>
+
+  <!-- Stub -->
+  <rect x="177" y="108" width="145" height="150" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.3"/>
+  <text x="249" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8ECB98">Stub</text>
+  <text x="249" y="150" text-anchor="middle" font-size="9" fill="#9DBDB6">devolve respostas</text>
+  <text x="249" y="162" text-anchor="middle" font-size="9" fill="#9DBDB6">fixas (&#8220;enlatadas&#8221;)</text>
+  <text x="249" y="174" text-anchor="middle" font-size="9" fill="#9DBDB6">para o cen&#225;rio</text>
+  <line x1="193" y1="186" x2="306" y2="186" stroke="#3B6B47"/>
+  <text x="249" y="204" text-anchor="middle" font-size="8.5" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">every{api.x()}</tspan></text>
+  <text x="249" y="216" text-anchor="middle" font-size="8.5" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">returns Erro(500)</tspan></text>
+  <text x="249" y="228" text-anchor="middle" font-size="8.5" fill="#9DBDB6">for&#231;ar o caminho triste</text>
+  <text x="249" y="248" text-anchor="middle" font-size="8" fill="#6B7480">responde</text>
+
+  <!-- Fake -->
+  <rect x="330" y="108" width="145" height="150" rx="10" fill="#25392A" stroke="#84C48D" stroke-width="1.8"/>
+  <text x="402" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8ECB98">Fake &#9733;</text>
+  <text x="402" y="150" text-anchor="middle" font-size="9" fill="#9DBDB6">implementa&#231;&#227;o leve</text>
+  <text x="402" y="162" text-anchor="middle" font-size="9" fill="#9DBDB6">de verdade, com</text>
+  <text x="402" y="174" text-anchor="middle" font-size="9" fill="#9DBDB6">atalho (na mem&#243;ria)</text>
+  <line x1="346" y1="186" x2="459" y2="186" stroke="#3B6B47"/>
+  <text x="402" y="204" text-anchor="middle" font-size="8.5" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">FakeRepository</tspan></text>
+  <text x="402" y="216" text-anchor="middle" font-size="8.5" fill="#9DBDB6">guarda numa lista</text>
+  <text x="402" y="228" text-anchor="middle" font-size="8.5" fill="#9DBDB6">real, sem rede/banco</text>
+  <text x="402" y="248" text-anchor="middle" font-size="8" fill="#6B7480">o preferido</text>
+
+  <!-- Spy -->
+  <rect x="483" y="108" width="145" height="150" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.3"/>
+  <text x="555" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#AEB7F2">Spy</text>
+  <text x="555" y="150" text-anchor="middle" font-size="9" fill="#AAB6C0">um real (ou stub)</text>
+  <text x="555" y="162" text-anchor="middle" font-size="9" fill="#AAB6C0">que <tspan font-weight="700">grava</tspan> como</text>
+  <text x="555" y="174" text-anchor="middle" font-size="9" fill="#AAB6C0">foi chamado</text>
+  <line x1="499" y1="186" x2="612" y2="186" stroke="#4650A0"/>
+  <text x="555" y="204" text-anchor="middle" font-size="8.5" fill="#AAB6C0">&#8220;quantas vezes</text>
+  <text x="555" y="216" text-anchor="middle" font-size="8.5" fill="#AAB6C0">chamou <tspan font-family="ui-monospace,monospace">salvar()</tspan>?&#8221;</text>
+  <text x="555" y="228" text-anchor="middle" font-size="8.5" fill="#AAB6C0">observa, n&#227;o exige</text>
+  <text x="555" y="248" text-anchor="middle" font-size="8" fill="#6B7480">registra</text>
+
+  <!-- Mock -->
+  <rect x="636" y="108" width="140" height="150" rx="10" fill="#2E3350" stroke="#6366F1" stroke-width="1.8"/>
+  <text x="706" y="130" text-anchor="middle" font-size="12.5" font-weight="700" fill="#AEB7F2">Mock</text>
+  <text x="706" y="150" text-anchor="middle" font-size="9" fill="#AAB6C0">pr&#233;-programa e</text>
+  <text x="706" y="162" text-anchor="middle" font-size="9" fill="#AAB6C0"><tspan font-weight="700">exige</tspan> as chamadas</text>
+  <text x="706" y="174" text-anchor="middle" font-size="9" fill="#AAB6C0">certas (falha se n&#227;o)</text>
+  <line x1="652" y1="186" x2="762" y2="186" stroke="#4650A0"/>
+  <text x="706" y="204" text-anchor="middle" font-size="8.5" fill="#AAB6C0"><tspan font-family="ui-monospace,monospace">verify{api.x()}</tspan></text>
+  <text x="706" y="216" text-anchor="middle" font-size="8.5" fill="#AAB6C0">o teste conhece o</text>
+  <text x="706" y="228" text-anchor="middle" font-size="8.5" fill="#AAB6C0">&#8220;como&#8221; interno</text>
+  <text x="706" y="248" text-anchor="middle" font-size="8" fill="#6B7480">verifica</text>
+
+  <!-- guia de uso -->
+  <rect x="24" y="276" width="752" height="126" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
+  <text x="42" y="298" font-size="12" font-weight="700" fill="#DFE1E5">Onde cada um entra na arquitetura (art. 12)</text>
+  <text x="42" y="320" font-size="10" fill="#AAB6C0"><tspan fill="#8ECB98" font-weight="700">Fake</tspan> &#8212; troca o <tspan font-family="ui-monospace,monospace">Repository</tspan> ao testar o <tspan font-weight="700">ViewModel</tspan>; troca uma fonte de dados (Room/DataStore) ao testar o Repository. <tspan font-weight="700">1&#170; escolha.</tspan></text>
+  <text x="42" y="340" font-size="10" fill="#AAB6C0"><tspan fill="#8ECB98" font-weight="700">Stub</tspan> &#8212; for&#231;a um caminho espec&#237;fico (erro de rede, lista vazia) que o fake n&#227;o produz naturalmente.</text>
+  <text x="42" y="360" font-size="10" fill="#AAB6C0"><tspan fill="#AEB7F2" font-weight="700">Mock/Spy</tspan> &#8212; s&#243; quando o <tspan font-style="italic">efeito</tspan> &#233; a intera&#231;&#227;o em si (&#8220;disparou o evento de analytics?&#8221;, &#8220;gravou no logger?&#8221;) &#8212; sen&#227;o acopla o teste ao c&#243;digo.</text>
+  <text x="42" y="386" font-size="10" fill="#C9A97E"><tspan fill="#E8A15C" font-weight="700">Regra do Google/tio Bob:</tspan> prefira <tspan font-weight="700">fakes a mocks</tspan>; teste <tspan font-weight="700">comportamento</tspan> (estado que sai), n&#227;o <tspan font-weight="700">implementa&#231;&#227;o</tspan> (chamadas que fez).</text>
+</svg>

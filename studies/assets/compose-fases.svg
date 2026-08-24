@@ -38,5 +38,5 @@
   <rect x="34" y="240" width="732" height="70" rx="10" fill="#2B2D2F" stroke="#4E5254"/>
   <text x="52" y="263" font-size="11.5" font-weight="700" fill="#DFE1E5">⚡ Por que isto importa para performance</text>
   <text x="52" y="284" font-size="10.5" fill="#AAB6C0">Mudou s&#243; a <tspan fill="#E8A15C">cor</tspan>? O Compose pula 1 e 2 e refaz s&#243; o <tspan fill="#E8A15C">Drawing</tspan>. Mudou s&#243; a <tspan fill="#8ECB98">posi&#231;&#227;o</tspan>? Pula a Composition.</text>
-  <text x="52" y="301" font-size="10.5" fill="#AAB6C0">Ler estado na fase mais <strong>tardia</strong> poss&#237;vel (ex.: <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">Modifier.offset{ }</tspan> lambda) evita recompor a &#225;rvore toda.</text>
+  <text x="52" y="301" font-size="10.5" fill="#AAB6C0">Ler estado na fase mais <tspan font-weight="700">tardia</tspan> poss&#237;vel (ex.: <tspan font-family="ui-monospace,monospace" fill="#B7BFC7">Modifier.offset{ }</tspan> lambda) evita recompor a &#225;rvore toda.</text>
 </svg>
