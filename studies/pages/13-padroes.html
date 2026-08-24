@@ -127,9 +127,39 @@ class LoginVmFactory(private val useCase: FazerLogin) : ViewModelProvider.Factor
 // Com Hilt, @HiltViewModel + @Inject faz essa fábrica sumir — a DI É a fábrica.
 </code></pre>
 
+<p>O <strong>Abstract Factory</strong> não cria <em>um</em> objeto, mas uma <strong>família coerente</strong> deles. Um <code>@Module</code> do Hilt é isso: ele sabe montar o <code>OkHttpClient</code>, o <code>Retrofit</code> que depende dele e a <code>Api</code> que depende do Retrofit — tudo combinando.</p>
+
+<pre><code class="language-kotlin">// Abstract Factory: um módulo provê uma FAMÍLIA de objetos que se encaixam
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides @Singleton
+    fun client(): OkHttpClient = OkHttpClient.Builder().build()
+
+    @Provides @Singleton
+    fun retrofit(client: OkHttpClient): Retrofit =        // recebe o membro anterior
+        Retrofit.Builder().baseUrl(BASE).client(client).build()
+
+    @Provides
+    fun api(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
+}
+</code></pre>
+
 <h3>Singleton — uma instância para o app inteiro</h3>
 
-<p>Uma única instância compartilhada: o banco Room, o <code>OkHttpClient</code> (caro de criar), o <code>DataStore</code>. Em Kotlin, <code>object</code> já é um Singleton <em>thread-safe</em> pronto. Mas cuidado:</p>
+<p>Uma única instância compartilhada: o banco Room, o <code>OkHttpClient</code> (caro de criar), o <code>DataStore</code>. Em Kotlin, <code>object</code> já é um Singleton <em>thread-safe</em> pronto — mas a forma que você vai usar de verdade é a anotação <code>@Singleton</code> do Hilt.</p>
+
+<pre><code class="language-kotlin">// Singleton "cru" da linguagem: bom para constantes/utilitários SEM estado
+object Formatadores {
+    val moeda = NumberFormat.getCurrencyInstance()
+}
+
+// Singleton de verdade no app: uma instância, porém INJETÁVEL (testável)
+@Singleton
+class SessaoUsuario @Inject constructor() {           // o Hilt garante 1 só
+    var token: String? = null
+}
+</code></pre>
 
 <blockquote><p>⚠️ <strong>Pegadinha:</strong> Singleton feito à mão vira <strong>estado global</strong> — difícil de testar (não dá para trocar por um fake) e memory-leak fácil se segurar um <code>Context</code> de Activity. A forma sênior é <strong>não escrever o Singleton</strong>: declare <code>@Singleton</code> no <strong>Hilt</strong> e deixe o container garantir a instância única <em>e</em> injetável. Você ganha o ciclo de vida certo e a testabilidade.</p></blockquote>
 
@@ -147,6 +177,25 @@ class LoginVmFactory(private val useCase: FazerLogin) : ViewModelProvider.Factor
 <tr><td align="left"><strong>Proxy</strong></td><td align="left">um substituto que representa outro objeto</td><td align="left">a interface de API que o <strong>Retrofit</strong> implementa em runtime</td></tr>
 </tbody>
 </table>
+
+<p>O <strong>Facade</strong> é o <code>Repository</code> que você já monta: uma porta única que esconde Room, Retrofit e cache. O <strong>Adapter</strong> traduz seus dados para o formato que um componente externo exige — o exemplo canônico é a lista.</p>
+
+<pre><code class="language-kotlin">// Facade: a UI chama UM método; o subsistema (cache + rede) fica escondido
+class NoticiaRepository(private val api: NoticiaApi, private val dao: NoticiaDao) {
+    fun observar(): Flow&lt;List&lt;Noticia&gt;&gt; = dao.observar()      // fonte da verdade: cache
+    suspend fun atualizar() {                                   // detalhe escondido
+        val frescas = api.buscar().map { it.toEntity() }        // rede + mapper
+        dao.substituir(frescas)                                 // grava; a UI nem sabe
+    }
+}
+
+// Adapter: traduz sua List&lt;Noticia&gt; para o que o RecyclerView entende
+class NoticiaAdapter : ListAdapter&lt;Noticia, NoticiaVH&gt;(Diff) {
+    override fun onCreateViewHolder(p: ViewGroup, v: Int) =
+        NoticiaVH(ItemNoticiaBinding.inflate(LayoutInflater.from(p.context), p, false))
+    override fun onBindViewHolder(vh: NoticiaVH, pos: Int) = vh.bind(getItem(pos))
+}
+</code></pre>
 
 <p>O <strong>Decorator</strong> merece atenção porque o Compose o transformou no dia a dia. Cada <code>Modifier</code> embrulha o anterior, formando uma cadeia — e a <strong>ordem importa</strong>:</p>
 
@@ -178,6 +227,27 @@ Modifier
 </tbody>
 </table>
 
+<p>O <strong>Observer</strong> e o <strong>State</strong> são o par que rege a tela. O ViewModel <em>emite</em> um estado (Observer); esse estado é uma <code>sealed interface</code> que muda o que a UI desenha (State) — e o <code>when</code> exaustivo garante que você tratou todos os casos.</p>
+
+<pre><code class="language-kotlin">// State: os estados possíveis são finitos e mutuamente exclusivos
+sealed interface TelaState {
+    data object Carregando : TelaState
+    data class Sucesso(val itens: List&lt;Noticia&gt;) : TelaState
+    data class Erro(val msg: String) : TelaState
+}
+
+// Observer: a UI se inscreve e reage; o when é exaustivo (o compilador cobra)
+@Composable
+fun Tela(vm: TelaViewModel) {
+    val estado by vm.state.collectAsStateWithLifecycle()   // observa o StateFlow
+    when (val e = estado) {
+        TelaState.Carregando -> Spinner()
+        is TelaState.Sucesso -> Lista(e.itens)
+        is TelaState.Erro    -> MensagemErro(e.msg)
+    }
+}
+</code></pre>
+
 <p>O <strong>Strategy</strong> em Kotlin quase desaparece: onde o GoF criava uma interface e várias classes, uma <strong>função de ordem superior</strong> (lambda) já é a estratégia. Isso é o padrão <em>idiomático</em> — reconhecê-lo evita criar uma hierarquia de classes onde uma lambda basta.</p>
 
 <pre><code class="language-kotlin">// Strategy "clássico": interface + implementações (verboso)
@@ -189,6 +259,25 @@ fun listar(tarefas: List&lt;Tarefa&gt;, ordenar: (List&lt;Tarefa&gt;) -&gt; List
 
 listar(tarefas) { it.sortedBy(Tarefa::prazo) }      // troca a estratégia na chamada
 listar(tarefas) { it.sortedByDescending(Tarefa::prioridade) }
+</code></pre>
+
+<p>O <strong>Command</strong> transforma uma ação em <strong>objeto</strong> — assim ela pode ser enfileirada, repetida ou desfeita. No MVI, o <code>Intent</code> já é um Command; no trabalho em segundo plano, o <strong>WorkManager</strong> guarda o Command e o executa depois, mesmo se o app morrer. E a <strong>Chain of Responsibility</strong> é a cadeia de <code>Interceptor</code>s do OkHttp: cada elo trata sua parte (autenticar, logar) e <strong>repassa</strong> ao próximo com <code>chain.proceed()</code>.</p>
+
+<pre><code class="language-kotlin">// Command: a ação vira um objeto agendável (roda depois, sobrevive ao app fechar)
+val enviar = OneTimeWorkRequestBuilder&lt;EnviarPedidoWorker&gt;()
+    .setConstraints(Constraints(requiredNetworkType = CONNECTED))
+    .build()
+WorkManager.getInstance(ctx).enqueue(enviar)          // enfileira o Command
+
+// Chain of Responsibility: cada interceptor trata o seu e chama chain.proceed()
+class AuthInterceptor(private val sessao: SessaoUsuario) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val req = chain.request().newBuilder()
+            .apply { sessao.token?.let { header("Authorization", "Bearer $it") } }
+            .build()
+        return chain.proceed(req)                     // repassa ao próximo elo
+    }
+}
 </code></pre>
 
 <hr>
