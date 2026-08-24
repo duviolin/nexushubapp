@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <rect x="0" y="0" width="800" height="560" rx="16" fill="#313335" stroke="#4E5254"/>
+  <text x="400" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#DFE1E5">O cat&#225;logo GoF que o Android j&#225; usa por voc&#234;</text>
+  <text x="400" y="56" text-anchor="middle" font-size="13" fill="#8A97A3">tr&#234;s fam&#237;lias &#8212; e onde cada padr&#227;o aparece nas APIs do dia a dia</text>
+
+  <!-- ══ CRIACIONAIS ══ -->
+  <rect x="24" y="78" width="248" height="454" rx="12" fill="#2E2A22" stroke="#CC7832" stroke-width="1.4"/>
+  <text x="148" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#E8A15C">Criacionais</text>
+  <text x="148" y="121" text-anchor="middle" font-size="10" fill="#C9A97E">como um objeto nasce</text>
+
+  <g font-size="10.5">
+    <rect x="40" y="134" width="216" height="60" rx="8" fill="#3A2E20" stroke="#7A5A34"/>
+    <text x="52" y="152" font-weight="700" fill="#E8A15C">Builder</text>
+    <text x="52" y="169" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">NotificationCompat.Builder</tspan></text>
+    <text x="52" y="185" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">Retrofit.Builder</tspan>, OkHttpClient</text>
+
+    <rect x="40" y="202" width="216" height="60" rx="8" fill="#3A2E20" stroke="#7A5A34"/>
+    <text x="52" y="220" font-weight="700" fill="#E8A15C">Factory Method</text>
+    <text x="52" y="237" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">LayoutInflater.from()</tspan></text>
+    <text x="52" y="253" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">ViewModelProvider.Factory</tspan></text>
+
+    <rect x="40" y="270" width="216" height="60" rx="8" fill="#3A2E20" stroke="#7A5A34"/>
+    <text x="52" y="288" font-weight="700" fill="#E8A15C">Abstract Factory</text>
+    <text x="52" y="305" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">Hilt / Dagger @Module</tspan></text>
+    <text x="52" y="321" fill="#C9A97E">monta fam&#237;lias do grafo de DI</text>
+
+    <rect x="40" y="338" width="216" height="60" rx="8" fill="#3A2E20" stroke="#7A5A34"/>
+    <text x="52" y="356" font-weight="700" fill="#E8A15C">Singleton</text>
+    <text x="52" y="373" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">object</tspan> Kotlin, <tspan font-family="ui-monospace,monospace">@Singleton</tspan></text>
+    <text x="52" y="389" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">Room.databaseBuilder</tspan> (1x)</text>
+
+    <rect x="40" y="406" width="216" height="60" rx="8" fill="#3A2E20" stroke="#7A5A34"/>
+    <text x="52" y="424" font-weight="700" fill="#E8A15C">Prototype</text>
+    <text x="52" y="441" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">data class .copy()</tspan></text>
+    <text x="52" y="457" fill="#C9A97E">clona o UiState com 1 campo novo</text>
+
+    <rect x="40" y="474" width="216" height="46" rx="8" fill="#3A2E20" stroke="#7A5A34"/>
+    <text x="52" y="492" font-weight="700" fill="#E8A15C">DSL (Builder tipado)</text>
+    <text x="52" y="509" fill="#C9A97E"><tspan font-family="ui-monospace,monospace">buildList{}</tspan>, Compose, Gradle KTS</text>
+  </g>
+
+  <!-- ══ ESTRUTURAIS ══ -->
+  <rect x="284" y="78" width="248" height="454" rx="12" fill="#25392A" stroke="#84C48D" stroke-width="1.4"/>
+  <text x="408" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#8ECB98">Estruturais</text>
+  <text x="408" y="121" text-anchor="middle" font-size="10" fill="#9DBDB6">como objetos se compõem</text>
+
+  <g font-size="10.5">
+    <rect x="300" y="134" width="216" height="60" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+    <text x="312" y="152" font-weight="700" fill="#8ECB98">Adapter</text>
+    <text x="312" y="169" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">RecyclerView.Adapter</tspan></text>
+    <text x="312" y="185" fill="#9DBDB6">liga seus dados &#224; lista da tela</text>
+
+    <rect x="300" y="202" width="216" height="60" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+    <text x="312" y="220" font-weight="700" fill="#8ECB98">Facade</text>
+    <text x="312" y="237" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">Repository</tspan> esconde Room+API</text>
+    <text x="312" y="253" fill="#9DBDB6">a UI s&#243; pede; n&#227;o sabe a fonte</text>
+
+    <rect x="300" y="270" width="216" height="60" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+    <text x="312" y="288" font-weight="700" fill="#8ECB98">Decorator</text>
+    <text x="312" y="305" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">OkHttp Interceptor</tspan></text>
+    <text x="312" y="321" fill="#9DBDB6">Compose <tspan font-family="ui-monospace,monospace">Modifier</tspan> encadeado</text>
+
+    <rect x="300" y="338" width="216" height="60" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+    <text x="312" y="356" font-weight="700" fill="#8ECB98">Composite</text>
+    <text x="312" y="373" fill="#9DBDB6">a &#225;rvore de <tspan font-family="ui-monospace,monospace">@Composable</tspan></text>
+    <text x="312" y="389" fill="#9DBDB6">folha e ramo tratados igual</text>
+
+    <rect x="300" y="406" width="216" height="60" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+    <text x="312" y="424" font-weight="700" fill="#8ECB98">Proxy</text>
+    <text x="312" y="441" fill="#9DBDB6"><tspan font-family="ui-monospace,monospace">Retrofit</tspan> gera o cliente da API</text>
+    <text x="312" y="457" fill="#9DBDB6">a interface &#233; um stub remoto</text>
+
+    <rect x="300" y="474" width="216" height="46" rx="8" fill="#1E3222" stroke="#3B6B47"/>
+    <text x="312" y="492" font-weight="700" fill="#8ECB98">Bridge</text>
+    <text x="312" y="509" fill="#9DBDB6">interface de domínio &#8596; impl de dados</text>
+  </g>
+
+  <!-- ══ COMPORTAMENTAIS ══ -->
+  <rect x="544" y="78" width="232" height="454" rx="12" fill="#2E3350" stroke="#6366F1" stroke-width="1.4"/>
+  <text x="660" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#AEB7F2">Comportamentais</text>
+  <text x="660" y="121" text-anchor="middle" font-size="10" fill="#AAB6C0">como objetos conversam</text>
+
+  <g font-size="10.5">
+    <rect x="560" y="134" width="200" height="60" rx="8" fill="#22273F" stroke="#4650A0"/>
+    <text x="572" y="152" font-weight="700" fill="#AEB7F2">Observer</text>
+    <text x="572" y="169" fill="#AAB6C0"><tspan font-family="ui-monospace,monospace">Flow</tspan> / <tspan font-family="ui-monospace,monospace">StateFlow</tspan> / LiveData</text>
+    <text x="572" y="185" fill="#AAB6C0">a base de todo o UDF</text>
+
+    <rect x="560" y="202" width="200" height="60" rx="8" fill="#22273F" stroke="#4650A0"/>
+    <text x="572" y="220" font-weight="700" fill="#AEB7F2">Strategy</text>
+    <text x="572" y="237" fill="#AAB6C0">passar uma <tspan font-family="ui-monospace,monospace">lambda</tspan> de ordena&#231;&#227;o</text>
+    <text x="572" y="253" fill="#AAB6C0">trocar o algoritmo em runtime</text>
+
+    <rect x="560" y="270" width="200" height="60" rx="8" fill="#22273F" stroke="#4650A0"/>
+    <text x="572" y="288" font-weight="700" fill="#AEB7F2">State</text>
+    <text x="572" y="305" fill="#AAB6C0"><tspan font-family="ui-monospace,monospace">sealed</tspan> UiState: Loading/</text>
+    <text x="572" y="321" fill="#AAB6C0">Success/Error muda o comportamento</text>
+
+    <rect x="560" y="338" width="200" height="60" rx="8" fill="#22273F" stroke="#4650A0"/>
+    <text x="572" y="356" font-weight="700" fill="#AEB7F2">Chain of Responsibility</text>
+    <text x="572" y="373" fill="#AAB6C0">cadeia de <tspan font-family="ui-monospace,monospace">Interceptor</tspan>s</text>
+    <text x="572" y="389" fill="#AAB6C0">cada um trata ou repassa</text>
+
+    <rect x="560" y="406" width="200" height="60" rx="8" fill="#22273F" stroke="#4650A0"/>
+    <text x="572" y="424" font-weight="700" fill="#AEB7F2">Command</text>
+    <text x="572" y="441" fill="#AAB6C0">Intent/Action como objeto</text>
+    <text x="572" y="457" fill="#AAB6C0"><tspan font-family="ui-monospace,monospace">WorkManager</tspan> enfileira trabalho</text>
+
+    <rect x="560" y="474" width="200" height="46" rx="8" fill="#22273F" stroke="#4650A0"/>
+    <text x="572" y="492" font-weight="700" fill="#AEB7F2">Template Method</text>
+    <text x="572" y="509" fill="#AAB6C0">ciclo de vida do <tspan font-family="ui-monospace,monospace">Activity</tspan></text>
+  </g>
+</svg>

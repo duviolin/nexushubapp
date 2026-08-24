@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Padrões de Projeto · Estudos Android</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="menu-btn" onclick="document.body.classList.toggle('nav-open')" aria-label="Abrir menu">☰</button>
+<div class="scrim" onclick="document.body.classList.remove('nav-open')"></div>
+  <nav class="side">
+    <a class="brand" href="../index.html">🎓 Estudos Android<small>NexusHub</small></a>
+    <a href="01-gradle.html"><span class="n">01</span><span class="e">🐘</span><span class="t">Gradle por Dentro</span></a>
+    <a href="02-sdk.html"><span class="n">02</span><span class="e">🧰</span><span class="t">Android SDK & Setup</span></a>
+    <a href="03-edge-to-edge.html"><span class="n">03</span><span class="e">📐</span><span class="t">Edge-to-Edge & Telas Grandes</span></a>
+    <a href="04-densidade.html"><span class="n">04</span><span class="e">📏</span><span class="t">Densidade & Tamanhos de Tela</span></a>
+    <a href="05-play-store.html"><span class="n">05</span><span class="e">🚀</span><span class="t">Publicar na Google Play</span></a>
+    <a href="06-git-ci.html"><span class="n">06</span><span class="e">🔁</span><span class="t">Git & Esteira de Entrega</span></a>
+    <a href="07-qualidade.html"><span class="n">07</span><span class="e">🔬</span><span class="t">Qualidade sob Medida</span></a>
+    <a href="08-ofuscacao.html"><span class="n">08</span><span class="e">🕶️</span><span class="t">Encolher & Ofuscar (R8)</span></a>
+    <a href="09-arquitetura.html"><span class="n">09</span><span class="e">🏛️</span><span class="t">Arquitetura & Código Limpo</span></a>
+    <a href="10-testes.html"><span class="n">10</span><span class="e">🧪</span><span class="t">Testes no Android</span></a>
+    <a href="11-ia-claude-code.html"><span class="n">11</span><span class="e">🤖</span><span class="t">Desenvolver com IA</span></a>
+    <a href="12-sdd-tdd-bdd.html"><span class="n">12</span><span class="e">📐</span><span class="t">SDD · TDD · BDD</span></a>
+    <a href="13-padroes.html" class="active"><span class="n">13</span><span class="e">🧱</span><span class="t">Padrões de Projeto</span></a>
+    <a class="guide" href="_guia.html">✍️ Guia de autoria</a>
+  </nav>
+<main>
+  <p class="crumb">Artigo <strong>13</strong> de 13 · trilha de estudos</p>
+  <article class="content">
+<h1>🧱 Padrões de projeto no Android: do GoF ao MVI (2026)</h1>
+
+<p>No artigo <strong>09 · Arquitetura</strong> montamos as <em>camadas</em>; aqui descemos um nível e olhamos os <strong>tijolos</strong>: os padrões de projeto que aparecem repetidos dentro de cada camada. Padrão não é código pronto para copiar — é um <strong>nome</strong> para uma solução que já se provou. Saber o nome muda a conversa de equipe: em vez de “aquela classe que monta o objeto passo a passo” você diz <em>“é um Builder”</em>, e todo mundo já sabe a forma, as vantagens e as pegadinhas. Num nível especialista, você não decora os 23 padrões do <strong>GoF</strong> — você <strong>reconhece</strong> quais o próprio Android SDK já usa por baixo, e escolhe o certo sem reinventar.</p>
+
+<blockquote><p>🔗 <strong>Fio condutor:</strong> o <strong>09</strong> desenhou <em>onde</em> o código mora (camadas); este mostra <em>com que formas</em> ele se organiza dentro delas. Os dois juntos são o vocabulário que o <strong>10 · Testes</strong> assume conhecido.</p></blockquote>
+
+<blockquote><p>🧠 <strong>Termo — GoF (Gang of Four):</strong> os quatro autores do livro <em>Design Patterns</em> (1994), que catalogaram 23 padrões em três famílias — <strong>criacionais</strong> (como um objeto nasce), <strong>estruturais</strong> (como objetos se compõem) e <strong>comportamentais</strong> (como objetos conversam).</p></blockquote>
+
+<hr>
+
+<h2>Parte 1 · Padrões de apresentação: a linhagem MVC → MVP → MVVM → MVI</h2>
+
+<p>Antes dos padrões “pequenos”, o padrão <strong>grande</strong> que rege a tela. Toda a história desses padrões de apresentação é <strong>uma pergunta só</strong>: <em>onde mora o estado da tela?</em> Cada geração tira estado e lógica de dentro da <code>View</code> e os empurra para um lugar mais testável e mais resistente ao ciclo de vida do Android.</p>
+
+<p><img src="../assets/mv-evolucao.svg" alt="Linha do tempo dos padrões de apresentação. MVC: a Activity age como Controller acoplada à View, e a tela testa mal. MVP: um Presenter conversa com a View por uma interface, mas gera muito boilerplate. MVVM: o ViewModel expõe observables e a View reage, sem interface. MVI/UDF: um único UiState imutável com fluxo unidirecional, em que a tela é função do estado. Faixa inferior resume que o que muda de verdade é para onde vai o estado: em MVC/MVP mora na View e some no giro de tela; em MVVM sobe para o ViewModel que sobrevive à recomposição mas fica espalhado em vários campos; em MVI vira um objeto só, imutável, e qualquer bug se reproduz recriando aquele UiState."></p>
+
+<table>
+<thead><tr><th align="left">Padrão</th><th align="left">Onde mora o estado</th><th align="left">Dor que resolve</th><th align="left">Dor que deixa</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>MVC</strong></td><td align="left">na <code>View</code> + <code>Activity</code></td><td align="left">separa <em>dado</em> de <em>desenho</em>, na teoria</td><td align="left">no Android a Activity é View <em>e</em> Controller: acopla tudo</td></tr>
+<tr><td align="left"><strong>MVP</strong></td><td align="left">no <code>Presenter</code></td><td align="left">Presenter puro, testável sem UI</td><td align="left">uma interface <code>View</code> por tela — muito boilerplate</td></tr>
+<tr><td align="left"><strong>MVVM</strong></td><td align="left">no <code>ViewModel</code> (vários observables)</td><td align="left">ViewModel sobrevive ao giro de tela; sem interface manual</td><td align="left">estado espalhado em N campos que podem divergir</td></tr>
+<tr><td align="left"><strong>MVI</strong></td><td align="left">no <code>ViewModel</code> (um <code>UiState</code>)</td><td align="left">um estado imutável, fluxo unidirecional, reprodutível</td><td align="left">mais cerimônia: <code>Intent</code>, reducer, canal de efeitos</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — “Model-View-*”:</strong> em todos, o <strong>Model</strong> é a mesma coisa (dados + regras: Repository/UseCase do artigo 09). O que muda é o pedaço do meio — <em>Presenter</em>, <em>ViewModel</em> — e a <strong>direção</strong> em que a informação corre.</p></blockquote>
+
+<h3>MVVM × MVI, lado a lado</h3>
+
+<p>Na prática, hoje 99% dos apps Android são <strong>MVVM</strong> (o <code>ViewModel</code> do Jetpack já entrega o padrão de graça). A dúvida real do especialista é: <em>meu ViewModel expõe vários observables (MVVM “clássico”) ou um único estado imutável (MVI)?</em> Não são rivais — <strong>MVI é o MVVM levado ao extremo</strong> da disciplina de estado.</p>
+
+<p><img src="../assets/mvvm-vs-mvi.svg" alt="Comparação MVVM versus MVI para a mesma tela. No MVVM (esquerda), a View observa o ViewModel, que expõe vários campos observáveis separados (nome, carregando, erro) como StateFlow ou LiveData distintos, e a View chama métodos públicos como aoEntrar(); risco de os campos ficarem inconsistentes entre si, e o binding pode ser bidirecional. No MVI (direita), a View é função do estado e recompõe a tela inteira a partir de um único StateFlow de UiState; o ViewModel tem um reducer que transforma (estado, intent) em novo estado imutável; o estado desce e o Intent (uma sealed interface, a intenção e não o método) sobe, formando um anel unidirecional; efeitos one-shot como navegar ou toast saem por um canal à parte, e o estado fica sempre consistente e reprodutível."></p>
+
+<pre><code class="language-kotlin">// ── MVVM clássico: um campo observável por pedaço da tela ──
+class LoginViewModelMvvm : ViewModel() {
+    val nome = MutableStateFlow("")
+    val carregando = MutableStateFlow(false)
+    val erro = MutableStateFlow&lt;String?&gt;(null)
+    // 3 fluxos → a View combina 3 coletas; podem divergir no tempo
+}
+
+// ── MVI: UM estado imutável descreve a tela inteira ──
+data class LoginUiState(
+    val nome: String = "",
+    val carregando: Boolean = false,
+    val erro: String? = null,
+)
+
+sealed interface LoginIntent {                 // o EVENTO como objeto (Command)
+    data class NomeMudou(val v: String) : LoginIntent
+    data object Entrar : LoginIntent
+}
+
+class LoginViewModelMvi(private val fazerLogin: FazerLogin) : ViewModel() {
+    private val _state = MutableStateFlow(LoginUiState())
+    val state: StateFlow&lt;LoginUiState&gt; = _state.asStateFlow()   // 1 fonte da verdade
+
+    fun onIntent(i: LoginIntent) = when (i) {                   // o reducer
+        is LoginIntent.NomeMudou -> _state.update { it.copy(nome = i.v) }
+        LoginIntent.Entrar       -> entrar()
+    }
+    private fun entrar() { /* chama o UseCase e faz _state.update { … } */ }
+}
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o divisor de águas é o <strong>estado impossível</strong>. No MVVM com campos soltos, nada impede <code>carregando = true</code> <em>e</em> <code>erro != null</code> ao mesmo tempo — um bug de tela que só aparece no timing certo. No MVI, como o estado é <strong>um objeto só</strong> montado por um <strong>reducer</strong>, você consegue modelar “ou carrega, ou deu erro, ou tem dado” com uma <code>sealed interface</code> e o compilador <strong>proíbe</strong> a combinação inválida. Vale a cerimônia extra em telas com muitos estados; em tela boba (um formulário simples) o MVVM enxuto basta.</p></blockquote>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> não coloque <strong>eventos de uma vez só</strong> (navegar, mostrar <em>snackbar</em>) dentro do <code>UiState</code>. Estado é o que a tela <em>é</em> agora; navegar é algo que <em>acontece uma vez</em>. Se virar campo do estado, ao girar a tela o Compose relê o estado e <strong>navega de novo</strong>. Use um canal à parte (<code>Channel</code>/<code>SharedFlow</code> de efeitos) — a seta laranja do diagrama.</p></blockquote>
+
+<hr>
+
+<h2>Parte 2 · Criacionais: como um objeto nasce</h2>
+
+<p>Agora os padrões “pequenos”. A boa notícia: o Android SDK é feito deles — você já os usa sem perceber. Ver o padrão por trás da API é o que permite estender ou testar com segurança.</p>
+
+<p><img src="../assets/padroes-catalogo.svg" alt="Catálogo dos padrões GoF que o Android já usa, em três famílias. Criacionais (como um objeto nasce): Builder em NotificationCompat.Builder, Retrofit.Builder e OkHttpClient; Factory Method em LayoutInflater.from e ViewModelProvider.Factory; Abstract Factory em módulos Hilt/Dagger que montam famílias do grafo de DI; Singleton com object Kotlin, @Singleton e Room.databaseBuilder; Prototype com data class .copy clonando o UiState; DSL como builder tipado em buildList, Compose e Gradle KTS. Estruturais (como objetos se compõem): Adapter em RecyclerView.Adapter; Facade no Repository que esconde Room e API; Decorator em OkHttp Interceptor e no Modifier encadeado do Compose; Composite na árvore de composables; Proxy no cliente gerado pelo Retrofit; Bridge entre interface de domínio e implementação de dados. Comportamentais (como objetos conversam): Observer em Flow, StateFlow e LiveData; Strategy passando uma lambda de ordenação; State com sealed UiState Loading/Success/Error; Chain of Responsibility na cadeia de Interceptors; Command com Intent/Action como objeto e WorkManager enfileirando trabalho; Template Method no ciclo de vida da Activity."></p>
+
+<h3>Builder — montar passo a passo, construir no fim</h3>
+
+<p>O padrão que você <strong>mais</strong> vê no Android. Em vez de um construtor com 12 parâmetros na ordem exata, você encadeia <code>.setX()</code> — cada um devolve <code>this</code> — e só materializa o objeto (imutável) no <code>.build()</code>.</p>
+
+<p><img src="../assets/builder-fluente.svg" alt="Padrão Builder de forma fluente. Uma cadeia horizontal: Builder() cria um objeto mutável vazio; .setTitle(...) retorna this; .setIcon(...) retorna this; .build() devolve o objeto imutável pronto. Um painel explica por que existe: evita o construtor telescópico com muitos parâmetros na ordem certa, deixa campos opcionais legíveis chamando só o necessário, entrega o produto final imutável e validado, e em Kotlin argumentos nomeados com default costumam substituir o Builder feito à mão. Um painel de código mostra NotificationCompat.Builder encadeando setContentTitle, setSmallIcon, setAutoCancel e build, e abaixo a versão idiomática Kotlin sem Builder usando construtor com argumentos nomeados."></p>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> em <strong>Java</strong> o Builder é quase obrigatório para objetos com muitos campos opcionais. Em <strong>Kotlin</strong>, <strong>argumentos nomeados + valores default</strong> resolvem o mesmo problema sem escrever a classe Builder — então <em>não</em> crie um Builder à mão para suas <code>data class</code>. Você ainda <em>consome</em> Builders o tempo todo (Retrofit, OkHttp, Notification) porque essas APIs precisam ser compatíveis com Java.</p></blockquote>
+
+<h3>Factory Method &amp; Abstract Factory — delegar “qual classe instanciar”</h3>
+
+<p><strong>Factory Method:</strong> um método que decide <em>qual</em> objeto criar, escondendo o <code>new</code>/construtor de quem chama. <code>LayoutInflater.from(context)</code> te devolve um inflater sem você saber a classe concreta. <strong>Abstract Factory</strong> sobe um degrau: cria <em>famílias</em> de objetos que combinam entre si — é exatamente o que um módulo <strong>Hilt</strong> faz ao prover o grafo de dependências coerente.</p>
+
+<pre><code class="language-kotlin">// Factory Method na prática: você precisa criar um ViewModel com argumentos
+class LoginVmFactory(private val useCase: FazerLogin) : ViewModelProvider.Factory {
+    override fun &lt;T : ViewModel&gt; create(modelClass: Class&lt;T&gt;): T =
+        LoginViewModel(useCase) as T   // a fábrica sabe montar; a tela só pede
+}
+// Com Hilt, @HiltViewModel + @Inject faz essa fábrica sumir — a DI É a fábrica.
+</code></pre>
+
+<h3>Singleton — uma instância para o app inteiro</h3>
+
+<p>Uma única instância compartilhada: o banco Room, o <code>OkHttpClient</code> (caro de criar), o <code>DataStore</code>. Em Kotlin, <code>object</code> já é um Singleton <em>thread-safe</em> pronto. Mas cuidado:</p>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> Singleton feito à mão vira <strong>estado global</strong> — difícil de testar (não dá para trocar por um fake) e memory-leak fácil se segurar um <code>Context</code> de Activity. A forma sênior é <strong>não escrever o Singleton</strong>: declare <code>@Singleton</code> no <strong>Hilt</strong> e deixe o container garantir a instância única <em>e</em> injetável. Você ganha o ciclo de vida certo e a testabilidade.</p></blockquote>
+
+<hr>
+
+<h2>Parte 3 · Estruturais: como objetos se compõem</h2>
+
+<table>
+<thead><tr><th align="left">Padrão</th><th align="left">Ideia em uma linha</th><th align="left">Onde no Android</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Adapter</strong></td><td align="left">tradutor entre duas interfaces incompatíveis</td><td align="left"><code>RecyclerView.Adapter</code>: liga sua <code>List</code> ao formato que a lista exige</td></tr>
+<tr><td align="left"><strong>Facade</strong></td><td align="left">uma porta simples para um subsistema complexo</td><td align="left"><code>Repository</code>: a UI pede dado; não sabe se veio de Room ou Retrofit</td></tr>
+<tr><td align="left"><strong>Decorator</strong></td><td align="left">embrulha um objeto e adiciona comportamento sem herança</td><td align="left"><code>Modifier</code> do Compose e <code>Interceptor</code> do OkHttp encadeados</td></tr>
+<tr><td align="left"><strong>Composite</strong></td><td align="left">folha e ramo tratados pela mesma interface (árvore)</td><td align="left">a árvore de <code>@Composable</code> — um <code>Column</code> contém filhos como ele</td></tr>
+<tr><td align="left"><strong>Proxy</strong></td><td align="left">um substituto que representa outro objeto</td><td align="left">a interface de API que o <strong>Retrofit</strong> implementa em runtime</td></tr>
+</tbody>
+</table>
+
+<p>O <strong>Decorator</strong> merece atenção porque o Compose o transformou no dia a dia. Cada <code>Modifier</code> embrulha o anterior, formando uma cadeia — e a <strong>ordem importa</strong>:</p>
+
+<pre><code class="language-kotlin">// Decorator: cada Modifier embrulha o de cima. Ordem = comportamento.
+Modifier
+    .padding(16.dp)          // 1º afasta…
+    .background(Azul)        // 2º …depois pinta o fundo (só a área interna)
+
+Modifier
+    .background(Azul)        // 1º pinta tudo…
+    .padding(16.dp)          // 2º …e o padding vira margem interna do fundo
+// Mesmos dois modifiers, resultado visual diferente — é a cadeia de Decorators.
+</code></pre>
+
+<hr>
+
+<h2>Parte 4 · Comportamentais: como objetos conversam</h2>
+
+<p>É a família mais presente na arquitetura reativa moderna. O <strong>Observer</strong> é literalmente a fundação do <strong>UDF</strong> do artigo 09: <code>Flow</code>/<code>StateFlow</code> <em>são</em> o padrão Observer — um sujeito (o ViewModel) notifica observadores (a UI) quando o estado muda, sem conhecê-los.</p>
+
+<table>
+<thead><tr><th align="left">Padrão</th><th align="left">Ideia em uma linha</th><th align="left">Onde no Android</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Observer</strong></td><td align="left">avisa interessados quando algo muda</td><td align="left"><code>Flow</code>, <code>StateFlow</code>, <code>LiveData</code> — a base de todo reativo</td></tr>
+<tr><td align="left"><strong>Strategy</strong></td><td align="left">algoritmo intercambiável passado de fora</td><td align="left">passar uma <code>lambda</code> de comparação/ordenação; trocar em runtime</td></tr>
+<tr><td align="left"><strong>State</strong></td><td align="left">o objeto muda de comportamento conforme seu estado</td><td align="left"><code>sealed interface UiState { Loading; Success; Error }</code></td></tr>
+<tr><td align="left"><strong>Command</strong></td><td align="left">encapsular uma ação como objeto (enfileirar, desfazer)</td><td align="left"><code>Intent</code> do MVI; tarefas do <strong>WorkManager</strong></td></tr>
+<tr><td align="left"><strong>Chain of Responsibility</strong></td><td align="left">uma fila de handlers; cada um trata ou repassa</td><td align="left">a cadeia de <code>Interceptor</code>s do OkHttp (auth → cache → log)</td></tr>
+</tbody>
+</table>
+
+<p>O <strong>Strategy</strong> em Kotlin quase desaparece: onde o GoF criava uma interface e várias classes, uma <strong>função de ordem superior</strong> (lambda) já é a estratégia. Isso é o padrão <em>idiomático</em> — reconhecê-lo evita criar uma hierarquia de classes onde uma lambda basta.</p>
+
+<pre><code class="language-kotlin">// Strategy "clássico": interface + implementações (verboso)
+interface Ordenacao { fun aplicar(l: List&lt;Tarefa&gt;): List&lt;Tarefa&gt; }
+
+// Strategy idiomático em Kotlin: a estratégia É uma lambda
+fun listar(tarefas: List&lt;Tarefa&gt;, ordenar: (List&lt;Tarefa&gt;) -&gt; List&lt;Tarefa&gt;) =
+    ordenar(tarefas)
+
+listar(tarefas) { it.sortedBy(Tarefa::prazo) }      // troca a estratégia na chamada
+listar(tarefas) { it.sortedByDescending(Tarefa::prioridade) }
+</code></pre>
+
+<hr>
+
+<h2>Quando (não) usar um padrão</h2>
+
+<table>
+<thead><tr><th align="left">Situação</th><th align="left">Faça</th></tr></thead>
+<tbody>
+<tr><td align="left">API Java com muitos campos opcionais</td><td align="left"><strong>Builder</strong> — ou, se for sua <code>data class</code> Kotlin, argumentos nomeados</td></tr>
+<tr><td align="left">Precisa de uma instância única e injetável</td><td align="left"><strong>Singleton via Hilt</strong> (<code>@Singleton</code>), não <code>object</code> com <code>Context</code></td></tr>
+<tr><td align="left">Trocar um algoritmo em runtime</td><td align="left"><strong>Strategy</strong> como <strong>lambda</strong>, sem hierarquia de classes</td></tr>
+<tr><td align="left">Tela com poucos estados possíveis</td><td align="left"><strong>MVVM</strong> enxuto; não pague a cerimônia do MVI completo</td></tr>
+<tr><td align="left">Tela com muitos estados que não podem coexistir</td><td align="left"><strong>MVI</strong> + <code>sealed</code> <code>UiState</code> para o compilador barrar o impossível</td></tr>
+<tr><td align="left">“Vi um padrão que encaixa em qualquer lugar”</td><td align="left"><strong>Pare.</strong> Padrão a mais é acoplamento e indireção sem retorno</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> o erro de sênior júnior é <strong>patternitis</strong> — aplicar padrão por status, não por necessidade. Padrão bom <em>remove</em> uma dor concreta (um construtor ilegível, um algoritmo que muda, um estado que diverge). Se você não consegue nomear a dor que ele resolve <em>aqui</em>, a solução mais simples (uma função, uma <code>data class</code>, uma lambda) é a certa. Kotlin dissolve metade do GoF em recursos da linguagem — reconhecer isso é o nível especialista de verdade.</p></blockquote>
+
+<hr>
+
+<h2>✅ Checklist para o NexusHub</h2>
+
+<table>
+<thead><tr><th align="left">Item</th><th align="left">Ação</th></tr></thead>
+<tbody>
+<tr><td align="left">Padrão de tela</td><td align="left">MVVM como base; MVI (<code>UiState</code> único + <code>Intent</code>) nas telas com muitos estados</td></tr>
+<tr><td align="left">Eventos one-shot</td><td align="left">canal separado (efeitos), <strong>fora</strong> do <code>UiState</code> — sem re-navegar no giro</td></tr>
+<tr><td align="left">Criação de objetos</td><td align="left">deixar o <strong>Hilt</strong> ser a fábrica/Singleton; evitar <code>object</code> global com <code>Context</code></td></tr>
+<tr><td align="left">Builders manuais</td><td align="left">não escrever para <code>data class</code> — usar argumentos nomeados + default</td></tr>
+<tr><td align="left">Strategy</td><td align="left">preferir <strong>lambda</strong> a uma hierarquia de interfaces</td></tr>
+<tr><td align="left">Antes de aplicar um padrão</td><td align="left">saber nomear, em uma frase, a dor concreta que ele remove aqui</td></tr>
+</tbody>
+</table>
+
+<h2>📖 Glossário-relâmpago</h2>
+
+<table>
+<thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>GoF</strong></td><td align="left">os 23 padrões clássicos em 3 famílias: criacional, estrutural, comportamental</td></tr>
+<tr><td align="left"><strong>MVVM</strong></td><td align="left">ViewModel expõe observables; a View reage — padrão de tela padrão do Jetpack</td></tr>
+<tr><td align="left"><strong>MVI</strong></td><td align="left">um <code>UiState</code> imutável + <code>Intent</code> + reducer, em fluxo unidirecional</td></tr>
+<tr><td align="left"><strong>Reducer</strong></td><td align="left">função <code>(estado, evento) → novo estado</code> imutável; o coração do MVI</td></tr>
+<tr><td align="left"><strong>Builder</strong></td><td align="left">montar um objeto por encadeamento; materializa no <code>.build()</code></td></tr>
+<tr><td align="left"><strong>Factory Method</strong></td><td align="left">um método esconde <em>qual</em> classe concreta instanciar</td></tr>
+<tr><td align="left"><strong>Singleton</strong></td><td align="left">uma única instância no app; no Android, prefira via Hilt</td></tr>
+<tr><td align="left"><strong>Observer</strong></td><td align="left">notificar interessados na mudança; é o que <code>Flow</code>/<code>StateFlow</code> fazem</td></tr>
+<tr><td align="left"><strong>Strategy</strong></td><td align="left">algoritmo trocável; em Kotlin, uma lambda</td></tr>
+<tr><td align="left"><strong>Decorator</strong></td><td align="left">embrulhar para adicionar comportamento; ver <code>Modifier</code> e interceptors</td></tr>
+<tr><td align="left"><strong>Patternitis</strong></td><td align="left">aplicar padrões sem necessidade — indireção que só atrapalha</td></tr>
+</tbody>
+</table>
+  </article>
+    <nav class="pager">
+      <a class="pg prev" href="12-sdd-tdd-bdd.html"><span>← Anterior</span><strong>📐 SDD · TDD · BDD</strong></a>
+      <a class="pg next" href="../index.html"><span>Fim da trilha 🎉</span><strong>↩ Voltar ao índice</strong></a>
+    </nav>
+</main>
+</body>
+</html>
