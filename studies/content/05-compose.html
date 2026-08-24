@@ -187,6 +187,56 @@ fun TelaPerfil(id: String, vm: PerfilViewModel) {
 
 <hr>
 
+<h2>Parte 8 · Animação: movimento sem recompor à toa</h2>
+
+<p>Animar no Compose é, na maioria das vezes, <strong>animar um estado</strong> — você troca o valor-alvo e o framework interpola. A dificuldade não é fazer mexer; é escolher a API certa e não pagar recomposição por frame. Comece sempre pela pergunta “<em>o que está animando?</em>”.</p>
+
+<p><img src="../assets/compose-animacao.svg" alt="Mapa de decisão das APIs de animação do Compose, a partir da pergunta o que está animando. Um valor único como cor, tamanho ou alpha: animateDpAsState e afins, declarativo — muda o alvo e ele desliza. Entrar ou sair da tela: AnimatedVisibility, com fade, slide ou expand de entrada e saída. Trocar um conteúdo por outro: AnimatedContent, por exemplo um contador ou troca de aba. Vários valores juntos com um gatilho: updateTransition, coordenando cor, tamanho e rotação em sincronia. Controle fino ou gesto: Animatable com animateTo, para arrastar, fling ou interromper no meio. Itens de lista reordenando: Modifier.animateItem em LazyColumn com key. Regras que sustentam a animação: anime na fase tardia via graphicsLayer ou offset lambda para não recompor a cada frame; respeite reduzir movimento por acessibilidade; duração curta e easing do Material, movimento com propósito."></p>
+
+<pre><code class="language-kotlin">// 1) O caso comum: animar UM valor de estado — declarativo
+val cor by animateColorAsState(if (ativo) Verde else Cinza, label = "cor")
+val elevacao by animateDpAsState(if (pressionado) 8.dp else 2.dp, label = "elev")
+Box(Modifier.background(cor))
+
+// 2) Aparecer/sumir com transição de entrada e saída
+AnimatedVisibility(visible = mostraDetalhe, enter = fadeIn() + expandVertically()) {
+    Detalhe()
+}
+
+// 3) Vários valores coordenados por UM gatilho: updateTransition
+val t = updateTransition(selecionado, label = "chip")
+val borda by t.animateDp(label = "borda") { if (it) 2.dp else 0.dp }
+val fundo by t.animateColor(label = "fundo") { if (it) RoxoClaro else Transparente }
+
+// 4) Performance: anime na fase de layout/draw, NÃO recompondo
+Box(Modifier.graphicsLayer { translationX = deslize }) // lê o estado na fase tardia
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> animar via <code>Modifier.offset(x.dp)</code> (valor) <strong>recompõe a cada frame</strong>; animar via <code>Modifier.offset { IntOffset(x, 0) }</code> ou <code>graphicsLayer { }</code> (lambda) só refaz a fase de layout/draw. Em animação contínua a diferença é jank vs. 120fps. E sempre dê um <code>label</code> — é o que o <strong>Animation Preview</strong> do Android Studio usa para inspecionar a curva.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> não anime “porque fica bonito”. Movimento tem função — dizer <em>de onde veio</em> o novo conteúdo, guiar o olho, dar feedback de toque. Duração curta (~100–300ms), <em>easing</em> do Material, e <strong>respeite a preferência de reduzir movimento</strong> do sistema: encurte ou desligue quando o usuário pediu. Animação longa ou paralaxe agressiva é problema de acessibilidade, não charme.</p></blockquote>
+
+<hr>
+
+<h2>Parte 9 · Além do básico: as portas que você vai abrir</h2>
+
+<p>Panorama dos avançados que aparecem quando o app cresce — cada um merece um estudo próprio, mas é bom saber que existem e <em>quando</em> alcançá-los.</p>
+
+<table>
+<thead><tr><th align="left">Recurso</th><th align="left">Para quê</th><th align="left">Quando</th></tr></thead>
+<tbody>
+<tr><td align="left"><code>CompositionLocal</code></td><td align="left">passar valor implícito pela árvore (tema, densidade) sem prop-drilling</td><td align="left">dado ambiental que muitos leem; <strong>não</strong> para estado de tela</td></tr>
+<tr><td align="left"><code>Layout</code> / <code>SubcomposeLayout</code></td><td align="left">medir e posicionar do seu jeito quando <code>Row</code>/<code>Column</code> não dão</td><td align="left">um grid especial, um componente que depende do tamanho medido</td></tr>
+<tr><td align="left"><code>Modifier.Node</code></td><td align="left">modifier customizado de alta performance (sem alocar por recomposição)</td><td align="left">gesto/efeito reutilizável em muitos lugares</td></tr>
+<tr><td align="left">Nested scroll</td><td align="left">coordenar rolagem entre pai e filho (colapsar topo)</td><td align="left"><code>TopAppBar</code> que encolhe ao rolar a lista</td></tr>
+<tr><td align="left"><code>drawBehind</code>/<code>Canvas</code></td><td align="left">desenho custom (gráfico, badge, progress)</td><td align="left">visual que nenhum componente entrega</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a maturidade em Compose é <strong>resistir</strong> a esses avançados até precisar. 95% das telas saem de composables prontos + estado + os modifiers padrão. <code>SubcomposeLayout</code> e <code>Modifier.Node</code> são poderosos e caros de manter — cada um que você adiciona é código de framework que <em>você</em> passa a manter. Alcance-os por uma dor medida, nunca por curiosidade.</p></blockquote>
+
+<hr>
+
 <h2>Quando (não) usar cada coisa</h2>
 
 <table>
@@ -233,5 +283,8 @@ fun TelaPerfil(id: String, vm: PerfilViewModel) {
 <tr><td align="left"><strong>LaunchedEffect</strong></td><td align="left">roda <code>suspend</code> atrelado à composição; cancela ao sair</td></tr>
 <tr><td align="left"><strong>derivedStateOf</strong></td><td align="left">estado calculado que só recompõe quando o resultado muda</td></tr>
 <tr><td align="left"><strong>Baseline Profile</strong></td><td align="left">pré-compilação AOT do caminho crítico; mata jank da 1ª rolagem</td></tr>
+<tr><td align="left"><strong>animate*AsState</strong></td><td align="left">anima um valor de estado declarativamente (o caso comum)</td></tr>
+<tr><td align="left"><strong>updateTransition</strong></td><td align="left">coordena vários valores animados a partir de um gatilho</td></tr>
+<tr><td align="left"><strong>CompositionLocal</strong></td><td align="left">valor implícito propagado pela árvore (tema, densidade)</td></tr>
 </tbody>
 </table>

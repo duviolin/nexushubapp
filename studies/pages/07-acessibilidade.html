@@ -134,6 +134,43 @@ composeTestRule.onNode(hasContentDescription("Ligar para Ana")).assertHasClickAc
 
 <hr>
 
+<h2>Parte 5 · Teclado, switch e foco: quem não toca na tela</h2>
+
+<p>Leitor de tela é só metade da acessibilidade motora. Muita gente navega <strong>sem tocar</strong>: por <strong>teclado</strong> físico (mobilidade reduzida), por <strong>D-pad</strong> num controle de Android TV, ou por <strong>Switch Access</strong> — um ou dois botões que varrem a tela e o usuário aciona no elemento certo. Todos dependem de uma coisa: um <strong>foco</strong> que percorre a UI numa ordem que faça sentido.</p>
+
+<p><img src="../assets/a11y-foco.svg" alt="Foco: quem não toca na tela também precisa navegar. Teclado, controle de TV com D-pad e Switch Access percorrem a UI um foco por vez. Numa tela de login, a ordem de foco segue a ordem de leitura de cima para baixo: 1 campo e-mail, 2 campo senha, 3 uma linha de chips agrupada num focusGroup que entra e sai como bloco, 4 botão Entrar. Quem depende do foco: usuários de teclado com Tab e Shift+Tab, muitos com mobilidade reduzida; D-pad e controle em Android TV; e Switch Access, em que um ou dois botões varrem a tela automaticamente. O que você controla no Compose: Modifier.focusable, focusGroup, focusRequester e focusProperties para ajustar a ordem, sendo que o clique padrão já é focável e o visual de foco vem do componente Material. Ações customizadas: um gesto complexo como arrastar para excluir precisa de uma alternativa via semantics customActions, por exemplo Excluir e Arquivar."></p>
+
+<table>
+<thead><tr><th align="left">Precisa</th><th align="left">Como no Compose</th></tr></thead>
+<tbody>
+<tr><td align="left">Tornar algo custom focável</td><td align="left"><code>Modifier.focusable()</code> (clique/componente M3 já é)</td></tr>
+<tr><td align="left">Agrupar um bloco (linha de chips)</td><td align="left"><code>Modifier.focusGroup()</code> — entra/sai como unidade</td></tr>
+<tr><td align="left">Mover o foco por código (após enviar)</td><td align="left"><code>FocusRequester</code> + <code>focusRequester(fr)</code>; <code>fr.requestFocus()</code></td></tr>
+<tr><td align="left">Ajustar a ordem de travessia</td><td align="left"><code>Modifier.focusProperties { next = …; down = … }</code></td></tr>
+<tr><td align="left">Alternativa a um gesto (arrastar)</td><td align="left"><code>semantics { customActions = listOf(...) }</code></td></tr>
+</tbody>
+</table>
+
+<pre><code class="language-kotlin">// Ação complexa por gesto (swipe-to-delete) PRECISA de uma alternativa acessível:
+Modifier.semantics {
+    customActions = listOf(
+        CustomAccessibilityAction("Excluir") { excluir(); true },
+        CustomAccessibilityAction("Arquivar") { arquivar(); true },
+    )
+}   // TalkBack e Switch Access oferecem essas ações num menu — sem precisar arrastar
+
+// Mover foco ao próximo campo após "Enter" no teclado
+val senha = remember { FocusRequester() }
+TextField(email, { email = it }, keyboardActions = KeyboardActions(onNext = { senha.requestFocus() }))
+TextField(senhaTxt, { senhaTxt = it }, modifier = Modifier.focusRequester(senha))
+</code></pre>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> <strong>nunca deixe uma ação só no gesto</strong>. Se “deslizar para excluir” é o único caminho, quem usa TalkBack, Switch Access ou teclado <em>não consegue excluir</em>. Toda funcionalidade acionada por gesto complexo precisa de uma <code>customAction</code> ou um botão visível equivalente. E cuide de <strong>não prender o foco</strong>: um diálogo custom mal feito pode “trancar” o Tab dentro dele — ou pior, deixar o foco escapar para trás dele.</p></blockquote>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> teste isto ligando um <strong>teclado Bluetooth</strong> (ou o do emulador) e navegando o app só com <strong>Tab / setas / Enter</strong>, sem tocar na tela. É o teste mais rápido de foco que existe e cobre teclado, TV e boa parte do Switch Access de uma vez. Se o Tab pula um controle, entra numa ordem maluca ou fica preso — você achou o bug antes do usuário.</p></blockquote>
+
+<hr>
+
 <h2>Quando (não) usar cada recurso</h2>
 
 <table>
@@ -179,6 +216,9 @@ composeTestRule.onNode(hasContentDescription("Ligar para Ana")).assertHasClickAc
 <tr><td align="left"><strong>liveRegion</strong></td><td align="left">trecho cujas mudanças o TalkBack anuncia sozinho</td></tr>
 <tr><td align="left"><strong>Accessibility Scanner</strong></td><td align="left">app da Google que varre a tela por problemas de a11y</td></tr>
 <tr><td align="left"><strong>dynamic type</strong></td><td align="left">texto em <code>sp</code> que respeita a escala de fonte do sistema</td></tr>
+<tr><td align="left"><strong>Switch Access</strong></td><td align="left">navegação por 1–2 botões que varrem a tela, para deficiência motora</td></tr>
+<tr><td align="left"><strong>focusGroup</strong></td><td align="left">agrupa controles para o foco entrar/sair como um bloco</td></tr>
+<tr><td align="left"><strong>customActions</strong></td><td align="left">alternativa acessível a um gesto complexo (arrastar p/ excluir)</td></tr>
 </tbody>
 </table>
   </article>

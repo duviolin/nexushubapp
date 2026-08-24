@@ -100,6 +100,56 @@ fun TelaNexus(vm: HomeViewModel) {
 
 <hr>
 
+<h2>Parte 5 · Tema customizado avançado</h2>
+
+<p>O Material 3 cobre o comum, mas toda marca acaba precisando de algo que <strong>não existe</strong> no sistema: uma cor semântica própria (um <em>“sucesso”</em> verde, um <em>“aviso”</em> âmbar), um espaçamento padrão da marca, uma tipografia extra. O jeito certo <strong>não</strong> é cravar valores nos componentes — é <strong>estender o tema</strong> com seus próprios tokens, expostos por um <code>CompositionLocal</code>, do mesmo jeito que o <code>MaterialTheme</code> expõe os dele.</p>
+
+<pre><code class="language-kotlin">// 1) Defina os tokens EXTRAS que o M3 não tem (cores semânticas da marca)
+@Immutable
+data class CoresNexus(val sucesso: Color, val aviso: Color, val onSucesso: Color)
+
+// 2) Exponha por um CompositionLocal (mesma mecânica do MaterialTheme)
+val LocalCoresNexus = staticCompositionLocalOf {
+    CoresNexus(Color.Unspecified, Color.Unspecified, Color.Unspecified)
+}
+
+// 3) Envolva o MaterialTheme e forneça também os seus tokens
+@Composable
+fun NexusTheme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -&gt; Unit) {
+    val extras = if (dark) CoresNexus(Verde200, Ambar200, Verde900)
+                 else       CoresNexus(Verde600, Ambar600, Color.White)
+    CompositionLocalProvider(LocalCoresNexus provides extras) {
+        MaterialTheme(colorScheme = nexusColorScheme(dark), typography = NexusType, content = content)
+    }
+}
+
+// 4) Um "acessor" no estilo MaterialTheme.colorScheme — leitura limpa no componente
+object NexusTheme { val cores: CoresNexus @Composable get() = LocalCoresNexus.current }
+
+// uso: Text("Salvo!", color = NexusTheme.cores.sucesso)  // troca sozinho no dark
+</code></pre>
+
+<blockquote><p>🧠 <strong>Termo — design token:</strong> um nome semântico para um valor de design (<code>cor.sucesso</code>, <code>espaco.card</code>), em vez do valor cru. Tokens deixam o time falar em <em>intenção</em> e trocar o valor num lugar só — é o que torna um tema escalável e o que ferramentas de design (Figma) exportam.</p></blockquote>
+
+<h3>Componente customizado: herde, não reescreva</h3>
+
+<p>Quando um componente da marca não existe no M3, construa-o <strong>sobre as primitivas</strong> (<code>Surface</code>, <code>ProvideTextStyle</code>, <code>ripple</code>, <code>Modifier.clickable</code>) — assim você herda estados (pressed/disabled/focus), acessibilidade e <em>ripple</em> de graça, e só pinta a diferença.</p>
+
+<pre><code class="language-kotlin">@Composable
+fun BotaoNexus(texto: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier) {
+    Surface(                                  // Surface já dá tonal elevation + shape do tema
+        onClick = onClick,                    // e o clique acessível + ripple
+        shape = MaterialTheme.shapes.large,
+        color = NexusTheme.cores.sucesso,
+        modifier = modifier.heightIn(min = 48.dp),   // alvo de toque (art. 07)
+    ) { Box(Modifier.padding(16.dp), Alignment.Center) { Text(texto) } }
+}
+</code></pre>
+
+<blockquote><p>🔒 <strong>Visão Specialist:</strong> a linha entre “tematizar” e “brigar com o Material” é esta: <strong>estender por tokens e primitivas = barato e sustentável; recriar componentes do zero = caro e frágil</strong>. Se a marca exige um visual radicalmente fora do Material, ainda assim construa sobre <code>Surface</code>/<code>Modifier</code> e a camada de <em>foundation</em> do Compose — você abre mão do <em>look</em> do M3, mas não da acessibilidade e dos estados que ele já resolve. Reescrever <code>Interaction</code>/foco na mão é onde apps “bonitos” viram inacessíveis.</p></blockquote>
+
+<hr>
+
 <h2>Quando (não) usar</h2>
 
 <table>
@@ -144,5 +194,7 @@ fun TelaNexus(vm: HomeViewModel) {
 <tr><td align="left"><strong>Window Size Class</strong></td><td align="left">Compact/Medium/Expanded — decide o layout adaptativo</td></tr>
 <tr><td align="left"><strong>tonal elevation</strong></td><td align="left">no M3, elevar tinge a superfície com a cor primária</td></tr>
 <tr><td align="left"><strong>List-Detail</strong></td><td align="left">lista + detalhe lado a lado em telas largas</td></tr>
+<tr><td align="left"><strong>design token</strong></td><td align="left">nome semântico de um valor de design (<code>cor.sucesso</code>), não o valor cru</td></tr>
+<tr><td align="left"><strong>CompositionLocal</strong></td><td align="left">canal que propaga o tema/tokens pela árvore sem prop-drilling</td></tr>
 </tbody>
 </table>
