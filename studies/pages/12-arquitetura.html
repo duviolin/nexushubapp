@@ -34,7 +34,7 @@
   <article class="content">
 <h1>🏛️ Arquitetura &amp; código limpo no Android: camadas que aguentam crescer (2026)</h1>
 
-<p>Existe uma pergunta que revela a saúde de um app: <strong>“consigo mudar isto sem medo?”</strong>. Se trocar a fonte de dados obriga a mexer na tela, se testar uma regra exige subir a UI inteira, se dois devs não conseguem tocar features diferentes sem colidir — o problema não é o código, é a <strong>arquitetura</strong>. Este artigo constrói, do básico ao avançado, a arquitetura que o próprio Google recomenda para Android — e o <em>porquê</em> de cada peça.</p>
+<p>Existe uma pergunta que revela a saúde de um app: <strong>“consigo mudar isto sem medo?”</strong>. Se trocar a fonte de dados obriga a mexer na tela, se testar uma regra exige subir a UI inteira, se dois devs não conseguem tocar features diferentes sem colidir — o problema não é o código, é a <strong>arquitetura</strong>. Este artigo constrói, do básico ao avançado, a arquitetura que o próprio Google recomenda para Android — e o <em>porquê</em> de cada peça, ancorado na teoria-base de <strong>Robert C. Martin</strong> (o “tio Bob”), dos livros <em>Clean Code</em> e <em>Clean Architecture</em>.</p>
 
 <blockquote><p>🔗 <strong>Fio condutor:</strong> este artigo desenha a estrutura; o <strong>próximo (13 · Padrões)</strong> desce ao nível dos <em>tijolos</em> — os padrões que preenchem cada camada (Repository, Factory, Observer…) — e o <strong>14 · Testes</strong> mostra como tudo isso vira teste barato. Não é coincidência — arquitetura boa é a que se testa fácil.</p></blockquote>
 
@@ -87,6 +87,14 @@ class AuthRepositoryImpl(private val api: AuthApi) : AuthRepository {
 </code></pre>
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> ponha o domínio num <strong>módulo Gradle Kotlin puro</strong> (<code>java-library</code>, sem o plugin Android). Aí a Regra da Dependência deixa de ser disciplina e vira <strong>lei física</strong>: se alguém tentar importar <code>android.content.Context</code> no domínio, o projeto <strong>não compila</strong>. A ferramenta passa a guardar a arquitetura por você.</p></blockquote>
+
+<h3>Os quatro círculos (a figura do tio Bob)</h3>
+
+<p>Robert C. Martin (o “tio Bob”) desenhou a Clean Architecture como <strong>círculos concêntricos</strong>. É a mesma ideia das camadas, mas deixa explícito o <em>grau de estabilidade</em>: o centro contém as regras que quase nunca mudam; a casca externa, os detalhes voláteis (o framework, o banco, a tela). A única regra é a <strong>Regra da Dependência</strong> — o código-fonte de um anel só pode apontar para <strong>dentro</strong>.</p>
+
+<p><img src="../assets/clean-arch-circles.svg" alt="Os círculos concêntricos da Clean Architecture de Robert C. Martin, mapeados para o Android. Do centro para fora: Entities, as regras do negócio (como Usuario e Pedido), verdadeiras mesmo sem app nenhum; Use Cases, as regras da aplicação (como FazerLogin e AplicarCupom, o que o app faz); Interface Adapters (ViewModel, Repository impl, Mappers) que traduzem entre o de fora e o de dentro; e Frameworks & Drivers (Compose, Room, Retrofit, Android SDK), o volátil e trocável sem dor. Toda seta de dependência aponta para dentro, em direção ao mais estável e abstrato. Para cruzar a fronteira para fora, o de dentro define a interface e o de fora a implementa — inversão de dependência."></p>
+
+<blockquote><p>🧠 <strong>Termo — Entities vs Use Cases:</strong> a distinção mais sutil e mais importante do tio Bob. <strong>Entities</strong> são regras que valem para <em>a empresa</em>, independentes de qualquer app (o cálculo de juros de um empréstimo existe no papel). <strong>Use Cases</strong> são regras <em>desta aplicação</em> — a orquestração de “fazer login”, “aplicar cupom”. Se amanhã o app virasse um site, as Entities continuariam iguais; os Use Cases, também; só a casca externa mudaria.</p></blockquote>
 
 <hr>
 
@@ -195,6 +203,58 @@ class LoginViewModel @Inject constructor(
 </tbody>
 </table>
 
+<h3>Nomes: a primeira documentação</h3>
+
+<p>Para o tio Bob, o nome é a <strong>menor unidade de design</strong>. Um bom nome responde três perguntas sem abrir a implementação: o que faz, por que existe, como se usa. Regras práticas: revele a intenção (<code>diasDesdeCriacao</code>, não <code>d</code>); evite desinformação (não chame de <code>lista</code> o que é <code>Set</code>); use nomes <strong>pesquisáveis</strong> e pronunciáveis; classe é <strong>substantivo</strong>, método é <strong>verbo</strong>; uma palavra por conceito (não misture <code>buscar</code>/<code>obter</code>/<code>pegar</code> para a mesma ideia).</p>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> nome bom <strong>não</strong> precisa de comentário para se explicar. Se você sentiu vontade de comentar o que uma variável guarda, o comentário é a prova de que o <em>nome</em> falhou. Renomeie em vez de comentar.</p></blockquote>
+
+<h3>Funções: as regras do tio Bob</h3>
+
+<p>O capítulo mais citado do <em>Clean Code</em>. A regra-mãe é: <strong>uma função faz uma coisa só, e a faz bem</strong>. As demais decorrem dela.</p>
+
+<table>
+<thead><tr><th align="left">Regra</th><th align="left">O que significa</th><th align="left">No Android</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>Pequena</strong></td><td align="left">cabe na tela; idealmente poucas linhas</td><td align="left">um <code>Composable</code> gigante vira vários menores</td></tr>
+<tr><td align="left"><strong>Uma coisa só</strong></td><td align="left">se dá para extrair outra função com nome próprio, ela fazia duas</td><td align="left">separar “buscar”, “mapear” e “atualizar estado”</td></tr>
+<tr><td align="left"><strong>Um nível de abstração</strong></td><td align="left">não misture regra de negócio com detalhe de string/rede</td><td align="left">o UseCase decide; o mapper formata; ninguém acumula</td></tr>
+<tr><td align="left"><strong>Poucos argumentos</strong></td><td align="left">0–1–2 é bom; 3 é suspeito; 4+ pede um objeto</td><td align="left">agrupe em <code>data class Credenciais</code> em vez de 5 <code>String</code></td></tr>
+<tr><td align="left"><strong>Sem argumento-bandeira</strong></td><td align="left">um <code>Boolean</code> que muda o comportamento = duas funções</td><td align="left"><code>mostrar()</code>/<code>esconder()</code>, não <code>setVisivel(b)</code></td></tr>
+<tr><td align="left"><strong>Sem efeito colateral</strong></td><td align="left">não faça escondido o que o nome não promete</td><td align="left">um <code>validar()</code> que também grava no cache mente</td></tr>
+<tr><td align="left"><strong>Comando ≠ Consulta (CQS)</strong></td><td align="left">ou <em>faz</em> algo, ou <em>responde</em> algo — nunca os dois</td><td align="left"><code>salvar()</code> não retorna dado; <code>obter()</code> não altera</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — DRY (Don’t Repeat Yourself):</strong> cada pedaço de conhecimento tem <strong>uma</strong> representação no sistema. Copiou-colou lógica? No dia da mudança você vai esquecer uma cópia. Mas cuidado com o oposto: abstrair cedo demais duas coisas que só <em>parecem</em> iguais acopla o que devia ser livre (WET vira DRY errado). Duplicação é barata; abstração errada é cara.</p></blockquote>
+
+<h3>Comentários: quase sempre uma derrota</h3>
+
+<p>A posição do tio Bob é dura e útil: <strong>todo comentário é uma pequena falha</strong> em expressar a ideia no próprio código. Não são proibidos — mas o comentário não envelhece junto com o código, então ele <em>mente com o tempo</em>. Prefira renomear e extrair a comentar.</p>
+
+<table>
+<thead><tr><th align="left">Comentário ruim (evite)</th><th align="left">Comentário bom (ok)</th></tr></thead>
+<tbody>
+<tr><td align="left">redundante: <code>// incrementa i</code></td><td align="left">explica <strong>intenção</strong>/porquê que o código não mostra</td></tr>
+<tr><td align="left"><strong>código comentado</strong> “por via das dúvidas” (o Git guarda)</td><td align="left">aviso de consequência (“roda na main thread”)</td></tr>
+<tr><td align="left">diário/changelog no topo do arquivo</td><td align="left"><code>TODO</code>/<code>FIXME</code> rastreável</td></tr>
+<tr><td align="left">comentário que <strong>contradiz</strong> o código (o pior)</td><td align="left">KDoc de <strong>API pública</strong> de biblioteca</td></tr>
+</tbody>
+</table>
+
+<h3>Objetos vs Estruturas de Dados &amp; a Lei de Deméter</h3>
+
+<p>Outra distinção do tio Bob que muda como você modela: <strong>objetos</strong> escondem os dados e expõem <strong>comportamento</strong>; <strong>estruturas de dados</strong> expõem os dados e não têm comportamento. Os dois são válidos — o pecado é o <strong>híbrido</strong> (meio objeto, meio bag de getters) que não protege nada nem é simples. No Android: <code>data class</code> de DTO/UiState são <strong>estruturas de dados</strong> honestas; uma entidade de domínio pode ser um <strong>objeto</strong> com regras dentro.</p>
+
+<blockquote><p>🧠 <strong>Termo — Lei de Deméter (“não fale com estranhos”):</strong> um método só deve conversar com amigos próximos: <code>this</code>, seus parâmetros, objetos que ele mesmo cria e seus campos diretos — <strong>nunca</strong> o vizinho do vizinho. A “trenzinho” <code>pedido.getCliente().getEndereco().getCidade()</code> acopla você à estrutura interna de três classes; no dia que uma muda, você quebra.</p></blockquote>
+
+<pre><code class="language-kotlin">// ❌ train wreck: você conhece a tripa interna de Pedido, Cliente e Endereço
+val cidade = pedido.cliente.endereco.cidade      // 3 acoplamentos escondidos
+
+// ✅ peça ao objeto o que você precisa; ele que saiba como obter (Tell, Don't Ask)
+val cidade = pedido.cidadeDeEntrega()            // Pedido protege sua estrutura interna
+</code></pre>
+
 <h3>SOLID, sem decoreba</h3>
 
 <p>SOLID são cinco princípios de orientação a objetos que, no Android, você já pratica sem saber os nomes — a arquitetura das Partes 1 a 5 <em>é</em> SOLID aplicado. Vale conhecer para nomear a dor quando algo cheira mal.</p>
@@ -218,9 +278,9 @@ class LoginViewModel @Inject constructor(
 </tbody>
 </table>
 
-<h3>Funções e tratamento de erro</h3>
+<h3>Tratamento de erro: a falha como valor</h3>
 
-<p>Função limpa faz <strong>uma</strong> coisa, num <strong>só nível de abstração</strong>, com poucos argumentos. E erro em Kotlin não precisa virar <code>try/catch</code> espalhado: modele a falha como <strong>valor</strong> (<code>Result</code> ou uma <code>sealed</code> de erros), e o compilador obriga quem chama a tratá-la.</p>
+<p>Para o tio Bob, tratamento de erro é <strong>uma coisa</strong> — então uma função que trata erro <em>só</em> trata erro. Ele prega ainda: use <strong>exceções em vez de códigos de retorno</strong> e <strong>não retorne <code>null</code></strong> (o <code>NullPointerException</code> é o bilhão de dólares de prejuízo). Em Kotlin isso fica elegante: não espalhe <code>try/catch</code>; modele a falha como <strong>valor</strong> (<code>Result</code> ou uma <code>sealed</code> de erros), e o compilador obriga quem chama a tratá-la — e o sistema de tipos nulos mata o <code>null</code> na raiz.</p>
 
 <pre><code class="language-kotlin">// ❌ Long method: mistura níveis (rede, parsing, regra, UI) numa função só
 suspend fun entrar(email: String, senha: String) {
@@ -242,7 +302,11 @@ class FazerLogin(private val repo: AuthRepository) {
 // quem chama é OBRIGADO a tratar os dois lados — nada de exceção esquecida
 </code></pre>
 
-<blockquote><p>⚠️ <strong>Pegadinha:</strong> “código limpo” não é encher de abstração. Uma interface com <strong>uma</strong> implementação que nunca terá outra, um UseCase que só repassa, cinco módulos para um app de duas telas — isso é <em>over-engineering</em>. Limpo é o <strong>mínimo</strong> que deixa mudar sem medo, não o máximo de camadas. Todo princípio desta parte serve a isso; nenhum é um fim em si.</p></blockquote>
+<h3>A Regra do Escoteiro</h3>
+
+<p>O princípio que costura tudo isto no dia a dia, e talvez o mais prático do tio Bob: <strong>“deixe o acampamento mais limpo do que você encontrou”</strong>. Você não precisa parar uma semana para refatorar o app inteiro — a cada arquivo que você <em>toca</em> por outro motivo, melhore <strong>uma</strong> coisa pequena: um nome, uma função extraída, um comentário morto removido. O código apodrece por mil cortes; ele saneia pelo mesmo caminho, um commit de cada vez.</p>
+
+<blockquote><p>⚠️ <strong>Pegadinha:</strong> “código limpo” não é encher de abstração. Uma interface com <strong>uma</strong> implementação que nunca terá outra, um UseCase que só repassa, cinco módulos para um app de duas telas — isso é <em>over-engineering</em>. Limpo é o <strong>mínimo</strong> que deixa mudar sem medo, não o máximo de camadas. Todo princípio desta parte serve a isso; nenhum é um fim em si. O próprio tio Bob avisa: princípio bom aplicado sem julgamento vira dogma — e dogma é dívida.</p></blockquote>
 
 <hr>
 
@@ -272,6 +336,34 @@ class FazerLogin(private val repo: AuthRepository) {
 
 <blockquote><p>🔒 <strong>Visão Specialist:</strong> comece o NexusHub com <strong>um módulo por feature</strong> + <code>:core</code> + <code>:domain</code> puro. Módulos por <strong>feature</strong> (não por camada técnica) escalam melhor: cada time é dono de uma feature de ponta a ponta. Adote a modularização quando o build começar a doer ou o time crescer — cedo demais, é burocracia; tarde demais, é um novelo para desembaraçar.</p></blockquote>
 
+<h3>Princípios de componentes (o tio Bob avançado)</h3>
+
+<p>Se SOLID cuida das <em>classes</em>, o tio Bob tem um conjunto menos famoso para os <strong>componentes</strong> (aqui, seus <strong>módulos Gradle</strong>). São seis, em dois grupos. Você não decora as siglas — usa a ideia para decidir <em>o que agrupar num módulo</em> e <em>quem pode depender de quem</em>.</p>
+
+<table>
+<thead><tr><th align="left">Coesão (o que fica junto no módulo)</th><th align="left">Ideia</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>REP</strong> — Reuse/Release Equivalence</td><td align="left">o que é lançado/versionado junto pertence ao mesmo módulo</td></tr>
+<tr><td align="left"><strong>CCP</strong> — Common Closure</td><td align="left">o que <strong>muda pelo mesmo motivo</strong> fica junto (é o “S” do SOLID no nível de módulo)</td></tr>
+<tr><td align="left"><strong>CRP</strong> — Common Reuse</td><td align="left">o que é <strong>usado junto</strong> fica junto; não force quem usa uma classe a arrastar dez</td></tr>
+</tbody>
+</table>
+
+<table>
+<thead><tr><th align="left">Acoplamento (quem depende de quem)</th><th align="left">Ideia</th></tr></thead>
+<tbody>
+<tr><td align="left"><strong>ADP</strong> — Acyclic Dependencies</td><td align="left">o grafo de módulos <strong>não pode ter ciclo</strong> (A→B→A trava o build e o raciocínio)</td></tr>
+<tr><td align="left"><strong>SDP</strong> — Stable Dependencies</td><td align="left">dependa na direção da <strong>estabilidade</strong>: <code>:feature</code> → <code>:domain</code>, nunca o contrário</td></tr>
+<tr><td align="left"><strong>SAP</strong> — Stable Abstractions</td><td align="left">o que é estável deve ser <strong>abstrato</strong> (por isso <code>:domain</code> é só interfaces + entidades)</td></tr>
+</tbody>
+</table>
+
+<blockquote><p>🧠 <strong>Termo — a tensão REP/CCP × CRP:</strong> os princípios de coesão <strong>puxam para lados opostos</strong> de propósito — juntar demais (bom para quem mantém) versus separar demais (bom para quem reusa). Módulo cedo demais tende a CRP (granular); módulo maduro tende a CCP (agrupado por motivo de mudança). Não existe divisão “certa” eterna; existe a certa <em>para o tamanho de hoje</em>.</p></blockquote>
+
+<h3>Screaming Architecture</h3>
+
+<p>Um teste final do tio Bob: abra a pasta de topo do projeto. Ela deveria <strong>gritar o domínio</strong> — <code>login/</code>, <code>carrinho/</code>, <code>pagamento/</code> — e não o framework (<code>activities/</code>, <code>fragments/</code>, <code>viewmodels/</code>). A arquitetura é sobre <em>o que o app faz</em>, não sobre a ferramenta com que foi feito. Organizar por <strong>feature</strong> (como no <code>:feature-*</code> acima) é o que faz a arquitetura gritar o negócio; organizar por <strong>tipo técnico</strong> esconde o que o app é.</p>
+
 <hr>
 
 <h2>✅ Checklist para o NexusHub</h2>
@@ -285,7 +377,9 @@ class FazerLogin(private val repo: AuthRepository) {
 <tr><td align="left"><strong>State hoisting</strong></td><td align="left">Rota conecta o ViewModel; conteúdo stateless recebe estado + lambdas</td></tr>
 <tr><td align="left"><strong>Repository + Mapper</strong></td><td align="left">Fachada única por dado; DTO nunca vaza para o domínio</td></tr>
 <tr><td align="left"><strong>Hilt</strong></td><td align="left">Injetar interfaces por construtor; nada de <code>new</code>/<code>create()</code> interno</td></tr>
-<tr><td align="left"><strong>Código limpo</strong></td><td align="left">nomes que revelam intenção; funções de um nível; erro como valor (<code>Result</code>/<code>sealed</code>)</td></tr>
+<tr><td align="left"><strong>Código limpo</strong></td><td align="left">nomes que revelam intenção; funções pequenas de um nível; erro como valor; CQS; sem train wreck (Deméter)</td></tr>
+<tr><td align="left"><strong>Regra do Escoteiro</strong></td><td align="left">todo arquivo tocado sai um pouco melhor — saneamento a cada commit, sem parar o mundo</td></tr>
+<tr><td align="left"><strong>Componentes</strong></td><td align="left">módulos sem ciclo (ADP); dependem na direção do estável e abstrato (SDP/SAP); estrutura por feature (Screaming)</td></tr>
 <tr><td align="left"><strong>Sem over-engineering</strong></td><td align="left">UseCase só quando agrega; a mínima camada que deixa mudar sem medo</td></tr>
 <tr><td align="left"><strong>Modularização</strong></td><td align="left">Por feature + core + domínio; adotar quando o build/time pedir</td></tr>
 </tbody>
@@ -297,8 +391,15 @@ class FazerLogin(private val repo: AuthRepository) {
 <thead><tr><th align="left">Termo</th><th align="left">Em uma linha</th></tr></thead>
 <tbody>
 <tr><td align="left"><strong>camada</strong></td><td align="left">Bloco com uma responsabilidade e fronteira por contrato.</td></tr>
-<tr><td align="left"><strong>Clean Architecture</strong></td><td align="left">UI/domínio/dados com dependência apontando para dentro.</td></tr>
+<tr><td align="left"><strong>Clean Architecture</strong></td><td align="left">Círculos Entities→Use Cases→Adapters→Frameworks; dependência para dentro.</td></tr>
+<tr><td align="left"><strong>Entities vs Use Cases</strong></td><td align="left">Regras do negócio (valem sem app) vs regras da aplicação (o que o app faz).</td></tr>
 <tr><td align="left"><strong>SOLID</strong></td><td align="left">5 princípios OO; no Android, S e D pagam a conta.</td></tr>
+<tr><td align="left"><strong>CQS</strong></td><td align="left">Comando ≠ consulta: ou faz algo, ou responde — nunca os dois.</td></tr>
+<tr><td align="left"><strong>DRY</strong></td><td align="left">Um conhecimento, uma representação — sem abstrair o que só parece igual.</td></tr>
+<tr><td align="left"><strong>Lei de Deméter</strong></td><td align="left">Fale só com amigos próximos; nada de <code>a.b.c.d()</code> (train wreck).</td></tr>
+<tr><td align="left"><strong>Regra do Escoteiro</strong></td><td align="left">Deixe cada arquivo que tocar um pouco mais limpo do que achou.</td></tr>
+<tr><td align="left"><strong>princípios de componentes</strong></td><td align="left">Coesão (REP/CCP/CRP) e acoplamento (ADP/SDP/SAP) entre módulos.</td></tr>
+<tr><td align="left"><strong>Screaming Architecture</strong></td><td align="left">A estrutura grita o domínio (login, carrinho), não o framework.</td></tr>
 <tr><td align="left"><strong>code smell</strong></td><td align="left">sinal de estrutura ruim (God object, long method…), não um bug.</td></tr>
 <tr><td align="left"><strong>value class</strong></td><td align="left">embrulho de tipo único que mata <em>primitive obsession</em> sem custo.</td></tr>
 <tr><td align="left"><strong>Regra da Dependência</strong></td><td align="left">O de fora depende do de dentro, nunca o contrário.</td></tr>
